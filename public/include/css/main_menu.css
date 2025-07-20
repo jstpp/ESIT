@@ -1,0 +1,104 @@
+#main_menu_sector
+        {
+            width: 100%;
+            height: 3.5vmax;
+            box-sizing: border-box;
+            border-bottom: 0.15vmax solid rgba(255, 255, 255, 0.2);
+            position: fixed;
+            z-index: 99;
+        }
+        #main_menu_sector .media_buttons
+        {
+            color: rgba(255, 255, 255, 0.6);
+            padding: 0.6vmax 0.6vmax;
+            float: left;
+            margin-top: 0.5vmax;
+            border: 0.15vmax solid rgba(255, 255, 255, 0.6);
+            border-radius: 2vmax;
+            width: 1vmax;
+            text-align: center;
+            margin-left: 0.5vmax;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        #main_menu_sector .media_buttons:hover
+        {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        #main_menu_sector_bottom
+        {
+            width: 100%;
+            margin-top: 3.5vmax;
+            position: fixed;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #main_menu_sector_bottom a
+        {
+            padding: 1.2vmax 1.8vmax;
+            font-family: 'Bree Serif';
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            position: relative;
+            transition: 0.3s;
+        }
+        #main_menu_sector_bottom a:hover
+        {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        @property --vis1
+        {
+            syntax: '<percentage>';
+            inherits: false;
+            initial-value: 30%;
+        }
+        @property --vis2
+        {
+            syntax: '<percentage>';
+            inherits: false;
+            initial-value: 65%;
+        }
+        @property --vis3
+        {
+            syntax: '<percentage>';
+            inherits: false;
+            initial-value: 100%;
+        }
+        .menu_dark_top
+        {
+            background-color: rgb(0, 35, 50);
+            border-bottom: 0.15vmax solid rgba(255, 255, 255, 0.2) !important;
+        }
+        .menu_dark_bottom
+        {
+            background: rgb(0, 35, 50);
+            background: linear-gradient(180deg,rgba(0, 35, 50,1) var(--vis1), rgba(0, 35, 50, 0.76) var(--vis2), rgba(255, 255, 255, 0) var(--vis3));
+            animation: menu_scroll 0.5s;
+        }
+        @keyframes menu_scroll {
+            0%    { --vis1: 0%; --vis2: 0%; --vis3: 0%; }
+            100%  { --vis1: 30%; --vis2: 65%; --vis3: 100%; }
+        }
+        
+        .transparent_btt 
+        {
+            color: rgba(255, 255, 255, 0.6);
+            padding: 0.6vmax 1.8vmax;
+            float: right;
+            margin-top: 0.5vmax;
+            border: 0.15vmax solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-right: 0.5vmax;
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .transparent_btt:hover 
+        {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }

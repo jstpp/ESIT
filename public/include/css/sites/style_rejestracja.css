@@ -1,0 +1,76 @@
+.registration_input
+{
+    border: 0.15vmax solid rgb(210, 210, 210);
+    border-radius: 0.5vmax;
+    color: rgb(170, 170, 170);
+    padding: 0;
+    transition: 0.3s;
+}
+.registration_input:hover
+{
+    border: 0.15vmax solid rgb(0, 136, 255);
+    color: rgb(0, 136, 255);
+}
+.registration_input input
+{
+    width: 99%;
+    margin: 0;
+    background: transparent;
+    padding: 0.8vmax 0.8vmax;
+    font-size: inherit;
+    border: 0;
+    outline: 0;
+}
+
+#r_i_checkbox {
+    padding: 0.8vmax 0.8vmax;
+    border: 0.15vmax solid rgb(210, 210, 210);
+    border-radius: 0.5vmax;
+}
+
+#r_i_checkbox legend{
+    color: rgb(170, 170, 170);
+}
+
+.registration_button
+{
+    margin-top: 2vmax;
+    border: 0;
+    padding: 1vmax 1vmax;
+    font: inherit;
+    border-radius: 0.5vmax;
+    background-color:rgb(0, 136, 255);
+    color: white;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.registration_button:hover
+{
+    margin-top: 2vmax;
+    border: 0;
+    padding: 1vmax 1vmax;
+    font: inherit;
+    border-radius: 0.5vmax;
+    background-color:rgb(0, 78, 146);
+    color: white;
+}
+
+.data-invalid {
+    color: rgb(184, 1, 0);
+    margin-left: 1vmax;
+}
+.data-invalid:before {
+    position: relative;
+    left: -1vmax;
+    content: "✖";
+}
+.data-valid {
+    color: rgb(5, 149, 0);
+    margin-left: 1vmax;
+}
+.data-valid:before {
+    position: relative;
+    left: -1vmax;
+    content: "✔";
+}

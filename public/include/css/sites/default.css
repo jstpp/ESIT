@@ -1,0 +1,46 @@
+#content
+{
+    background-color: white;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0.3vmax 0.6vmax 0 rgba(0, 0, 0, 0.3);
+    margin-top: -5vh;
+    z-index: 5;
+    padding: 1vmax 1vmax;
+    position: relative;
+}
+#welcome_sector
+{
+    position: relative;
+    float: left;
+    top: 0;
+    width: 100%;
+    height: 50vh;
+    overflow: hidden;
+}
+#welcome_sector img
+{
+    width: 100%;
+    height: 100%;
+    float: left;
+    position: absolute;
+    filter: brightness(20%);
+    z-index: 0;
+    object-fit: cover;
+}
+#welcome_sector h1
+{
+    z-index: 1;
+    position: relative;
+    color: white;
+    text-align: center;
+    font-size: 4vmax;
+    margin-top: 25vh;
+    animation: title_enter 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@media (max-width: 500px) {
+    #content {
+        font-size: 2vmax;
+    }
+}
