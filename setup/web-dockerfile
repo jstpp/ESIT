@@ -1,0 +1,16 @@
+FROM nginx:1-alpine
+
+ARG UID
+ARG GID
+ 
+ENV UID=${UID}
+ENV GID=${GID}
+
+RUN addgroup -g ${GID} --system esit-group
+RUN adduser -G esit-group --system -D -s /bin/sh -u ${UID} esit-user
+
+#COPY ./public /www/esit/public
+#RUN chown -R esit-user:esit-group /www/esit/public/*
+
+#COPY ./include /www/esit/include
+#RUN chown -R esit-user:esit-group /www/esit/include/*

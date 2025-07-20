@@ -1,0 +1,13 @@
+#content h2,h3,p {
+    margin-left: 2vmax;
+    margin-right: 2vmax;
+}
+h2,h3 {
+    color: rgb(0, 35, 50);
+}
+#content p {
+    color: gray;
+}
+b {
+    color: rgb(0, 35, 50);
+}

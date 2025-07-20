@@ -1,0 +1,281 @@
+#welcome_sector
+{
+    background: linear-gradient(
+          rgba(0, 0, 0, 0.7), 
+          rgba(0, 0, 0, 0.7)
+        ), url('../../../img/background.gif');
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    float: left;
+    top: 0;
+    width: 100%;
+    height: 105vh;
+    overflow: hidden;
+}
+#welcome_sector img
+{
+    width: 100%;
+    height: 100%;
+    float: left;
+    position: absolute;
+    filter: brightness(20%);
+    object-fit: cover;
+    z-index: 0;
+}
+#welcome_sector h1
+{
+    z-index: 1;
+    position: relative;
+    color: white;
+    text-align: center;
+    font-size: 4vmax;
+    margin-top: 15vmax;
+}
+#welcome_sector h2
+{
+    z-index: 1;
+    position: relative;
+    color: white;
+    text-align: center;
+    font-size: 1.4vmax;
+    margin-top: 0.5vmax;
+    font-weight: normal;
+}
+#news_sector 
+{
+    background-color: white;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0.3vmax 0.6vmax 0 rgba(0, 0, 0, 0.3);
+    margin-top: -5vh;
+    z-index: 5;
+    padding: 0.5vmin 0.5vmin;
+    position: relative;
+}
+#articles_list 
+{
+    display: flex;
+    padding-bottom: 2vmax;
+    justify-content: space-between;
+    gap: 1vmax;
+    width: 96%;
+    margin-left: 2%;
+}
+#articles_list .card
+{
+    padding: 1% 1%;
+    cursor: pointer;
+    flex: 1 1 0px;
+}
+#articles_list .card img
+{
+    width: 100%;
+    height: 12vmax;
+    object-fit: cover;
+}
+#articles_list .card a
+{
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Bree Serif';
+    color: rgb(0, 35, 50);
+    transition: 0.3s;
+    cursor: pointer;
+}
+#articles_list .card a:hover
+{
+    color: rgb(0, 100, 135);
+}
+#articles_list .card p
+{
+    max-width: 20vw;
+    text-align: justify;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#partners_sector
+{
+    background-size: cover;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+}
+.partners_slide
+{
+    min-width: calc(100%);
+    flex-shrink: 0;
+    
+    display: flex;
+    gap: 4vmax;
+    align-items: center;
+    justify-content: center;      
+    animation: partners_slideshow 30s infinite linear;
+    margin-left: 4vmax;
+}
+#partners_sector img 
+{
+    max-height: 15vmax;
+    min-height: 5vmax;
+}
+#timetable_sector
+{
+    background-image: url('../../../img/grafika1.png');
+    color: white;
+    padding: 1vmax 2.5%;
+    text-align: center;
+    width: 45%;
+    flex: 1;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#documents_sector
+{
+    background-color: white;
+    color: rgb(0, 35, 50);
+    padding: 1vmax 2.5%;
+    text-align: center;
+    width: 45%;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+#timetable_sector .timetable_date
+{
+    padding: 0.5vmax 0.5vmax;
+    border: 0.2vmax solid white;
+    border-radius: 0.5vmax;
+    line-height: 3;
+}
+#timetable_sector .current
+{
+    background-color: white;
+    color: rgb(0, 35, 50);
+}
+#timetable_sector h3
+{
+    margin-top: 1.5vmax;
+    display: block;
+}
+#beginner_sector
+{
+    text-align: center;
+    outline: 0.2vmax solid rgb(0, 35, 50);
+    outline-offset: -2vmax;
+    padding: 5vmax 5vmax;
+}
+#encourage_sector #box_1
+{
+    float: right;
+    width: 40vw;
+    height: 80vh;
+    position: sticky;
+    top: 10vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 2vw;
+    background-color: rgb(0, 35, 50);
+    color: white;
+    text-align: center;
+    padding: 2vh 2vw;
+}
+#timeline
+{
+    border-left: 0.5vmax solid rgb(0, 100, 135);
+    height: 260vh;
+    position: absolute;
+    left: 50%;
+    margin-left: -0.25vmax;
+    width: 1%;
+}
+#encourage_sector
+{
+    margin-top: 2vmax;
+}
+#encourage_sector .box_2
+{
+    float: left;
+    width: 40vw;
+    height: 80vh;
+    margin-top: 4vh;
+    margin-left: 2vw;
+    margin-right: 20vw;
+    color: white;
+    text-align: center;
+    padding: 2vh 2vw;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+#encourage_sector .box_2::before {
+  content: " ";
+  height: 0;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  margin-right: -45vw;
+  border: medium solid white;
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent rgb(0, 100, 135);
+}
+#encourage_sector .box_2 p
+{
+    font-size: 1.6vmax;
+}
+#encourage_sector h1
+{
+    background-color: white;
+    color: rgb(0, 35, 50);
+    font-size: 3.5vw;
+}
+@media (max-width: 500px) {
+    #content {
+        font-size: 2vmax;
+    }
+    #articles_list {
+        flex-direction: column;
+        gap: 4vmax;
+    }
+    #articles_list .card p
+    {
+        max-width: 90vw;
+    }
+    #timetable_sector
+    {
+        width: 100%;
+        padding: 0;
+    }
+    #documents_sector
+    {
+        width: 100%;
+        padding: 10vmax 0;
+    }
+    #big_box_1
+    {
+        flex-direction: column;
+    }
+    .simple_href
+    {
+        font-size: 2vmax;
+    }
+}
+
+@keyframes partners_slideshow {
+	from {
+		transform: translateX( 4vmax );
+	}
+	to {
+		transform: translateX( -100% );
+	}
+}

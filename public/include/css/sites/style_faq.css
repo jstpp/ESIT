@@ -1,0 +1,30 @@
+.card {
+    width: 92%;
+    margin-left: 2%;
+    padding: 1% 2%;
+    margin-top: 0.75vmax;
+    background-color: rgb(222, 222, 222);
+    cursor: pointer;
+}
+
+#content h2,p {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+#content p {
+    color: gray;
+    text-align: justify;
+}
+
+.card h2 {
+    float: left;
+}
+
+.card p {
+    display: none;
+}
+
+.card .expand_icon {
+    float: right;
+}

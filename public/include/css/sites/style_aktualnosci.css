@@ -1,0 +1,37 @@
+.card {
+    width: 95%;
+    margin-left: 0.5%;
+    padding: 2% 2%;
+    margin-top: 0.5vmax;
+    background-color: rgb(222, 222, 222);
+    cursor: pointer;
+}
+
+.card img {
+    float: left;
+    height: 20vw;
+    margin-right: 2.5%;
+    width: 30vw;
+    object-fit: cover;
+}
+.card p {
+    text-align: justify;
+    font-size: 1.2vmax;
+    display: -webkit-box;
+    -webkit-line-clamp: 9;
+    -webkit-box-orient: vertical;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100%;
+}
+
+#content img {
+    max-width: 100%;
+}
+
+@media (max-width: 500px) {
+    .card img {
+        margin-right: 2.5%;
+    }
+}

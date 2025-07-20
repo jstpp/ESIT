@@ -1,0 +1,62 @@
+{
+    "rabbit_version": "4.1",
+    "rabbitmq_version": "4.1",
+    "product_name": "RabbitMQ",
+    "product_version": "4.1",
+    "users": [
+      {
+        "name": "esit_user",
+        "password_hash": "dfrWOajIM5i4a/f1RhtL6DA1lFPSJ82X4CbdOP3NRQCWLNXt",
+        "hashing_algorithm": "rabbit_password_hashing_sha256",
+        "tags": "administrator"
+      }
+    ],
+    "vhosts": [
+      {
+        "name": "/"
+      }
+    ],
+    "permissions": [
+      {
+        "user": "esit_user",
+        "vhost": "/",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      }
+    ],
+    "topic_permissions": [
+  
+    ],
+    "parameters": [
+  
+    ],
+    "policies": [
+  
+    ],
+    "queues": [
+      {
+        "name": "esit",
+        "vhost": "/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {
+          "x-queue-mode": "lazy",
+          "x-queue-type": "classic"
+        }
+      }
+    ],
+    "exchanges": [
+    ],
+    "bindings": [
+      {
+        "source": "amq.direct",
+        "vhost": "/",
+        "destination": "esit",
+        "destination_type": "queue",
+        "routing_key": "esit",
+        "arguments": {
+        }
+      }
+    ]
+  }

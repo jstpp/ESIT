@@ -1,0 +1,2 @@
+FROM mariadb:lts-ubi9
+COPY ./setup/db.sql /docker-entrypoint-initdb.d/

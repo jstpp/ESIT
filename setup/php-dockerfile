@@ -1,0 +1,29 @@
+FROM php:8-fpm-alpine
+
+ARG UID
+ARG GID
+ 
+ENV UID=${UID}
+ENV GID=${GID}
+
+RUN apk add zip libzip-dev unzip linux-headers && docker-php-ext-install pdo_mysql sockets zip && docker-php-ext-enable pdo_mysql
+
+RUN addgroup -g ${GID} --system esit-group
+RUN adduser -G esit-group --system -D -s /bin/sh -u ${UID} esit-user
+
+RUN sed -i "s/user = www-data/user = esit-user/g" /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i "s/group = www-data/group = esit-group/g" /usr/local/etc/php-fpm.d/www.conf
+
+COPY ./public /www/esit/public
+RUN chown -R esit-user:esit-group /www/esit/public/*
+
+#COPY ./include /www/esit/include
+#RUN chown -R esit-user:esit-group /www/esit/include/*
+
+WORKDIR /www/esit/public/app/modules/composer/
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php composer-setup.php
+RUN php -r "unlink('composer-setup.php');"
+RUN php composer.phar install
+
+WORKDIR /
