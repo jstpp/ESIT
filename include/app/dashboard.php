@@ -80,7 +80,7 @@
 	<h2 class="window_title">Moje ostatnie rozwiązania</h2>
 	<table id="results">
 		<?php
-			$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, PROBLEMS.title AS title, PROBLEMS.type AS type, PROBLEMS.maxpoints AS max_pts, PROBLEMS.PROBLEM_ID AS problem_id FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 5');
+			$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, PROBLEMS.title AS title, PROBLEMS.type AS type, PROBLEMS.maxpoints AS max_pts, PROBLEMS.PROBLEM_ID AS problem_id, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 5');
 			$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
 
 			$isfound = 0;
@@ -136,13 +136,19 @@
 				<td><a href="?p='.$resultdest.'&sid='.$row['id'].'">Szczegóły</a></td>
 				<td>'.$row['submission_time'].'</td>
 				<td><a href="?p=quest&id='.$row['problem_id'].'">'.$row['title'].'</a></td>
-				<td>'.$problemtype.'</td>
-				<td style="background-image: '.$gradient.'">'.$status.'</td>');
-				if ($row['score_percentage']!=-1) {
+				<td>'.$problemtype.'</td>');
+				if ($row['score_percentage']!=-1 and strtotime($row['result_publish_time'])<strtotime("now")) {
+					
 					echo('
+					<td style="background-image: '.$gradient.'">'.$status.'</td>
 					<td>'.$row['score'].'/'.$row['max_pts'].'</td>
 					<td style="background-image: '.$gradient.'">'.$percentage.'</td>
 					</tr>');
+				} else if (strtotime($row['result_publish_time'])>strtotime("now"))
+				{
+					echo('<td colspan="3"><i class="fa fa-eye-slash"></i>&nbsp;&nbsp;Wynik ukryty</td></tr>');
+				} else {
+					echo('<td colspan="3" style="background-image: '.$gradient.'">'.$status.'</td></tr>');
 				}
 			}
 			if($isfound==0)

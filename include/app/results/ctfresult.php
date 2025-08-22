@@ -10,13 +10,19 @@
 
 	$row = $db_query->fetch();
 
-	if($row['score']=='0')
+	if(strtotime($row['result_publish_time'])<strtotime("now"))
 	{
-		$comment = "Nie udało Ci się przesłać poprawnej flagi. Szukaj dalej!";
-		$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
+		if($row['score']=='0')
+		{
+			$comment = "Nie udało Ci się przesłać poprawnej flagi. Szukaj dalej!";
+			$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
+		} else {
+			$comment = "Udało Ci się przesłać poprawną flagę. Cieszymy się Twoim szczęściem!";
+			$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
+		}
 	} else {
-		$comment = "Udało Ci się przesłać poprawną flagę. Cieszymy się Twoim szczęściem!";
-		$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
+		$comment = "Wynik weryfikacji twojej flagi nie jest jeszcze dostępny.";
+		$gradient = "linear-gradient(to left, gray 0%,transparent 50%);";
 	}
 ?>
 <style>
@@ -74,8 +80,8 @@
 		<tr>
 			<td><?php echo($row['submission_time']); ?></td>
 			<td><i class='fas fa-flag'></i></i>&nbsp;&nbsp;Capture The Flag</td>
-			<td><?php echo($row['score']); ?>/<?php echo($row['maxpoints']); ?></td>
-			<td style="background-image: <?php echo($gradient); ?>"><?php echo($row['score_percentage']); ?>%</td>
+			<td><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score']); } else { echo("???"); }?>/<?php echo($row['maxpoints']); ?></td>
+			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score_percentage']); } else { echo("???"); }?>%</td>
 		</tr>
 	</table>
 	<br style="clear: both;" />

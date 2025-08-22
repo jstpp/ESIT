@@ -3,6 +3,7 @@
 
     $org_link = "localhost"; #Link to website, where this app is hosted by You.
     $site_domains = array($org_link, "localhost"); #Used for worker communication and file upload. Keep in mind that first URL in array will be used by worker to return results
+    $site_timezone = "Europe/Warsaw";
     $error_link =  $org_link."/error"; #Your custom error site. Feel free to change it...
     $display_debug = false; #Set to true if You would like to see more debug messages
 
@@ -23,7 +24,7 @@
 
 
 
-
+    date_default_timezone_set($site_timezone);
     
     $dsn = "mysql:host=$db_host;dbname=$db_database;options='--client_encoding=$db_charset'";
     $options = [
