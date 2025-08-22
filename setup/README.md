@@ -1,4 +1,4 @@
-# Installation example
+# Installation example & config details
 Create user `esit-user` and add it to docker group:
 ```bash
 adduser esit-user && usermod -aG docker esit-user
@@ -53,3 +53,37 @@ After the end of the installation, service should be available on `localhost:80`
 | `php-dockerfile` | `php-fpm` |
 | `web-dockerfile` | `web` |
 | `worker-dockerfile` | `worker` |
+
+## Config variables
+### General config
+| Variable | Type | Description |
+| --- | --- | --- |
+| `$org_link` | string | Your website's URL. **We use it for connection with ESIT workers and for API communication!** |
+| `$site_domains` | array | More URLs |
+| `$error_link` | string | Your custom error site |
+| `$display_debug` | boolean | Displaying debug informations |
+
+> The access to general config variables will be more flexible in the future - the variables would be accessed from GUI instead of config file modifications.
+### Database (mariadb) config
+
+| Variable | Type | Description |
+| --- | --- | --- |
+| `$db_host`| string | Host IP address |
+| `$db_username` | string | Your username |
+| `$db_password` | string | Your password |
+| `$db_database` | string | Name of the database |
+| `$db_charset` | string | Charset of the database (`utf8` is default) |
+
+### Broker ([rabbitMQ](https://www.rabbitmq.com/)) config
+| Variable | Type | Description |
+| --- | --- | --- |
+| `$rabbit_mq_host`| string | Host IP address |
+| `$rabbit_mq_port` | string | Port for broker |
+| `$rabbit_mq_user` | string | Username |
+| `$rabbit_mq_password` | string | Password |
+
+### Worker config
+| Variable | Type | Description |
+| --- | --- | --- |
+| `$worker_network_private_key`| string | Key used for API encryption |
+| `$worker_trusted_ips` | array | Array of workers' IPs |

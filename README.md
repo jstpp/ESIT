@@ -20,7 +20,7 @@ You can customize your [config file](include/config/config_init.php). You should
 
 Start docker compose with predefined user-id and group-id:
 ```bash
-UID="<your-uid>" GID="<your-gid>" docker compose up
+UID="<your-uid>" GID="<your-gid>" docker compose -f compose.yaml up
 ```
 > [!tip]
 > To check your uid and gid you can use the following commands:
@@ -44,39 +44,8 @@ ESIT also supports:
 - single choice tests
 - multiple choice tests
 
-## Config variables
-### General config
-| Variable | Type | Description |
-| --- | --- | --- |
-| `$org_link` | string | Your website's URL. **We use it for connection with ESIT workers and for API communication!** |
-| `$site_domains` | array | More URLs |
-| `$error_link` | string | Your custom error site |
-| `$display_debug` | boolean | Displaying debug informations |
-
-> The access to general config variables will be more flexible in the future - the variables would be accessed from GUI instead of config file modifications.
-### Database (mariadb) config
-
-| Variable | Type | Description |
-| --- | --- | --- |
-| `$db_host`| string | Host IP address |
-| `$db_username` | string | Your username |
-| `$db_password` | string | Your password |
-| `$db_database` | string | Name of the database |
-| `$db_charset` | string | Charset of the database (`utf8` is default) |
-
-### Broker ([rabbitMQ](https://www.rabbitmq.com/)) config
-| Variable | Type | Description |
-| --- | --- | --- |
-| `$rabbit_mq_host`| string | Host IP address |
-| `$rabbit_mq_port` | string | Port for broker |
-| `$rabbit_mq_user` | string | Username |
-| `$rabbit_mq_password` | string | Password |
-
-### Worker config
-| Variable | Type | Description |
-| --- | --- | --- |
-| `$worker_network_private_key`| string | Key used for API encryption |
-| `$worker_trusted_ips` | array | Array of workers' IPs |
+## Custom configuration
+Check possibilities of ESIT custom configuration [here](setup/README.md).
 
 > [!tip]
 > When running docker installation remember to check if Your custom config matches the credentials in [compose.yaml](compose.yaml).
@@ -85,4 +54,8 @@ ESIT also supports:
 Although the code variables and comments are in English, ESIT doesn't provide English GUI. Feel free to add translations.
 
 ## More informations
-For more informations see [worker info](worker/README.md), [installation example](setup/README.md), [MIT license](LICENSE) and [security annotations](SECURITY.md).
+For more informations see:
+- [worker info](worker/README.md), 
+- [installation example & custom configuration details](setup/README.md), 
+- [MIT license](LICENSE),
+- [security annotations](SECURITY.md).

@@ -27,25 +27,32 @@
 			die;
 		}
 
-		if($row['score_percentage']==0)
+		if(strtotime($row['result_publish_time'])<strtotime("now"))
 		{
-			$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
-			$percentage = $row['score_percentage']."%";
-			$status = "Całkowicie niepoprawne";
-		} else if ($row['score_percentage']==100)
-		{
-			$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
-			$percentage = $row['score_percentage']."%";
-			$status = "Bez błędów";
-		} else if ($row['score_percentage']==-1)
-		{
+			if($row['score_percentage']==0)
+			{
+				$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
+				$percentage = $row['score_percentage']."%";
+				$status = "Całkowicie niepoprawne";
+			} else if ($row['score_percentage']==100)
+			{
+				$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
+				$percentage = $row['score_percentage']."%";
+				$status = "Bez błędów";
+			} else if ($row['score_percentage']==-1)
+			{
+				$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
+				$percentage = "...";
+				$status = "W kolejce";
+			} else {
+				$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
+				$percentage = $row['score_percentage']."%";
+				$status = "Częściowo poprawne";
+			}
+		} else {
 			$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
 			$percentage = "...";
-			$status = "W kolejce";
-		} else {
-			$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
-			$percentage = $row['score_percentage']."%";
-			$status = "Częściowo poprawne";
+			$status = "Wynik ukryty";
 		}
 
 	} else {
@@ -149,8 +156,8 @@
 			<td><?php echo($row['verification_time']); ?></td>
 			<td><i class='fas fa-check-square'></i>&nbsp;&nbsp;Jednokrotnego wyboru</td>
 			<td style="background-image: <?php echo($gradient); ?>"><?php echo($status); ?></td>
-			<td><?php echo($row['score']); ?>/<?php echo($row['maxpoints']); ?></td>
-			<td style="background-image: <?php echo($gradient); ?>"><?php echo($percentage); ?></td>
+			<td><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score']); } else { echo("???"); } ?>/<?php echo($row['maxpoints']); ?></td>
+			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($percentage); } else { echo("???"); }?></td>
 		</tr>
 	</table>
 	<br style="clear: both;" />
@@ -158,4 +165,10 @@
 	<br />
 </div>
 <br />
+<?php
+	if ($row['score_percentage']==-1 or strtotime($row['result_publish_time'])>strtotime("now"))
+	{
+		echo("<script>document.getElementById('charts').style.display = 'none';</script>");
+	}
+?>
 <br />

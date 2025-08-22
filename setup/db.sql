@@ -94,6 +94,7 @@ CREATE TABLE `PROBLEMS` (
   `maxpoints` int(11) NOT NULL,
   `problemset` int(11) NOT NULL,
   `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `result_publish_time` datetime NOT NULL DEFAULT current_timestamp(),
   `isarchived` int(11) NOT NULL,
   `comment` text NOT NULL DEFAULT ('-')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

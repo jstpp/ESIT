@@ -146,7 +146,8 @@
 			<option value="5">Zadanie otwarte (formularz)</option>
 		</select>
 		<br />
-		<p style="margin-left: 2.5%; width: 95%;">Moment publikacji:&emsp;<input type="datetime-local" onChange="validate_data();" class="forminput" name="publish_time" /></p>
+		<p style="margin-left: 2.5%; width: 95%;">Moment publikacji zadania:&emsp;<input type="datetime-local" onChange="validate_data();" class="forminput" name="publish_time" /></p>
+		<p style="margin-left: 2.5%; width: 95%;">Moment publikacji wyników:&emsp;<input type="datetime-local" onChange="validate_data();" class="forminput" name="result_publish_time" /></p>
 		<br />
 	</div>
 	<div class="window" id="alg_pdf">
@@ -466,6 +467,7 @@
                 if(document.querySelector('select[name="problem_type"]').value.length>0 
 				&& document.querySelector('input[name="problem_points"]').value.length>0 
 				&& document.querySelector('input[name="publish_time"]').value.length>0
+				&& document.querySelector('input[name="result_publish_time"]').value.length>0
 				&& document.querySelector('input[name="problem_title"]').value.length>0 
 				&& document.querySelector('input[name="problem_maxattempts"]').value.length>0
 				&& document.querySelector('select[name="problem_isarchived"]').value.length>0) 

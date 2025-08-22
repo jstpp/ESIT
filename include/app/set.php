@@ -95,8 +95,8 @@
 			if(isset($_GET['id']))
 			{
 				try {
-					$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:setid');
-					$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+					$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:setid AND publish_time<:currenttime');
+					$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
 					while($row = $db_query->fetch())
 					{
@@ -149,10 +149,19 @@
 						echo('<tr onClick="window.location.href = \'?p=quest&id='.$row['PROBLEM_ID'].'\';">
 							<td>#'.$row['PROBLEM_ID'].'</td>
 							<td><a href="?p=quest&id='.$row['PROBLEM_ID'].'">'.$row['title'].'</a></td>
-							<td>'.$problemtype.'</td>
-							<td>'.$maxscore.'/'.$row['maxpoints'].' pkt.</td>
-							<td style="background-image: '.$attemptsgradient.';">'.$attempts.'</td>
-						</tr>');
+							<td>'.$problemtype.'</td>');
+						if(strtotime($row['result_publish_time'])<strtotime("now"))
+						{
+							echo('
+								<td>'.$maxscore.'/'.$row['maxpoints'].' pkt.</td>
+								<td style="background-image: '.$attemptsgradient.';">'.$attempts.'</td>
+							</tr>');
+						} else {
+							echo('
+								<td style="text-align: center;"><i class="fa fa-eye-slash"></i></td>
+								<td style="background-image: '.$attemptsgradient.';">'.$attempts.'</td>
+							</tr>');
+						}
 					}
 
 				} catch (Exception $e)
@@ -181,8 +190,8 @@
 					$scores = array();
 					$temp_table_user_ids = array();
 					$temp_table_total_scores = array();
-					$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:setid ORDER BY PROBLEM_ID DESC');
-					$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+					$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:setid AND result_publish_time<:currenttime ORDER BY PROBLEM_ID DESC');
+					$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
 					while($row = $db_query->fetch())
 					{
@@ -194,8 +203,8 @@
 
 					foreach($problem_array as $p)
 					{
-						$db_query = $pdo->prepare('SELECT SUBMISSIONS.user_id AS user_id, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, SUBMISSIONS.problem_id AS problem_id, USERS.username AS username FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID WHERE SUBMISSIONS.problem_id=:pids AND SUBMISSIONS.problemset_id=:psids ORDER BY SUBMISSIONS.problem_id DESC');
-						$db_query->execute(['pids' => $p, 'psids' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+						$db_query = $pdo->prepare('SELECT SUBMISSIONS.user_id AS user_id, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, SUBMISSIONS.problem_id AS problem_id, USERS.username AS username, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.problem_id=:pids AND SUBMISSIONS.problemset_id=:psids AND PROBLEMS.result_publish_time<:currenttime ORDER BY SUBMISSIONS.problem_id DESC');
+						$db_query->execute(['pids' => $p, 'psids' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
 						while($row = $db_query->fetch())
 						{
@@ -208,10 +217,10 @@
 
 							if(!isset($scores[$row['user_id']][$row['problem_id']]['score']))
 							{
-								$scores[$row['user_id']][$row['problem_id']]['score'] = $row['score'];
-								$scores[$row['user_id']][$row['problem_id']]['percentage'] = $row['score_percentage'];
 								if($row['score']!=-1)
 								{
+									$scores[$row['user_id']][$row['problem_id']]['score'] = $row['score'];
+									$scores[$row['user_id']][$row['problem_id']]['percentage'] = $row['score_percentage'];
 									$scores[$row['user_id']]['user_data']['total_score'] += $row['score'];
 								}
 							} else {

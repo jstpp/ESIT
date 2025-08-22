@@ -12,25 +12,32 @@
 
 		$row = $db_query->fetch();
 
-		if($row['score_percentage']==0)
+		if(strtotime($row['result_publish_time'])<strtotime("now"))
 		{
-			$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
-			$percentage = $row['score_percentage']."%";
-			$status = "Całkowicie niepoprawne";
-		} else if ($row['score_percentage']==100)
-		{
-			$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
-			$percentage = $row['score_percentage']."%";
-			$status = "Bez błędów";
-		} else if ($row['score_percentage']==-1)
-		{
+			if($row['score_percentage']==0)
+			{
+				$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
+				$percentage = $row['score_percentage']."%";
+				$status = "Całkowicie niepoprawne";
+			} else if ($row['score_percentage']==100)
+			{
+				$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
+				$percentage = $row['score_percentage']."%";
+				$status = "Bez błędów";
+			} else if ($row['score_percentage']==-1)
+			{
+				$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
+				$percentage = "...";
+				$status = "W kolejce";
+			} else {
+				$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
+				$percentage = $row['score_percentage']."%";
+				$status = "Częściowo poprawne";
+			}
+		} else {
 			$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
 			$percentage = "...";
-			$status = "W kolejce";
-		} else {
-			$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
-			$percentage = $row['score_percentage']."%";
-			$status = "Częściowo poprawne";
+			$status = "Wynik ukryty";
 		}
 
 		$results = array();
@@ -144,9 +151,9 @@
 	</div>
 	<br />
 	<?php
-		if ($row['score_percentage']==-1)
+		if ($row['score_percentage']==-1 or strtotime($row['result_publish_time'])>strtotime("now"))
 		{
-			echo('<center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;Twoje rozwiązanie czeka na sprawdzenie. Wyniki będą dostępne niebawem.</center>');
+			echo('<center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;Twoje rozwiązanie czeka na sprawdzenie lub jego wynik został tymczasowo ukryty. Wyniki będą dostępne niebawem.</center>');
 		}
 	?>
 	<table class="results" id="summary" style="width: 90%; margin-right: 5%; margin-top: 4vmax;">
@@ -154,9 +161,9 @@
 			<td><?php echo($row['submission_time']); ?></td>
 			<td><?php echo($row['verification_time']); ?></td>
 			<td><i class='fas fa-cloud'></i>&nbsp;Algorytmiczne</td>
-			<td style="background-image: <?php echo($gradient); ?>"><?php echo($status); ?></td>
-			<td><?php echo($row['score']); ?>/<?php echo($row['maxpoints']); ?></td>
-			<td style="background-image: <?php echo($gradient); ?>"><?php echo($percentage); ?></td>
+			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($status); } ?></td>
+			<td><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score']); } ?>/<?php echo($row['maxpoints']); ?></td>
+			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($percentage); } ?></td>
 		</tr>
 	</table>
 	<br style="clear: both;" />
@@ -213,7 +220,7 @@
 	<br />
 </div>
 <?php
-	if ($row['score_percentage']==-1)
+	if ($row['score_percentage']==-1 or strtotime($row['result_publish_time'])>strtotime("now"))
 	{
 		echo("<script>document.getElementById('details').style.display = 'none';</script>");
 		echo("<script>document.getElementById('charts').style.display = 'none';</script>");
