@@ -34,7 +34,7 @@ The installation may take some time - be prepared for it.
 
 After the end of the installation, service should be available on `localhost:80` unless You don't change it in proper files.
 
-# Files in `/setup` directory
+## Files in `/setup` directory
 ### Configuration files
 | File | Container | Description |
 | --- | --- | --- |
