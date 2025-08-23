@@ -14,7 +14,7 @@
 		$problemtype = $row['type'];
 	}
 
-	if($isfound!=1) 
+	if($isfound!=1 or (strtotime($publishtime)>strtotime("now") and $_SESSION['AUTH_LEVEL']>3)) 
 	{ 
 		kick();
 	}

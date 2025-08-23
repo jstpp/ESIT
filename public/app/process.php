@@ -1,7 +1,6 @@
 <?php
 	include(__DIR__.'/../../include/config/config_init.php');
 	include(__DIR__.'/../../include/app/core.php');
-
 	if(isset($_GET['r']))
 	{
 		if($_GET['r']=="register")
@@ -100,6 +99,9 @@
 		{
 			if(!is_logged_in()) force_to_login();
 			include(__DIR__.'/../../include/app/settings/change_password.php');
+		} else if($_GET['r']=="get_content")
+		{
+			include(__DIR__.'/../../include/app/content_delivery/get_content.php');
 		} else {
 			echo("Not found.");
 			kick();

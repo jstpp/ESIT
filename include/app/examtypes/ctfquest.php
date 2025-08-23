@@ -56,7 +56,7 @@
 	<br />
 	<br />
 	<center>
-		<a class="forminput_a" href="content/ctf_public/<?php echo($problemid); ?>/<?php echo(scandir("content/ctf_public/".$problemid, SCANDIR_SORT_DESCENDING)[0]); ?>" download>Pobierz plik</a>
+		<a class="forminput_a" href="process.php?r=get_content&mode=ctffile&cid=<?php echo(filter_var($problemid, FILTER_VALIDATE_INT)); ?>" download>Pobierz plik</a>
 	</center>
 	<br />
 	<br />

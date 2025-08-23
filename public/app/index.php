@@ -29,6 +29,7 @@
 				--bg: #3e4145;
 				--container-bg: #313136;
 				--container-hover-bg: #2a2c2e;
+				--container-hover-bg-textbox:rgba(32, 33, 34, 1);
 				--text: #dae2e6;
 			}
 
@@ -36,6 +37,7 @@
 				--bg: #dae2e6;
 				--container-bg: #c8c8c8;
 				--container-hover-bg:rgb(170, 170, 170);
+				--container-hover-bg-textbox: #dae2e6;
 				--text: #3e4145;
 			}
 
@@ -43,6 +45,7 @@
 				--bg: #3e4145;
 				--container-bg: #313136;
 				--container-hover-bg: #2a2c2e;
+				--container-hover-bg-textbox:rgba(32, 33, 34, 1);
 				--text: #dae2e6;
 			}
 

@@ -94,15 +94,15 @@
 	.window .forminput, .window .forminput_a {
 		border: 0; 
 		padding: 1vw 1.5vw; 
-		color: #dae2e6; 
-		background-color: #2a2c2e; 
+		color: var(--text); 
+		background-color: var(--container-hover-bg-textbox); 
 		font-family: inherit;
 		transition: 0.4s;
 		outline: none;
 		text-decoration: none;
 	}
 	.window .forminput_a:hover {
-		background-color: #3e4145;
+		background-color: var(--container-hover-bg); 
 		cursor: pointer;
 	}
 	.window .window_card
