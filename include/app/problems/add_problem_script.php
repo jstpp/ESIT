@@ -1,22 +1,21 @@
 <?php
     function process_alg_create_root($pid)
 	{
-        mkdir("content/quests/".$pid, 0777);
-        mkdir("content/quests/".$pid."/pdf", 0777, true);
 		mkdir(__DIR__.'/../../../include/worker/alg/'.$pid, 0777, true);
         mkdir(__DIR__.'/../../../include/worker/alg/'.$pid."/in", 0777, true);
         mkdir(__DIR__.'/../../../include/worker/alg/'.$pid."/out", 0777, true);
+        mkdir(__DIR__.'/../../../include/worker/alg/'.$pid."/pdf", 0777, true);
 	}
 
     function process_ctf_public_create_root($pid)
 	{
-		mkdir("content/ctf_public/".$pid, 0777);
+        mkdir(__DIR__.'/../../../include/worker/ctf/'.$pid, 0777, true);
 	}
 
     function process_form_create_root($pid)
 	{
-		mkdir("content/quests/".$pid, 0777);
-        mkdir("content/quests/".$pid."/pdf", 0777);
+		mkdir(__DIR__.'/../../../include/worker/alg/'.$pid, 0777, true); 
+        mkdir(__DIR__.'/../../../include/worker/alg/'.$pid."/pdf", 0777, true); 
 	}
 
     function process_alg_check($file, $mode)
@@ -33,7 +32,7 @@
         }
 
 		if (file_exists(basename($file["name"]))) {
-          	echo "Sorry, file already exists.";
+          	echo "Plik już istnieje.";
           	$uploadOk = 0;
         }
 
@@ -64,7 +63,7 @@
 
         $uploadOk = 1;
 		if (file_exists($target_file)) {
-          	echo "Sorry, file already exists.";
+          	echo "Plik już istnieje.";
           	$uploadOk = 0;
         }
 
@@ -84,14 +83,14 @@
     function process_alg_content($file, $mode, $pid)
 	{
 		$index = "new_file";
-		$target_file = "content/quests/".$pid."/".$mode."/".basename($file["name"]);
+		$target_file = __DIR__.'/../../../include/worker/alg/'.$pid."/".$mode."/".basename($file["name"]);
 		$FileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-		$target_file = "content/quests/".$pid."/".$mode."/".$pid.".".$FileType;
+		$target_file = __DIR__.'/../../../include/worker/alg/'.$pid."/".$mode."/".$pid.".".$FileType;
 		$check = filesize($file["tmp_name"]);
 
         $uploadOk = 1;
 		if (file_exists($target_file)) {
-          	echo "Sorry, file already exists.";
+          	echo "Plik już istnieje.";
           	$uploadOk = 0;
         }
 
@@ -111,9 +110,9 @@
     function process_ctf_public_file($file, $pid)
 	{
 		$index = "new_file";
-		$target_file = 'content/ctf_public/'.$pid."/".basename($file["name"]);
+		$target_file = __DIR__.'/../../../include/worker/ctf/'.$pid."/".basename($file["name"]);
 		$FileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-		$target_file = 'content/ctf_public/'.$pid."/".$pid.".".$FileType;
+		$target_file = __DIR__.'/../../../include/worker/ctf/'.$pid."/".$pid.".".$FileType;
 		$check = filesize($file["tmp_name"]);
 
         $uploadOk = 1;

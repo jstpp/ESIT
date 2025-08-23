@@ -42,9 +42,9 @@
 
 <div class="window">
 	<h2 class="window_title">Treść zadania</h2>
-	<iframe src="content/quests/<?php echo($problemid); ?>/pdf/<?php echo($problemid); ?>.pdf" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
+	<iframe src="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
 	<br />
-	<p style="color: white; text-align: center; width: 100%;">To zadanie możesz też otworzyć <a href="content/quests/<?php echo($problemid); ?>/pdf/<?php echo($problemid); ?>.pdf" target="_blank">&nbsp;<i class='fas fa-folder-open'></i>&nbsp;tutaj</a>&nbsp;</p>
+	<p style="color: white; text-align: center; width: 100%;">To zadanie możesz też otworzyć <a href="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" target="_blank">&nbsp;<i class='fas fa-folder-open'></i>&nbsp;tutaj</a>&nbsp;</p>
 	<br />
 	<br />
 </div>
