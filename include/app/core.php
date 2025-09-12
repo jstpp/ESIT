@@ -32,7 +32,7 @@
 		'general_motd' => 'Change your MOTD',
 		'general_url' => 'localhost',
 		'general_timezone' => 'Europe/Warsaw',
-		'general_workers_allowed_addr' => '["localhost", "worker"]',
+		'general_workers_allowed_addr' => '["localhost", "worker", "172.18.0.1"]',
 		'plugin_custom_error_broker_url' => 'localhost',
 		'plugin_mailing_module_host' => 'localhost',
 		'plugin_mailing_module_port' => 587,
