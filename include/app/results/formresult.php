@@ -14,8 +14,7 @@
 
 		if(!isset($row['score_percentage']))
 		{
-			echo("<meta http-equiv='refresh' content='0; url=".$error_link."' />"); 
-			die;
+			kick();
 		}
 
 		
@@ -48,8 +47,7 @@
 		}
 
 	} else {
-		echo("<meta http-equiv='refresh' content='0; url=".$error_link."' />"); 
-		die;
+		kick();
 	}
 ?>
 <style>

@@ -24,6 +24,7 @@ services:
       - GID=${GID:-1001}
     volumes:
       - ./public/index.php:/www/esit/public/index.php
+      - ./public/process.php:/www/esit/public/process.php
       - ./public/img:/www/esit/public/img
       - ./public/login:/www/esit/public/login
       - ./public/include/resources:/www/esit/public/include/resources

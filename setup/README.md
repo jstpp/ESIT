@@ -34,8 +34,6 @@ The installation may take some time - be prepared for it.
 
 After the end of the installation, service should be available on `localhost:80` unless You don't change it in proper files.
 
-> [!important] Remember to change `$org_link` when running application with custom domain. Also, adjust Your mailing config for password recovery features - consider own mailing server due to the popular providers' anti-spam policy.
-
 ## Files in `/setup` directory
 ### Configuration files
 | File | Container | Description |
@@ -57,16 +55,7 @@ After the end of the installation, service should be available on `localhost:80`
 | `worker-dockerfile` | `worker` |
 
 ## Config variables
-### General config
-| Variable | Type | Description |
-| --- | --- | --- |
-| `$org_link` | string | Your website's URL. **We use it for connection with ESIT workers and for API communication!** |
-| `$site_domains` | array | More URLs |
-| `$site_timezone` | string | Your timezone |
-| `$error_link` | string | Your custom error site |
-| `$display_debug` | boolean | Displaying debug informations |
 
-> The access to general config variables will be more flexible in the future - the variables would be accessed from GUI instead of config file modifications.
 ### Database (mariadb) config
 
 | Variable | Type | Description |
@@ -89,17 +78,10 @@ After the end of the installation, service should be available on `localhost:80`
 | Variable | Type | Description |
 | --- | --- | --- |
 | `$worker_network_private_key`| string | Key used for API encryption |
-| `$worker_trusted_ips` | array | Array of workers' IPs |
 
 ### Mailing config
 | Variable | Type | Description |
 | --- | --- | --- |
-| `$enable_mailing_module`| boolean | Enable mailing module |
-| `$mail_host` | string | Mailing server |
-| `$mail_port` | integer | Port |
-| `$mail_username` | string | Username in the mailing server |
-| `$mail_password` | string | Password in the mailing server |
 | `$mail_name` | string | Name of the sender |
 | `$mail_smtp_debug` | integer | SMTP debugging |
-| `$mail_smtp_secure` | string | Enable TLS/SSL encryption |
 | `$mail_smtp_auth` | boolean | Enable SMTP auth |

@@ -1,5 +1,5 @@
 <?php
-	include(__DIR__.'/../../include/config/config_init.php');
+	include(__DIR__.'/../../include/app/core.php');
 	if(isset($_SESSION['AUTH_ID']))
 	{
 		echo('<meta http-equiv="refresh" content="0; url=../app/index.php" />');
@@ -165,13 +165,12 @@
 					<br />
 					<input class="login_input" type="password" name="auth_password" placeholder="Hasło" required />
 					<br />
-					<?php if($enable_mailing_module==true) echo('<a onClick=\'document.getElementById("password_recovery_window_mail").style.display = "block"; document.getElementById("default_login_window").style.display = "none";\' class="simple_href" style="float: left; margin-top: 0.5vmax; margin-left: 7%; font-size: 1vmax;">Nie pamiętasz hasła?</a>'); ?>
-					<br />
+					<?php if(boolval(get_misc_value('plugin_mailing'))) echo('<a onClick=\'document.getElementById("password_recovery_window_mail").style.display = "block"; document.getElementById("default_login_window").style.display = "none";\' class="simple_href" style="float: left; margin-top: 0.5vmax; margin-left: 7%; font-size: 1vmax;">Nie pamiętasz hasła?</a>'); ?>
 					<br />
 					<input class="login_submit" type="submit" value="Zaloguj się" />
 					<br style="clear: both;"/>
-					<br />
 				</form>
+				<p>Nie masz jeszcze konta? <a class="simple_href" href="../rejestracja.php">Zarejestruj się</a>.</p>
 			</div>
 			<div class="window" id="password_recovery_window_mail" style="display: none;">
 				<form method="POST" action="process.php?s=passrecovery_mail">

@@ -1,7 +1,6 @@
 <?php
 	if(isset($_GET['s']))
 	{
-		include(__DIR__.'/../../include/config/config_init.php');
 		include(__DIR__.'/../../include/app/core.php');
 		
 		if ($_GET['s']=="logout")

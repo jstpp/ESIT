@@ -48,5 +48,10 @@
 <div id="horizontal_menu">
 	<a href="../login/process.php?s=logout"><i class='fas fa-door-open'></i>&emsp;Wyloguj się</a>
 	<a onClick="document.getElementById('notifications_menu').style.display = 'block';"><i class='fa fa-bell'></i>&emsp;Powiadomienia</a>
-	<a href="../index.php"><i class='fa fa-bookmark'></i>&emsp;Portal</a>
+	<?php
+		if(boolval(get_misc_value('plugin_portal')))
+		{
+			echo('<a href="../index.php"><i class=\'fa fa-bookmark\'></i>&emsp;Portal</a>');
+		}
+	?>
 </div>

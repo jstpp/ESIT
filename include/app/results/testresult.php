@@ -23,8 +23,7 @@
 
 		if(!isset($row['score_percentage']))
 		{
-			echo("<meta http-equiv='refresh' content='0; url=".$error_link."' />"); 
-			die;
+			kick();
 		}
 
 		if(strtotime($row['result_publish_time'])<strtotime("now"))
@@ -56,8 +55,7 @@
 		}
 
 	} else {
-		echo("<meta http-equiv='refresh' content='0; url=".$error_link."' />"); 
-		die;
+		kick();
 	}
 ?>
 <style>

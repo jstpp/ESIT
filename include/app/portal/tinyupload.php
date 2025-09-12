@@ -1,7 +1,7 @@
 <?php
     if(is_logged_in() and has_a_priority(3))
     {
-        $accepted_origins = array_merge(array("http://localhost", "http://192.168.1.1"), $site_domains);
+        $accepted_origins = array("http://localhost", "http://192.168.1.1", get_misc_value('general_url'));
         
         $imageFolder = "../img/articles/";
         

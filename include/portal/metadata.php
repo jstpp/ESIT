@@ -1,4 +1,9 @@
 <?php
+    require_once(__DIR__.'/../app/core.php');
+    if(!boolval(get_misc_value('plugin_portal')))
+    {
+        redirect("app/index.php");
+    }
     $db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name LIKE "general_%"');
     $db_query->execute();
     while($row = $db_query->fetch())
