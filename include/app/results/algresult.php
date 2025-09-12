@@ -56,8 +56,7 @@
 			array_push($results, $xr);
 		}
 	} else {
-		echo("<meta http-equiv='refresh' content='0; url=".$error_link."' />"); 
-		die;
+		kick();
 	}
 ?>
 <style>

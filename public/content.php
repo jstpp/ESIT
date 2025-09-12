@@ -1,5 +1,5 @@
 <?php
-    include(__DIR__.'/../include/config/config_init.php');
+    include(__DIR__.'/../include/app/core.php');
 
     $found = 0;
     try
@@ -7,7 +7,7 @@
         $db_query = $pdo->prepare('SELECT * FROM ARTICLES WHERE ID=:id');
         $db_query->execute(['id' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
     } catch (Exception $e) {
-        header("Location: ".$error_link);
+        kick();
     }
 
     while($row = $db_query->fetch())
@@ -19,7 +19,7 @@
         $article_content = $row['content'];
         $article_image_path = $row['image_path'];
     }
-    if($found!=1) { header("Location: ".$error_link); }
+    if($found!=1) { kick(); }
 ?>
 <!DOCTYPE html>
 <html lang="pl">

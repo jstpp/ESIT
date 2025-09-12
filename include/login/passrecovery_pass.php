@@ -1,5 +1,5 @@
 <?php
-    include('../../include/config/config_init.php');
+    include('../../include/app/core.php');
 
     if(isset($_SESSION['pr_mail']) and isset($_SESSION['pr_token']) and isset($_POST['recovery_pass_1']) and isset($_POST['recovery_pass_2']))
     {

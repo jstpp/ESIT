@@ -166,12 +166,10 @@
 
 				} catch (Exception $e)
 				{
-					echo("<meta http-equiv='refresh' content='0; url=".$error_link."' />");
-					die;
+					kick();
 				}
 			} else {
-				echo("<meta http-equiv='refresh' content='0; url=".$error_link."' />");
-				die;
+				kick();
 			}
 		?>
 	</table>

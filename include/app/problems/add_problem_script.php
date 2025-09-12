@@ -147,8 +147,7 @@
 
     if($isfound!=1)
     {
-        echo("<meta http-equiv='refresh' content='0; url=".$error_link."' />"); 
-		die;
+        kick();
     }
 
     if(isset($_POST['problem_type']) and $_POST['problem_type']>0 and $_POST['problem_type']<=5)

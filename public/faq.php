@@ -1,5 +1,5 @@
 <?php
-    include(__DIR__.'/../include/config/config_init.php');
+    require_once(__DIR__.'/../include/app/core.php');
 ?>
 <!DOCTYPE html>
 <html lang="pl">

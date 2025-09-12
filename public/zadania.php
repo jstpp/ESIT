@@ -1,5 +1,5 @@
 <?php
-    include(__DIR__.'/../include/config/config_init.php');
+    include(__DIR__.'/../include/app/core.php');
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -39,7 +39,7 @@
                 if($count==0) echo('<center style="width: 100%;"><br /><br />Niczego tu jeszcze nie ma!</center>');
             ?>
         </div>
-        <h2 style="text-align: center; color: rgb(0, 35, 50);">Zbiór zadań przygotowawczych do Olimpiady</h2>
+        <h2 style="text-align: center; color: rgb(0, 35, 50);">Zbiór zadań przygotowawczych</h2>
         <div class="event">
             <?php
                 $db_query = $pdo->prepare('SELECT * FROM PORTAL_RESOURCES WHERE resource_type="quests" AND is_actual=0');

@@ -15,6 +15,7 @@
 			$_SESSION['AUTH_LEVEL'] = $row['role'];
 			$_SESSION['AUTH_MAIL'] = $row['mail'];
 			$_SESSION['AUTH_LAST_LOGIN'] = $row['lastlogin'];
+			$_SESSION['SESSION_TIMEOUT'] = strtotime("now")+18000;
 
 			if($row['role']==1)
 			{

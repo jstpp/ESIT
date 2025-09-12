@@ -1,5 +1,3 @@
-<?php include(__DIR__.'/../app/core.php'); ?>
-
 <?php
 	$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name LIKE "social_media_%"');
 	$db_query->execute();

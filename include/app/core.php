@@ -1,22 +1,106 @@
 <?php
+	session_start();
+
+	###############################################
+	#               customization				  #
+	###############################################
+
+	# database connection
+	$db_host = "mysql"; #MySQL host
+    $db_username = "esit_db"; #MySQL username
+    $db_password = "esit_db"; #MySQL password
+    $db_database = "esit_db"; #MySQL db name
+    $db_charset = "utf8"; #MySQL charset
+
+	# broker connection
+	$rabbit_mq_host = "rabbitmq"; #Broker's host
+    $rabbit_mq_port = 5672; #Broker's access port
+    $rabbit_mq_user = "esit_user"; #Broker's access username
+    $rabbit_mq_password = "123456"; #Broker's access password
+
+	# mailing settings
+	$mail_name = "ESIT Mailing Module"; #Name of the sender
+	$mail_smtp_debug = 0; #Mail debugging
+	$mail_smtp_auth = true;
+
+	# network and APIs
+	$worker_network_private_key = "write_something_complicated_here!"; #Change it to provide higher level of data safety during transfer via API
+
+	# default variables
+	$default_variables = array(
+		'general_title' => 'My First ESIT app',
+		'general_motd' => 'Change your MOTD',
+		'general_url' => 'localhost',
+		'general_timezone' => 'Europe/Warsaw',
+		'general_workers_allowed_addr' => '["localhost", "worker"]',
+		'plugin_custom_error_broker_url' => 'localhost',
+		'plugin_mailing_module_host' => 'localhost',
+		'plugin_mailing_module_port' => 587,
+		'plugin_mailing_module_username' => 'YourUsername',
+		'plugin_mailing_module_password' => 'YourPassword',
+		'plugin_mailing_module_protocol' => 'starttls'
+	);
+
+	###############################################
+	#		   	 database connection	     	  #
+	###############################################
+
+	$dsn = "mysql:host=$db_host;dbname=$db_database;options='--client_encoding=$db_charset'";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
+    $pdo = new PDO($dsn, $db_username, $db_password, $options);
+
+
 	###############################################
 	#              general toolbox				  #
 	###############################################
 
+	function get_misc_value($key)
+	{
+		global $pdo;
+		$config_array = array();
+
+		$db_query = $pdo->prepare('SELECT DISTINCT * FROM MISC WHERE misc_name=:key');
+		$db_query->execute(['key' => $key]);
+
+		while($row = $db_query->fetch())
+		{
+			return $row['misc_value'];
+		}
+
+		global $default_variables;
+		if(isset($default_variables[$key]))
+		{
+			return $default_variables[$key];
+		} else {
+			return "";
+		}
+	}
+
 	function force_to_login()
 	{
-		global $org_link;
-
-		header("Location: ".$org_link);
-
-		echo('<meta http-equiv="refresh" content="0; url='.$org_link.'/login" />');
+		header("Location: /login");
+		echo('<meta http-equiv="refresh" content="0; url=/login" />');
 		die;
 	}
 
 	function kick()
 	{
-		global $error_link;
-		
+		if(boolval(get_misc_value('plugin_errors')) and boolval(get_misc_value('plugin_custom_error_broker_url')))
+		{
+			$error_link = get_misc_value('plugin_custom_error_broker_url');
+		} else {
+			if(boolval(get_misc_value('general_url')))
+			{
+				$error_link = get_misc_value('general_url')."/error.php";
+			} else {
+				$error_link = "http://localhost/error.php";
+			}
+		}
+
 		header("Location: ".$error_link);
 		
 		echo('<meta http-equiv="refresh" content="0; url='.$error_link.'/login" />');
@@ -100,6 +184,33 @@
 		}
 	}
 
+	function check_session_timeout()
+	{
+		if(isset($_SESSION['SESSION_TIMEOUT']))
+		{
+			if($_SESSION['SESSION_TIMEOUT']<strtotime("now"))
+			{
+				session_destroy();
+				force_to_login();
+			} else {
+				$_SESSION['SESSION_TIMEOUT'] += 18000;
+			}
+		} else {
+			force_to_login();
+		}
+	}
+
+	function net_check_if_trusted()
+	{
+		if(in_array($_SERVER['REMOTE_ADDR'],json_decode(get_misc_value('general_workers_allowed_addr'))))
+		{
+			return True;
+		} else {
+			return False;
+		}
+	}
+
+
 	###############################################
 	#              some automation				  #
 	###############################################
@@ -119,4 +230,17 @@
 	{
 		parse_error_message($_GET['error']);
 	}
+
+	try {
+		date_default_timezone_set(get_misc_value('general_timezone'));
+	} catch (Exception $e) {
+		echo("Unvalid timezone.");
+	}
+
+	if(boolval(get_misc_value('plugin_debugging')))
+    {
+        ini_set('display_errors', '1');
+        ini_set('display_startup_errors', '1');
+        error_reporting(E_ALL);
+    }
 ?>

@@ -1,6 +1,6 @@
 <?php
-	include(__DIR__.'/../../include/config/config_init.php');
 	include(__DIR__.'/../../include/app/core.php');
+
 	if(isset($_GET['r']))
 	{
 		if($_GET['r']=="register")
@@ -33,9 +33,11 @@
 			include(__DIR__.'/../../include/worker/mq_producer.php');
 		} else if($_GET['r']=="api_get_results")
 		{
+			if(!net_check_if_trusted()) kick();
 			include(__DIR__.'/../../include/worker/api/api_get_results.php');
 		} else if($_GET['r']=="ask_for_inout")
 		{
+			if(!net_check_if_trusted()) kick();
 			include(__DIR__.'/../../include/worker/api/api_ask_for_inout.php');
 		} else if($_GET['r']=="registration_is_unique")
 		{
@@ -90,6 +92,11 @@
 			if(!is_logged_in()) force_to_login();
 			if(!has_a_priority(3)) kick();
 			include(__DIR__.'/../../include/app/user_management/remove_user.php');
+		} else if($_GET['r']=="modify_config")
+		{
+			if(!is_logged_in()) force_to_login();
+			if(!has_a_priority(3)) kick();
+			include(__DIR__.'/../../include/app/config/modify_config.php');
 		} else if($_GET['r']=="create_set")
 		{
 			if(!is_logged_in()) force_to_login();
@@ -106,5 +113,7 @@
 			echo("Not found.");
 			kick();
 		}
+
+		if(is_logged_in()) check_session_timeout();
 	}
 ?>

@@ -138,13 +138,13 @@
     $myObj->problem_id = $problem_id; 
     $myObj->submission_lang = $submission_lang;
     $myObj->tests = $tests;
-    $myObj->listenerUrl = $site_domains[0];
+    $myObj->listenerUrl = get_misc_value('general_url');
     $myObj->submission_time = date('Y-m-d H:i:s');
     $myObj->submission_file = base64_encode(file_get_contents(zip_submission($submission_id)));
 
     $data = json_encode($myObj);
 
-    mqsend($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $data); #credentials from config/config_init.php
+    mqsend($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $data); #credentials from app/core.php
 
     redirect("index.php?p=algresult&sid=".$submission_id);
     die;

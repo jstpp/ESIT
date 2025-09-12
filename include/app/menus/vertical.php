@@ -61,8 +61,11 @@
 	<?php
 		if(has_a_priority(3))
 		{
-			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-school\'></i>&emsp;Administracja</a>
-	<a href="?p=portal" id="portal"><i class=\'fa fa-bank\'></i>&emsp;Zarządzanie portalem</a>');
+			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-school\'></i>&emsp;Administracja</a>');
+			if(boolval(get_misc_value('plugin_portal')))
+			{
+				echo('<a href="?p=portal" id="portal"><i class=\'fa fa-bank\'></i>&emsp;Zarządzanie portalem</a>');
+			}
 		}
 	?>
 	<p class="category_title">Zbiory zadań</p>

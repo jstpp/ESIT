@@ -112,7 +112,7 @@
 
                 if(process_check($_FILES['quest_file_'.$i], "pdf"))
                 {
-                    $resource_path = process_resource($_FILES['quest_file_'.$i], "pdf", $resource_id, $org_link);
+                    $resource_path = process_resource($_FILES['quest_file_'.$i], "pdf", $resource_id, get_misc_value('general_url'));
                     if($_POST['is_actual_'.$i]=="1")
                     {
                         $is_actual = 1;
@@ -156,7 +156,7 @@
 
                 if(process_check_img($_FILES['logo_file_'.$i]))
                 {
-                    $resource_path = process_resource($_FILES['logo_file_'.$i], strtolower(pathinfo(basename($_FILES['logo_file_'.$i]['name']),PATHINFO_EXTENSION)), $resource_id, $org_link);
+                    $resource_path = process_resource($_FILES['logo_file_'.$i], strtolower(pathinfo(basename($_FILES['logo_file_'.$i]['name']),PATHINFO_EXTENSION)), $resource_id, get_misc_value('general_url'));
                 } else {
                     kick();
                 }

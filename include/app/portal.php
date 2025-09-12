@@ -168,22 +168,12 @@
 </div>
 <div class="window">
 	<h2 class="window_title">Ustawienia ogólne</h2>&emsp;
-	<?php
-		$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name LIKE "general_%"');
-		$db_query->execute();
-
-		while($row = $db_query->fetch())
-		{
-			if($row['misc_name']=="general_title") $general_title = $row;
-			if($row['misc_name']=="general_motd") $general_motd = $row;
-		}
-	?>
 	<form id="misc_general_form" method="POST" action="process.php?r=modify_resources&mode=general">
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-keyboard-o" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_title" placeholder="Nazwa strony" value="<?php if(isset($general_title)) echo($general_title['misc_value']); ?>" />
+			<i class="fa fa-keyboard-o" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_title" placeholder="Nazwa strony" value="<?php echo(get_misc_value('general_title')); ?>" />
 		</div>
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			&nbsp;<i class="fa fa-i-cursor" style="font-size: 2vw;"></i>&emsp;&emsp;<input class="forminput" style="width: 80%" type="text" name="g_motd" placeholder="MOTD strony" value="<?php if(isset($general_motd)) echo($general_motd['misc_value']); ?>" />
+			&nbsp;<i class="fa fa-i-cursor" style="font-size: 2vw;"></i>&emsp;&emsp;<input class="forminput" style="width: 80%" type="text" name="g_motd" placeholder="MOTD strony" value="<?php echo(get_misc_value('general_motd')); ?>" />
 		</div>
 	</form>
 	<br />
