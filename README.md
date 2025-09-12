@@ -16,7 +16,7 @@ Create user `esit-user` and download repository:
 ```bash
 git clone https://github.com/jstpp/esit.git && cd esit
 ```
-You can customize your [config file](include/config/config_init.php). You should consider it when You run it in production mode, otherwise You can ignore it.
+You can customize your [config file](include/app/core.php). You should consider it when You run it in production mode, otherwise You can ignore it.
 
 Start docker compose with predefined user-id and group-id:
 ```bash

@@ -8,7 +8,7 @@ To start the worker without running entire [compose.yaml](../compose.yaml) You s
 >
 > When privileged mode of docker container is not enabled, worker will probably return `255` error code. It's probably related with docker's seccomp policy.
 
-When proper environment is ready You can start worker using
+When proper environment is ready (make sure, that IP of your worker is on the proper list - You can add IPs in GUI) You can start worker using:
 ```bash
 python3 /worker/mq_receiver.py
 ```
