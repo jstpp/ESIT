@@ -1,14 +1,16 @@
 # <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="25" style="user-select: none;">&nbsp;&nbsp;ESIT
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
-`Evaluation System for IT` - simple online judge with additional features. Measure execution time and limit memory inside nsjail-based sandboxes. Divide your content into sets of exercises and show your results with scoreboards. 
+`Evaluation System for IT` - simple online judge with additional features. Measure execution time and limit memory inside nsjail-based sandboxes. Divide your content into sets of exercises and show your results with scoreboards.
 
 ![Screenshot of dashboard](public/img/screenshots/screenshot-1.png)
 ## Purpose
 ESIT is a platform for organizing contests, exams and other similar forms related with Computer Science.
+> [!important]
+> Take into consideration, that this is still an unstable project.
 
 > [!important]
-> This repo is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness FOR A particular purpose. You are using this software at Your own risk.
+> This repo is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness FOR A particular purpose. You are using this software at Your own risk. 
 
 ## Installation
 
