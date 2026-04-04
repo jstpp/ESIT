@@ -6,7 +6,7 @@
 
 		background-color: var(--container-bg);
 
-		border: 0.2vw solid #2a2c2e;
+		border: 0.2vw solid var(--container-hover-bg);
 		border-radius: 1vw;
 	}
 
@@ -106,7 +106,8 @@
 		background: transparent;
 		outline: none;
 		border: none;
-		border-bottom: 0.3vmin solid rgb(204, 204, 204);
+		border-bottom: 0.3vmin solid var(--text);
+		color: var(--text);
 		font: inherit;
 		width: 98%;
 		margin-left: auto;
@@ -191,6 +192,76 @@
 	.switch-checkbox input:checked + .switch-checkbox-toggle:before {
 		transform: translateX(0.9vmax);
 	}
+
+	.remove_plugin {
+		float: right;
+		margin: 0.5vmax;
+		transition: 0.3s;
+		cursor: pointer;
+		font-size: 1.5vmax;
+		text-decoration: none;
+		color: var(--text);
+	}
+	.remove_plugin:hover {
+		color: red;
+	}
+
+	#settings_menu {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		margin-left: 2.5%;
+		width: 60%;
+		display: flex;
+		gap: 1vmax;
+		align-items: center;
+	}
+	#settings_menu a {
+		color: #00b3ff; 
+		text-decoration: none;
+		transition: 0.3s;
+	}
+	#settings_menu a:hover {
+		color: var(--text); 
+	}
+
+	#search_icon {
+		transition: 0.3s;
+		cursor: pointer;
+	}
+	#search_icon:hover {
+		color: #00b3ff;
+	}
+
+	.github_search_results_item {
+		background-color: var(--container-hover-bg);
+		border-radius: 0.5vmax;
+		margin-bottom: 0.5vmax;
+		padding: 1vmax;
+		display: flex;
+		align-items: center;
+		gap: 1vmax;
+		text-align: justify;
+	}
+
+	.github_search_results_item img {
+		height: 3vmax;
+		border-radius: 50%;
+		margin-left: 1vmax;
+		margin-right: 1vmax;
+	}
+
+	.download_button {
+		font-size: 1.5vmax;
+		transition: 0.3s;
+		cursor: pointer;
+		margin-right: 1vmax;
+		text-decoration: none;
+		color: white;
+	}
+	.download_button:hover {
+		color: #00b3ff;
+	}
 </style>
 
 <center>
@@ -198,7 +269,7 @@
 </center>
 <div id="user_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
 	<span onClick="document.getElementById('user_dialog').style.display = 'none';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
-	<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
+	<div style="background-color: var(--bg); color: var(--text); width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
 		<h2 style="text-align: center;">Dodaj użytkownika</h2>
 		<br />
 		<form method="POST" id="user_form">
@@ -220,8 +291,81 @@
 		<br style="clear: both;"/>
 	</div>
 </div>
-<div class="window">
-	<h2 class="window_title">Konfiguracja</h2>
+<div id="plugins_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999;">
+	<span onClick="document.getElementById('plugins_dialog').style.display = 'none';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
+	<div style="background-color: var(--bg); color: var(--text); width: 80vw; height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax; overflow: auto;">
+		<h1 style="text-align: center;">Wyszukaj wtyczkę na GitHubie&nbsp;&nbsp;<i class="fa fa-github"></i></h1>
+		<center>
+			<small>
+				Wyszukiwarka wtyczek wyświetla repozytoria oznaczone tagiem <code>esit-plugins</code>
+			</small>
+		</center>
+		<br />
+		<div style="width: 90%; margin-left: 5%; background-color: var(--container-hover-bg-textbox); overflow: hidden; border-radius: 0.4vmax; display: flex; align-items: center; justify-content: right;">
+			<input type="text" id="github_searchbox" placeholder="Nazwa repozytorium lub słowo kluczowe" style="outline: none; width: 100%; background-color: transparent; color: var(--text); border: none; padding: 1vmax; font-size: 1.2vmax; font-family: inherit; float: left;"/>
+			<i class="fa fa-search" id="search_icon" onClick="githubSearch();" style="font-size: 1.2vmax; margin-right: 1.2vmax;"></i>
+		</div>
+		<div id="github_search_results" style="width: 90%; margin-left: 5%; display: none;">
+			<br />
+			<h3>Repozytoria użytkownika</h3>
+			<div class="github_search_results_item">
+				<img src="#" />
+				<p style="width: 80%;">
+					<b>Repo 1</b> by <b>jdoe</b><br />
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+				</p>
+				<a class="download_button"><i class="fa fa-download"></i></a>
+			</div>		
+			<h3>Wyszukiwanie repozytoriów</h3>
+		</div>
+		<script>
+			async function githubSearch() {
+				const query = document.getElementById("github_searchbox").value;
+    			const resultsDiv = document.getElementById("github_search_results");
+				resultsDiv.innerHTML = '';
+
+				const repo_search = await fetch("https://api.github.com/search/repositories?q=" + encodeURIComponent(document.getElementById("github_searchbox").value) + "+topic:esit-plugins&sort=stars&order=desc");
+				const repo_result = await repo_search.json();
+
+				if(repo_result.items && repo_result.items.length > 0) {
+					const repoHeader = document.createElement('h3');
+					repoHeader.textContent = "Popularne repozytoria";
+					resultsDiv.appendChild(repoHeader);
+
+					repo_result.items.forEach(repo => {
+						const repoDiv = document.createElement('div');
+						repoDiv.className = 'github_search_results_item';
+
+						repoDiv.innerHTML = `
+							<img src="${repo.owner.avatar_url}" />
+							<p style="width: 80%;">
+								<b>${repo.name}</b> by <b>${repo.owner.login}</b><br/>
+								${repo.description || 'Brak opisu'}
+							</p>
+							<a href="${repo.html_url}" target="_blank" class="download_button"><i class="fa fa-external-link"></i></a>
+							<a href="process.php?r=download_plugin&repo=` + repo.full_name + `&branch=` + repo.default_branch + `" class="download_button"><i class="fa fa-download"></i></a>
+						`;
+						resultsDiv.appendChild(repoDiv);
+					});
+				} else {
+					const notfoundDiv = document.createElement('center');
+					notfoundDiv.innerHTML = "<br /><br />Nie znaleziono wyników."
+					resultsDiv.appendChild(notfoundDiv);
+				}
+				document.getElementById("github_search_results").style.display = 'block';
+			}
+		</script>
+		<br style="clear: both;"/>
+	</div>
+</div>
+<div id="settings_menu">
+	<p>Nawigacja:</p>
+	<a href="#initial_parameters">Podstawowe parametry</a>
+	<a href="#plugins">Zarządzanie wtyczkami</a>
+	<a href="#users">Zarządzanie użytkownikami</a>
+</div>
+<div class="window" id="initial_parameters">
+	<h2 class="window_title">Podstawowe parametry</h2>
 	<form method="POST" action="process.php?r=modify_config&category=general">
 		<?php
 			if(boolval(get_misc_value('plugin_portal'))) 
@@ -304,8 +448,8 @@
 	<br />
 	<br />
 </div>
-<div class="window">
-	<h2 class="window_title">Wtyczki</h2>
+<div class="window" id="plugins">
+	<h2 class="window_title">Wtyczki systemowe</h2>
 	<form method="POST" action="process.php?r=modify_config&category=plugin">
 		<div class="dark-box">
 			<label class="switch-checkbox">
@@ -356,14 +500,48 @@
 			<label for="plugin_debugging">&emsp;Zaawansowany debugging</label>
 		</div>
 		<br />
-		<input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="Zapisz konfigurację">
+		<input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="Zapisz wtyczki syst.">
+	</form>
+	<br />
+	<br />
+	<h2 class="window_title">Wtyczki społeczności</h2>
+	<form method="POST" action="process.php?r=modify_config&category=community_plugin">
+		<?php
+			$plugins = array_slice(scandir("../../include/plugins/"),2);
+			
+			foreach($plugins as $plugin)
+			{
+				echo('<div class="dark-box">
+					<label class="switch-checkbox">
+						<input type="checkbox" name="community_plugin_'.htmlentities($plugin).'" value="1" id="community_plugin_'.htmlentities($plugin).'" '.(boolval(get_misc_value('community_plugin_'.htmlentities($plugin))) ? 'checked' : '').'>
+						<span class="switch-checkbox-toggle"></span>
+					</label>
+					<label for="community_plugin_'.htmlentities($plugin).'">&emsp;Plugin zewnętrzny: <b>'.htmlentities($plugin).'</b></label>
+					<a href="process.php?r=modify_config&call=plugin_uninstall&plugin_name='.$plugin.'" class="remove_plugin"><i class="fa fa-trash"></i></a>');
+					if(!include_plugins_for("settings_configuration", $plugin)) echo("&emsp;<small>Wczytywanie wtyczki nie powiodło się.</small>");
+					echo('	<br style="clear: both;"/>
+				</div>');
+			}
+
+			if(count($plugins)==0) {
+				echo('<center style="color: var(--text);">
+					<br />
+					<i class="fa fa-search" style="font-size: 5vmax;"></i>
+					<p>Naciśnij <code>Znajdź wtyczki</code> by pobrać nowe modyfikacje.</p>
+					<br />
+				</center>');
+			}
+		?>
+		<br />
+		<input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="Zapisz wtyczki społ.">
+		<a class="button" onClick="document.getElementById('plugins_dialog').style.display = 'flex';" style="margin-right: 0.5%; font: inherit; border: none;">Znajdź wtyczki</a>
 	</form>
 	<br />
 	<br />
 	<br />
 	<br />
 </div>
-<div class="window">
+<div class="window" id="users">
 	<h2 class="window_title">Użytkownicy</h2>
 	<p style="margin-left: 5%;">
 		<i class='fas fa-info-circle'></i>&nbsp;&nbsp;W tej sekcji zmodyfikujesz uprawnienia użytkowników i nadasz uprawnienia nauczyciela

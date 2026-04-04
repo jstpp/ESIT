@@ -40,6 +40,21 @@ CREATE TABLE `ARTICLES` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `LOGS`
+--
+
+CREATE TABLE `LOGS` (
+  `id` int(11) NOT NULL,
+  `category` text NOT NULL,
+  `ip` text NOT NULL,
+  `time` datetime NOT NULL DEFAULT current_timestamp(),
+  `content` text NOT NULL,
+  `details` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `NOTIFICATIONS`
 --
 
@@ -82,6 +97,19 @@ CREATE TABLE `MISC` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `PLUGINS`
+--
+
+CREATE TABLE `PLUGINS` (
+  `VALUE_ID` int(11) NOT NULL,
+  `plugin_name` text NOT NULL,
+  `value_category` text NOT NULL DEFAULT ('misc'),
+  `value` text NOT NULL DEFAULT ('-')
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `PROBLEMS`
 --
 
@@ -110,6 +138,7 @@ CREATE TABLE `PROBLEMSETS` (
   `title` text NOT NULL,
   `author_id` int(11) NOT NULL,
   `description` text NOT NULL DEFAULT ('Zbiór zadań'),
+  `img_path` text NOT NULL DEFAULT ('../img/placeholder.jpeg'),
   `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
   `isarchived` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -232,10 +261,22 @@ ALTER TABLE `PORTAL_RESOURCES`
   ADD PRIMARY KEY (`RESOURCE_ID`);
 
 --
+-- Indeksy dla tabeli `LOGS`
+--
+ALTER TABLE `LOGS`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeksy dla tabeli `MISC`
 --
 ALTER TABLE `MISC`
   ADD PRIMARY KEY (`MISC_ID`);
+
+--
+-- Indeksy dla tabeli `PLUGINS`
+--
+ALTER TABLE `PLUGINS`
+  ADD PRIMARY KEY (`VALUE_ID`);
 
 --
 -- Indeksy dla tabeli `PROBLEMS`
@@ -316,10 +357,22 @@ ALTER TABLE `PORTAL_RESOURCES`
   MODIFY `RESOURCE_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `LOGS`
+--
+ALTER TABLE `LOGS`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `MISC`
 --
 ALTER TABLE `MISC`
   MODIFY `MISC_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `PLUGINS`
+--
+ALTER TABLE `PLUGINS`
+  MODIFY `VALUE_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `PROBLEMS`

@@ -14,7 +14,7 @@
 		<style> 
 			body {
 				margin: 0;
-				background-color: #3e4145;
+				background-color: rgba(39, 55, 71, 1);
 
 				font-size: 1vw;
 				font-family: 'Montserrat';
@@ -39,9 +39,9 @@
 				-ms-transform: translate(-50%, -50%);
 				transform: translate(-50%, -50%);
 
-				background-color: #313136;
+				background-color: rgba(32, 43, 54, 1);
 
-				border: 0.2vw solid #2a2c2e;
+				border: 0.2vw solid rgba(21, 33, 46, 1);
 				border-radius: 1vw;
 				transition: 0.2s;
 				user-select: none;
@@ -50,14 +50,14 @@
 			}
 
 			.login_input {
-				background-color: #3e4145;
+				background-color: rgba(39, 55, 71, 1);
 				color: white;
 				padding: 1vmax 1vmax;
 				font-size: inherit;
 				font-family: inherit;
 				width: 80%;
 
-				border: 0.2vmax solid #2a2c2e;
+				border: 0.2vmax solid var(--container-hover-bg);
 				border-radius: 0.5vmax;
 
 				transition: 0.3s;

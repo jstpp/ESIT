@@ -1,18 +1,4 @@
 <style> 
-	:root {
-		--horizontal-menu-bg: #2a2c2e;
-		--horizontal-menu-text: #dae2e6;
-	}
-
-	[data-theme="light"] {
-		--horizontal-menu-bg: #a5a5a5;
-		--horizontal-menu-text: #2a2c2e;
-	}
-
-	[data-theme="dark"] {
-		--horizontal-menu-bg: #2a2c2e;
-		--horizontal-menu-text: #dae2e6;
-	}
 	#horizontal_menu {
 		margin: 0;
 		width: 100%;
@@ -26,7 +12,7 @@
 	}
 	#horizontal_menu a {
 		margin: 0;
-		padding: 0.89vw 1vw;
+		padding: 0.8vw 1.2vw;
 
 		display: block;
 		float: right;
@@ -41,8 +27,7 @@
 	#horizontal_menu a:hover {
 		margin: 0;
 
-		background-color: var(--horizontal-menu-text);
-		color: var(--horizontal-menu-bg);
+		background-color: var(--vertical-menu-bg);
 	}
 </style>
 <div id="horizontal_menu">

@@ -210,6 +210,42 @@
 		}
 	}
 
+	function include_plugins_for($element, $plugin = null) {
+		if(isset($element))
+		{
+			global $pdo;
+
+			if(!isset($plugin)) {
+				$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_value=1 AND misc_name LIKE "community_plugin_%"');
+				$db_query->execute();
+
+				while($row = $db_query->fetch())
+				{
+					try {
+						if(file_exists(__DIR__."/../plugins/".substr($row['misc_name'], 17)."/include/".$element.".php")) {
+							include(__DIR__."/../plugins/".substr($row["misc_name"], 17)."/include/".$element.".php");
+						}
+					} catch (Exception $e) {
+						continue;
+					}
+				}
+			} else {
+				try {
+					if(file_exists(__DIR__."/../plugins/".$plugin."/include/".$element.".php")) {
+						include(__DIR__."/../plugins/".$plugin."/include/".$element.".php");
+					} else {
+						return False;
+					}
+				} catch (Exception $e) {
+					return False;
+				}
+			}
+			return True;
+		} else {
+			return False;
+		}
+	}
+
 
 	###############################################
 	#              some automation				  #

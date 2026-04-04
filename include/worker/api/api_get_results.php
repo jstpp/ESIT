@@ -55,16 +55,21 @@
             }
             $solution_array = preg_split('/\r\n|\r|\n/', $sm['result']);
         }
-        $i = 0;
 
+        $i = 0;
         $sm['anws_correct'] = 0;
         $sm['anws_wrong'] = 0;
         $sm['anws_resource'] = 0;
 
-        if(!feof($checkfile))
+        while(!feof($checkfile))
         {
             $correctanwser = fgets($checkfile);
-            $anwser = $solution_array[$i];
+            if($i<=count($solution_array)-1)
+            {
+                $anwser = $solution_array[$i];
+            } else {
+                $anwser = "";
+            }
 
             if(preg_replace('/\s+/', '', $correctanwser)==preg_replace('/\s+/', '',$anwser))
             {
@@ -84,12 +89,13 @@
                     $sm['anws_resource']++;
                     $sm['comment'] = "Przekroczono limit czasu";
                 } else {
-                    if(!isset($sm['comment']) 
-                    and $sm['result']!="<-error->" 
+                    if($sm['result']!="<-error->" 
                     and $sm['result']!="<-resource->" 
                     and $sm['result']!="<-systemerror->")
                     {
-                        $sm['comment'] = "Otrzymano <code>".htmlentities($anwser)."</code> a oczekiwano <code>".htmlentities($correctanwser)."</code> (...)";
+                        if(!isset($sm['comment'])) {
+                            $sm['comment'] = "Otrzymano <code>".htmlentities(preg_replace('/\s+/', '',$anwser))."</code> a oczekiwano <code>".htmlentities(preg_replace('/\s+/', '', $correctanwser))."</code> (...)";
+                        }
                         $anws_wrong++;
                         $sm['anws_wrong']++;
                     } else if ($sm['result']=="<-error->")
@@ -128,7 +134,7 @@
 
     $percentage = $anws_correct/($anws_correct+$anws_wrong+$anws_resource);
 
-    $notification_content = "Twoje rozwiązanie do zadania #".$sm['TEST_ID']." zostało sprawdzone!<br/><a href='index.php?p=mysolutions'><i class='fa fa-eye'></i>&nbsp;Moje rozwiązania</a>";
+    $notification_content = "Twoje rozwiązanie do zadania #".$submission['problem_id']." zostało sprawdzone!<br/><a href='index.php?p=mysolutions'><i class='fa fa-eye'></i>&nbsp;Moje rozwiązania</a>";
 
     $db_query = $pdo->prepare('UPDATE SUBMISSIONS SET verification_time=CURRENT_TIMESTAMP, score=(:percentage1*(SELECT DISTINCT maxpoints FROM PROBLEMS WHERE PROBLEM_ID=:pid)), score_percentage=(:percentage2*100) WHERE SUBMISSION_ID=:sid');
     $db_query->execute(['sid' => $submission['submission_id'], "percentage1" => $percentage, "percentage2" => $percentage, "pid" => $submission['problem_id']]);

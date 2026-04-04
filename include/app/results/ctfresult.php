@@ -33,7 +33,7 @@
 
 		background-color: var(--container-bg);
 
-		border: 0.2vw solid #2a2c2e;
+		border: 0.2vw solid var(--container-hover-bg);
 		border-radius: 1vw;
 		transition: 0.2s;
 		user-select: none;

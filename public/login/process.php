@@ -20,6 +20,6 @@
 ?>
 <style>
 	* {
-		background-color: #3e4145;
+		background-color: rgba(39, 55, 71, 1);
 	}
 </style>

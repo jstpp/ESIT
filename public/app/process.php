@@ -102,10 +102,19 @@
 			if(!is_logged_in()) force_to_login();
 			if(!has_a_priority(3)) kick();
 			include(__DIR__.'/../../include/app/sets/create_set.php');
+		} else if($_GET['r']=="download_plugin")
+		{
+			if(!is_logged_in()) force_to_login();
+			if(!has_a_priority(3)) kick();
+			include(__DIR__.'/../../include/app/plugins/download_plugin.php');
 		} else if($_GET['r']=="change_password")
 		{
 			if(!is_logged_in()) force_to_login();
 			include(__DIR__.'/../../include/app/settings/change_password.php');
+		} else if($_GET['r']=="diag_server_resources")
+		{
+			if(!is_logged_in()) force_to_login();
+			include(__DIR__.'/../../include/diagnostics/resources.php');
 		} else if($_GET['r']=="get_content")
 		{
 			include(__DIR__.'/../../include/app/content_delivery/get_content.php');

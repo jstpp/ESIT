@@ -1,21 +1,4 @@
 <style> 
-	:root {
-		--notifications-menu-bg: rgba(49,49,54,0.8);
-		--notifications-container-bg: #3e4145;
-		--notifications-menu-text: #dae2e6;
-	}
-
-	[data-theme="light"] {
-		--notifications-menu-bg: rgba(200,200,200,0.8);
-		--notifications-container-bg:rgb(229, 229, 229);
-		--notifications-menu-text: #313136;
-	}
-
-	[data-theme="dark"] {
-		--notifications-menu-bg: rgba(49,49,54,0.8);
-		--notifications-container-bg: #3e4145;
-		--notifications-menu-text: #dae2e6;
-	}
 	#notifications_menu {
 		margin: 0;
 		height: 100vh;
@@ -53,7 +36,7 @@
 	}
 	
 	.notification {
-		background-color: var(--notifications-container-bg);
+		background-color: var(--bg);
 		color: var(--notifications-menu-text);
 		border-radius: 0.2vmax;
 		padding: 0.5vmax 0.5vmax;

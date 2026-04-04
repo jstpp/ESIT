@@ -6,7 +6,7 @@
 
 		background-color: var(--container-bg);
 
-		border: 0.2vw solid #2a2c2e;
+		border: 0.2vw solid var(--container-hover-bg);
 		border-radius: 1vw;
 	}
 
@@ -24,23 +24,23 @@
 	.window .forminput {
 		border: 0; 
 		padding: 0.75vw 1.25vw; 
-		color: #dae2e6; 
-		background-color: #2a2c2e; 
+		color: var(--text); 
+		background-color: var(--container-hover-bg); 
 		font-family: inherit;
 		outline: none;
 	}
 	.window .forminput_a {
 		border: 0; 
 		padding: 0.75vw 2.5%; 
-		color: #dae2e6; 
-		background-color: #2a2c2e; 
+		color: var(--text); 
+		background-color: var(--container-hover-bg); 
 		font-family: inherit;
 		cursor: pointer;
 		transition: 0.4s;
 		text-decoration: none;
 	}
 	.window .forminput_a:hover {
-		background-color: #3e4145;
+		background-color: var(--bg);
 	}
 
 	.window input, .window select {

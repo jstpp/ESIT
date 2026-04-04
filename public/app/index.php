@@ -26,11 +26,19 @@
 		<script src="https://kit.fontawesome.com/8a8540bd68.js" crossorigin="anonymous"></script>
 		<style> 
 			:root {
-				--bg: #3e4145;
+				/*--bg: #3e4145;
 				--container-bg: #313136;
 				--container-hover-bg: #2a2c2e;
 				--container-hover-bg-textbox:rgba(32, 33, 34, 1);
+				--text: #dae2e6;*/
+				--bg: rgba(39, 55, 71, 1);
+				--container-bg: rgba(32, 43, 54, 1);
+				--container-hover-bg: rgba(21, 33, 46, 1);
+				--container-hover-bg-textbox: rgba(6, 20, 34, 1);
 				--text: #dae2e6;
+				--horizontal-menu-bg: rgba(21, 33, 46, 1);
+				--vertical-menu-bg: rgba(32, 43, 54, 1);
+				--notifications-menu-bg: rgba(32, 43, 54, 0.8);
 			}
 
 			[data-theme="light"] {
@@ -39,14 +47,24 @@
 				--container-hover-bg:rgb(170, 170, 170);
 				--container-hover-bg-textbox: #dae2e6;
 				--text: #3e4145;
+				--horizontal-menu-bg: #a5a5a5;
+				--vertical-menu-bg: #c8c8c8;
+				--notifications-menu-bg: rgba(200,200,200,0.8);
 			}
 
 			[data-theme="dark"] {
-				--bg: #3e4145;
+				/*--bg: #3e4145;
 				--container-bg: #313136;
 				--container-hover-bg: #2a2c2e;
 				--container-hover-bg-textbox:rgba(32, 33, 34, 1);
-				--text: #dae2e6;
+				--text: #dae2e6;*/
+				--bg: rgba(39, 55, 71, 1);
+				--container-bg: rgba(32, 43, 54, 1);
+				--container-hover-bg: rgba(21, 33, 46, 1);
+				--container-hover-bg-textbox: rgba(6, 20, 34, 1);
+				--horizontal-menu-bg: rgba(21, 33, 46, 1);
+				--vertical-menu-bg: rgba(32, 43, 54, 1);
+				--notifications-menu-bg: rgba(32, 43, 54, 0.8);
 			}
 
 			body {
@@ -59,7 +77,7 @@
 			}
 			
 			#page_content {
-				width: 80vw;
+				width: 82vw;
 				margin-top: 3vw;
 				float: right;
 				-webkit-animation: entrance 1s;
@@ -84,7 +102,7 @@
 			}
 			include(__DIR__.'/../../include/app/menus/horizontal.php');
 			include(__DIR__.'/../../include/app/menus/vertical.php');
-			include(__DIR__.'/../../include/app//menus/noftications.php');
+			include(__DIR__.'/../../include/app/menus/notifications.php');
 		?>
 		<div id="page_content">
 			<?php
@@ -95,37 +113,42 @@
 						if(!is_logged_in()) force_to_login();
 						if(!has_a_priority(3)) kick();
 						include(__DIR__.'/../../include/app/admin.php');
-						echo("<script>document.getElementById('admin').style.background = '#2a2c2e'; document.getElementById('admin').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('admin').style.background = 'var(--container-hover-bg)'; document.getElementById('admin').style.color = '#00b3ff';</script>");
 					} else if ($_GET['p']=="sets") {
 						if(!is_logged_in()) force_to_login();
 						include(__DIR__.'/../../include/app/sets.php');
-						echo("<script>document.getElementById('sets').style.background = '#2a2c2e'; document.getElementById('sets').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('sets').style.background = 'var(--container-hover-bg)'; document.getElementById('sets').style.color = '#00b3ff';</script>");
 					} else if ($_GET['p']=="archive") {
 						if(!is_logged_in()) force_to_login();
 						include(__DIR__.'/../../include/app/archive.php');
-						echo("<script>document.getElementById('archive').style.background = '#2a2c2e'; document.getElementById('archive').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('archive').style.background = 'var(--container-hover-bg)'; document.getElementById('archive').style.color = '#00b3ff';</script>");
 					} else if ($_GET['p']=="mysolutions") {
 						if(!is_logged_in()) force_to_login();
 						include(__DIR__.'/../../include/app/mysolutions.php');
-						echo("<script>document.getElementById('mysolutions').style.background = '#2a2c2e'; document.getElementById('mysolutions').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('mysolutions').style.background = 'var(--container-hover-bg)'; document.getElementById('mysolutions').style.color = '#00b3ff';</script>");
 					} else if ($_GET['p']=="myexamsadmin") {
 						if(!is_logged_in()) force_to_login();
 						if(!has_a_priority(4)) kick();
 						include(__DIR__.'/../../include/app/myexamsadmin.php');
-						echo("<script>document.getElementById('myexamsadmin').style.background = '#2a2c2e'; document.getElementById('myexamsadmin').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('myexamsadmin').style.background = 'var(--container-hover-bg)'; document.getElementById('myexamsadmin').style.color = '#00b3ff';</script>");
 					} else if ($_GET['p']=="settings") {
 						if(!is_logged_in()) force_to_login();
 						include(__DIR__.'/../../include/app/settings.php');
-						echo("<script>document.getElementById('settings').style.background = '#2a2c2e'; document.getElementById('settings').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('settings').style.background = 'var(--container-hover-bg)'; document.getElementById('settings').style.color = '#00b3ff';</script>");
 					} else if ($_GET['p']=="dashboard") {
 						if(!is_logged_in()) force_to_login();
 						include(__DIR__.'/../../include/app/dashboard.php');
-						echo("<script>document.getElementById('dashboard').style.background = '#2a2c2e'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('dashboard').style.background = 'var(--container-hover-bg)'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
 					} else if ($_GET['p']=="portal") {
 						if(!is_logged_in()) force_to_login();
 						if(!has_a_priority(3)) kick();
 						include(__DIR__.'/../../include/app/portal.php');
-						echo("<script>document.getElementById('portal').style.background = '#2a2c2e'; document.getElementById('portal').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('portal').style.background = 'var(--container-hover-bg)'; document.getElementById('portal').style.color = '#00b3ff';</script>");
+					} else if ($_GET['p']=="diagnostics") {
+						if(!is_logged_in()) force_to_login();
+						if(!has_a_priority(3)) kick();
+						include(__DIR__.'/../../include/app/diagnostics.php');
+						echo("<script>document.getElementById('diagnostics').style.background = 'var(--container-hover-bg)'; document.getElementById('diagnostics').style.color = '#00b3ff';</script>");
 					} else if ($_GET['p']=="algresult") {
 						if(!is_logged_in()) force_to_login();
 						include(__DIR__.'/../../include/app/results/algresult.php');
@@ -162,11 +185,11 @@
 						include(__DIR__.'/../../include/app/check_the_form.php');
 					} else {
 						include(__DIR__.'/../../include/app/dashboard.php');
-						echo("<script>document.getElementById('dashboard').style.background = '#2a2c2e'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
+						echo("<script>document.getElementById('dashboard').style.background = 'var(--container-hover-bg)'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
 					}
 				} else {
 					include(__DIR__.'/../../include/app/dashboard.php');
-					echo("<script>document.getElementById('dashboard').style.background = '#2a2c2e'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
+					echo("<script>document.getElementById('dashboard').style.background = 'var(--container-hover-bg)'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
 				}
 			?>
 		</div>

@@ -23,8 +23,8 @@ services:
       - UID=${UID:-1001}
       - GID=${GID:-1001}
     volumes:
-      - ./public/index.php:/www/esit/public/index.php
-      - ./public/process.php:/www/esit/public/process.php
+      - ./public/app/index.php:/www/esit/public/app/index.php
+      - ./public/app/process.php:/www/esit/public/app/process.php
       - ./public/img:/www/esit/public/img
       - ./public/login:/www/esit/public/login
       - ./public/include/resources:/www/esit/public/include/resources

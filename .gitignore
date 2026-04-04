@@ -1,7 +1,8 @@
-**/worker/solutions/
-**/worker/alg/
-**/worker/ctf/
-/worker/inout/
-/public/include/resources/
-/public/img/articles/
-
+**/worker/solutions/*
+**/worker/alg/*
+**/worker/ctf/*
+/worker/inout/*
+/public/include/resources/*
+/public/img/articles/*
+/public/img/plugins/*
+*.pyc

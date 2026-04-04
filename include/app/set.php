@@ -7,6 +7,7 @@
 	{
 		$isfound++;
 		$settitle = $row['title'];
+		$setimgpath = $row['img_path'];
 		$setdescription = $row['description'];
 	}
 
@@ -23,7 +24,7 @@
 
 		background-color: var(--container-bg);
 
-		border: 0.2vw solid #2a2c2e;
+		border: 0.2vw solid var(--container-hover-bg);
 		border-radius: 1vw;
 	}
 
@@ -65,16 +66,28 @@
 		border: 0; 
 		padding: 0.75vw 1.25vw; 
 		color: #dae2e6; 
-		background-color: #2a2c2e; 
+		background-color: var(--container-hover-bg); 
 		font-family: inherit;
 		cursor: pointer;
 		transition: 0.4s;
 		text-decoration: none;
 	}
 	.window .forminput:hover {
-		background-color: #3e4145;
+		background-color: var(--container-hover-bg-textbox);
+	}
+
+	#set_header_img {
+		width: calc(100% - 18vw);
+		height: 20vmax;
+		filter: brightness(20%);
+		position: absolute;
+		object-fit: cover;
+		z-index: -1;
+		-webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+		mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 	}
 </style>
+<img id="set_header_img" src="<?php echo($setimgpath); ?>" />
 <br />
 <br />
 <center>

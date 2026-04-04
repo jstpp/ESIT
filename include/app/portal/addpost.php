@@ -24,7 +24,7 @@
 
 		background-color: #313136;
 
-		border: 0.2vw solid #2a2c2e;
+		border: 0.2vw solid var(--container-hover-bg);
 		border-radius: 1vw;
 	}
 

@@ -1,22 +1,8 @@
 <style> 
-	:root {
-		--vertical-menu-bg: #313136;
-		--vertical-menu-text: #dae2e6;
-	}
-
-	[data-theme="light"] {
-		--vertical-menu-bg: #c8c8c8;
-		--vertical-menu-text: #313136;
-	}
-
-	[data-theme="dark"] {
-		--vertical-menu-bg: #313136;
-		--vertical-menu-text: #dae2e6;
-	}
 	#vertical_menu {
 		margin: 0;
 		height: 100vh;
-		width: 20vw;
+		width: 18vw;
 		top: 0;
 		left: 0;
 
@@ -28,22 +14,23 @@
 	}
 
 	#vertical_menu a {
-		padding: 1vw 1vw;
+		padding: 0.6vw 1vw;
 		display: flex;
 
 		text-decoration: none;
+		align-items: center;
 		color: inherit;
 		cursor: pointer;
 		transition: 0.2s;
 		user-select: none;
 	}
 	#vertical_menu a:hover {
-		background-color: #2a2c2e;
+		background-color: var(--container-hover-bg);
 		color: #00b3ff;
 	}
 
 	#vertical_menu .category_title {
-		margin-top: 1.4vw;
+		margin-top: 1.2vw;
 		margin-left: 1vw;
 		user-select: none;
 
@@ -51,20 +38,22 @@
 	}
 </style>
 <div id="vertical_menu">
-	<p style="margin-left: 1vw; margin-top: 5vw;">
+	<p style="margin-left: 0.8vw; margin-top: 5vw;">
 		<b><?php echo($_SESSION['AUTH_NAME']) ?> <?php echo($_SESSION['AUTH_SURNAME']) ?></b>
 		<br />
 		<span style="font-size: 0.8vw;"><?php echo($_SESSION['AUTH_USERNAME']) ?> • <?php echo($_SESSION['AUTH_ROLE']) ?></span>
 	</p>
 	<br />
-	<a href="?p=dashboard" id="dashboard"><i class='fas fa-book-open'></i>&emsp;Dashboard</a>
+	<a href="?p=dashboard" id="dashboard"><i class='fas fa-book-open'></i>&emsp;&nbsp;Dashboard</a>
 	<?php
 		if(has_a_priority(3))
 		{
-			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-school\'></i>&emsp;Administracja</a>');
+			echo('<p class="category_title">Administracja</p>');
+			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-school\'></i>&emsp;Konfiguracja</a>');
+			echo('<a href="?p=diagnostics" id="diagnostics"><i class=\'fa fa-dashboard\'></i>&emsp;&nbsp;Diagnostyka</a>');
 			if(boolval(get_misc_value('plugin_portal')))
 			{
-				echo('<a href="?p=portal" id="portal"><i class=\'fa fa-bank\'></i>&emsp;Zarządzanie portalem</a>');
+				echo('<a href="?p=portal" id="portal"><i class=\'fa fa-bank\'></i>&emsp;&nbsp;Zarządzanie portalem</a>');
 			}
 		}
 	?>
@@ -75,10 +64,9 @@
 	<?php
 		if(has_a_priority(4))
 		{
-			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-file-alt\'></i>&emsp;Panel egzaminatora</a>');
+			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-file-alt\'></i>&emsp;&nbsp;Panel egzaminatora</a>');
 		}
 	?>
-
-	<p class="category_title">Ustawienia</p>
+	<p class="category_title">Ustawienia użytkownika</p>
 	<a href="?p=settings" id="settings"><i class='fas fa-eye'></i>&emsp;Ustawienia konta</a>
 </div>

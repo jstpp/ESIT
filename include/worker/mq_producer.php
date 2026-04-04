@@ -10,11 +10,11 @@
         try {
             if (!file_exists(__DIR__."/solutions/".$submission_id))
             {
-                mkdir(__DIR__."/solutions/".$submission_id, 0777);
-                mkdir(__DIR__."/solutions/".$submission_id."/code", 0777);
-                mkdir(__DIR__."/solutions/".$submission_id."/misc", 0777);
-                mkdir(__DIR__."/solutions/".$submission_id."/time", 0777);
-                mkdir(__DIR__."/solutions/".$submission_id."/output", 0777);
+                mkdir(__DIR__."/solutions/".$submission_id, 0777, true);
+                mkdir(__DIR__."/solutions/".$submission_id."/code", 0777, true);
+                mkdir(__DIR__."/solutions/".$submission_id."/misc", 0777, true);
+                mkdir(__DIR__."/solutions/".$submission_id."/time", 0777, true);
+                mkdir(__DIR__."/solutions/".$submission_id."/output", 0777, true);
 
                 chmod(__DIR__."/solutions/".$submission_id, 0777);
                 chmod(__DIR__."/solutions/".$submission_id."/code", 0777);

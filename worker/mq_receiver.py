@@ -18,48 +18,55 @@ def connect_to_queue():
     return channel
 
 def prepare_inout(submission):
-    print(str(time.ctime())+f' | Preparing inout for submission {submission["submission_id"]}...')
-    if(os.path.isdir(os.path.dirname(os.path.realpath(__file__)) + "/inout/" + str(submission['problem_id']))):
-        print(str(time.ctime())+f' | Inout set for submission {submission["submission_id"]} has been found in ', os.path.dirname(os.path.realpath(__file__)) + "/inout/" + str(submission['problem_id']))
-        return True
-    else:
-        print(str(time.ctime())+f' | Inout set for submission {submission["submission_id"]} not found. Asking main server to fill the gap...')
-        if(api.lib.ask_for_inout(submission)):
+    try:
+        print(str(time.ctime())+f' | Preparing inout for submission {submission["submission_id"]}...')
+        if(os.path.isdir(os.path.dirname(os.path.realpath(__file__)) + "/inout/" + str(submission['problem_id']))):
+            print(str(time.ctime())+f' | Inout set for submission {submission["submission_id"]} has been found in ', os.path.dirname(os.path.realpath(__file__)) + "/inout/" + str(submission['problem_id']))
             return True
         else:
-            print(str(time.ctime())+f' | Inout set for submission {submission["submission_id"]} not found. **Filling the gap failed!**')
-            return False
+            print(str(time.ctime())+f' | Inout set for submission {submission["submission_id"]} not found. Asking main server to fill the gap...')
+            if(api.lib.ask_for_inout(submission)):
+                return True
+            else:
+                print(str(time.ctime())+f' | Inout set for submission {submission["submission_id"]} not found. **Filling the gap failed!**')
+                return False
+    except Exception as exception:
+        raise Exception(f"EXCEPTION | mq_receiver.py: prepare_inout(): {exception}")
 
 def main():
     print(str(time.ctime())+' | Worker is starting...')
-    print(str(time.ctime())+' | Logging directory: '+str(os.path.dirname(os.path.realpath(__name__)))+'/logs/worker.log')
+    print(str(time.ctime())+' | Logging directory: '+str(os.path.abspath(os.getcwd()))+'/logs/worker.log')
 
-    global logfile
-    orginal_stdout = sys.stdout
-    logfile = open(os.path.dirname(os.path.realpath(__file__))+'/logs/worker.log', 'a')
-    sys.stdout = logfile
+    try:
+        global logfile
+        orginal_stdout = sys.stdout
+        logfile = open(os.path.dirname(os.path.realpath(__file__))+'/logs/worker.log', 'a')
+        sys.stdout = logfile
 
-    channel = connect_to_queue()
-    def callback(ch, method, properties, body):
-        print(str(time.ctime())+f' | Received {body}')
-        submission = json.loads(body)
+        channel = connect_to_queue()
+        def callback(ch, method, properties, body):
+            print(str(time.ctime())+f' | Received {body}')
+            submission = json.loads(body)
 
-        if not (prepare_inout(submission)):
-            print(str(time.ctime())+f' | An error occured when worker was preparing inout for submission {submission["submission_id"]}.')
-        
-        api.lib.prepare(submission)
+            if not (prepare_inout(submission)):
+                print(str(time.ctime())+f' | An error occured when worker was preparing inout for submission {submission["submission_id"]}.')
+            
+            api.lib.prepare(submission)
+            logfile.flush()
+
+            if (submission["submission_lang"]=="py"):
+                api.lib.send(compilers.python.run(submission), submission)
+            elif (submission["submission_lang"]=="cpp"):
+                api.lib.send(compilers.cpp.run(submission), submission)
+
+        channel.basic_consume(queue='esit', on_message_callback=callback, auto_ack=True)
+
+        print(str(time.ctime())+' | Waiting for messages. To exit press CTRL+C')
         logfile.flush()
-
-        if (submission["submission_lang"]=="py"):
-            api.lib.send(compilers.python.run(submission), submission)
-        elif (submission["submission_lang"]=="cpp"):
-            api.lib.send(compilers.cpp.run(submission), submission)
-
-    channel.basic_consume(queue='esit', on_message_callback=callback, auto_ack=True)
-
-    print(str(time.ctime())+' | Waiting for messages. To exit press CTRL+C')
-    logfile.flush()
-    channel.start_consuming()
+        channel.start_consuming()
+    except Exception as exception:
+        raise Exception(f"EXCEPTION | mq_receiver.py: main(): {exception}")
+    
 
 if __name__ == '__main__':
     try:
