@@ -5,4 +5,5 @@
 /public/include/resources/*
 /public/img/articles/*
 /public/img/plugins/*
+/include/plugins/*
 *.pyc

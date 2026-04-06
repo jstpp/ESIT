@@ -49,6 +49,9 @@
 <center>
 	<h1>Moje rozwiązania</h1>
 </center>
+<?php
+	include_plugins_for("my_solutions");
+?>
 <div class="window">
 	<h2 class="window_title">Moje rozwiązania</h2>
 	<table id="results">

@@ -249,22 +249,41 @@
 	function copy_directory($src, $dst) {
 		$dir = opendir($src);
 		try {
-			mkdir($dst);
+			mkdir($dst, 0777, true);
 		} catch (Throwable $e) {
 			return False;
 		}
 
-		while (false !== ($file = readdir($dir))) {
-			if (($file != '.') && ($file != '..')) {
-				if (is_dir($src . '/' . $file)) {
-					copy_directory($src . '/' . $file, $dst . '/' . $file);
-				} else {
-					copy($src . '/' . $file, $dst . '/' . $file);
+		try {
+			while (false !== ($file = readdir($dir))) {
+				if (($file != '.') && ($file != '..')) {
+					if (is_dir($src . '/' . $file)) {
+						copy_directory($src . '/' . $file, $dst . '/' . $file);
+					} else {
+						copy($src . '/' . $file, $dst . '/' . $file);
+					}
 				}
 			}
+			closedir($dir);
+		} catch (Throwable $e) {
+			return False;
 		}
-		closedir($dir);
 		return True;
+	}
+
+	function delete_directory($dir) {
+		if (!is_dir($dir)) {
+			return false;
+		}
+
+		$files = array_diff(scandir($dir), array('.', '..'));
+
+		foreach ($files as $file) {
+			$path = "$dir/$file";
+			(is_dir($path)) ? deleteFolder($path) : unlink($path);
+		}
+
+		return rmdir($dir);
 	}
 
 

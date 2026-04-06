@@ -18,6 +18,7 @@ Check out `include_plugins_for()` function in [core](../core.php) file.
 | `vertical_menu_administration` | `/app/menus/vertical.php` | Add new option to `administration` category of vertical menu |
 | `vertical_menu_problemsets` | `/app/menus/vertical.php` | Add new option to `problemsets` category of vertical menu |
 | `horizontal_menu` | `/app/menus/horizontal.php` | Add new element to horizontal menu |
+| `my_solutions` | `/app/index.php?p=mysolutions` | User's submissions summary page |
 
 > [!note] 
 > The list of available extension points will be expanded in future updates.
