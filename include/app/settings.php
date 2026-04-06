@@ -180,5 +180,8 @@
 	<br />
 	<br />
 </div>
+<?php
+	include_plugins_for("users_settings_personalization");
+?>
 <br />
 <br />

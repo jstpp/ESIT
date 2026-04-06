@@ -58,6 +58,7 @@ Although the code variables and comments are in English, ESIT doesn't provide En
 ## More informations
 For more informations see:
 - [worker info](worker/README.md), 
+- [plugins](include/app/plugins/README.md), 
 - [installation example & custom configuration details](setup/README.md), 
 - [MIT license](LICENSE),
 - [security annotations](SECURITY.md).

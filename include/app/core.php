@@ -225,7 +225,7 @@
 						if(file_exists(__DIR__."/../plugins/".substr($row['misc_name'], 17)."/include/".$element.".php")) {
 							include(__DIR__."/../plugins/".substr($row["misc_name"], 17)."/include/".$element.".php");
 						}
-					} catch (Exception $e) {
+					} catch (Throwable $e) {
 						continue;
 					}
 				}
@@ -236,7 +236,7 @@
 					} else {
 						return False;
 					}
-				} catch (Exception $e) {
+				} catch (Throwable $e) {
 					return False;
 				}
 			}
