@@ -195,26 +195,26 @@
         });
     </script>
 </div>
-    <script>
-        async function update_stats() {
-            const response = await fetch('process.php?r=diag_server_resources&call=getall');
-            const data = await response.json();
-
-            for (let i = 0; i < 10; i++)
-            {
-                memory_usage_data[i] = memory_usage_data[i+1];
-                cpu_usage_data[i] = cpu_usage_data[i+1];
-            }
-            memory_usage_data[10] = Math.round((parseFloat(data.value.memory.MemTotal) - parseFloat(data.value.memory.MemFree))/parseFloat(data.value.memory.MemTotal) * 1000)/10;
-            memory_usage_chart.update();
-            cpu_usage_data[10] = parseInt(data.value.cpuusage);
-            cpu_usage_chart.update();
+<script>
+    async function update_stats() {
+        const response = await fetch('process.php?r=diag_server_resources&call=getall');
+        const data = await response.json();
+        for (let i = 0; i < 10; i++)
+        {
+            memory_usage_data[i] = memory_usage_data[i+1];
+            cpu_usage_data[i] = cpu_usage_data[i+1];
         }
-
-        update_stats();
-        setInterval(update_stats, 1000);
-    </script>
-    <br />
-    <br />
-</div>
+        memory_usage_data[10] = Math.round((parseFloat(data.value.memory.MemTotal) - parseFloat(data.value.memory.MemFree))/parseFloat(data.value.memory.MemTotal) * 1000)/10;
+        memory_usage_chart.update();
+        cpu_usage_data[10] = parseInt(data.value.cpuusage);
+        cpu_usage_chart.update();
+    }
+    update_stats();
+    setInterval(update_stats, 1000);
+</script>
+<?php
+    include_plugins_for("diagnostics");
+?>
+<br />
+<br />
 <br />

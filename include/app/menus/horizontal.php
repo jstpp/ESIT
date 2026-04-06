@@ -38,5 +38,6 @@
 		{
 			echo('<a href="../index.php"><i class=\'fa fa-bookmark\'></i>&emsp;Portal</a>');
 		}
+		include_plugins_for("horizontal_menu");
 	?>
 </div>

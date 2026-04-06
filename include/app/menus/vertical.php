@@ -55,12 +55,16 @@
 			{
 				echo('<a href="?p=portal" id="portal"><i class=\'fa fa-bank\'></i>&emsp;&nbsp;Zarządzanie portalem</a>');
 			}
+			include_plugins_for("vertical_menu_administration");
 		}
 	?>
 	<p class="category_title">Zbiory zadań</p>
 	<a href="?p=sets" id="sets"><i class='fas fa-folder-open'></i>&emsp;Aktywne zbiory zadań</a>
 	<a href="?p=archive" id="archive"><i class='far fa-folder-open'></i>&emsp;Archiwalne zbiory zadań</a>
 	<a href="?p=mysolutions" id="mysolutions"><i class='fas fa-paper-plane'></i>&emsp;Moje rozwiązania</a>
+	<?php
+		include_plugins_for("vertical_menu_problemsets");
+	?>
 	<?php
 		if(has_a_priority(4))
 		{
@@ -69,4 +73,8 @@
 	?>
 	<p class="category_title">Ustawienia użytkownika</p>
 	<a href="?p=settings" id="settings"><i class='fas fa-eye'></i>&emsp;Ustawienia konta</a>
+
+	<?php
+		include_plugins_for("vertical_menu");
+	?>
 </div>
