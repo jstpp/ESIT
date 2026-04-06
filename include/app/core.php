@@ -246,6 +246,27 @@
 		}
 	}
 
+	function copy_directory($src, $dst) {
+		$dir = opendir($src);
+		try {
+			mkdir($dst);
+		} catch (Throwable $e) {
+			return False;
+		}
+
+		while (false !== ($file = readdir($dir))) {
+			if (($file != '.') && ($file != '..')) {
+				if (is_dir($src . '/' . $file)) {
+					copy_directory($src . '/' . $file, $dst . '/' . $file);
+				} else {
+					copy($src . '/' . $file, $dst . '/' . $file);
+				}
+			}
+		}
+		closedir($dir);
+		return True;
+	}
+
 
 	###############################################
 	#       just another extension point		  #
