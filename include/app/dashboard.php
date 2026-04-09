@@ -201,8 +201,11 @@
 			<?php
 				$db_query = $pdo->prepare('SELECT AVG(score_percentage) AS avg_score FROM SUBMISSIONS WHERE user_id=:uid');
 				$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
+
 				$avg_score = 0;
-				$avg_score = round($db_query->fetch()['avg_score'],1);
+				while($row = $db_query->fetch()) {
+					$avg_score = isset($row['avg_score']) ? round($row['avg_score'], 1) : 0;
+				}
 
 				$db_query = $pdo->prepare('SELECT
 					DATE(submission_time) as day,
@@ -353,7 +356,7 @@
 		<h3 class="window_title">Proponowane zbiory zadań</h3>
 		<div id="dashboard_propositions_bar">
 			<?php
-				$db_query = $pdo->prepare('SELECT *, USERS.username AS author FROM PROBLEMSETS INNER JOIN USERS ON PROBLEMSETS.author_id=USERS.USER_ID ORDER BY PROBLEMSETS.SET_ID DESC LIMIT 3;');
+				$db_query = $pdo->prepare('SELECT *, USERS.username AS author FROM PROBLEMSETS INNER JOIN USERS ON PROBLEMSETS.author_id=USERS.USER_ID ORDER BY PROBLEMSETS.SET_ID DESC LIMIT 4;');
 				$db_query->execute();
 				
 				$count = 0;
@@ -375,6 +378,7 @@
 			<br />
 			<br />
 		</div>
+		<br />
 	</div>
 </div>
 <br />

@@ -3,7 +3,8 @@
 **/worker/ctf/*
 /worker/inout/*
 /public/include/resources/*
-/public/img/articles/*
+/public/img/articles/header/*
+/public/img/problemsets/header/*
 /public/img/plugins/*
 /include/plugins/*
 *.pyc

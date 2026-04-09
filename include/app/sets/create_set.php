@@ -10,20 +10,25 @@
                 $isarchived = 1;
             }
 
-            $db_query = $pdo->prepare('INSERT INTO PROBLEMSETS (title, author_id, description, publish_time, isarchived) VALUES (:title, :aid, :desc, :publishtime, :isarchived)');
+            if(isset($_FILES["set_img"]) && $_FILES["set_img"]["error"] === UPLOAD_ERR_OK) {
+                $image = load_img_input($_FILES["set_img"], "../img/problemsets/header/");
+            } else {
+                $image = load_img_input();
+            }
+
+            $db_query = $pdo->prepare('INSERT INTO PROBLEMSETS (title, author_id, description, publish_time, isarchived, img_path) VALUES (:title, :aid, :desc, :publishtime, :isarchived, :img_path)');
             $db_query->execute([
                 'title' => $_POST['setname'], 
                 'aid' => $_SESSION['AUTH_ID'],
                 'desc'=> $_POST['description'],
                 'publishtime' => $_POST['publish_time'],
+                'img_path' => $image,
                 'isarchived' => $isarchived
             ]);
 
-            header("Location: index.php?p=sets");
-            die;
+            redirect("index.php?p=sets");
         } else {
-            header("Location: index.php?p=sets&error");
-            die;
+            redirect("index.php?p=sets&error");
         }
     } else {
         kick();

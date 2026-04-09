@@ -286,6 +286,56 @@
 		return rmdir($dir);
 	}
 
+	function load_img_input($img = null, $target_root_dir = null) {
+		if(isset($img) and isset($target_root_dir))
+		{
+			try {
+				$index = hash('sha256', (new DateTime())->format('Uv'));
+				$target_file = $target_root_dir.basename($img["name"]);
+				$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+				$target_file = $target_root_dir.$index.".".$imageFileType;
+				$check = getimagesize($img["tmp_name"]);
+
+				if($check !== false) {
+					echo "File is an image - " . $check["mime"] . ".";
+					$uploadOk = 1;
+				} else {
+					echo "File is not an image.";
+					$uploadOk = 0;
+				}
+
+				if (file_exists($target_file)) {
+					echo "Sorry, file already exists.";
+					$uploadOk = 0;
+				}
+
+				if ($img["size"] > 1000000) {
+					echo "Image is too large!";
+					$uploadOk = 0;
+				}
+
+				if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "webp" ) {
+				echo "Only JPG, JPEG, PNG i WEBP are allowed.";
+				$uploadOk = 0;
+				}
+
+				if ($uploadOk == 0) {
+					echo "<br/>Sorry, an error occurred.";
+				} else {
+					if (!move_uploaded_file($img["tmp_name"], $target_file)) {
+						echo "<br/>Sorry, an error occurred.";
+					}
+				}
+			} catch (Throwable $e) {
+				return "../img/placeholder.jpeg";
+			}
+
+			return $target_file;
+		} else {
+			return "../img/placeholder.jpeg";
+		}
+	}
+
 
 	###############################################
 	#       just another extension point		  #

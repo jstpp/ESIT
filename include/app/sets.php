@@ -84,12 +84,18 @@
 	<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
 		<h2 style="text-align: center;">Dodaj zbiór zadań</h2>
 		<br />
-		<form method="POST" id="new_set_form" action="process.php?r=create_set">
-			<input name="setname" class="forminput_2" type="text" placeholder="Nazwa zbioru zadań" onChange="validate_data();" required/>
+		<form method="POST" id="new_set_form" action="process.php?r=create_set" enctype="multipart/form-data">
+			<input name="setname" class="forminput_2" type="text" placeholder="Nazwa zbioru zadań*" onChange="validate_data();" required/>
 			<br />
-			<textarea name="description" class="forminput_2" placeholder="Opis zbioru zadań" onChange="validate_data();" required></textarea>
+			<textarea name="description" class="forminput_2" placeholder="Opis zbioru zadań*" onChange="validate_data();" required></textarea>
 			<br />
+			<br />
+			Czas publikacji*:
 			<input name="publish_time" class="forminput_2" type="datetime-local" onChange="validate_data();" required/>
+			<br />
+			<br />
+			Okładka:
+			<input name="set_img" id="set_img" class="forminput_2" type="file" onChange="validate_data();"/>
 			<br />
 			<br />
 			<input name="isactive" id="isactive" type="checkbox" value="1" onChange="validate_data();" checked> 
@@ -100,7 +106,7 @@
 		<br style="clear: both;"/>
 		<fieldset id="r_i_validation" style="margin-top: 2vmax;">
             <legend>Walidacja danych</legend>
-            <p class="data-invalid" id="c_1">Wypełnij wszystkie wymagane pola</p>
+            <p class="data-invalid" id="c_1">Wypełnij wszystkie wymagane pola (*)</p>
             <script>
                 let e = 0;
                 function check_data()
