@@ -8,3 +8,4 @@
 /public/img/plugins/*
 /include/plugins/*
 *.pyc
+misc_shell_script.sh
