@@ -354,6 +354,7 @@
 				}
 				document.getElementById("github_search_results").style.display = 'block';
 			}
+			githubSearch();
 		</script>
 		<br style="clear: both;"/>
 	</div>
@@ -361,8 +362,8 @@
 <div id="settings_menu">
 	<p>Nawigacja:</p>
 	<a href="#initial_parameters">Podstawowe parametry</a>
-	<a href="#plugins">Zarządzanie wtyczkami</a>
-	<a href="#users">Zarządzanie użytkownikami</a>
+	<a href="#plugins">Wtyczki</a>
+	<a href="#users">Użytkownicy</a>
 </div>
 <div class="window" id="initial_parameters">
 	<h2 class="window_title">Podstawowe parametry</h2>

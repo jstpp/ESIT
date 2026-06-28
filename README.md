@@ -17,22 +17,17 @@ ESIT is a platform for organizing contests, exams and other similar forms relate
 
 ## Installation
 
-Create user `esit-user` and download the repository:
+Download the repository:
 ```bash
 git clone https://github.com/jstpp/esit.git && cd esit
 ```
 You can customize the [config file](include/app/core.php). You should consider this when running it in production, otherwise, you can ignore it.
 
-Start Docker Compose with predefined user-id and group-id:
+Start [installation script](./setup/install.sh):
 ```bash
-UID="<your-uid>" GID="<your-gid>" docker compose -f compose.yaml up
+source ./setup/install.sh
 ```
-> [!tip]
-> To check your uid and gid you can use the following commands:
-> ```bash
-> id -u && id -g
-> ```
-> 
+
 The service should be available on `localhost:80` unless you change it. The first registered user becomes an admin.
 
 ## Technical details

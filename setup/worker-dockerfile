@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     protobuf-compiler
 
+RUN mkdir /worker/inout
 RUN mkdir /worker/sandboxing && cd /worker/sandboxing && git clone https://github.com/google/nsjail.git
 RUN cd /worker/sandboxing/nsjail && make
 
