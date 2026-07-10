@@ -39,11 +39,16 @@ ESIT uses [nsjail](https://github.com/google/nsjail) to isolate algorithmic solu
 ### Evaluation of CTF solutions
 ESIT's support for CTF solutions (at the moment) is limited to cases where the flag is hidden inside a single file. Hosting more sophisticated challenges in [nsjail](https://github.com/google/nsjail) is planned in the future.
 
-### Evaluation of other solutions
+### Evaluation of other types of content
 ESIT also supports:
 - writing tasks (with LaTeX support)
 - single choice tests
 - multiple choice tests
+
+### Portal functions are disabled by default
+To enable the portal and all related features, enable the "portal" system plugin and update your settings. Once the plugin is enabled, you'll be able to use the default template as your main site.
+
+![Screenshot of portal's default template](public/img/screenshots/screenshot-3.png)
 
 ## Custom configuration
 Check the ESIT custom configuration options [here](setup/README.md).

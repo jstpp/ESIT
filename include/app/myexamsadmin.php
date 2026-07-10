@@ -67,7 +67,12 @@
 	}
 	if($count==0)
 	{
-		echo("<center><i>Nie ma niczego do sprawdzenia!</i></center>");
+		echo('
+		<div style="margin-left: auto; margin-right: auto; margin-top: 5vmax; text-align: center; display: flex; flex-direction: column; justify-content: cetner; width: 30%; padding: 3vmax; background-color: var(--container-bg); border: 0.2vw solid var(--container-hover-bg); border-radius: 1vw;">
+			<i class="fa fa-hourglass-3" style="font-size: 7vmax;"></i>
+			<center style="margin-top: 2vmax; user-select: none;"><i>Nie ma niczego do sprawdzenia!</i></center>
+		</div>
+		');
 	}
 ?>
 <br />

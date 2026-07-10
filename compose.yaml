@@ -8,8 +8,9 @@ services:
     ports:
       - '80:80'
     volumes:
-      - ./public/:/www/esit/public
       - ./include/:/www/esit/include
+      - ./public/img:/www/esit/public/img
+      - ./public/include/resources:/www/esit/public/include/resources
       - ./setup/nginx.conf.example:/etc/nginx/nginx.conf
       - ./setup/default.conf.example:/etc/nginx/conf.d/default.conf
       - ./setup/fastcgi-php.conf.example:/etc/nginx/snippets/fastcgi-php.conf
@@ -23,12 +24,9 @@ services:
       - UID=${UID:-1001}
       - GID=${GID:-1001}
     volumes:
-      - ./public/app/index.php:/www/esit/public/app/index.php
-      - ./public/app/process.php:/www/esit/public/app/process.php
-      - ./public/img:/www/esit/public/img
-      - ./public/login:/www/esit/public/login
-      - ./public/include/resources:/www/esit/public/include/resources
       - ./include/:/www/esit/include
+      - ./public/img:/www/esit/public/img
+      - ./public/include/resources:/www/esit/public/include/resources
     depends_on:
       - rabbitmq
 
@@ -42,6 +40,10 @@ services:
       MYSQL_PASSWORD: esit_db
     depends_on:
       - php-fpm
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "esit_db", "-pesit_db"]
+      timeout: 2s
+      retries: 10
 
   rabbitmq:
     image: rabbitmq:4.1-alpine
@@ -62,4 +64,5 @@ services:
     privileged: true
     command: python3 /worker/mq_receiver.py
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy

@@ -8,3 +8,10 @@ ENV GID=${GID}
 
 RUN addgroup -g ${GID} --system esit-group
 RUN adduser -G esit-group --system -D -s /bin/sh -u ${UID} esit-user
+
+COPY ./public/portal /www/esit/public
+#COPY ./public/img /www/esit/public/img
+COPY ./public/include /www/esit/public/include
+COPY ./public/app /www/esit/public/app
+COPY ./public/login /www/esit/public/login
+RUN chown -R esit-user:esit-group /www/esit/public/*

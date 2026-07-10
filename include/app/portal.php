@@ -56,6 +56,20 @@
 		cursor: default;
 		user-select: none;
 	}
+
+	#template_files {
+		padding: 1vw 2vw;
+		margin-left: 5%;
+		margin-top: 0.5vw;
+		width: 85%;
+
+		max-height: 15vmax;
+		overflow: auto;
+
+		background-color: var(--container-hover-bg);
+		transition: 0.2s;
+	}
+
 	.org_user table {
 		padding: 0.8vw 0.8vw;
 		width: 70%;
@@ -125,6 +139,10 @@
 	input, select {
 		font: inherit;
 	}
+
+	.fa-folder {
+		color: #cecb84ff;
+	}
 </style>
 
 <center>
@@ -179,6 +197,37 @@
 	<br />
 	<a class="forminput_a" style="float: right; margin-right: 5%;" onClick="document.getElementById('misc_general_form').submit();">Zapisz ustawienia</a>
 	<br style="clear: both;" />
+	<br />
+	<br />
+</div>
+<div class="window">
+	<h2 class="window_title">Szablon portalu</h2>
+	<p style="margin-left: 5%; margin-top: 0;">Nazwa: <b>Default template</b><br />
+	Wersja: <b>1.0.0</b><br />
+	Autor: <b>jstpp</b></p>
+	<div id="template_files">
+		<?php
+			function list_template_files($template_dir)
+			{
+				$template_dir = rtrim($template_dir, '/');
+				$template_files = scandir($template_dir);
+				array_shift($template_files);
+				array_shift($template_files);
+				print('<i class="fa fa-folder"></i>&emsp;<span><code>'.$template_dir.'</code></span><br />');
+				print('<dir id="portal-template-dir-'.htmlentities($template_dir).'">');
+				foreach($template_files as $file) {
+					if(is_dir($template_dir."/".$file))
+					{
+						list_template_files($template_dir."/".$file);
+					} else {
+						print('<i class="fa fa fa-file"></i>&emsp;&nbsp;<span><code>'.$file.'</code></span><br />');
+					}
+				}
+				print('</dir>');
+			}
+			list_template_files("/www/esit/public/");
+		?>
+	</div>
 	<br />
 	<br />
 </div>

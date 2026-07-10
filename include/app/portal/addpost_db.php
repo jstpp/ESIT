@@ -1,6 +1,7 @@
 <?php
 	function processimage($img)
 	{
+		print_r($img);
 		$index = "new_img";
 		$target_file = "../img/articles/header/".basename($img["name"]);
 		$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));

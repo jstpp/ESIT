@@ -129,7 +129,12 @@
 			}
 			if($isfound==0)
 			{
-				echo("<center>Jeszcze tu niczego nie ma!</center>");
+				echo('
+				<div style="margin-left: auto; margin-right: auto; margin-top: 5vmax; text-align: center; display: flex; flex-direction: column; justify-content: cetner; width: 30%; padding: 3vmax;">
+					<i class="fa fa-hourglass-3" style="font-size: 7vmax;"></i>
+					<center style="margin-top: 2vmax; user-select: none;"><i>Jeszcze niczego tu nie ma!</i></center>
+				</div>
+				');
 			}
 		?>
 	</table>

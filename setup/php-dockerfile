@@ -17,8 +17,12 @@ RUN sed -i "s/group = www-data/group = esit-group/g" /usr/local/etc/php-fpm.d/ww
 COPY ./public /www/esit/public
 RUN chown -R esit-user:esit-group /www/esit/public/*
 
-#COPY ./include /www/esit/include
-#RUN chown -R esit-user:esit-group /www/esit/include/*
+COPY ./public/portal /www/esit/public
+#COPY ./public/img /www/esit/public/img
+COPY ./public/include /www/esit/public/include
+COPY ./public/app /www/esit/public/app
+COPY ./public/login /www/esit/public/login
+RUN chown -R esit-user:esit-group /www/esit/*
 
 WORKDIR /www/esit/public/app/modules/composer/
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
