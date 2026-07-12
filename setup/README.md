@@ -8,28 +8,11 @@ adduser esit-user && usermod -aG docker esit-user
 ```bash
 git clone https://github.com/jstpp/esit.git && cd esit
 ```
-> [!tip]
->
-> If You face permission issues, chown all files to Your `esit-user` for:
-> ```bash
-> sudo chown 1001:1001 -R /www/esit_testing/*
-> ```
-> replace `/www/esit_testing` with path to Your folder.
-
-Check your uid and gid:
+then:
 ```bash
-id -u && id -g
+docker compose up
 ```
 
-<small>Output:</small>
-```bash
-1001
-1001
-```
-Now, start docker compose with predefined user-id and group-id:
-```bash
-UID="1001" GID="1001" docker compose up
-```
 The installation may take some time - be prepared for it.
 
 After the end of the installation, service should be available on `localhost:80` unless You don't change it in proper files.
