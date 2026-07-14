@@ -1,5 +1,8 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+# Download default portal template
+git clone https://github.com/jstpp/ESITDefaultTemplate.git ./public/portal
+
 # Create missing files
 chmod -R 0777 "$SCRIPT_DIR/../public/img"
 mkdir "$SCRIPT_DIR/../public/img/articles/"

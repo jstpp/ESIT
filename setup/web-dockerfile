@@ -9,7 +9,7 @@ ENV GID=${GID}
 RUN addgroup -g ${GID} --system esit-group
 RUN adduser -G esit-group --system -D -s /bin/sh -u ${UID} esit-user
 
-COPY ./public/portal/php /www/esit/public
+COPY ./public/portal/sites /www/esit/public
 COPY ./public/portal/css /www/esit/public/include/css
 COPY ./public/portal/elements /www/esit/public/include/elements
 #COPY ./public/img /www/esit/public/img

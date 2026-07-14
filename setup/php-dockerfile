@@ -17,7 +17,7 @@ RUN sed -i "s/group = www-data/group = esit-group/g" /usr/local/etc/php-fpm.d/ww
 COPY ./public /www/esit/public
 RUN chown -R esit-user:esit-group /www/esit/public/*
 
-COPY ./public/portal/php /www/esit/public
+COPY ./public/portal/sites /www/esit/public
 COPY ./public/portal/css /www/esit/public/include/css
 COPY ./public/portal/elements /www/esit/public/include/elements
 #COPY ./public/img /www/esit/public/img
