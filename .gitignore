@@ -3,6 +3,8 @@
 **/worker/ctf/*
 /worker/inout/*
 /public/include/resources/*
+/include/portal/
+/public/portal/
 /public/img/articles/header/*
 /public/img/problemsets/header/*
 /public/img/plugins/*
