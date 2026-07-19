@@ -10,7 +10,7 @@
         $db_query = $pdo->prepare('INSERT INTO NOTIFICATIONS (user_id, content, type) VALUES (:uid, :content, "success")');
         $db_query->execute(['uid' => $_SESSION['AUTH_ID'], 'content' => $notification_content]);
 
-        header('Location: index.php?p=settings');
+        redirect('index.php?p=settings');
         die;
     } else {
         force_to_login();

@@ -7,7 +7,7 @@
             'priority' => $_SESSION['AUTH_LEVEL']
         ]);
 
-        header("Location: index.php?p=admin");
+        redirect("index.php?p=admin");
     } else {
         kick();
     }

@@ -1,128 +1,79 @@
 <?php
 	include(__DIR__.'/../../include/app/core.php');
 
-	if(isset($_GET['r']))
-	{
-		if($_GET['r']=="register")
-		{
-			if(is_logged_in()) kick();
-			include(__DIR__.'/../../include/app/user_management/register_new_user.php');
-		} else if($_GET['r']=="addpost")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/portal/addpost_db.php');
-		} else if($_GET['r']=="getimg")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/portal/tinyupload.php');
-		} else if($_GET['r']=="deletepost" and isset($_GET['id']))
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/portal/deletepost.php');
-		} else if($_GET['r']=="modifypost" and isset($_GET['id']))
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/portal/modifypost_db.php');
-		} else if($_GET['r']=="send_alg_solution" and isset($_POST['lang']) and isset($_GET['pid']))
-		{
-			if(!is_logged_in()) force_to_login();
-			include(__DIR__.'/../../include/worker/mq_producer.php');
-		} else if($_GET['r']=="api_get_results")
-		{
-			if(!net_check_if_trusted()) kick();
-			include(__DIR__.'/../../include/worker/api/api_get_results.php');
-		} else if($_GET['r']=="ask_for_inout")
-		{
-			if(!net_check_if_trusted()) kick();
-			include(__DIR__.'/../../include/worker/api/api_ask_for_inout.php');
-		} else if($_GET['r']=="registration_is_unique")
-		{
-			include(__DIR__.'/../../include/portal/registration_is_unique.php');
-		} else if($_GET['r']=="add_problem")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/problems/add_problem_script.php');
-		} else if($_GET['r']=="verify_ctf")
-		{
-			if(!is_logged_in()) force_to_login();
-			include(__DIR__.'/../../include/app/problems/verify_ctf_script.php');
-		} else if($_GET['r']=="verify_test")
-		{
-			if(!is_logged_in()) force_to_login();
-			include(__DIR__.'/../../include/app/problems/verify_test_anwsers.php');
-		} else if($_GET['r']=="save_form")
-		{
-			if(!is_logged_in()) force_to_login();
-			include(__DIR__.'/../../include/app/problems/save_form_script.php');
-		} else if($_GET['r']=="check_form")
-		{
-			if(!is_logged_in()) force_to_login();
-			include(__DIR__.'/../../include/app/problems/check_form_script.php');
-		} else if($_GET['r']=="settings_appearance")
-		{
-			if(!is_logged_in()) force_to_login();
-			include(__DIR__.'/../../include/app/settings/settings_appearance.php');
-		} else if($_GET['r']=="modify_content")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/portal/modify_content.php');
-		} else if($_GET['r']=="modify_resources")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/portal/modify_portal_resources.php');
-		} else if($_GET['r']=="modify_user")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/user_management/modify_user.php');
-		} else if($_GET['r']=="create_user")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/user_management/create_user.php');
-		} else if($_GET['r']=="remove_user")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/user_management/remove_user.php');
-		} else if($_GET['r']=="modify_config")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/config/modify_config.php');
-		} else if($_GET['r']=="create_set")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/sets/create_set.php');
-		} else if($_GET['r']=="download_plugin")
-		{
-			if(!is_logged_in()) force_to_login();
-			if(!has_a_priority(3)) kick();
-			include(__DIR__.'/../../include/app/plugins/download_plugin.php');
-		} else if($_GET['r']=="change_password")
-		{
-			if(!is_logged_in()) force_to_login();
-			include(__DIR__.'/../../include/app/settings/change_password.php');
-		} else if($_GET['r']=="diag_server_resources")
-		{
-			if(!is_logged_in()) force_to_login();
-			include(__DIR__.'/../../include/diagnostics/resources.php');
-		} else if($_GET['r']=="get_content")
-		{
-			include(__DIR__.'/../../include/app/content_delivery/get_content.php');
-		} else {
-			echo("Not found.");
-			kick();
-		}
+	$allowed_scripts = [
+		'register' 		      		=> ['mode' => 'register', 'priority' => 0, 'path' => 'app/user_management/register_new_user.php'],
+		'addpost'    		  		=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/portal/addpost_db.php'],
+		'getimg'      		  		=> ['mode' => 'non-interactive', 'priority' => 3, 'path' => 'app/portal/tinyupload.php'],
+		'deletepost'   		  		=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/portal/deletepost.php', 'required' => ['id']],
+		'modifypost'   		  		=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/portal/modifypost_db.php', 'required' => ['id']],
+		'send_alg_solution'   		=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'worker/mq_producer.php', 'required' => ['lang', 'pid']],
+		'api_get_results'	  		=> ['mode' => 'worker-api', 'priority' => 0, 'path' => 'worker/api/api_get_results.php'],
+		'ask_for_inout'	  	  		=> ['mode' => 'worker-api', 'priority' => 0, 'path' => 'worker/api/api_ask_for_inout.php'],
+		'registration_is_unique'	=> ['mode' => 'public', 'priority' => 0, 'path' => 'portal/registration_is_unique.php'],
+		'add_problem'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/problems/add_problem_script.php'],
+		'verify_ctf'				=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/problems/verify_ctf_script.php'],
+		'verify_test'				=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/problems/verify_test_anwsers.php'],
+		'save_form'					=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/problems/save_form_script.php'],
+		'check_form'				=> ['mode' => 'interactive', 'priority' => 4, 'path' => 'app/problems/check_form_script.php'],
+		'settings_appearance'		=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/settings/settings_appearance.php'],
+		'modify_content'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/portal/modify_content.php'],
+		'modify_resources'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'portal/modify_portal_resources.php'],
+		'modify_user'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/user_management/modify_user.php'],
+		'create_user'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/user_management/create_user.php'],
+		'remove_user'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/user_management/remove_user.php'],
+		'modify_config'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/config/modify_config.php'],
+		'create_set'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/sets/create_set.php'],
+		'download_plugin'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/plugins/download_plugin.php'],
+		'change_password'			=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/settings/change_password.php'],
+		'diag_server_resources'		=> ['mode' => 'non-interactive', 'priority' => 3, 'path' => 'diagnostics/resources.php'],
+		'get_content'				=> ['mode' => 'content-delivery', 'priority' => 0, 'path' => 'app/content_delivery/get_content.php'],
+	];
 
-		if(is_logged_in()) check_session_timeout();
+	$current_r = $_GET['r'] ?? 'none';
+	if(is_logged_in()) check_session_timeout();
+	if (!array_key_exists($current_r, $allowed_scripts)) kick();
+	$script_config = $allowed_scripts[$current_r];
+
+	switch($script_config['mode'])
+	{
+		case 'interactive':
+			if(!is_logged_in()) kick();
+			if($script_config['priority'] > 0 && !has_a_priority($script_config['priority'])) kick();
+			print('
+				<style>
+					html {
+						background-color: rgba(39, 55, 71, 1);
+					}
+				</style>'
+			);
+			break;
+		case 'non-interactive':
+			if(!is_logged_in()) kick();
+			if($script_config['priority'] > 0 && !has_a_priority($script_config['priority'])) kick();
+			break;
+		case 'content-delivery':
+			break;
+		case 'public':
+			break;
+		case 'register':
+			if(is_logged_in()) kick();
+			break;
+		case 'worker-api':
+			if(!net_check_if_trusted()) kick();
+			break;
+		default:
+			kick();
+			break;
 	}
+
+	if (isset($script_config['required'])) {
+        foreach ($script_config['required'] as $req) {
+            if (!isset($_GET[$req]) && !isset($_POST[$req])) {
+                kick();
+            }
+        }
+    }
+
+	include(__DIR__.'/../../include/'.$script_config['path']);
 ?>

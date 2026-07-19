@@ -216,6 +216,7 @@
 				print('<i class="fa fa-folder"></i>&emsp;<span><code>'.$template_dir.'</code></span><br />');
 				print('<dir id="portal-template-dir-'.htmlentities($template_dir).'">');
 				foreach($template_files as $file) {
+					if(str_starts_with($file, ".")) continue;
 					if(is_dir($template_dir."/".$file))
 					{
 						list_template_files($template_dir."/".$file);
@@ -225,7 +226,7 @@
 				}
 				print('</dir>');
 			}
-			list_template_files("/www/esit/public/");
+			list_template_files("/www/esit/public/portal/");
 		?>
 	</div>
 	<br />

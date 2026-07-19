@@ -23,7 +23,7 @@
             and preg_replace('/[^A-Za-z0-9\-]/', '', $_POST['username'])==$_POST['username'])
         {
 
-            if(!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) header("Location: ../rejestracja.php?error");
+            if(!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) redirect("../rejestracja.php?error");
 
             $db_query = $pdo->prepare('INSERT INTO USERS (username, password, role, mail, name, surname, organization) VALUES (:username, :password, :priority, :mail, :name, :surname, :org)');
             $db_query->execute([
@@ -35,9 +35,9 @@
                 'surname' => $_POST['surname'], 
                 'org' => $_POST['org']
             ]);
-            header("Location: ../login/?response=registered");
+            redirect("../login/?response=registered");
         } else {
-            header("Location: ../rejestracja.php?error");
+            redirect("../rejestracja.php?error");
         }
     } else {
         kick();

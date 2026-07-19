@@ -21,9 +21,9 @@
                 'surname' => $_POST['surname'], 
                 'org' => $_POST['org']
             ]);
-            header("Location: index.php?p=admin");
+            redirect("index.php?p=admin");
         } else {
-            header("Location: index.php?p=admin&error");
+            redirect("index.php?p=admin&error");
         }
     } else {
         kick();

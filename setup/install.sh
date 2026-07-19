@@ -1,7 +1,8 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Download default portal template
-rm -R "$SCRIPT_DIR/../public/portal"
+rm -Rf "$SCRIPT_DIR/../public/portal"
+rm -Rf "$SCRIPT_DIR/../include/portal"
 git clone https://github.com/jstpp/ESITDefaultTemplate.git "$SCRIPT_DIR/../public/portal"
 cp -r "$SCRIPT_DIR/../public/portal/include" "$SCRIPT_DIR/../include/portal"
 

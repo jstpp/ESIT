@@ -20,7 +20,7 @@
 					unlink($headerimagename);
 				}
 
-				header("Location: index.php?p=portal");
+				redirect("index.php?p=portal");
 			} catch (Exception $e) {
 				kick();
 			}

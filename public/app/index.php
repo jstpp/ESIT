@@ -4,33 +4,59 @@
 	if(!is_logged_in()) force_to_login(); #functions from core
 	check_session_timeout();
 
-	$db_query = $pdo->prepare('SELECT DISTINCT * FROM USERS WHERE USER_ID=:uid');
+	$db_query = $pdo->prepare('SELECT * FROM USERS WHERE USER_ID=:uid LIMIT 1');
 	$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
 
 	$user = $db_query->fetch();
-	$settings = json_decode($user['settings']);
+	$settings = $user ? json_decode($user['settings']) : null;
 
-	$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name LIKE "general_%"');
+	$db_query = $pdo->prepare('SELECT misc_value FROM MISC WHERE misc_name LIKE "general_title" LIMIT 1');
     $db_query->execute();
-    while($row = $db_query->fetch())
-    {
-        if($row['misc_name']=="general_title") $general_title = $row['misc_value'];
-    }
+    $general_title = $db_query->fetchColumn() ?: "ESIT";
+
+	$allowed_pages = [
+		'dashboard'     => ['priority' => 0, 'path' => 'dashboard.php', 'menu_id' => 'dashboard'],
+		'admin'         => ['priority' => 3, 'path' => 'admin.php', 'menu_id' => 'admin'],
+		'sets'          => ['priority' => 0, 'path' => 'sets.php', 'menu_id' => 'sets'],
+		'archive'       => ['priority' => 0, 'path' => 'archive.php', 'menu_id' => 'archive'],
+		'mysolutions'   => ['priority' => 0, 'path' => 'mysolutions.php', 'menu_id' => 'mysolutions'],
+		'myexamsadmin'  => ['priority' => 4, 'path' => 'myexamsadmin.php', 'menu_id' => 'myexamsadmin'],
+		'settings'      => ['priority' => 0, 'path' => 'settings.php', 'menu_id' => 'settings'],
+		'portal'        => ['priority' => 3, 'path' => 'portal.php', 'menu_id' => 'portal'],
+		'diagnostics'   => ['priority' => 3, 'path' => 'diagnostics.php', 'menu_id' => 'diagnostics'],
+		'algresult'     => ['priority' => 0, 'path' => 'results/algresult.php'],
+		'testresult'    => ['priority' => 0, 'path' => 'results/testresult.php'],
+		'ctfresult'     => ['priority' => 0, 'path' => 'results/ctfresult.php'],
+		'formresult'    => ['priority' => 0, 'path' => 'results/formresult.php'],
+		'quest'         => ['priority' => 0, 'path' => 'quest.php'],
+		'set'           => ['priority' => 0, 'path' => 'set.php'],
+		'addpost'       => ['priority' => 3, 'path' => 'portal/addpost.php'],
+		'modifypost'    => ['priority' => 3, 'path' => 'portal/modifypost.php'],
+		'addproblem'    => ['priority' => 3, 'path' => 'add_problem.php'],
+		'check_the_form'=> ['priority' => 3, 'path' => 'check_the_form.php'],
+	];
+
+	$current_p = $_GET['p'] ?? 'dashboard';
+	if (!array_key_exists($current_p, $allowed_pages)) {
+		$current_p = 'dashboard';
+	}
+	$page_config = $allowed_pages[$current_p];
+
+	if ($page_config['priority'] > 0 && !has_a_priority($page_config['priority'])) {
+		kick();
+	}
+
+
 ?>
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Aplikacja | <?php if(isset($general_title)) { echo($general_title); } else { echo("ESIT"); } ?></title>
+		<title>Aplikacja | <?php  echo(htmlspecialchars($general_title)); ?></title>
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 		<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 		<script src="https://kit.fontawesome.com/8a8540bd68.js" crossorigin="anonymous"></script>
 		<style> 
 			:root {
-				/*--bg: #3e4145;
-				--container-bg: #313136;
-				--container-hover-bg: #2a2c2e;
-				--container-hover-bg-textbox:rgba(32, 33, 34, 1);
-				--text: #dae2e6;*/
 				--bg: rgba(39, 55, 71, 1);
 				--container-bg: rgba(32, 43, 54, 1);
 				--container-hover-bg: rgba(21, 33, 46, 1);
@@ -53,11 +79,6 @@
 			}
 
 			[data-theme="dark"] {
-				/*--bg: #3e4145;
-				--container-bg: #313136;
-				--container-hover-bg: #2a2c2e;
-				--container-hover-bg-textbox:rgba(32, 33, 34, 1);
-				--text: #dae2e6;*/
 				--bg: rgba(39, 55, 71, 1);
 				--container-bg: rgba(32, 43, 54, 1);
 				--container-hover-bg: rgba(21, 33, 46, 1);
@@ -93,105 +114,29 @@
 				}
 			}
 		</style>
+		<?php if (isset($settings) && $settings->dark_mode === "0"): ?>
+			<script>document.documentElement.setAttribute('data-theme', 'light');</script>
+		<?php endif; ?>
 	</head>
 	<body>
 		<?php
-			if(isset($settings))
-			{
-				if($settings->{'dark_mode'}=="0") echo("<script>document.body.setAttribute('data-theme', 'light');</script>");
-			}
 			include(__DIR__.'/../../include/app/menus/horizontal.php');
 			include(__DIR__.'/../../include/app/menus/vertical.php');
 			include(__DIR__.'/../../include/app/menus/notifications.php');
 		?>
 		<div id="page_content">
 			<?php
-				if (isset($_GET['p']))
-				{
-					if($_GET['p']=="admin")
-					{
-						if(!is_logged_in()) force_to_login();
-						if(!has_a_priority(3)) kick();
-						include(__DIR__.'/../../include/app/admin.php');
-						echo("<script>document.getElementById('admin').style.background = 'var(--container-hover-bg)'; document.getElementById('admin').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="sets") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/sets.php');
-						echo("<script>document.getElementById('sets').style.background = 'var(--container-hover-bg)'; document.getElementById('sets').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="archive") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/archive.php');
-						echo("<script>document.getElementById('archive').style.background = 'var(--container-hover-bg)'; document.getElementById('archive').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="mysolutions") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/mysolutions.php');
-						echo("<script>document.getElementById('mysolutions').style.background = 'var(--container-hover-bg)'; document.getElementById('mysolutions').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="myexamsadmin") {
-						if(!is_logged_in()) force_to_login();
-						if(!has_a_priority(4)) kick();
-						include(__DIR__.'/../../include/app/myexamsadmin.php');
-						echo("<script>document.getElementById('myexamsadmin').style.background = 'var(--container-hover-bg)'; document.getElementById('myexamsadmin').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="settings") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/settings.php');
-						echo("<script>document.getElementById('settings').style.background = 'var(--container-hover-bg)'; document.getElementById('settings').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="dashboard") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/dashboard.php');
-						echo("<script>document.getElementById('dashboard').style.background = 'var(--container-hover-bg)'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="portal") {
-						if(!is_logged_in()) force_to_login();
-						if(!has_a_priority(3)) kick();
-						include(__DIR__.'/../../include/app/portal.php');
-						echo("<script>document.getElementById('portal').style.background = 'var(--container-hover-bg)'; document.getElementById('portal').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="diagnostics") {
-						if(!is_logged_in()) force_to_login();
-						if(!has_a_priority(3)) kick();
-						include(__DIR__.'/../../include/app/diagnostics.php');
-						echo("<script>document.getElementById('diagnostics').style.background = 'var(--container-hover-bg)'; document.getElementById('diagnostics').style.color = '#00b3ff';</script>");
-					} else if ($_GET['p']=="algresult") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/results/algresult.php');
-					} else if ($_GET['p']=="testresult") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/results/testresult.php');
-					} else if ($_GET['p']=="ctfresult") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/results/ctfresult.php');
-					} else if ($_GET['p']=="formresult") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/results/formresult.php');
-					} else if ($_GET['p']=="quest") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/quest.php');
-					} else if ($_GET['p']=="set") {
-						if(!is_logged_in()) force_to_login();
-						include(__DIR__.'/../../include/app/set.php');
-					} else if ($_GET['p']=="addpost") {
-						if(!is_logged_in()) force_to_login();
-						if(!has_a_priority(3)) kick();
-						include(__DIR__.'/../../include/app/portal/addpost.php');
-					} else if ($_GET['p']=="modifypost") {
-						if(!is_logged_in()) force_to_login();
-						if(!has_a_priority(3)) kick();
-						include(__DIR__.'/../../include/app/portal/modifypost.php');
-					} else if ($_GET['p']=="addproblem") {
-						if(!is_logged_in()) force_to_login();
-						if(!has_a_priority(3)) kick();
-						include(__DIR__.'/../../include/app/add_problem.php');
-					} else if ($_GET['p']=="check_the_form") {
-						if(!is_logged_in()) force_to_login();
-						if(!has_a_priority(3)) kick();
-						include(__DIR__.'/../../include/app/check_the_form.php');
-					} else {
-						include(__DIR__.'/../../include/app/dashboard.php');
-						echo("<script>document.getElementById('dashboard').style.background = 'var(--container-hover-bg)'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
-					}
-				} else {
-					include(__DIR__.'/../../include/app/dashboard.php');
-					echo("<script>document.getElementById('dashboard').style.background = 'var(--container-hover-bg)'; document.getElementById('dashboard').style.color = '#00b3ff';</script>");
-				}
+				include(__DIR__.'/../../include/app/'.$page_config['path']);
 			?>
+			<?php if (isset($page_config['menu_id'])): ?>
+				<script>
+					const activeMenu = document.getElementById(<?= json_encode($page_config['menu_id']) ?>);
+					if (activeMenu) {
+						activeMenu.style.background = 'var(--container-hover-bg)'; 
+						activeMenu.style.color = '#00b3ff';
+					}
+				</script>
+			<?php endif; ?>
 		</div>
 	</body>
 </html>

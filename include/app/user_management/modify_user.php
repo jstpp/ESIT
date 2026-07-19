@@ -19,7 +19,7 @@
             'uid' => filter_var($_GET['uid'], FILTER_VALIDATE_INT)
         ]);
 
-        header("Location: index.php?p=admin");
+        redirect("index.php?p=admin");
     } else {
         kick();
     }

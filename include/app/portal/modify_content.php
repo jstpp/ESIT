@@ -24,6 +24,6 @@
         kick();
     }
 
-    header("Location: index.php?p=portal");
+    redirect("index.php?p=portal");
     die;
 ?>
