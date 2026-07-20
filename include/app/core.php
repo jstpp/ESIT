@@ -30,10 +30,10 @@
 	$default_variables = array(
 		'general_title' => 'My First ESIT app',
 		'general_motd' => 'Change your MOTD',
-		'general_url' => 'localhost',
+		'general_url' => 'http://localhost',
 		'general_timezone' => 'Europe/Warsaw',
-		'general_workers_allowed_addr' => '["localhost", "worker", "172.18.0.1"]',
-		'plugin_custom_error_broker_url' => 'localhost',
+		'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1"]',
+		'plugin_custom_error_broker_url' => 'http://localhost',
 		'plugin_mailing_module_host' => 'localhost',
 		'plugin_mailing_module_port' => 587,
 		'plugin_mailing_module_username' => 'YourUsername',
@@ -63,10 +63,10 @@
 		global $pdo;
 		$config_array = array();
 
-		$db_query = $pdo->prepare('SELECT DISTINCT * FROM MISC WHERE misc_name=:key');
+		$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name=:key LIMIT 1');
 		$db_query->execute(['key' => $key]);
 
-		while($row = $db_query->fetch())
+		if($row = $db_query->fetch())
 		{
 			return $row['misc_value'];
 		}
@@ -89,7 +89,7 @@
 
 	function kick()
 	{
-		if(boolval(get_misc_value('plugin_errors')) and boolval(get_misc_value('plugin_custom_error_broker_url')))
+		if(boolval(get_misc_value('plugin_errors')) && boolval(get_misc_value('plugin_custom_error_broker_url')))
 		{
 			$error_link = get_misc_value('plugin_custom_error_broker_url');
 		} else {
@@ -101,7 +101,7 @@
 			}
 		}
 
-		header("Location: ".$error_link);
+		redirect($error_link);
 		
 		echo('<meta http-equiv="refresh" content="0; url='.$error_link.'/login" />');
 		die;
@@ -115,9 +115,10 @@
 
 	function display_message($type, $header, $message)
 	{
+		if(!isset($type) || !isset($header) || !isset($message)) kick();
 		echo('<div onClick="this.remove();" style="display: flex; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
 			<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 60vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">');
-			
+		
 		if($type=="error")
 		{
 			echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 80, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
@@ -138,20 +139,10 @@
 		global $pdo;
 		$count = 0;
 
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS WHERE username=:key');
+		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS WHERE username=:key OR mail=:key');
 		$db_query->execute(['key' => $key]);
-		$count += $db_query->fetch()['count'];
-
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS WHERE mail=:key');
-		$db_query->execute(['key' => $key]);
-		$count += $db_query->fetch()['count'];
-
-		if(isset($count) and $count > 0)
-		{
-			return True;
-		} else {
-			return False;
-		}
+		
+		return ($db_query->fetch()['count'] > 0);
 	}
 
 	function is_logged_in()
@@ -166,7 +157,7 @@
 
 	function is_admin()
 	{
-		if(isset($_SESSION['AUTH_LEVEL']) and $_SESSION['AUTH_LEVEL']<=3)
+		if(isset($_SESSION['AUTH_LEVEL']) && $_SESSION['AUTH_LEVEL']<=3)
 		{
 			return True;
 		} else {
@@ -176,7 +167,7 @@
 
 	function has_a_priority($n)
 	{
-		if(isset($_SESSION['AUTH_LEVEL']) and $_SESSION['AUTH_LEVEL']<=$n)
+		if(isset($_SESSION['AUTH_LEVEL']) && $_SESSION['AUTH_LEVEL']<=$n)
 		{
 			return True;
 		} else {
@@ -192,8 +183,9 @@
 			{
 				session_destroy();
 				force_to_login();
+				die;
 			} else {
-				$_SESSION['SESSION_TIMEOUT'] += 18000;
+				$_SESSION['SESSION_TIMEOUT'] = time() + 14400;
 			}
 		} else {
 			force_to_login();
@@ -202,18 +194,19 @@
 
 	function net_check_if_trusted()
 	{
-		if(in_array($_SERVER['REMOTE_ADDR'],json_decode(get_misc_value('general_workers_allowed_addr'))))
-		{
-			return True;
-		} else {
-			return False;
-		}
+		$allowed = json_decode(get_misc_value('general_workers_allowed_addr'), true);
+        return is_array($allowed) && in_array($_SERVER['REMOTE_ADDR'], $allowed, true);
 	}
 
 	function include_plugins_for($element, $plugin = null) {
 		if(isset($element))
 		{
 			global $pdo;
+			$element = basename($element);
+			if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $element)) {
+				return False; 
+			}
+			$base_dir = realpath(__DIR__ . "/../plugins");
 
 			if(!isset($plugin)) {
 				$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_value=1 AND misc_name LIKE "community_plugin_%"');
@@ -221,9 +214,17 @@
 
 				while($row = $db_query->fetch())
 				{
+					$plugin_name = substr($row['misc_name'], 17);
+            
+					if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin_name)) {
+						continue;
+					}
+
+					$plugin_path = realpath($base_dir . "/" . $plugin_name . "/include/" . $element . ".php");
+
 					try {
-						if(file_exists(__DIR__."/../plugins/".substr($row['misc_name'], 17)."/include/".$element.".php")) {
-							include(__DIR__."/../plugins/".substr($row["misc_name"], 17)."/include/".$element.".php");
+						if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) {
+							include($plugin_path);
 						}
 					} catch (Throwable $e) {
 						continue;
@@ -231,8 +232,14 @@
 				}
 			} else {
 				try {
-					if(file_exists(__DIR__."/../plugins/".$plugin."/include/".$element.".php")) {
-						include(__DIR__."/../plugins/".$plugin."/include/".$element.".php");
+					if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin)) {
+						return false;
+					}
+
+					$plugin_path = realpath($base_dir . "/" . $plugin . "/include/" . $element . ".php");
+					
+					if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) {
+						include($plugin_path);
 					} else {
 						return False;
 					}
@@ -251,6 +258,7 @@
 		try {
 			mkdir($dst, 0777, true);
 		} catch (Throwable $e) {
+			closedir($dir);
 			return False;
 		}
 
@@ -266,6 +274,7 @@
 			}
 			closedir($dir);
 		} catch (Throwable $e) {
+			closedir($dir);
 			return False;
 		}
 		return True;
@@ -280,60 +289,86 @@
 
 		foreach ($files as $file) {
 			$path = "$dir/$file";
-			(is_dir($path)) ? deleteFolder($path) : unlink($path);
+			(is_dir($path)) ? delete_directory($path) : unlink($path);
 		}
 
 		return rmdir($dir);
 	}
 
 	function load_img_input($img = null, $target_root_dir = null) {
-		if(isset($img) and isset($target_root_dir))
+		$allowed_types = [
+							'image/jpeg' => 'jpg',
+							'image/png'  => 'png',
+							'image/webp' => 'webp'
+						 ];
+
+		$placeholder = "../img/placeholder.jpeg";
+
+		if(!isset($img) || !isset($target_root_dir) || !isset($img['tmp_name']) || $img['error'] !== UPLOAD_ERR_OK) {
+			echo "Sorry, something went wrong. (1)";
+			return $placeholder;
+		}
+
+		$base_dir = realpath($target_root_dir);
+		if (!$base_dir || !is_dir($base_dir)) {
+			echo "Sorry, something went wrong. (2)";
+			return $placeholder;
+		}
+
+		if(isset($img) && isset($target_root_dir))
 		{
+
 			try {
-				$index = hash('sha256', (new DateTime())->format('Uv'));
-				$target_file = $target_root_dir.basename($img["name"]);
-				$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-				$target_file = $target_root_dir.$index.".".$imageFileType;
+				$finfo = new finfo(FILEINFO_MIME_TYPE);
+				$mime_type = $finfo->file($img["tmp_name"]);
 				$check = getimagesize($img["tmp_name"]);
 
 				if($check !== false) {
 					echo "File is an image - " . $check["mime"] . ".";
-					$uploadOk = 1;
 				} else {
-					echo "File is not an image.";
-					$uploadOk = 0;
-				}
-
-				if (file_exists($target_file)) {
-					echo "Sorry, file already exists.";
-					$uploadOk = 0;
+					echo "File is not an image. (3)";
+					return $placeholder;
 				}
 
 				if ($img["size"] > 1000000) {
-					echo "Image is too large!";
-					$uploadOk = 0;
+					echo "Image is too large! (4)";
+					return $placeholder;
 				}
 
-				if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "webp" ) {
-				echo "Only JPG, JPEG, PNG i WEBP are allowed.";
-				$uploadOk = 0;
+				if (!array_key_exists($mime_type, $allowed_types)) {
+					echo "Only JPG, JPEG, PNG and WEBP are allowed. (5)";
+					return $placeholder;
 				}
 
-				if ($uploadOk == 0) {
-					echo "<br/>Sorry, an error occurred.";
-				} else {
-					if (!move_uploaded_file($img["tmp_name"], $target_file)) {
-						echo "<br/>Sorry, an error occurred.";
-					}
+				$index = hash('sha256', (new DateTime())->format('Uv') . random_bytes(5));
+				$target_file = $base_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
+
+				if (file_exists($target_file)) {
+					echo "Sorry, file already exists. (6)";
+					return $placeholder;
+				}
+
+				if (strpos($target_file, $base_dir) !== 0) {
+					echo "Sorry, something went wrong. (7)";
+					echo("1: ".$target_file);
+					echo("2: ".$base_dir);
+					return $placeholder;
+				}
+
+				if (!move_uploaded_file($img["tmp_name"], $target_file)) {
+					echo "<br/>Sorry, an error occurred. (8)";
+					return $placeholder;
 				}
 			} catch (Throwable $e) {
-				return "../img/placeholder.jpeg";
+				echo "<br/>Sorry, an error occurred. (9)";
+				return $placeholder;
 			}
-
-			return $target_file;
+			return "/img/problemsets/header".DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
 		} else {
-			return "../img/placeholder.jpeg";
+			echo "<br/>Sorry, an error occurred. (10)";
+			return $placeholder;
 		}
+		die;
 	}
 
 
@@ -350,7 +385,7 @@
 
 	function parse_error_message($some_b64_string)
 	{
-		if(strlen($some_b64_string>1))
+		if(strlen($some_b64_string)>1)
 		{
 			$arguments = json_decode(base64_decode($some_b64_string));
 			display_message($arguments->{'type'}, $arguments->{'header'}, $arguments->{'content'});
@@ -375,5 +410,9 @@
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
         error_reporting(E_ALL);
-    }
+    } else {
+		ini_set('display_errors', '0');
+        ini_set('display_startup_errors', '0');
+        error_reporting(0);
+	}
 ?>
