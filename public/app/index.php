@@ -56,6 +56,10 @@
 		<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 		<script src="https://kit.fontawesome.com/8a8540bd68.js" crossorigin="anonymous"></script>
 		<style> 
+			html {
+				scroll-behavior: smooth;
+			}
+			
 			:root {
 				--bg: rgba(39, 55, 71, 1);
 				--container-bg: rgba(32, 43, 54, 1);

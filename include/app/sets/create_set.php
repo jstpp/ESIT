@@ -11,7 +11,7 @@
             }
 
             if(isset($_FILES["set_img"]) && $_FILES["set_img"]["error"] === UPLOAD_ERR_OK) {
-                $image = load_img_input($_FILES["set_img"], "../img/problemsets/header/");
+                $image = load_img_input($_FILES["set_img"], "../img/problemsets/header");
             } else {
                 $image = load_img_input();
             }

@@ -33,6 +33,7 @@
 		'general_url' => 'http://localhost',
 		'general_timezone' => 'Europe/Warsaw',
 		'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1"]',
+		'general_trusted_proxies' => '["127.0.0.1", "::1"]',
 		'plugin_custom_error_broker_url' => 'http://localhost',
 		'plugin_mailing_module_host' => 'localhost',
 		'plugin_mailing_module_port' => 587,
@@ -45,20 +46,27 @@
 	#		   	 database connection	     	  #
 	###############################################
 
-	$dsn = "mysql:host=$db_host;dbname=$db_database;options='--client_encoding=$db_charset'";
+	$dsn = "mysql:host=$db_host;dbname=$db_database;charset=$db_charset";
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
     ];
-    $pdo = new PDO($dsn, $db_username, $db_password, $options);
+
+	try {
+    	$pdo = new PDO($dsn, $db_username, $db_password, $options);
+	}
+	catch (Throwable $t) {
+		echo("Database initialization failure. Please reload.");
+		die;
+	}
 
 
 	###############################################
 	#              general toolbox				  #
 	###############################################
 
-	function get_misc_value($key)
+	function get_misc_value($key): string
 	{
 		global $pdo;
 		$config_array = array();
@@ -80,14 +88,14 @@
 		}
 	}
 
-	function force_to_login()
+	function force_to_login(): void
 	{
-		header("Location: /login");
+		header("Location: /login", true, 302);
 		echo('<meta http-equiv="refresh" content="0; url=/login" />');
 		die;
 	}
 
-	function kick()
+	function kick(): void
 	{
 		if(boolval(get_misc_value('plugin_errors')) && boolval(get_misc_value('plugin_custom_error_broker_url')))
 		{
@@ -102,18 +110,20 @@
 		}
 
 		redirect($error_link);
-		
-		echo('<meta http-equiv="refresh" content="0; url='.$error_link.'/login" />');
-		die;
 	}
 
-	function redirect($dest)
+	function redirect($dest): void
 	{
-		echo('<meta http-equiv="refresh" content="0; url='.$dest.'" />');
-		die;
+		if (!headers_sent()) {
+			header("Location: ".$dest, true, 302);
+			die;
+		} else {
+			echo '<meta http-equiv="refresh" content="0; url='.htmlspecialchars($dest).'"/>';
+			die;
+		}
 	}
 
-	function display_message($type, $header, $message)
+	function display_message($type, $header, $message): void
 	{
 		if(!isset($type) || !isset($header) || !isset($message)) kick();
 		echo('<div onClick="this.remove();" style="display: flex; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
@@ -134,7 +144,7 @@
 		</div>');
 	}
 
-	function is_an_user($key)
+	function is_an_user($key): bool
 	{
 		global $pdo;
 		$count = 0;
@@ -145,37 +155,22 @@
 		return ($db_query->fetch()['count'] > 0);
 	}
 
-	function is_logged_in()
+	function is_logged_in(): bool
 	{
-		if(isset($_SESSION['AUTH_ID']))
-		{
-			return True;
-		} else {
-			return False;
-		}
+		return isset($_SESSION['AUTH_ID']);
 	}
 
-	function is_admin()
+	function is_admin(): bool
 	{
-		if(isset($_SESSION['AUTH_LEVEL']) && $_SESSION['AUTH_LEVEL']<=3)
-		{
-			return True;
-		} else {
-			return False;
-		}
+		return isset($_SESSION['AUTH_LEVEL']) && $_SESSION['AUTH_LEVEL']<=3;
 	}
 
-	function has_a_priority($n)
+	function has_a_priority($n): bool
 	{
-		if(isset($_SESSION['AUTH_LEVEL']) && $_SESSION['AUTH_LEVEL']<=$n)
-		{
-			return True;
-		} else {
-			return False;
-		}
+		return isset($_SESSION['AUTH_LEVEL']) && $_SESSION['AUTH_LEVEL']<=$n;
 	}
 
-	function check_session_timeout()
+	function check_session_timeout(): void
 	{
 		if(isset($_SESSION['SESSION_TIMEOUT']))
 		{
@@ -192,13 +187,33 @@
 		}
 	}
 
-	function net_check_if_trusted()
+	function net_check_if_trusted(): bool
 	{
 		$allowed = json_decode(get_misc_value('general_workers_allowed_addr'), true);
-        return is_array($allowed) && in_array($_SERVER['REMOTE_ADDR'], $allowed, true);
+        return is_array($allowed) && in_array(get_real_client_ip(), $allowed, true);
 	}
 
-	function include_plugins_for($element, $plugin = null) {
+	function get_real_client_ip(): string
+	{
+		$remote_addr = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+
+		if (!in_array($remote_addr, json_decode(get_misc_value('general_trusted_proxies'), true), true)) {
+			return $remote_addr;
+		}
+		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+			$client_ip = trim($ips[0]);
+
+			if (filter_var($client_ip, FILTER_VALIDATE_IP)) {
+				return $client_ip;
+			}
+		}
+
+		return $remote_addr;
+	}
+
+	function include_plugins_for($element, $plugin = null): bool
+	{
 		if(isset($element))
 		{
 			global $pdo;
@@ -232,9 +247,7 @@
 				}
 			} else {
 				try {
-					if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin)) {
-						return false;
-					}
+					if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin)) return False;
 
 					$plugin_path = realpath($base_dir . "/" . $plugin . "/include/" . $element . ".php");
 					
@@ -253,7 +266,8 @@
 		}
 	}
 
-	function copy_directory($src, $dst) {
+	function copy_directory($src, $dst): bool 
+	{
 		$dir = opendir($src);
 		try {
 			mkdir($dst, 0777, true);
@@ -280,10 +294,9 @@
 		return True;
 	}
 
-	function delete_directory($dir) {
-		if (!is_dir($dir)) {
-			return false;
-		}
+	function delete_directory($dir): bool
+	{
+		if (!is_dir($dir)) return False;
 
 		$files = array_diff(scandir($dir), array('.', '..'));
 
@@ -295,7 +308,8 @@
 		return rmdir($dir);
 	}
 
-	function load_img_input($img = null, $target_root_dir = null) {
+	function load_img_input($img = null, $target_root_dir = null): string
+	{
 		$allowed_types = [
 							'image/jpeg' => 'jpg',
 							'image/png'  => 'png',
@@ -323,20 +337,18 @@
 				$mime_type = $finfo->file($img["tmp_name"]);
 				$check = getimagesize($img["tmp_name"]);
 
-				if($check !== false) {
-					echo "File is an image - " . $check["mime"] . ".";
-				} else {
-					echo "File is not an image. (3)";
+				if($check == false) {
+					#echo "File is not an image. (3)";
 					return $placeholder;
 				}
 
 				if ($img["size"] > 1000000) {
-					echo "Image is too large! (4)";
+					#echo "Image is too large! (4)";
 					return $placeholder;
 				}
 
 				if (!array_key_exists($mime_type, $allowed_types)) {
-					echo "Only JPG, JPEG, PNG and WEBP are allowed. (5)";
+					#echo "Only JPG, JPEG, PNG and WEBP are allowed. (5)";
 					return $placeholder;
 				}
 
@@ -344,31 +356,40 @@
 				$target_file = $base_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
 
 				if (file_exists($target_file)) {
-					echo "Sorry, file already exists. (6)";
+					#echo "Sorry, file already exists. (6)";
 					return $placeholder;
 				}
 
 				if (strpos($target_file, $base_dir) !== 0) {
-					echo "Sorry, something went wrong. (7)";
-					echo("1: ".$target_file);
-					echo("2: ".$base_dir);
+					#echo "Sorry, something went wrong. (7)";
 					return $placeholder;
 				}
 
 				if (!move_uploaded_file($img["tmp_name"], $target_file)) {
-					echo "<br/>Sorry, an error occurred. (8)";
+					#echo "<br/>Sorry, an error occurred. (8)";
 					return $placeholder;
 				}
 			} catch (Throwable $e) {
-				echo "<br/>Sorry, an error occurred. (9)";
+				#echo "<br/>Sorry, an error occurred. (9)";
 				return $placeholder;
 			}
-			return "/img/problemsets/header".DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
+			return $target_root_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
 		} else {
-			echo "<br/>Sorry, an error occurred. (10)";
+			#echo "<br/>Sorry, an error occurred. (10)";
 			return $placeholder;
 		}
-		die;
+	}
+
+	function parse_flash_messages(): void
+	{
+		if(isset($_SESSION['flash_messages']) && count($_SESSION['flash_messages'])>0)
+		{
+			foreach($_SESSION['flash_messages'] as $message)
+			{
+				display_message($message->{'type'}, $message->{'header'}, $message->{'content'});
+			}
+			unset($_SESSION['flash_messages']);
+		}
 	}
 
 
@@ -383,26 +404,12 @@
 	#              some automation				  #
 	###############################################
 
-	function parse_error_message($some_b64_string)
-	{
-		if(strlen($some_b64_string)>1)
-		{
-			$arguments = json_decode(base64_decode($some_b64_string));
-			display_message($arguments->{'type'}, $arguments->{'header'}, $arguments->{'content'});
-		} else {
-			display_message("error", "Wystąpił błąd!", "Wystąpił błąd. Nie załączono jego opisu.");
-		}
-	}
-
-	if(isset($_GET['error']))
-	{
-		parse_error_message($_GET['error']);
-	}
+	if(isset($_SESSION['flash_messages'])) parse_flash_messages();
 
 	try {
 		date_default_timezone_set(get_misc_value('general_timezone'));
 	} catch (Exception $e) {
-		echo("Unvalid timezone.");
+		echo("Invalid timezone.");
 	}
 
 	if(boolval(get_misc_value('plugin_debugging')))

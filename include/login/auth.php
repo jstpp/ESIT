@@ -3,7 +3,7 @@
 	$db_query = $pdo->prepare('SELECT * FROM USERS WHERE username=:usr');
     $db_query->execute(['usr' => $_POST['auth_username']]);
 
-	while($row = $db_query->fetch())
+	if($row = $db_query->fetch())
 	{
 		$isfound++;
 		if($_POST['auth_username']==$row['username'] and hash('sha3-384', $_POST['auth_password'])==$row['password'])
