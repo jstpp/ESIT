@@ -28,7 +28,7 @@
             $db_query = $pdo->prepare('INSERT INTO USERS (username, password, role, mail, name, surname, organization) VALUES (:username, :password, :priority, :mail, :name, :surname, :org)');
             $db_query->execute([
                 'username' => htmlentities($_POST['username']), 
-                'password' => hash('sha3-384', $_POST['pass']),
+                'password' => password_hash($_POST['pass'], PASSWORD_ARGON2ID),
                 'priority'=> $priority, 
                 'mail' => $_POST['mail'], 
                 'name' => $_POST['name'], 

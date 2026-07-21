@@ -147,10 +147,9 @@
 	function is_an_user($key): bool
 	{
 		global $pdo;
-		$count = 0;
 
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS WHERE username=:key OR mail=:key');
-		$db_query->execute(['key' => $key]);
+		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS WHERE username=:key1 OR mail=:key2');
+		$db_query->execute(['key1' => $key, 'key2' => $key]);
 		
 		return ($db_query->fetch()['count'] > 0);
 	}
@@ -418,8 +417,8 @@
         ini_set('display_startup_errors', '1');
         error_reporting(E_ALL);
     } else {
-		ini_set('display_errors', '0');
-        ini_set('display_startup_errors', '0');
+		#ini_set('display_errors', '0');
+        #ini_set('display_startup_errors', '0');
         error_reporting(0);
 	}
 ?>

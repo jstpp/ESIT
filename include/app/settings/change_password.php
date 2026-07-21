@@ -4,7 +4,7 @@
         if(isset($_POST['password_old']) and isset($_POST['password_new1']) and isset($_POST['password_new2']) and $_POST['password_new2']==$_POST['password_new1'])
         {
             $db_query = $pdo->prepare('UPDATE USERS SET password=:password WHERE USER_ID=:uid');
-            $db_query->execute(['password' => hash('sha3-384', $_POST['password_new1']), 'uid' => $_SESSION['AUTH_ID']]);
+            $db_query->execute(['password' => password_hash($_POST['password_new1'], PASSWORD_ARGON2ID), 'uid' => $_SESSION['AUTH_ID']]);
         }
 
         $notification_content = "Twoje hasło zostało zmienione.";
