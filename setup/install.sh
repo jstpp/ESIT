@@ -5,6 +5,7 @@ rm -Rf "$SCRIPT_DIR/../public/portal"
 rm -Rf "$SCRIPT_DIR/../include/portal"
 git clone https://github.com/jstpp/ESITDefaultTemplate.git "$SCRIPT_DIR/../public/portal"
 cp -r "$SCRIPT_DIR/../public/portal/include" "$SCRIPT_DIR/../include/portal"
+cp -r "$SCRIPT_DIR/../public/portal/img/"* "$SCRIPT_DIR/../public/img/"
 
 # Create missing files
 chmod -R 0777 "$SCRIPT_DIR/../public/img"
