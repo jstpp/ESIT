@@ -391,6 +391,20 @@
 		}
 	}
 
+	function insert_flash_message($type, $header, $content = null): void
+	{
+		if (!isset($_SESSION['flash_messages']) || !is_array($_SESSION['flash_messages'])) {
+			$_SESSION['flash_messages'] = [];
+		}
+
+		$_SESSION['flash_messages'][] = [
+			'type'    => $type,
+			'header'  => $header,
+			'content' => $content ?? '',
+		];
+	}
+
+
 
 	###############################################
 	#       just another extension point		  #
@@ -411,14 +425,17 @@
 		echo("Invalid timezone.");
 	}
 
+	include(__DIR__."/../diagnostics/error_handler.php");
+
+
 	if(boolval(get_misc_value('plugin_debugging')))
     {
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
         error_reporting(E_ALL);
     } else {
-		#ini_set('display_errors', '0');
-        #ini_set('display_startup_errors', '0');
+		ini_set('display_errors', '0');
+        ini_set('display_startup_errors', '0');
         error_reporting(0);
 	}
 ?>

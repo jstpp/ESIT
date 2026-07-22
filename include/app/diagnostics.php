@@ -42,10 +42,10 @@
         box-shadow: 0px 0px 1px 1px #0000001a;
     }
 
-    .diag_error .circle {
+    .diag_error .circle, .diag_fatal .circle {
         background: red;
     }
-    .diag_warning .circle {
+    .diag_warning .circle, .diag_exception .circle {
         background: orange;
     }
     .diag_info .circle {
@@ -59,7 +59,17 @@
         margin-top: 0.5vw;
         padding: 1% 2%;
         align-items: center;
+        justify-content: left;
         display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+    }
+
+    .diagnostics_details {
+        background: var(--text);
+        color: var(--bg);
+        width: calc(100% - 1vmax);
+        padding: 1vmax;
         border-radius: 10px;
     }
 
@@ -81,50 +91,6 @@
 <center>
 	<h1>Panel diagnostyczny</h1>
 </center>
-<div class="window">
-	<h2 class="window_title">Podsumowanie</h2>
-    <p><small>Podsumowanie przedstawia wyniki powierzchownych testów.</p>
-    <h3 class="window_title">Konfiguracja</h3>
-    <?php
-        $count = 0;
-        foreach(configuration_diagnostics() as $row)
-        {
-            $count++;
-            echo('<div class="diagnostics_feedback diag_'.htmlentities($row['category']).'">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.$row['content'].'</p>
-            </div>');
-        }
-        if($count==0)
-        {
-            echo('<div class="diagnostics_feedback diag_info">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">Hurra! Nie ma zdarzeń wartych Twojej uwagi.</p>
-            </div>');
-        }
-    ?>
-    <br />
-    <h3 class="window_title">Dziennik zdarzeń</h3>
-    <?php
-        $db_query = $pdo->prepare('SELECT * FROM LOGS WHERE category="warning" OR category="error" OR category="info"');
-        $db_query->execute();
-
-        $count = 0;
-        while($row = $db_query->fetch())
-        {
-            $count++;
-            echo('<div class="diagnostics_feedback diag_'.htmlentities($row['category']).'">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.htmlentities($row['content']).'</p>
-            </div>');
-        }
-        if($count==0)
-        {
-            echo('<div class="diagnostics_feedback diag_info">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">Hurra! Nie ma zdarzeń wartych Twojej uwagi.</p>
-            </div>');
-        }
-    ?>
-    <br />
-    <br />
-</div>
 <div class="window">
 	<h2 class="window_title">Zasoby systemowe</h2>
     <p>System operacyjny: <?php echo(php_uname()); ?></p>
@@ -212,6 +178,56 @@
     update_stats();
     setInterval(update_stats, 1000);
 </script>
+<div class="window">
+	<h2 class="window_title">Podsumowanie</h2>
+    <p><small>Podsumowanie przedstawia wyniki powierzchownych testów.</p>
+    <h3 class="window_title">Konfiguracja</h3>
+    <?php
+        $count = 0;
+        foreach(configuration_diagnostics() as $row)
+        {
+            $count++;
+            echo('<div class="diagnostics_feedback diag_'.htmlentities($row['category']).'" style="display: flex; flex-direction: row;">
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.$row['content'].'</p>
+            </div>');
+        }
+        if($count==0)
+        {
+            echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">Hurra! Nie ma zdarzeń wartych Twojej uwagi.</p>
+            </div>');
+        }
+    ?>
+    <br />
+    <h3 class="window_title">Dziennik zdarzeń</h3>
+    <?php
+        $db_query = $pdo->prepare('SELECT * FROM LOGS WHERE category="fatal" OR category="error" OR category="exception" ORDER BY time DESC LIMIT 5');
+        $db_query->execute();
+
+        $count = 0;
+        while($row = $db_query->fetch())
+        {
+            $count++;
+            echo('<div class="diagnostics_feedback diag_'.htmlentities($row['category']).'">
+                <div style="display: flex; flex-direction: row; width: 100%; align-items: center;">
+                    <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.$row['content'].'</p>
+                </div>
+                <code class="diagnostics_details">
+                '.htmlentities($row['time']).' 
+                '.htmlentities($row['details']).'
+                </code>
+            </div>');
+        }
+        if($count==0)
+        {
+            echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">Hurra! Nie ma zdarzeń wartych Twojej uwagi.</p>
+            </div>');
+        }
+    ?>
+    <br />
+    <br />
+</div>
 <?php
     include_plugins_for("diagnostics");
 ?>
