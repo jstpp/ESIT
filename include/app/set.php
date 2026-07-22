@@ -17,22 +17,6 @@
 	}
 ?>
 <style>
-	.window {
-		width: 95%;
-		margin-left: 2.5%;
-		margin-top: 1vw;
-
-		background-color: var(--container-bg);
-
-		border: 0.2vw solid var(--container-hover-bg);
-		border-radius: 1vw;
-	}
-
-	.window .window_title {
-		margin-left: 5%;
-		margin-top: 1.5vw;
-	}
-
 	.window table {
 		width: 90%;
 		margin-left: 5%;
@@ -100,7 +84,7 @@
 	<p style="margin-left: 2.5%;"><?php echo(htmlentities($setdescription)); ?></p>
 	<br />
 </div>
-<div class="window" style="width: 48%; float: left;">
+<div class="window" style="width: 48%; float: left; margin-right: 0;">
 	<h2 class="window_title" style="float: left;">Dostępne zadania</h2>
 	<?php if(has_a_priority(3)) echo('<a href="?p=addproblem&sid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" class="forminput" style="float: right; margin-right: 5%; margin-top: 2.5%;">Dodaj zadanie</a>'); ?>
 	<table id="questlist">
@@ -189,7 +173,7 @@
 	<br />
 	<br />
 </div>
-<div class="window" style="width: 44%; float: left;">
+<div class="window" style="width: 44%; float: left; margin-left: 1%;">
 	<h2 class="window_title">Tablica wyników</h2>
 	<div style="overflow: auto; width: 90%; margin-left: 5%;">
 		<table id="scoreboard">
@@ -248,7 +232,7 @@
 						}
 					}
 
-					foreach(array_keys($scores) as $u) #iterate for each user
+					foreach(array_keys($scores) as $u)
 					{
 						array_push($temp_table_total_scores, $scores[$u]['user_data']['total_score']);
 						array_push($temp_table_user_ids, $scores[$u]['user_data']['user_id']);
@@ -257,7 +241,7 @@
 
 					array_multisort($temp_table_total_scores, SORT_DESC, $temp_table_user_ids);
 
-					foreach($temp_table_user_ids as $u) #iterate for each user
+					foreach($temp_table_user_ids as $u)
 					{
 						if($_SESSION['AUTH_ID']==$u)
 						{

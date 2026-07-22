@@ -3,28 +3,9 @@
     include(__DIR__.'/../../include/diagnostics/configuration.php');
 ?>
 <style>
-	.window {
-		width: 95%;
-		margin-left: 2.5%;
-		margin-top: 1vw;
-
-		background-color: var(--container-bg);;
-
-		border: 0.2vw solid var(--container-hover-bg);
-		border-radius: 1vw;
-	}
     .window p, h2, h3 {
 		margin-left: 5%;
 	}
-
-	.window .window_title {
-		margin-left: 5%;
-		margin-top: 1.5vw;
-	}
-    .window a {
-        text-decoration: none;
-		color: rgb(0, 179, 255);
-    }
     .pulse {
 		animation: pulse-animation 1.8s infinite;
 	}
@@ -201,7 +182,7 @@
     <br />
     <h3 class="window_title">Dziennik zdarzeń</h3>
     <?php
-        $db_query = $pdo->prepare('SELECT * FROM LOGS WHERE category="fatal" OR category="error" OR category="exception" ORDER BY time DESC LIMIT 5');
+        $db_query = $pdo->prepare('SELECT * FROM LOGS WHERE category="fatal" OR category="error" OR category="exception" ORDER BY time DESC LIMIT 3');
         $db_query->execute();
 
         $count = 0;
@@ -225,6 +206,9 @@
             </div>');
         }
     ?>
+    <br />
+    <a class="button" style="margin-right: 5%;" href="index.php?p=logs">Zobacz wszystkie</a>
+    <br style="clear: both;"/>
     <br />
     <br />
 </div>

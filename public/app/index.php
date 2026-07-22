@@ -17,13 +17,13 @@
 	$allowed_pages = [
 		'dashboard'     => ['priority' => 0, 'path' => 'dashboard.php', 'menu_id' => 'dashboard'],
 		'admin'         => ['priority' => 3, 'path' => 'admin.php', 'menu_id' => 'admin'],
-		'sets'          => ['priority' => 0, 'path' => 'sets.php', 'menu_id' => 'sets'],
-		'archive'       => ['priority' => 0, 'path' => 'archive.php', 'menu_id' => 'archive'],
+		'contentsets'   => ['priority' => 0, 'path' => 'contentsets.php', 'menu_id' => 'contentsets'],
 		'mysolutions'   => ['priority' => 0, 'path' => 'mysolutions.php', 'menu_id' => 'mysolutions'],
 		'myexamsadmin'  => ['priority' => 4, 'path' => 'myexamsadmin.php', 'menu_id' => 'myexamsadmin'],
 		'settings'      => ['priority' => 0, 'path' => 'settings.php', 'menu_id' => 'settings'],
 		'portal'        => ['priority' => 3, 'path' => 'portal.php', 'menu_id' => 'portal'],
 		'diagnostics'   => ['priority' => 3, 'path' => 'diagnostics.php', 'menu_id' => 'diagnostics'],
+		'logs'    		=> ['priority' => 3, 'path' => 'logs.php', 'menu_id' => 'logs'],
 		'algresult'     => ['priority' => 0, 'path' => 'results/algresult.php'],
 		'testresult'    => ['priority' => 0, 'path' => 'results/testresult.php'],
 		'ctfresult'     => ['priority' => 0, 'path' => 'results/ctfresult.php'],
@@ -117,6 +117,45 @@
 					opacity: 1;
 				}
 			}
+
+			.window {
+				width: calc(95% - 0.5vmax);
+				margin-left: 2%;
+				margin-right: 2%;
+				margin-top: 1vw;
+				padding: 0.5vmax;
+
+				background-color: var(--container-bg);
+
+				box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg);
+				border-radius: 1vw;
+			}
+
+			.window .window_title {
+				margin-left: 5%;
+				margin-top: 1.5vw;
+			}
+
+			.window a {
+				text-decoration: none;
+				color: rgb(0, 179, 255);
+			}
+			.window .button {
+				padding: 1vw 1vw;
+				float: right;
+				text-decoration: none;
+				margin-left: 0.5vw;
+
+				background-color: #00b3ff;
+				color: white;
+				border-radius: 5px;
+				cursor: pointer;
+				transition: 0.2s;
+			}
+			.window .button:hover {
+				background-color:rgb(0, 121, 173);
+			}
+
 		</style>
 		<?php if (isset($settings) && $settings->dark_mode === "0"): ?>
 			<script>document.documentElement.setAttribute('data-theme', 'light');</script>

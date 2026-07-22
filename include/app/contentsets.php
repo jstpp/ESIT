@@ -1,22 +1,25 @@
 <style>
-	.window {
+	.content_window {
 		width: 95%;
 		margin-left: 2.5%;
 		margin-top: 1vw;
 
 		background-color: var(--container-bg);
 
-		border: 0.2vw solid var(--container-hover-bg);
+		box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg);
 		border-radius: 1vw;
 		transition: 0.2s;
 		user-select: none;
 		cursor: pointer;
+
+		display: flex;
+		align-content: stretch;
 	}
-	.window:hover {
+	.content_window:hover {
 		background-color: var(--container-hover-bg);
 	}
 
-	.window .window_title {
+	.content_window .window_title {
 		margin-left: 5%;
 		margin-top: 1.5vw;
 	}
@@ -71,8 +74,8 @@
 </style>
 
 <center>
-	<h1>Aktywne zbiory zadań</h1> 
-	<?php if(has_a_priority(3)) echo('<a class="button" style="margin-right: 2.5%;"onClick="document.getElementById(\'new_set_dialog\').style.display = \'flex\';">Dodaj nowy</a>'); ?>
+	<h1>Centrum treści</h1> 
+	<?php if(has_a_priority(3)) echo('<a class="button" style="margin-right: 2.5%;"onClick="document.getElementById(\'new_set_dialog\').style.display = \'flex\';">Dodaj nowy zbiór</a>'); ?>
 	<br style="clear: both;" />
 </center>
 <?php
@@ -141,18 +144,23 @@
 	}
 ?>
 <?php
-	$db_query = $pdo->prepare('SELECT PROBLEMSETS.SET_ID AS sid, PROBLEMSETS.title AS title, USERS.name AS name, USERS.surname AS surname FROM PROBLEMSETS INNER JOIN USERS ON PROBLEMSETS.author_id=USERS.USER_ID WHERE PROBLEMSETS.isarchived=0 AND :current_time>=PROBLEMSETS.publish_time ORDER BY USER_ID DESC');
+	$db_query = $pdo->prepare('SELECT PROBLEMSETS.SET_ID AS sid, PROBLEMSETS.img_path AS img_path, PROBLEMSETS.isarchived AS isarchived, PROBLEMSETS.title AS title, USERS.name AS name, USERS.surname AS surname FROM PROBLEMSETS INNER JOIN USERS ON PROBLEMSETS.author_id=USERS.USER_ID WHERE :current_time>=PROBLEMSETS.publish_time ORDER BY PROBLEMSETS.isarchived ASC, PROBLEMSETS.publish_time DESC');
     $db_query->execute(['current_time' => date('Y/m/d H:i:s')]);
 
 	$isfound = 0;
     while($row = $db_query->fetch())
     {
-		echo('<div class="window" onClick="window.location.href = \'?p=set&id='.$row['sid'].'\';">
-		<h2 class="window_title">'.$row['title'].'</h2><i style="font-size: 0.6vw; color: gray; margin-left: 5%; margin-top: -0.5vw; display: block;">Kliknij, by przejść do zbioru</i>
+		echo('<div class="content_window" onClick="window.location.href = \'?p=set&id='.$row['sid'].'\';">
+		<div style="flex-grow: 5;">
+		<h2 class="window_title">'.$row['title']);
+		if($row['isarchived']==1) echo("&emsp;<span style='background-color: #d1b502; padding: 0.5vmax; border-radius: 10px;'>Zarchiwizowany</span>");
+		echo('</h2><i style="font-size: 0.6vw; color: gray; margin-left: 5%; margin-top: -0.5vw; display: block;">Kliknij, by przejść do zbioru</i>
 		<p style="margin-left: 5%;">
 			<i class=\'fas fa-user\'></i>&nbsp;&nbsp;Autor: <b>'.$row['name']." ".$row['surname'].'</b><br />
 		</p>
 		<br />
+		</div>
+		<div style="width: 30%; mask-image: linear-gradient(to left, black 0%, black 60%, transparent 100%); background: url(\''.$row['img_path'].'\'); background-size: cover;"></div>
 		</div>');
 		$isfound++;
 	}
@@ -160,7 +168,7 @@
 	if($isfound==0)
 	{
 		echo('
-		<div style="margin-left: auto; margin-right: auto; margin-top: 5vmax; text-align: center; display: flex; flex-direction: column; justify-content: cetner; width: 30%; padding: 3vmax; background-color: var(--container-bg); border: 0.2vw solid var(--container-hover-bg); border-radius: 1vw;">
+		<div style="margin-left: auto; margin-right: auto; margin-top: 5vmax; text-align: center; display: flex; flex-direction: column; justify-content: cetner; width: 30%; padding: 3vmax; background-color: var(--container-bg); border: 0.2vw solid var(--container-hover-bg); border-radius: 1vw;" >
 			<i class="fa fa-hourglass-3" style="font-size: 7vmax;"></i>
 			<center style="margin-top: 2vmax; user-select: none;"><i>Jeszcze niczego tu nie ma!</i></center>
 		</div>

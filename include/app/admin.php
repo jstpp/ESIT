@@ -1,20 +1,4 @@
 <style>
-	.window {
-		width: 95%;
-		margin-left: 2.5%;
-		margin-top: 1vw;
-
-		background-color: var(--container-bg);
-
-		border: 0.2vw solid var(--container-hover-bg);
-		border-radius: 1vw;
-	}
-
-	.window .window_title {
-		margin-left: 5%;
-		margin-top: 1.5vw;
-	}
-
 	.window #results {
 		width: 90%;
 		margin-left: 5%;
@@ -74,7 +58,7 @@
 		width: 80%;
 		float: left;
 	}
-	.org_user a, .button {
+	.org_user a {
 		padding: 1vw 1vw;
 		float: right;
 
@@ -99,7 +83,7 @@
 	.button_red:hover {
 		background-color:rgb(255, 110, 110);
 	}
-	.org_user a:hover, .button:hover {
+	.org_user a:hover {
 		background-color: #6ed4ff;
 	}
 	.forminput_2 {

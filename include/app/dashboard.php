@@ -1,19 +1,4 @@
 <style>
-	.window {
-		width: 100%;
-		margin-top: 1vw;
-
-		background-color: var(--container-bg);
-
-		border: 0.2vw solid var(--container-hover-bg);
-		border-radius: 1vw;
-	}
-
-	.window .window_title {
-		margin-left: 5%;
-		margin-top: 1.5vw;
-	}
-
 	.window #results {
 		width: 90%;
 		margin-left: 5%;
@@ -110,8 +95,130 @@
 <center>
 	<h1 style="font-size: 3.5vw; user-select: none; background: linear-gradient(315deg, rgba(0, 179, 255, 1) 0%, var(--text) 60%); -webkit-background-clip: text; color: transparent;">Witaj, <?php echo(htmlentities($_SESSION['AUTH_NAME'])); ?>!</h1>
 </center>
-<div style="display: flex; margin: 2.5%; gap: 2.5%;">
+<div style="display: flex;">
 	<div style="min-width: 72%;">
+		<div class="window">
+			<h2 class="window_title">Twoje postępy</h2>
+			<?php
+				$db_query = $pdo->prepare('SELECT AVG(score_percentage) AS avg_score FROM SUBMISSIONS WHERE user_id=:uid');
+				$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
+
+				$avg_score = 0;
+				while($row = $db_query->fetch()) {
+					$avg_score = isset($row['avg_score']) ? round($row['avg_score'], 1) : 0;
+				}
+
+				$db_query = $pdo->prepare('SELECT
+					DATE(submission_time) as day,
+					SUM(score) as daily_points
+					FROM SUBMISSIONS
+					WHERE user_id = :uid
+					AND submission_time >= CURDATE() - INTERVAL 30 DAY
+					GROUP BY day
+					ORDER BY day ASC;');
+				$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
+
+				$data = $db_query->fetchAll(PDO::FETCH_ASSOC);
+
+				$labels = [];
+				$points = [];
+
+				$currentSum = 0;
+
+				$period = new DatePeriod(
+					new DateTime("-30 days"),
+					new DateInterval("P1D"),
+					new DateTime("+0 day")
+				);
+
+				$map = [];
+				foreach ($data as $row) {
+					$map[$row['day']] = $row['daily_points'];
+				}
+
+				foreach ($period as $date) {
+					$day = $date->format("Y-m-d");
+
+					if (isset($map[$day])) {
+						$currentSum += $map[$day];
+					}
+
+					$labels[] = $date->format("j M");
+					$points[] = $currentSum;
+				}
+			?>
+			<script>
+				const dashboard_progress_pts = <?php echo json_encode($points); ?>;
+				const dashboard_labels = <?php echo json_encode($labels); ?>;
+			</script>
+			<div style="display: flex; gap: 3vmax;">
+				<div style="height: 13vmax; width: 10vmax; padding: 1vmax; margin-left: 5%; display: flex; flex-direction: column; align-items: center; text-align: center;">
+					<div style="position: relative; width: 10vmax; height: 10vmax;">
+						<canvas id="dashboard_progress_correct_anwsers"></canvas>
+						<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 2vmax;">
+							<?php echo($avg_score); ?>%
+						</div>
+					</div>
+					<small style="width: 100%; font-size: 0.8vw; margin-top: 2vmax;">Średnia poprawność</small>
+				</div>
+				<div style="max-height: 12vmax; width: calc(100% - 22vmax); padding: 1vmax; margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center;">
+					<canvas id="dashboard_progress_points" style="width: 100%; float: right;"></canvas>
+					<br />
+					<small style="width: 100%;">Ilość punktów w ciągu ostatnich 30 dni</small>
+				</div>
+			</div>
+			<br />
+			<script>
+			
+				dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_anwsers'), {
+					type: 'doughnut',
+					data: {
+					labels: ["Odpowiedzi prawidłowe", "Odpowiedzi błędne"],
+					datasets: [{
+						data: [<?php echo($avg_score); ?>, <?php echo(100-$avg_score); ?>],
+						backgroundColor: ['rgb(0, 179, 255)', 'rgba(21, 33, 46, 1)']
+					}]
+					},
+					options: {
+						responsive: true,
+						borderWidth: 0,
+						cutout: '75%',
+						plugins: {
+							legend: {
+								display: false
+							},
+							tooltip: {
+								enabled: false
+							}
+						}
+					}
+				});
+
+				dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_points'), {
+				type: "line",
+				data: {
+					labels: dashboard_labels,
+					datasets: [{ 
+						data: dashboard_progress_pts,
+						borderColor: "rgb(0, 179, 255)",
+						pointRadius: 2,
+						fill: true,
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: { display: false }
+					},
+					y: {
+						suggestedMin: 0,
+						suggestedMax: 100
+					}
+				}
+				});
+			</script>
+		</div>
 		<div class="window">
 			<h2 class="window_title">Moje ostatnie rozwiązania</h2>
 			<table id="results">
@@ -197,130 +304,6 @@
 			<br />
 		</div>
 		<div class="window">
-			<h2 class="window_title">Twoje postępy</h2>
-			<?php
-				$db_query = $pdo->prepare('SELECT AVG(score_percentage) AS avg_score FROM SUBMISSIONS WHERE user_id=:uid');
-				$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
-
-				$avg_score = 0;
-				while($row = $db_query->fetch()) {
-					$avg_score = isset($row['avg_score']) ? round($row['avg_score'], 1) : 0;
-				}
-
-				$db_query = $pdo->prepare('SELECT
-					DATE(submission_time) as day,
-					SUM(score) as daily_points
-					FROM SUBMISSIONS
-					WHERE user_id = :uid
-					AND submission_time >= CURDATE() - INTERVAL 30 DAY
-					GROUP BY day
-					ORDER BY day ASC;');
-				$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
-
-				$data = $db_query->fetchAll(PDO::FETCH_ASSOC);
-
-				$labels = [];
-				$points = [];
-
-				$currentSum = 0;
-
-				$period = new DatePeriod(
-					new DateTime("-30 days"),
-					new DateInterval("P1D"),
-					new DateTime("+0 day")
-				);
-
-				$map = [];
-				foreach ($data as $row) {
-					$map[$row['day']] = $row['daily_points'];
-				}
-
-				foreach ($period as $date) {
-					$day = $date->format("Y-m-d");
-
-					if (isset($map[$day])) {
-						$currentSum += $map[$day];
-					}
-
-					$labels[] = $date->format("j M");
-					$points[] = $currentSum;
-				}
-			?>
-			<script>
-				const dashboard_progress_pts = <?php echo json_encode($points); ?>;
-				const dashboard_labels = <?php echo json_encode($labels); ?>;
-			</script>
-			<div style="display: flex; gap: 3vmax;">
-				<div style="height: 13vmax; width: 10vmax; padding: 1vmax; margin-left: 5%; display: flex; flex-direction: column; align-items: center; text-align: center;">
-					<div style="position: relative; width: 10vmax; height: 10vmax;">
-						<canvas id="dashboard_progress_correct_anwsers"></canvas>
-						<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 2vmax;">
-							<?php echo($avg_score); ?>%
-						</div>
-					</div>
-					<small style="width: 100%; font-size: 0.8vw; margin-top: 2vmax;">Średnia poprawność</small>
-				</div>
-				<div style="max-height: 12vmax; width: calc(100% - 22vmax); padding: 1vmax; margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center;">
-					<canvas id="dashboard_progress_points" style="width: 100%; float: right;"></canvas>
-					<br />
-					<small style="width: 100%;">Ilość punktów w ciągu ostatnich 30 dni</small>
-				</div>
-			</div>
-			<br />
-			<script>
-			
-				dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_anwsers'), {
-					type: 'doughnut',
-					data: {
-					labels: ["Odpowiedzi prawidłowe", "Odpowiedzi błędne"],
-					datasets: [{
-						data: [<?php echo($avg_score); ?>, <?php echo(100-$avg_score); ?>],
-						backgroundColor: ['#00d10a', 'gray']
-					}]
-					},
-					options: {
-						responsive: true,
-						borderWidth: 0,
-						cutout: '75%',
-						plugins: {
-							legend: {
-								display: false
-							},
-							tooltip: {
-								enabled: false
-							}
-						}
-					}
-				});
-
-				//dashboard_progress_pts = [0, 10, 25, 100, 120, 250, 260, 280, 290, 500, 500, 510, 525, 600, 620, 750, 960, 1280, 1290, 1500, 2000, 2010, 2025, 2100, 2120, 2150, 2160, 2180, 2290, 2300];
-				dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_points'), {
-				type: "line",
-				data: {
-					labels: dashboard_labels,
-					datasets: [{ 
-						data: dashboard_progress_pts,
-						borderColor: "rgb(0, 179, 255)",
-						pointRadius: 2,
-						//tension: 0.4,
-						fill: true,
-					}]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: { display: false }
-					},
-					y: {
-						suggestedMin: 0,
-						suggestedMax: 100
-					}
-				}
-				});
-			</script>
-		</div>
-		<div class="window">
 			<h2 class="window_title">Aktualności</h2>
 			<?php
 				$db_query = $pdo->prepare('SELECT * FROM ARTICLES ORDER BY id DESC LIMIT 3');
@@ -349,11 +332,11 @@
 			<br />
 		</div>
 	</div>
-	<div class="window" style="max-width: 28%;">
+	<div class="window" style="max-width: 30%; margin-left: 0;">
 		<?php
 			include_plugins_for("dashboard_side_panel");
 		?>
-		<h3 class="window_title">Proponowane zbiory zadań</h3>
+		<h3 class="window_title"><i class='fas fa-lightbulb'></i>&emsp;Proponowane</h3>
 		<div id="dashboard_propositions_bar">
 			<?php
 				$db_query = $pdo->prepare('SELECT *, USERS.username AS author FROM PROBLEMSETS INNER JOIN USERS ON PROBLEMSETS.author_id=USERS.USER_ID ORDER BY PROBLEMSETS.SET_ID DESC LIMIT 4;');

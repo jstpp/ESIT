@@ -1,20 +1,4 @@
 <style>
-	.window {
-		width: 95%;
-		margin-left: 2.5%;
-		margin-top: 1vw;
-
-		background-color: var(--container-bg);
-
-		border: 0.2vw solid var(--container-hover-bg);
-		border-radius: 1vw;
-	}
-
-	.window .window_title {
-		margin-left: 5%;
-		margin-top: 1.5vw;
-	}
-
 	.window #results {
 		width: 90%;
 		margin-left: 5%;

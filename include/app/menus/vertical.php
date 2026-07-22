@@ -38,29 +38,34 @@
 	}
 </style>
 <div id="vertical_menu">
-	<p style="margin-left: 0.8vw; margin-top: 5vw;">
-		<b><?php echo($_SESSION['AUTH_NAME']) ?> <?php echo($_SESSION['AUTH_SURNAME']) ?></b>
-		<br />
-		<span style="font-size: 0.8vw;"><?php echo($_SESSION['AUTH_USERNAME']) ?> • <?php echo($_SESSION['AUTH_ROLE']) ?></span>
-	</p>
+	<div style="margin-left: 0.8vw; margin-top: 5vw; display: flex; gap: 1vmax;">
+		<img src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($_SESSION['AUTH_USERNAME']) ?>" style="width: 2.5vmax; border-radius: 1.25vmax; background-color: var(--text);"/>
+		<div>
+			<b><?php echo($_SESSION['AUTH_NAME']) ?> <?php echo($_SESSION['AUTH_SURNAME']) ?></b>
+			<br />
+			<span style="font-size: 0.8vw;"><?php echo($_SESSION['AUTH_USERNAME']) ?> • <?php echo($_SESSION['AUTH_ROLE']) ?></span>
+		</div>
+	</div>
 	<br />
-	<a href="?p=dashboard" id="dashboard"><i class='fas fa-book-open'></i>&emsp;&nbsp;Dashboard</a>
+	<br />
+	<a href="?p=dashboard" id="dashboard"><i class='fas fa-compass'></i>&emsp;Dashboard</a>
+	<a href="?p=settings" id="settings"><i class='fas fa-address-card'></i>&emsp;Ustawienia konta</a>
 	<?php
 		if(has_a_priority(3))
 		{
 			echo('<p class="category_title">Administracja</p>');
-			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-school\'></i>&emsp;Konfiguracja</a>');
-			echo('<a href="?p=diagnostics" id="diagnostics"><i class=\'fa fa-dashboard\'></i>&emsp;&nbsp;Diagnostyka</a>');
+			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-tools\'></i>&emsp;Konfiguracja</a>');
 			if(boolval(get_misc_value('plugin_portal')))
 			{
-				echo('<a href="?p=portal" id="portal"><i class=\'fa fa-bank\'></i>&emsp;&nbsp;Zarządzanie portalem</a>');
+				echo('<a href="?p=portal" id="portal"><i class=\'fas fa-pen-nib\'></i>&emsp;Zarządzanie portalem</a>');
 			}
+			echo('<a href="?p=diagnostics" id="diagnostics"><i class=\'fa fa-dashboard\'></i>&emsp;Diagnostyka</a>');
+			echo('<a href="?p=logs" id="logs"><i class=\'fas fas fa-stream\'></i>&emsp;Dziennik zdarzeń</a>');
 			include_plugins_for("vertical_menu_administration");
 		}
 	?>
-	<p class="category_title">Zbiory zadań</p>
-	<a href="?p=sets" id="sets"><i class='fas fa-folder-open'></i>&emsp;Aktywne zbiory zadań</a>
-	<a href="?p=archive" id="archive"><i class='far fa-folder-open'></i>&emsp;Archiwalne zbiory zadań</a>
+	<p class="category_title">Treści</p>
+	<a href="?p=contentsets" id="contentsets"><i class='fas fa-pencil-ruler'></i>&emsp;Zbiory treści</a>
 	<a href="?p=mysolutions" id="mysolutions"><i class='fas fa-paper-plane'></i>&emsp;Moje rozwiązania</a>
 	<?php
 		include_plugins_for("vertical_menu_problemsets");
@@ -68,11 +73,9 @@
 	<?php
 		if(has_a_priority(4))
 		{
-			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-file-alt\'></i>&emsp;&nbsp;Panel egzaminatora</a>');
+			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-coffee\'></i>&emsp;Centrum twórców</a>');
 		}
 	?>
-	<p class="category_title">Ustawienia użytkownika</p>
-	<a href="?p=settings" id="settings"><i class='fas fa-eye'></i>&emsp;Ustawienia konta</a>
 
 	<?php
 		include_plugins_for("vertical_menu");

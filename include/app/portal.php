@@ -1,20 +1,4 @@
 <style>
-	.window {
-		width: 95%;
-		margin-left: 2.5%;
-		margin-top: 1vw;
-
-		background-color: var(--container-bg);
-
-		border: 0.2vw solid var(--container-hover-bg);
-		border-radius: 1vw;
-	}
-
-	.window .window_title {
-		margin-left: 5%;
-		margin-top: 1.5vw;
-	}
-
 	.set_link {
 		padding: 1vw 1vw;
 		width: 90%;
@@ -74,21 +58,6 @@
 		padding: 0.8vw 0.8vw;
 		width: 70%;
 		float: left;
-	}
-	.window .button {
-		padding: 1vw 1vw;
-		float: right;
-		text-decoration: none;
-		margin-left: 0.5vw;
-
-		background-color: #00b3ff;
-		color: white;
-		border-radius: 5px;
-		cursor: pointer;
-		transition: 0.2s;
-	}
-	.window .button:hover {
-		background-color:rgb(0, 121, 173);
 	}
 	.window .deletebutton {
 		padding: 1vw 1vw;
