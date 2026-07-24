@@ -65,7 +65,7 @@
 		}
 	?>
 	<p class="category_title">Treści</p>
-	<a href="?p=contentsets" id="contentsets"><i class='fas fa-pencil-ruler'></i>&emsp;Zbiory treści</a>
+	<a href="?p=channels" id="contentsets"><i class='fas fa-pencil-ruler'></i>&emsp;Zbiory treści</a>
 	<a href="?p=mysolutions" id="mysolutions"><i class='fas fa-paper-plane'></i>&emsp;Moje rozwiązania</a>
 	<?php
 		include_plugins_for("vertical_menu_problemsets");

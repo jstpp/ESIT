@@ -158,7 +158,7 @@
             $db_query->execute(['title' => htmlentities($_POST['problem_title']), 'aid' => $_SESSION['AUTH_ID'], 'type' => filter_var($_POST['problem_type'], FILTER_VALIDATE_INT), 'maxattempts' => filter_var($_POST['problem_maxattempts'], FILTER_VALIDATE_INT), 'maxpoints' => filter_var($_POST['problem_points'], FILTER_VALIDATE_INT), 'sid' => filter_var($_GET['sid'], FILTER_VALIDATE_INT), 'resultpublishtime' => $_POST['result_publish_time'], 'publishtime' => $_POST['publish_time'], 'isarchived' => filter_var($_POST['problem_isarchived'], FILTER_VALIDATE_INT)]);
             $problem_id = $pdo->lastInsertId();
         } catch (Exception $e){
-            redirect("index.php?p=sets&error");
+            redirect("index.php?p=channels&error");
         }
     }
 

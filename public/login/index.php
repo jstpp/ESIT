@@ -41,7 +41,7 @@
 
 				background-color: rgba(32, 43, 54, 1);
 
-				border: 0.2vw solid rgba(21, 33, 46, 1);
+				box-shadow: 0 0 0.1vmax 0.2vmax rgba(21, 33, 46, 1);
 				border-radius: 1vw;
 				transition: 0.2s;
 				user-select: none;
@@ -64,7 +64,7 @@
 			}
 			.login_input:focus {
 				outline: none;
-				border: 0.2vmax solid #00b3ff;
+				box-shadow: 0 0 0.1vmax 0.2vmax #00b3ff;
 			}
 
 			.login_submit {

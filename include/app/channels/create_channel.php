@@ -16,7 +16,7 @@
                 $image = load_img_input();
             }
             
-            $db_query = $pdo->prepare('INSERT INTO PROBLEMSETS (title, author_id, description, publish_time, isarchived, img_path) VALUES (:title, :aid, :desc, :publishtime, :isarchived, :img_path)');
+            $db_query = $pdo->prepare('INSERT INTO CHANNELS (title, author_id, description, publish_time, isarchived, img_path) VALUES (:title, :aid, :desc, :publishtime, :isarchived, :img_path)');
             $db_query->execute([
                 'title' => $_POST['setname'], 
                 'aid' => $_SESSION['AUTH_ID'],
@@ -26,9 +26,9 @@
                 'isarchived' => $isarchived
             ]);
 
-            redirect("index.php?p=sets");
+            redirect("index.php?p=channels");
         } else {
-            redirect("index.php?p=sets&error");
+            redirect("index.php?p=channels&error");
         }
     } else {
         kick();

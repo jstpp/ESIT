@@ -130,6 +130,23 @@ CREATE TABLE `PROBLEMS` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `CHANNELS`
+--
+
+CREATE TABLE `CHANNELS` (
+  `CHANNEL_ID` int(11) NOT NULL,
+  `title` text NOT NULL,
+  `author_id` int(11) NOT NULL,
+  `description` text NOT NULL DEFAULT ('Kanał'),
+  `img_path` text NOT NULL DEFAULT ('../img/placeholder.jpeg'),
+  `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `layout` text NOT NULL DEFAULT ('{}'),
+  `isarchived` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `PROBLEMSETS`
 --
 
@@ -137,10 +154,9 @@ CREATE TABLE `PROBLEMSETS` (
   `SET_ID` int(11) NOT NULL,
   `title` text NOT NULL,
   `author_id` int(11) NOT NULL,
-  `description` text NOT NULL DEFAULT ('Zbiór zadań'),
-  `img_path` text NOT NULL DEFAULT ('../img/placeholder.jpeg'),
-  `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `isarchived` int(11) NOT NULL DEFAULT 0
+  `channel_id` int(11) NOT NULL,
+  `depends_on` text NOT NULL DEFAULT ('{"content":[]}'),
+  `publish_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -287,11 +303,19 @@ ALTER TABLE `PROBLEMS`
   ADD KEY `author_id` (`author_id`);
 
 --
+-- Indeksy dla tabeli `CHANNELS`
+--
+ALTER TABLE `CHANNELS`
+  ADD PRIMARY KEY (`CHANNEL_ID`),
+  ADD KEY `author_2_id` (`author_id`);
+
+--
 -- Indeksy dla tabeli `PROBLEMSETS`
 --
 ALTER TABLE `PROBLEMSETS`
   ADD PRIMARY KEY (`SET_ID`),
-  ADD KEY `author_2_id` (`author_id`);
+  ADD KEY `author_3_id` (`author_id`),
+  ADD KEY `channel_of_problemset` (`channel_id`);
 
 --
 -- Indeksy dla tabeli `RESULTS`
@@ -381,6 +405,12 @@ ALTER TABLE `PROBLEMS`
   MODIFY `PROBLEM_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `CHANNELS`
+--
+ALTER TABLE `CHANNELS`
+  MODIFY `CHANNEL_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `PROBLEMSETS`
 --
 ALTER TABLE `PROBLEMSETS`
@@ -441,10 +471,17 @@ ALTER TABLE `PROBLEMS`
   ADD CONSTRAINT `problemset_id` FOREIGN KEY (`problemset`) REFERENCES `PROBLEMSETS` (`SET_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `CHANNELS`
+--
+ALTER TABLE `CHANNELS`
+  ADD CONSTRAINT `author_2_id` FOREIGN KEY (`author_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `PROBLEMSETS`
 --
 ALTER TABLE `PROBLEMSETS`
-  ADD CONSTRAINT `author_2_id` FOREIGN KEY (`author_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `author_3_id` FOREIGN KEY (`author_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `channel_of_problemset` FOREIGN KEY (`channel_id`) REFERENCES `CHANNELS` (`CHANNEL_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `RESULTS`
@@ -457,7 +494,7 @@ ALTER TABLE `RESULTS`
 --
 ALTER TABLE `SUBMISSIONS`
   ADD CONSTRAINT `submission_problem_id` FOREIGN KEY (`problem_id`) REFERENCES `PROBLEMS` (`PROBLEM_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `submission_problemset_id` FOREIGN KEY (`problemset_id`) REFERENCES `PROBLEMSETS` (`SET_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `submission_problemset_id` FOREIGN KEY (`problemset_id`) REFERENCES `CHANNELS` (`CHANNEL_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `submission_user_id` FOREIGN KEY (`user_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

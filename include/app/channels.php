@@ -14,6 +14,7 @@
 
 		display: flex;
 		align-content: stretch;
+		overflow: hidden;
 	}
 	.content_window:hover {
 		background-color: var(--container-hover-bg);
@@ -75,7 +76,7 @@
 
 <center>
 	<h1>Centrum treści</h1> 
-	<?php if(has_a_priority(3)) echo('<a class="button" style="margin-right: 2.5%;"onClick="document.getElementById(\'new_set_dialog\').style.display = \'flex\';">Dodaj nowy zbiór</a>'); ?>
+	<?php if(has_a_priority(3)) echo('<a class="button" style="margin-right: 2.5%;" onClick="document.getElementById(\'new_set_dialog\').style.display = \'flex\';">Dodaj nowy kanał</a>'); ?>
 	<br style="clear: both;" />
 </center>
 <?php
@@ -87,7 +88,7 @@
 	<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
 		<h2 style="text-align: center;">Dodaj zbiór zadań</h2>
 		<br />
-		<form method="POST" id="new_set_form" action="process.php?r=create_set" enctype="multipart/form-data">
+		<form method="POST" id="new_set_form" action="process.php?r=create_channel" enctype="multipart/form-data">
 			<input name="setname" class="forminput_2" type="text" placeholder="Nazwa zbioru zadań*" onChange="validate_data();" required/>
 			<br />
 			<textarea name="description" class="forminput_2" placeholder="Opis zbioru zadań*" onChange="validate_data();" required></textarea>
@@ -105,7 +106,7 @@
 			<label for="isactive">Czy aktywny?</label>
 		</form>
 		<br />
-		<a class="button" id="button_1" onClick="document.getElementById(\'new_set_form\').submit();" style="display: none; margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;Dodaj zbiór zadań</a>
+		<a class="button" id="button_1" onClick="document.getElementById(\'new_set_form\').submit();" style="display: none; margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;Dodaj kanał</a>
 		<br style="clear: both;"/>
 		<fieldset id="r_i_validation" style="margin-top: 2vmax;">
             <legend>Walidacja danych</legend>
@@ -144,13 +145,13 @@
 	}
 ?>
 <?php
-	$db_query = $pdo->prepare('SELECT PROBLEMSETS.SET_ID AS sid, PROBLEMSETS.img_path AS img_path, PROBLEMSETS.isarchived AS isarchived, PROBLEMSETS.title AS title, USERS.name AS name, USERS.surname AS surname FROM PROBLEMSETS INNER JOIN USERS ON PROBLEMSETS.author_id=USERS.USER_ID WHERE :current_time>=PROBLEMSETS.publish_time ORDER BY PROBLEMSETS.isarchived ASC, PROBLEMSETS.publish_time DESC');
+	$db_query = $pdo->prepare('SELECT CHANNELS.CHANNEL_ID AS sid, CHANNELS.img_path AS img_path, CHANNELS.isarchived AS isarchived, CHANNELS.title AS title, USERS.name AS name, USERS.surname AS surname FROM CHANNELS INNER JOIN USERS ON CHANNELS.author_id=USERS.USER_ID WHERE :current_time>=CHANNELS.publish_time ORDER BY CHANNELS.isarchived ASC, CHANNELS.publish_time DESC');
     $db_query->execute(['current_time' => date('Y/m/d H:i:s')]);
 
 	$isfound = 0;
     while($row = $db_query->fetch())
     {
-		echo('<div class="content_window" onClick="window.location.href = \'?p=set&id='.$row['sid'].'\';">
+		echo('<div class="content_window" onClick="window.location.href = \'?p=channel&id='.$row['sid'].'\';">
 		<div style="flex-grow: 5;">
 		<h2 class="window_title">'.$row['title']);
 		if($row['isarchived']==1) echo("&emsp;<span style='background-color: #d1b502; padding: 0.5vmax; border-radius: 10px;'>Zarchiwizowany</span>");

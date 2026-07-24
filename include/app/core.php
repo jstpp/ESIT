@@ -404,6 +404,18 @@
 		];
 	}
 
+	function problem_type_identification($type): array {
+		$problem_types = [
+			'alg'     => ['full_name' => 'Algorytmiczne', 'icon' => 'fas fa-file-code', 'color' => 'rgba(0, 121, 250, 1)'],
+			'ctf'     => ['full_name' => 'Capture The Flag', 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
+			'och'     => ['full_name' => 'Pytania jednokrotnego wyboru', 'icon' => 'fa fa-check-square-o', 'color' => 'rgba(14, 149, 109, 1)'],
+			'mch'     => ['full_name' => 'Pytania wielokrotnego wyboru', 'icon' => 'fa fa-check-square', 'color' => 'rgba(218, 130, 6, 1)'],
+			'opn'     => ['full_name' => 'Zadanie otwarte', 'icon' => 'fa fa-pencil-square-o', 'color' => 'rgba(69, 47, 165, 1)']
+		];
+
+		return $problem_types[$type] ?? [];
+	}
+
 
 
 	###############################################

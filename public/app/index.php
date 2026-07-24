@@ -17,7 +17,7 @@
 	$allowed_pages = [
 		'dashboard'     => ['priority' => 0, 'path' => 'dashboard.php', 'menu_id' => 'dashboard'],
 		'admin'         => ['priority' => 3, 'path' => 'admin.php', 'menu_id' => 'admin'],
-		'contentsets'   => ['priority' => 0, 'path' => 'contentsets.php', 'menu_id' => 'contentsets'],
+		'channels'   	=> ['priority' => 0, 'path' => 'channels.php', 'menu_id' => 'channels'],
 		'mysolutions'   => ['priority' => 0, 'path' => 'mysolutions.php', 'menu_id' => 'mysolutions'],
 		'myexamsadmin'  => ['priority' => 4, 'path' => 'myexamsadmin.php', 'menu_id' => 'myexamsadmin'],
 		'settings'      => ['priority' => 0, 'path' => 'settings.php', 'menu_id' => 'settings'],
@@ -28,8 +28,8 @@
 		'testresult'    => ['priority' => 0, 'path' => 'results/testresult.php'],
 		'ctfresult'     => ['priority' => 0, 'path' => 'results/ctfresult.php'],
 		'formresult'    => ['priority' => 0, 'path' => 'results/formresult.php'],
-		'quest'         => ['priority' => 0, 'path' => 'quest.php'],
-		'set'           => ['priority' => 0, 'path' => 'set.php'],
+		'problem'       => ['priority' => 0, 'path' => 'problem.php', 'required' => ['id']],
+		'channel'       => ['priority' => 0, 'path' => 'channel.php'],
 		'addpost'       => ['priority' => 3, 'path' => 'portal/addpost.php'],
 		'modifypost'    => ['priority' => 3, 'path' => 'portal/modifypost.php'],
 		'addproblem'    => ['priority' => 3, 'path' => 'add_problem.php'],
@@ -45,6 +45,14 @@
 	if ($page_config['priority'] > 0 && !has_a_priority($page_config['priority'])) {
 		kick();
 	}
+
+	if (isset($script_config['required'])) {
+        foreach ($script_config['required'] as $req) {
+            if (!isset($_GET[$req]) && !isset($_POST[$req])) {
+                kick();
+            }
+        }
+    }
 
 
 ?>

@@ -339,14 +339,14 @@
 		<h3 class="window_title"><i class='fas fa-lightbulb'></i>&emsp;Proponowane</h3>
 		<div id="dashboard_propositions_bar">
 			<?php
-				$db_query = $pdo->prepare('SELECT *, USERS.username AS author FROM PROBLEMSETS INNER JOIN USERS ON PROBLEMSETS.author_id=USERS.USER_ID ORDER BY PROBLEMSETS.SET_ID DESC LIMIT 4;');
+				$db_query = $pdo->prepare('SELECT *, USERS.username AS author FROM CHANNELS INNER JOIN USERS ON CHANNELS.author_id=USERS.USER_ID ORDER BY CHANNELS.CHANNEL_ID DESC LIMIT 4;');
 				$db_query->execute();
 				
 				$count = 0;
 				while($row = $db_query->fetch())
 				{
 					$count++;
-					echo('<a href="?p=set&id='.$row['SET_ID'].'" style="text-decoration: none;"><div class="dashboard_content_set" style="background: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url(\''.$row['img_path'].'\'); background-size: cover;">
+					echo('<a href="?p=channel&id='.$row['CHANNEL_ID'].'" style="text-decoration: none;"><div class="dashboard_content_set" style="background: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url(\''.$row['img_path'].'\'); background-size: cover;">
 				<div class="dashboard_content_set_metadata">
 					<h3>'.$row['title'].'</h3>
 					<small style="top: -1vmax; position: relative;">Autor: '.$row['author'].'</small>

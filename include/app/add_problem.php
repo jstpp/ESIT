@@ -127,25 +127,25 @@
 	<div class="window" id="problem_type_select_window">
 		<h2 style="margin-left: 2.5%;">Wybierz typ zadania</h1>
 		<div id="problem_type_select_flexbox" style="margin: 2.5%; display: flex; flex-wrap: wrap; gap: 0.5vmax;">
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(1);" style="background-color: rgba(0, 121, 250, 1);">
-				<h3>Algorytmiczne</h3><br />
-				<i class="fa-solid fa-code" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(1);" style="background-color: <?php print(problem_type_identification('alg')['color']); ?>;">
+				<h3><?php print(problem_type_identification('alg')['full_name']); ?></h3><br />
+				<i class="<?php print(problem_type_identification('alg')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(2);" style="background-color: rgba(208, 72, 72, 1);">
-				<h3>Capture The Flag</h3><br />
-				<i class="fa-solid fa-flag" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(2);" style="background-color: <?php print(problem_type_identification('ctf')['color']); ?>;">
+				<h3><?php print(problem_type_identification('ctf')['full_name']); ?></h3><br />
+				<i class="<?php print(problem_type_identification('ctf')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(3);" style="background-color: rgba(14, 149, 109, 1);">
-				<h3>Pytania jednokrotnego wyboru</h3><br />
-				<i class="fa fa-check-square-o" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(3);" style="background-color: <?php print(problem_type_identification('och')['color']); ?>;">
+				<h3><?php print(problem_type_identification('och')['full_name']); ?></h3><br />
+				<i class="<?php print(problem_type_identification('och')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(4);" style="background-color: rgba(218, 130, 6, 1);">
-				<h3>Pytania wielokrotnego wyboru</h3><br />
-				<i class="fa fa-check-square" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(4);" style="background-color: <?php print(problem_type_identification('mch')['color']); ?>;">
+				<h3><?php print(problem_type_identification('mch')['full_name']); ?></h3><br />
+				<i class="<?php print(problem_type_identification('mch')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(5);" style="background-color: rgba(69, 47, 165, 1);">
-				<h3>Zadanie otwarte</h3><br />
-				<i class="fa fa-pencil-square-o" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(5);" style="background-color: <?php print(problem_type_identification('opn')['color']); ?>;">
+				<h3><?php print(problem_type_identification('opn')['full_name']); ?></h3><br />
+				<i class="<?php print(problem_type_identification('opn')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
 		</div>
 	</div>
@@ -478,7 +478,7 @@
 	<div class="window">
 		<br />
 		<a class="forminput_a" id="button_1" onClick="document.getElementById('newproblemform').submit();" style="display: none; float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowe zadanie</a>
-		<a class="forminput_a" href="index.php?p=set&id=<?php echo($setid); ?>" style="float: right; margin-right: 2.5%;"><i class="fa fa-close"></i>&nbsp;&nbsp;Anuluj</a>
+		<a class="forminput_a" href="index.php?p=channel&id=<?php echo($setid); ?>" style="float: right; margin-right: 2.5%;"><i class="fa fa-close"></i>&nbsp;&nbsp;Anuluj</a>
 		<br style="clear: both;" />
 		<br />
 		<fieldset id="r_i_validation" style="margin-top: 2vmax; width: 92.5%; margin: auto;">
