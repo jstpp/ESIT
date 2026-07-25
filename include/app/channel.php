@@ -422,8 +422,10 @@
 						}
 					}
 				}
-				generate_content($chlayout, $pdo);
-				
+				if (isset($chlayout->content) && (is_array($chlayout->content) || is_object($chlayout->content))) {
+					generate_content($chlayout, $pdo);
+				}
+								
 			?>
 		</div>
 		<br />
@@ -451,21 +453,23 @@
 						$scores = array();
 						$temp_table_user_ids = array();
 						$temp_table_total_scores = array();
-						$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:setid AND result_publish_time<:currenttime ORDER BY PROBLEM_ID DESC');
-						$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
+
+						$db_query = $pdo->prepare('SELECT PROBLEMS.* FROM PROBLEMS INNER JOIN PROBLEMSETS ON PROBLEMS.problemset=PROBLEMSETS.SET_ID INNER JOIN CHANNELS ON PROBLEMSETS.channel_id=CHANNELS.CHANNEL_ID WHERE CHANNELS.CHANNEL_ID=:cid AND result_publish_time<:currenttime ORDER BY PROBLEM_ID DESC');
+						$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
 						while($row = $db_query->fetch())
 						{
 							echo('<th>#'.$row['PROBLEM_ID'].'</th>');
 							array_push($problem_array, $row['PROBLEM_ID']);
+
 						}
 						
 						echo("</tr>");
 
 						foreach($problem_array as $p)
 						{
-							$db_query = $pdo->prepare('SELECT SUBMISSIONS.user_id AS user_id, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, SUBMISSIONS.problem_id AS problem_id, USERS.username AS username, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.problem_id=:pids AND SUBMISSIONS.problemset_id=:psids AND PROBLEMS.result_publish_time<:currenttime ORDER BY SUBMISSIONS.problem_id DESC');
-							$db_query->execute(['pids' => $p, 'psids' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
+							$db_query = $pdo->prepare('SELECT SUBMISSIONS.user_id AS user_id, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, SUBMISSIONS.problem_id AS problem_id, USERS.username AS username, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.problem_id=:pids AND PROBLEMS.result_publish_time<:currenttime ORDER BY SUBMISSIONS.problem_id DESC');
+							$db_query->execute(['pids' => $p, 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
 							while($row = $db_query->fetch())
 							{
