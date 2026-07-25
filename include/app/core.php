@@ -416,6 +416,62 @@
 		return $problem_types[$type] ?? [];
 	}
 
+	function check_problemset_availability($set_id, $pdo): array
+	{
+		$status = array('is_available' => 'false', 'condition_title' => 'Unknown');
+		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID = :sid');
+		$db_query->execute(['sid' => $set_id]);
+		$set = $db_query->fetch();
+
+		if (!$set)
+		{ 
+			$status['is_available'] = False;
+			return $status;
+		}
+		$condition = json_decode($set['depends_on']);
+		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID = :sid');
+		$db_query->execute(['sid' => $condition->id]);
+		$status['condition_title'] = $db_query->fetch()['title'];
+
+		if (!isset($condition->type) || $condition->type === 'none') 
+		{
+			$status['is_available'] = True;
+			return $status;
+		}
+		$required_set_id = $condition->id;
+
+		$db_query = $pdo->prepare('SELECT PROBLEM_ID, maxpoints FROM PROBLEMS WHERE problemset = :pid');
+		$db_query->execute(['pid' => $required_set_id]);
+		$problems = $db_query->fetchAll();
+
+		if (empty($problems)) 
+		{
+			$status['is_available'] = False;
+			return $status;
+		}
+
+		foreach ($problems as $row) {
+			$cdb_query = $pdo->prepare('SELECT MAX(score) AS maxscore FROM SUBMISSIONS WHERE problem_id = :pid AND user_id = :uid');
+			$cdb_query->execute([
+				'pid' => $row['PROBLEM_ID'], 
+				'uid' => $_SESSION['AUTH_ID']
+			]);
+			$ctx = $cdb_query->fetch();
+
+			$maxscore = ($ctx && (int)$ctx['maxscore'] !== -1) ? (float)$ctx['maxscore'] : 0;
+			$maxpoints = (float)$row['maxpoints'];
+
+			$percentage = ($maxpoints > 0) ? ($maxscore / $maxpoints) * 100 : 0;
+
+			if (round($percentage, 0) < 50) {
+				$status['is_available'] = False;
+				return $status;
+			}
+		}
+		$status['is_available'] = True;
+		return $status;
+	}
+
 
 
 	###############################################

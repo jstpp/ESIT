@@ -6,13 +6,13 @@
             $cid = filter_var($_GET['cid'] ?? null, FILTER_VALIDATE_INT);
             if ($cid===False) redirect("index.php?p=channels&error");
             try {
-                switch($_POST['new_block_form_name'][0])
+                switch($_POST['new_block_form_condition'][0])
                 {
                     case 'S': # problemset
-                        $condition = json_encode(array('type' => 'problemset', 'id' => (int)mb_substr($_POST['new_block_form_name'], 1)));
+                        $condition = json_encode(array('type' => 'problemset', 'id' => (int)mb_substr($_POST['new_block_form_condition'], 1)));
                         break;
                     case 'P': # problem
-                        $condition = json_encode(array('type' => 'problem', 'id' => (int)mb_substr($_POST['new_block_form_name'], 1)));
+                        $condition = json_encode(array('type' => 'problem', 'id' => (int)mb_substr($_POST['new_block_form_condition'], 1)));
                         break;
                     default:
                         $condition = json_encode(array('type' => 'none', 'id' => 'none'));
@@ -37,9 +37,7 @@
                 $db_query->execute(['layout' => json_encode($layout), 'cid' => $cid]);
 
             } catch (Throwable $t) {
-                print($t);
-                die;
-                #redirect("index.php?p=channels&error");
+                redirect("index.php?p=channels&error");
             }
 
             redirect("index.php?p=channel&id=".$cid);

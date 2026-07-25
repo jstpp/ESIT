@@ -278,7 +278,7 @@
 						echo('<tr>
 						<td><a href="?p='.$resultdest.'&sid='.$row['id'].'">Szczegóły</a></td>
 						<td>'.$row['submission_time'].'</td>
-						<td><a href="?p=quest&id='.$row['problem_id'].'">'.$row['title'].'</a></td>
+						<td><a href="?p=problem&id='.$row['problem_id'].'">'.$row['title'].'</a></td>
 						<td>'.$problemtype.'</td>');
 						if ($row['score_percentage']!=-1 and strtotime($row['result_publish_time'])<strtotime("now")) {
 							

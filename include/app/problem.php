@@ -1,5 +1,5 @@
 <?php
-	$db_query = $pdo->prepare('SELECT PROBLEMS.PROBLEM_ID AS id, PROBLEMS.type AS type, PROBLEMS.maxpoints AS maxpoints, PROBLEMS.title AS title, PROBLEMS.publish_time AS publish_time, USERS.name AS authorname, USERS.surname AS authorsurname, PROBLEMS.maxattempts AS maxattempts FROM PROBLEMS INNER JOIN USERS ON USERS.USER_ID=PROBLEMS.author_id WHERE PROBLEMS.PROBLEM_ID=:pid');
+	$db_query = $pdo->prepare('SELECT PROBLEMS.PROBLEM_ID AS id, PROBLEMS.type AS type, PROBLEMS.problemset AS problemset, PROBLEMS.maxpoints AS maxpoints, PROBLEMS.title AS title, PROBLEMS.publish_time AS publish_time, USERS.name AS authorname, USERS.surname AS authorsurname, PROBLEMS.maxattempts AS maxattempts FROM PROBLEMS INNER JOIN USERS ON USERS.USER_ID=PROBLEMS.author_id WHERE PROBLEMS.PROBLEM_ID=:pid');
     $db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 	$isfound = 0;
     while($row = $db_query->fetch())
@@ -12,9 +12,10 @@
 		$maxattempts = $row['maxattempts'];
 		$maxpoints = $row['maxpoints'];
 		$problemtype = $row['type'];
+		$problemset = $row['problemset'];
 	}
 
-	if($isfound!=1 or (strtotime($publishtime)>strtotime("now") and $_SESSION['AUTH_LEVEL']>3)) 
+	if($isfound!=1 or (strtotime($publishtime)>strtotime("now") and $_SESSION['AUTH_LEVEL']>3) or (!check_problemset_availability($problemset, $pdo) and $_SESSION['AUTH_LEVEL']>3)) 
 	{ 
 		kick();
 	}

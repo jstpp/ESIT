@@ -155,7 +155,7 @@ CREATE TABLE `PROBLEMSETS` (
   `title` text NOT NULL,
   `author_id` int(11) NOT NULL,
   `channel_id` int(11) NOT NULL,
-  `depends_on` text NOT NULL DEFAULT ('{"content":[]}'),
+  `depends_on` text NOT NULL DEFAULT ('{"type":"none", "id":"none"}'),
   `publish_time` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -494,7 +494,7 @@ ALTER TABLE `RESULTS`
 --
 ALTER TABLE `SUBMISSIONS`
   ADD CONSTRAINT `submission_problem_id` FOREIGN KEY (`problem_id`) REFERENCES `PROBLEMS` (`PROBLEM_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `submission_problemset_id` FOREIGN KEY (`problemset_id`) REFERENCES `CHANNELS` (`CHANNEL_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `submission_problemset_id` FOREIGN KEY (`problemset_id`) REFERENCES `PROBLEMSETS` (`SET_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `submission_user_id` FOREIGN KEY (`user_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

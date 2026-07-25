@@ -173,7 +173,7 @@
 		width: 70%;
 	}
 	.channel_content_block_final:hover .channel_content_block_progress {
-		width: 3vmax;
+		width: 3.5vmax;
 	}
 	.channel_content_chapter .channel_content_block_final {
 		width: calc(100% - 0.2vmax);
@@ -238,7 +238,7 @@
 	
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.7/Sortable.js" integrity="sha512-aUIczPo0e7N7BM7pIVe8I0XbFrT5jy9IjFSHuxhyb64yfHZ4JL10tKpTK/y8tWVB/hcO2YYfvQwbv3o+srga+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<img id="set_header_img" src="<?php echo($chimgpath); ?>" />
+<img id="set_header_img" src="<?php echo htmlspecialchars($chimgpath, ENT_QUOTES, 'UTF-8'); ?>" />
 <br />
 <br />
 <center>
@@ -262,9 +262,16 @@
 			<br />
 			Dostępność zależy od ukończenia:
 			<select class="forminput_2" name="new_block_form_condition" id="new_block_form_condition">
-				<option value="none"><i>Niczego</i></option>
-				<option value="P1">eee</option>
-			</select>
+				<option value="none"><i>Niczego</i></option>');
+
+		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE channel_id=:cid');
+		$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+
+		while($row = $db_query->fetch()) {
+			echo('<option value="S'.$row['SET_ID'].'">Blok '.$row['title'].'</option>');
+		}
+
+		echo('</select>
 			<br />
 			<br />
 			<br />
@@ -294,62 +301,79 @@
 							$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:sid');
 							$db_query->execute(['sid' => $object['id']]);
 							$set = $db_query->fetch();
+							$availability = check_problemset_availability($object['id'], $pdo);
 							if(isset($set))
 							{
-								echo('<div class="channel_content_block channel_content_chapter">
-								<div class="channel_content_chapter_pinned" style="order: -9999;">
-									'.$set['title'].'&emsp;<small style="color: rgba(14, 149, 109, 1);"><i class=\'fas fa-award\'></i> Ukończono</small>
-								</div>');
+								echo('<div class="channel_content_block channel_content_chapter">');
 								$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:pid');
 								$db_query->execute(['pid' => $object['id']]);
-								while($row = $db_query->fetch())
+								$set_results[$set['SET_ID']] = [];
+								if($availability['is_available'] or has_a_priority(3))
 								{
-									switch($row['type']){
-										case 1:
-											$contenttype = problem_type_identification('alg');
-											break;
-										case 2:
-											$contenttype = problem_type_identification('ctf');
-											break;
-										case 3:
-											$contenttype = problem_type_identification('och');
-											break;
-										case 4:
-											$contenttype = problem_type_identification('mch');
-											break;
-										case 5:
-											$contenttype = problem_type_identification('opn');
-											break;
-									}
-									$cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts, MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
-									$cdb_query->execute(['pid' => $row['PROBLEM_ID'], 'uid' => $_SESSION['AUTH_ID']]);
-
-									$ctx = $cdb_query->fetch();
-
-									if((int)$ctx['maxscore']!=-1)
+									while($row = $db_query->fetch())
 									{
-										$maxscore = $ctx['maxscore'];
-									} else {
-										$maxscore = 0;
-									}
-									echo('<a class="channel_content_block_final" href="index.php?p=problem&id='.$row['PROBLEM_ID'].'" style="color: inherit;">
-										<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
-										<div class="channel_content_block_title">
-											<b class="channel_content_block_title_text">'.$row['title'].'</b>
-											<div class="channel_content_block_element_details">
-												<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'">
-													'.($row['maxattempts']-$ctx['attempts']).' prób
-												</div>
-												<div class="channel_content_block_progress">
-													<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
-												</div>
+										switch($row['type']){
+											case 1:
+												$contenttype = problem_type_identification('alg');
+												break;
+											case 2:
+												$contenttype = problem_type_identification('ctf');
+												break;
+											case 3:
+												$contenttype = problem_type_identification('och');
+												break;
+											case 4:
+												$contenttype = problem_type_identification('mch');
+												break;
+											case 5:
+												$contenttype = problem_type_identification('opn');
+												break;
+										}
+
+										$cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts, MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
+										$cdb_query->execute(['pid' => $row['PROBLEM_ID'], 'uid' => $_SESSION['AUTH_ID']]);
+										$ctx = $cdb_query->fetch();
+
+										if((int)$ctx['maxscore']!=-1)
+										{
+											$maxscore = $ctx['maxscore'];
+										} else {
+											$maxscore = 0;
+										}
+										echo('<a class="channel_content_block_final" href="index.php?p=problem&id='.$row['PROBLEM_ID'].'" style="color: inherit;">
+											<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
+											<div class="channel_content_block_title">
+												<b class="channel_content_block_title_text">#'.$row['PROBLEM_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
+												<div class="channel_content_block_element_details">
+													<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'">
+														'.($row['maxattempts']-$ctx['attempts']).' prób
+													</div>');
+										
+										if(has_a_priority(3))
+										{
+											echo('<div class="channel_content_block_progress">
+															<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
+														</div>');
+										}
+										echo('</div>
 											</div>
-										</div>
-									</a>');
+										</a>');
+									}
+								} else {
+									echo('<h1 style="text-align: center; margin-bottom: -1vmax;"><i class=\'fas fa-lock\'></i></h1>');
 								}
+								echo('<div class="channel_content_chapter_pinned" style="order: -9999;">'.$set['title']);
+								if (!$availability['is_available']) {
+									echo('&emsp;<small style="color: rgba(128, 128, 128, 1);"><i class=\'fas fa-lock\'></i> Wymaga ukończenia: '.htmlentities($availability['condition_title']).'</small>');
+								} else if(in_array(0, $set_results[$set['SET_ID']]) || count($set_results[$set['SET_ID']])==0)
+								{
+									echo('&emsp;<small style="color: rgba(218, 130, 6, 1);"><i class=\'fas fa-rocket\'></i> W trakcie</small>');
+								} else {
+									echo('&emsp;<small style="color: rgba(14, 149, 109, 1);"><i class=\'fas fa-award\'></i> Ukończono</small>');
+								}
+								echo('</div>');
 								echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
 									<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;Dodaj zadanie</a>
-									<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-cog\'></i>&nbsp;&nbsp;Ustawienia</a>
 									<br />
 									<br />
 								</div></div>');
