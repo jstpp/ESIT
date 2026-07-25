@@ -418,7 +418,7 @@
 
 	function check_problemset_availability($set_id, $pdo): array
 	{
-		$status = array('is_available' => 'false', 'condition_title' => 'Unknown');
+		$status = array('is_available' => 'false', 'condition_title' => 'Unknown', 'condition_id' => -1);
 		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID = :sid');
 		$db_query->execute(['sid' => $set_id]);
 		$set = $db_query->fetch();
@@ -429,9 +429,10 @@
 			return $status;
 		}
 		$condition = json_decode($set['depends_on']);
-		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID = :sid');
+		$status['condition_id'] = $condition->id;
+		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:sid');
 		$db_query->execute(['sid' => $condition->id]);
-		$status['condition_title'] = $db_query->fetch()['title'];
+		if($row = $db_query->fetch()) $status['condition_title'] = $row['title'];
 
 		if (!isset($condition->type) || $condition->type === 'none') 
 		{

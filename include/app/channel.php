@@ -268,7 +268,7 @@
 		$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 
 		while($row = $db_query->fetch()) {
-			echo('<option value="S'.$row['SET_ID'].'">Blok '.$row['title'].'</option>');
+			echo('<option value="S'.$row['SET_ID'].'">'.$row['title'].'</option>');
 		}
 
 		echo('</select>
@@ -304,6 +304,46 @@
 							$availability = check_problemset_availability($object['id'], $pdo);
 							if(isset($set))
 							{
+								echo('
+								<div id="update_block_dialog_'.$set['SET_ID'].'" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
+									<span onClick="document.getElementById(\'update_block_dialog_'.$set['SET_ID'].'\').style.display = \'none\';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
+									<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
+										<h2 style="text-align: center;">'.htmlentities($set['title']).'</h2>
+										<br />
+										<form method="POST" action="process.php?r=modify_problemset&sid='.$set['SET_ID'].'" id="update_block_form_'.$set['SET_ID'].'">
+											<input name="update_block_form_name" id="update_block_form_name" class="forminput_2" type="text" placeholder="Nazwa bloku" value="'.htmlentities($set['title']).'" required/>
+											<br />
+											<br />
+											<br />
+											Dostępność zależy od ukończenia:
+											<select class="forminput_2" name="update_block_form_condition" id="update_block_form_condition">
+												<option value="none"><i>Niczego</i></option>');
+
+										$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE channel_id=:cid');
+										$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+
+										while($row = $db_query->fetch()) {
+											if($row['SET_ID']==$availability['condition_id'])
+											{
+												echo('<option value="S'.$row['SET_ID'].'" selected>'.$row['title'].'</option>');
+											} else {
+												echo('<option value="S'.$row['SET_ID'].'">'.$row['title'].'</option>');
+											}
+										}
+
+										echo('</select>
+											<br />
+											<br />
+											<br />
+											Czas publikacji:
+											<input name="update_block_form_publish_time" id="update_block_form_publish_time" class="forminput_2" type="datetime-local" value="'.htmlentities($set['publish_time']).'" required/>
+											<br />
+										</form>
+										<br />
+										<a class="button" id="button_1" onClick="document.getElementById(\'update_block_form_'.$set['SET_ID'].'\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;Zapisz ustawienia</a>
+										<br style="clear: both;"/>
+									</div>
+								</div>');
 								echo('<div class="channel_content_block channel_content_chapter">');
 								$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:pid');
 								$db_query->execute(['pid' => $object['id']]);
@@ -347,15 +387,10 @@
 												<div class="channel_content_block_element_details">
 													<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'">
 														'.($row['maxattempts']-$ctx['attempts']).' prób
-													</div>');
-										
-										if(has_a_priority(3))
-										{
-											echo('<div class="channel_content_block_progress">
-															<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
-														</div>');
-										}
-										echo('</div>
+													</div>
+													<div class="channel_content_block_progress">
+														<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
+													</div></div>
 											</div>
 										</a>');
 									}
@@ -372,8 +407,13 @@
 									echo('&emsp;<small style="color: rgba(14, 149, 109, 1);"><i class=\'fas fa-award\'></i> Ukończono</small>');
 								}
 								echo('</div>');
-								echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
-									<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;Dodaj zadanie</a>
+								if(has_a_priority(3))
+								{
+									echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
+										<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;Dodaj zadanie</a>
+										<a class="forminput" onClick="document.getElementById(\'update_block_dialog_'.$object['id'].'\').style.display = \'flex\';"><i class=\'fas fa-wrench\'></i>&nbsp;&nbsp;Ustawienia</a>');
+								}
+								echo('
 									<br />
 									<br />
 								</div></div>');
