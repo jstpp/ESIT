@@ -24,7 +24,7 @@
 		'remove_user'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/user_management/remove_user.php'],
 		'modify_config'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/config/modify_config.php'],
 		'create_channel'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/channels/create_channel.php'],
-		'archive_channel'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/channels/archive_channel.php'],
+		'archive_channel'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/channels/archive_channel.php', 'required' => ['cid']],
 		'create_problemset'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/channels/create_problemset.php', 'required' => ['cid']],
 		'modify_problemset'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/channels/modify_problemset.php', 'required' => ['sid']],
 		'download_plugin'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/plugins/download_plugin.php'],

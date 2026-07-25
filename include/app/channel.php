@@ -10,6 +10,7 @@
 		$chimgpath = $row['img_path'];
 		$chdescription = $row['description'];
 		$chauthor = $row['username'];
+		$chisarchived = $row['isarchived'];
 		$chlayout = json_decode($row['layout']);
 	}
 
@@ -132,7 +133,7 @@
 	}
 	.channel_content_chapter::after {
 		content: '●';
-		margin-left: -3.2vmax;
+		margin-left: -3.3vmax;
 		background-color: black;
 		padding: 0.4vmax;
 		padding-top: 0.2vmax;
@@ -538,6 +539,15 @@
 	<div style="width: 68%;">
 		<h3 class="window_title" style="margin-left: 2.5%;">Informacje</h3>
 		<p style="margin-left: 2.5%;"><?php echo(htmlentities($chdescription)); ?></p>
+		<br />
+		<?php
+			if(has_a_priority(3))
+			{
+				echo('
+				<a class="button" href="process.php?r=archive_channel&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" style="float: left; margin-left: 2.5%;"><i class=\'fas fa-archive\'></i>&nbsp;&nbsp;'.($chisarchived==1 ? 'Odarchiwizuj' : 'Archiwizuj').'</a>
+				<br style="clear: both;"/>');
+			}
+		?>
 		<br />
 	</div>
 	<div style="width: 30%;">
