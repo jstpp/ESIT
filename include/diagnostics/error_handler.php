@@ -10,6 +10,7 @@
                                 'content' => $content, 
                                 'details' => $details]);
 
+            if(boolval(get_misc_value('plugin_debugging'))) insert_flash_message($category, "Ups...", $content);
             return True;
         } catch (Throwable) {
             return False;

@@ -8,7 +8,8 @@
         $db_query->execute(['cid'=>$_GET['cid']]);
         if ($db_query->rowCount() === 0) redirect("index.php?p=channels&error");
         redirect("index.php?p=channel&id=".$_GET['cid']);
-    } catch (Throwable) {
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
         redirect("index.php?p=channels&error");
     }
 ?>

@@ -1,27 +1,9 @@
 <?php
-    if(isset($_GET['repo']) and isset($_GET['branch']))
+    if(!isset($plugin_manager, $_GET['repo'], $_GET['branch']) || !has_a_priority(3)) kick();
+    if($plugin_manager->download($_GET['repo'], $_GET['branch']))
     {
-        $repoUrl = 'https://github.com/'.$_GET['repo'].'/archive/refs/heads/'.$_GET['branch'].'.zip';
-        $destPath = __DIR__.'/../../plugins/'.htmlentities(explode("/",$_GET['repo'])[1]);
-
-        mkdir(__DIR__.'/../../plugins/'.htmlentities(explode("/",$_GET['repo'])[1]));
-
-        file_put_contents($destPath."/".$_GET['branch'].".zip", 
-            file_get_contents($repoUrl)
-        );
-
-        $zip = new ZipArchive;
-        if ($zip->open($destPath."/".htmlentities($_GET['branch']).".zip") === TRUE) {
-            $zip->extractTo(__DIR__.'/../../plugins/');
-            $zip->close();
-            unlink($destPath."/".htmlentities($_GET['branch']).".zip");
-            rmdir($destPath);
-            rename($destPath."-".$_GET['branch'], $destPath);
-            redirect("index.php?p=admin#plugins");
-        } else {
-            echo "Błąd przy rozpakowywaniu ZIP.";
-        }
+        redirect("index.php?p=admin#plugins");
     } else {
-        kick();
+        redirect("index.php?p=admin#plugins&error");
     }
 ?>

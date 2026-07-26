@@ -23,7 +23,8 @@
             'img_path' => $image,
             'isarchived' => $isarchived
         ]);
-    } catch (Throwable) {
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
         redirect("index.php?p=channels&error");
     }
 

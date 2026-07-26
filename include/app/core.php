@@ -385,7 +385,7 @@
 		{
 			foreach($_SESSION['flash_messages'] as $message)
 			{
-				display_message($message->{'type'}, $message->{'header'}, $message->{'content'});
+				display_message($message['type'], $message['header'], $message['content']);
 			}
 			unset($_SESSION['flash_messages']);
 		}
@@ -496,6 +496,10 @@
 
 	include(__DIR__."/../diagnostics/error_handler.php");
 
+	if (is_logged_in() and has_a_priority(3)) {
+		include_once(__DIR__."/plugins/plugin_manager.php");
+		$plugin_manager = new PluginManager($pdo);
+	}
 
 	if(boolval(get_misc_value('plugin_debugging')))
     {
@@ -506,5 +510,11 @@
 		ini_set('display_errors', '0');
         ini_set('display_startup_errors', '0');
         error_reporting(0);
+	}
+
+	if(isset($_GET['error'])) 
+	{
+		insert_flash_message('warning', "Ups...", "Coś poszło nie tak. Spróbuj ponownie.");
+		parse_flash_messages();
 	}
 ?>
