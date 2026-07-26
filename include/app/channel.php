@@ -299,12 +299,13 @@
 						$object = json_decode(json_encode($object), true);
 						if($object['type']=="problemset")
 						{
-							$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:sid');
-							$db_query->execute(['sid' => $object['id']]);
+							$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:sid AND publish_time<:currenttime');
+							$db_query->execute(['sid' => $object['id'], 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 							$set = $db_query->fetch();
 							$availability = check_problemset_availability($object['id'], $pdo);
 							if(isset($set))
 							{
+								if(!isset($set['title']) || empty($set['title'])) continue;
 								echo('
 								<div id="update_block_dialog_'.$set['SET_ID'].'" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
 									<span onClick="document.getElementById(\'update_block_dialog_'.$set['SET_ID'].'\').style.display = \'none\';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
@@ -345,7 +346,7 @@
 										<br style="clear: both;"/>
 									</div>
 								</div>');
-								echo('<div class="channel_content_block channel_content_chapter">');
+								echo('<div class="channel_content_block channel_content_chapter" data-id="'.$object['id'].'">');
 								$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:pid');
 								$db_query->execute(['pid' => $object['id']]);
 								$set_results[$set['SET_ID']] = [];
@@ -438,7 +439,38 @@
 			group: 'shared',
 			animation: 150,
 			fallbackOnBody: true,
-			swapThreshold: 0.65
+			swapThreshold: 0.65,
+			draggable: '.channel_content_chapter',
+			dataIdAttr: 'data-id',
+			onEnd: function (evt) {
+				var order = this.toArray(); 
+
+				var layoutData = {
+					content: order.map(function(id) {
+						return {
+							type: "problemset",
+							id: parseInt(id)
+						};
+					})
+				};
+
+				fetch('process.php?r=update_channel_layout&cid=<?php echo filter_var($_GET['id'], FILTER_VALIDATE_INT); ?>', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(layoutData)
+				})
+				.then(response => response.json())
+				.then(data => {
+					if(!data.success) {
+						console.error('Błąd podczas zapisywania układu:', data.message);
+					}
+				})
+				.catch(error => {
+					console.error('Błąd połączenia:', error);
+				});
+			}
 		});
 	</script>
 	<div class="window" style="margin-left: 0; align-self: stretch;">

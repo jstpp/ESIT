@@ -27,6 +27,7 @@
 		'archive_channel'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/channels/archive_channel.php', 'required' => ['cid']],
 		'create_problemset'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/channels/create_problemset.php', 'required' => ['cid']],
 		'modify_problemset'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/channels/modify_problemset.php', 'required' => ['sid']],
+		'update_channel_layout'		=> ['mode' => 'non-interactive', 'priority' => 3, 'path' => 'app/channels/update_channel_layout.php', 'required' => ['cid']],
 		'download_plugin'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/plugins/download_plugin.php'],
 		'change_password'			=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/settings/change_password.php'],
 		'diag_server_resources'		=> ['mode' => 'non-interactive', 'priority' => 3, 'path' => 'diagnostics/resources.php'],
