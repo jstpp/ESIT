@@ -58,6 +58,10 @@
 		case 'content-delivery':
 			break;
 		case 'public':
+			if(!api_rate_limit_tick(120, 600)) {
+				header('HTTP/1.1 429 Too Many Requests');
+				die;
+			}
 			break;
 		case 'register':
 			if(is_logged_in()) kick();

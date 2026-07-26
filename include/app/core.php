@@ -467,6 +467,20 @@
 		return $status;
 	}
 
+	function api_rate_limit_tick($limit, $timeRange): bool
+	{
+		$now = time();
+		$_SESSION['api_rate_limit_tick'] ??= [];
+
+		$_SESSION['api_rate_limit_tick'] = array_filter(
+			$_SESSION['api_rate_limit_tick'],
+			fn(int $timestamp) => $now - $timestamp <= $timeRange
+		);
+
+		$_SESSION['api_rate_limit_tick'][] = $now;
+		return count($_SESSION['api_rate_limit_tick']) <= $limit;
+	}
+
 
 
 	###############################################

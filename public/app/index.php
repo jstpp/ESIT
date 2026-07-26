@@ -1,7 +1,7 @@
 <?php
 	include(__DIR__.'/../../include/app/core.php');
 
-	if(!is_logged_in()) force_to_login(); #functions from core
+	if(!is_logged_in()) force_to_login();
 	check_session_timeout();
 
 	$db_query = $pdo->prepare('SELECT * FROM USERS WHERE USER_ID=:uid LIMIT 1');
