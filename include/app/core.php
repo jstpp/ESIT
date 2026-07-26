@@ -101,12 +101,7 @@
 		{
 			$error_link = get_misc_value('plugin_custom_error_broker_url');
 		} else {
-			if(boolval(get_misc_value('general_url')))
-			{
-				$error_link = get_misc_value('general_url')."/error.php";
-			} else {
-				$error_link = "http://localhost/error.php";
-			}
+			$error_link = boolval(get_misc_value('general_url')) ? get_misc_value('general_url')."/error.php" : "http://localhost/error.php";
 		}
 
 		redirect($error_link);
@@ -116,11 +111,10 @@
 	{
 		if (!headers_sent()) {
 			header("Location: ".$dest, true, 302);
-			die;
 		} else {
 			echo '<meta http-equiv="refresh" content="0; url='.htmlspecialchars($dest).'"/>';
-			die;
 		}
+		die;
 	}
 
 	function display_message($type, $header, $message): void

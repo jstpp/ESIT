@@ -165,7 +165,7 @@
 			}
 
 		</style>
-		<?php if (isset($settings) && $settings->dark_mode === "0"): ?>
+		<?php if (isset($settings) && $settings->dark_mode == 0): ?>
 			<script>document.documentElement.setAttribute('data-theme', 'light');</script>
 		<?php endif; ?>
 	</head>
