@@ -148,14 +148,14 @@
 				text-decoration: none;
 				color: rgb(0, 179, 255);
 			}
-			.window .button {
+			.button {
 				padding: 1vw 1vw;
 				float: right;
 				text-decoration: none;
 				margin-left: 0.5vw;
 
 				background-color: #00b3ff;
-				color: white;
+				color: white !important;
 				border-radius: 5px;
 				cursor: pointer;
 				transition: 0.2s;

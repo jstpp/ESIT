@@ -413,12 +413,12 @@
 								{
 									echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
 										<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;Dodaj zadanie</a>
-										<a class="forminput" onClick="document.getElementById(\'update_block_dialog_'.$object['id'].'\').style.display = \'flex\';"><i class=\'fas fa-wrench\'></i>&nbsp;&nbsp;Ustawienia</a>');
+										<a class="forminput" onClick="document.getElementById(\'update_block_dialog_'.$object['id'].'\').style.display = \'flex\';"><i class=\'fas fa-wrench\'></i>&nbsp;&nbsp;Ustawienia</a><br /><br /></div>');
 								}
 								echo('
 									<br />
 									<br />
-								</div></div>');
+								</div>');
 							}
 						}
 					}
