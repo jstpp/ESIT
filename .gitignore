@@ -6,6 +6,7 @@
 /include/portal/
 /public/portal/
 /public/img/articles/header/*
+/public/img/articles/content/*
 /public/img/problemsets/header/*
 /public/img/plugins/*
 /include/plugins/*

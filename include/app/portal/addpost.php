@@ -16,23 +16,6 @@
 </script>
 
 <style>
-	.window {
-		width: 93%;
-		margin-left: 2.5%;
-		margin-top: 1vw;
-        padding: 1% 1%;
-
-		background-color: #313136;
-
-		border: 0.2vw solid var(--container-hover-bg);
-		border-radius: 1vw;
-	}
-
-	.window .window_title {
-		margin-left: 5%;
-		margin-top: 1.5vw;
-	}
-
 	.set_link {
 		padding: 1vw 1vw;
 		width: 90%;

@@ -17,7 +17,7 @@
 		'save_form'					=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/problems/save_form_script.php'],
 		'check_form'				=> ['mode' => 'interactive', 'priority' => 4, 'path' => 'app/problems/check_form_script.php'],
 		'settings_appearance'		=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/settings/settings_appearance.php'],
-		'modify_content'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/portal/modify_content.php'],
+		'modify_content'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/portal/modify_content.php', 'required' => ['page']],
 		'modify_resources'			=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'portal/modify_portal_resources.php'],
 		'modify_user'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/user_management/modify_user.php', 'required' => ['uid']],
 		'create_user'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/user_management/create_user.php'],
