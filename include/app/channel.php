@@ -389,10 +389,14 @@
 												<div class="channel_content_block_element_details">
 													<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'">
 														'.($row['maxattempts']-$ctx['attempts']).' prób
-													</div>
-													<div class="channel_content_block_progress">
-														<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
-													</div></div>
+													</div>');
+										if(strtotime($row['result_publish_time'])<strtotime("now"))
+										{
+											echo('<div class="channel_content_block_progress">
+												<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
+											</div>');
+										}
+										echo('</div>
 											</div>
 										</a>');
 									}

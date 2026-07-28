@@ -2,7 +2,7 @@
 	#results {
 		display: flex;
 		flex-direction: column;
-		gap: 1vmax;
+		gap: 0.5vmax;
 	}
 	.mysolutions_results_block {
 		padding: 1vmax;
