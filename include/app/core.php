@@ -404,7 +404,8 @@
 			'ctf'     => ['full_name' => 'Capture The Flag', 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
 			'och'     => ['full_name' => 'Pytania jednokrotnego wyboru', 'icon' => 'fa fa-check-square-o', 'color' => 'rgba(14, 149, 109, 1)'],
 			'mch'     => ['full_name' => 'Pytania wielokrotnego wyboru', 'icon' => 'fa fa-check-square', 'color' => 'rgba(218, 130, 6, 1)'],
-			'opn'     => ['full_name' => 'Zadanie otwarte', 'icon' => 'fa fa-pencil-square-o', 'color' => 'rgba(69, 47, 165, 1)']
+			'opn'     => ['full_name' => 'Zadanie otwarte', 'icon' => 'fa fa-pencil-square-o', 'color' => 'rgba(69, 47, 165, 1)'],
+			'unk'     => ['full_name' => 'Nieznane', 'icon' => 'fas fa-bug', 'color' => 'rgba(120, 120, 120, 1)']
 		];
 
 		return $problem_types[$type] ?? [];

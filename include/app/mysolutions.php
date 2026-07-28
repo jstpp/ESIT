@@ -1,29 +1,49 @@
 <style>
-	.window #results {
-		width: 90%;
+	#results {
+		display: flex;
+		flex-direction: column;
+		gap: 1vmax;
+	}
+	.mysolutions_results_block {
+		padding: 1vmax;
+		background-color: var(--container-hover-bg);
+		border-radius: 1vmax;
+		width: calc(90% - 2vmax);
 		margin-left: 5%;
-		user-select: none;
-	}
-	.window #results a {
+
 		text-decoration: none;
-		color: rgb(0, 179, 255);
-	}
-	.window #results td {
-		border-top: 0.1vw solid gray;
-		padding: 0.5vw 0.5vw;
-	}
-	.window #results td a {
-		font-weight: bold;
-		text-align: center;
+		color: var(--text) !important;
+
+		display: flex;
+		gap: 1vmax;
+		justify-content: stretch;
+		align-items: center;
 		transition: 0.3s;
 		cursor: pointer;
 	}
-	.window #results tr {
-		transition: 0.2s;
-		cursor: default;
+
+	.mysolutions_results_block:hover {
+		box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg-textbox);
 	}
-	.window #results tr:hover {
+
+	.mysolutions_results_block_progress {
 		background-color: var(--container-hover-bg);
+		width: 8vmax;
+		border-radius: 0.5vmax;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+	}
+	.mysolutions_results_block_progress_bar {
+		padding-top: 0.5vmax;
+		padding-bottom: 0.5vmax;
+		width: calc(8vmax * 0.2);
+		height: 100%;
+		display: flex;
+		align-items: center;
+	}
+	.mysolutions_results_block_progress_bar h2 {
+		margin-left: 1vmax;
 	}
 </style>
 
@@ -35,90 +55,99 @@
 ?>
 <div class="window">
 	<h2 class="window_title">Moje rozwiązania</h2>
-	<table id="results">
+	<div id="results">
 		<?php
-			$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.submission_lang AS lang, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, PROBLEMS.title AS title, PROBLEMS.type AS type, PROBLEMS.maxpoints AS max_pts, PROBLEMS.PROBLEM_ID AS problem_id, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC');
+			$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, PROBLEMS.title AS title, PROBLEMS.type AS type, PROBLEMS.maxpoints AS max_pts, PROBLEMS.PROBLEM_ID AS problem_id, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC');
 			$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
 
 			$isfound = 0;
 			while($row = $db_query->fetch())
 			{
 				$isfound++;
-				if($row['score_percentage']==0)
+				if(strtotime($row['result_publish_time'])>strtotime("now"))
 				{
-					$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
-					$percentage = $row['score_percentage']."%";
+					$gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
+					$percentage = "...";
+					$status = "<i class=\"fa fa-eye-slash\"></i>&nbsp;&nbsp;Wynik ukryty";
+				}
+				else if($row['score_percentage']==0)
+				{
+					$gradient = "linear-gradient(to left, rgba(255, 61, 110, 0.5) 0%,transparent 50%);";
+					$percentage = (int)($row['score_percentage']);
 					$status = "Całkowicie niepoprawne";
 				} else if ($row['score_percentage']==100)
 				{
-					$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
-					$percentage = $row['score_percentage']."%";
+					$gradient = "linear-gradient(to left, rgba(0, 209, 10, 0.5) 0%,transparent 50%);";
+					$percentage = (int)($row['score_percentage']);
 					$status = "Bez błędów";
 				} else if ($row['score_percentage']==-1)
 				{
-					$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
+					$gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
 					$percentage = "...";
 					$status = "W kolejce";
 				} else {
-					$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
-					$percentage = $row['score_percentage']."%";
+					$gradient = "linear-gradient(to left, rgba(142, 237, 40, 0.5) 0%,transparent 50%);";
+					$percentage = (int)($row['score_percentage']);
 					$status = "Częściowo poprawne";
 				}
 
-				if($row['type']==1)
+				switch($row['type'])
 				{
-					$problemtype = "<i class='fas fa-cloud'></i>&nbsp;Algorytmiczne";
-					$resultdest = "algresult";
-				} else if($row['type']==2)
-				{
-					$problemtype = "<i class='fas fa-flag'></i></i>&nbsp;&nbsp;Capture The Flag";
-					$resultdest = "ctfresult";
-				} else if($row['type']==3)
-				{
-					$problemtype = "<i class='fas fa-check-square'></i>&nbsp;&nbsp;Jednokrotnego wyboru";
-					$resultdest = "testresult";
-				} else if($row['type']==4)
-				{
-					$problemtype = "<i class='fas fa-check-double'></i>&nbsp;&nbsp;Wielokrotnego wyboru";
-					$resultdest = "testresult";
-				} else if($row['type']==5)
-				{
-					$problemtype = "<i class='fa fa-edit'></i>&nbsp;&nbsp;Formularz";
-					$resultdest = "formresult";
-				} else {
-					$problemtype = "Nieznany typ";
+					case 1:
+						$problem = problem_type_identification('alg');
+						$resultdest = "algresult";
+						break;
+					case 2:
+						$problem = problem_type_identification('ctf');
+						$resultdest = "ctfresult";
+						break;
+					case 3:
+						$problem = problem_type_identification('och');
+						$resultdest = "testresult";
+						break;
+					case 4:
+						$problem = problem_type_identification('mch');
+						$resultdest = "testresult";
+						break;
+					case 5:
+						$problem = problem_type_identification('opn');
+						$resultdest = "formresult";
+						break;
+					default:
+						$problem = problem_type_identification('unk');
+						break;
 				}
 
-				echo('<tr>
-				<td><a href="?p='.$resultdest.'&sid='.$row['id'].'">Szczegóły</a></td>
-				<td>'.$row['submission_time'].'</td>
-				<td><a href="?p=quest&id='.$row['problem_id'].'">'.$row['title'].'</a></td>
-				<td>'.$problemtype.'</td>');
-				if ($row['score_percentage']!=-1 and strtotime($row['result_publish_time'])<strtotime("now")) {
-					
-					echo('
-					<td style="background-image: '.$gradient.'">'.$status.'</td>
-					<td>'.$row['score'].'/'.$row['max_pts'].'</td>
-					<td style="background-image: '.$gradient.'">'.$percentage.'</td>
-					</tr>');
-				} else if (strtotime($row['result_publish_time'])>strtotime("now"))
-				{
-					echo('<td colspan="3"><i class="fa fa-eye-slash"></i>&nbsp;&nbsp;Wynik ukryty</td></tr>');
+				echo('<a href="index.php?p=ctfresult&sid='.$row['id'].'" class="mysolutions_results_block" style="background-image: '.$gradient.';">
+					<div style="display: flex; flex-direction: column; flex: 1;">
+						<h2 style="margin: 0 0 0.5vmax 0;">'.htmlentities($row['title']).'</h2>
+						<small style="font-size: 0.7vmax; background-color: '.$problem['color'].'; width: 8vmax; text-align: center; padding: 0.4vmax; border-radius: 1vmax;"><i class="'.$problem['icon'].'"></i>&nbsp;&nbsp;'.$problem['full_name'].'</small>
+					</div>');
+				
+				if ($row['score_percentage']!=-1 and strtotime($row['result_publish_time'])<strtotime("now")) {	
+					echo('	<div class="mysolutions_results_block_status" style="flex: 1;">'.$status.'</div>
+							<div>
+								<small>'.$row['submission_time'].'</small><br />
+								<div class="mysolutions_results_block_progress">
+									<div class="mysolutions_results_block_progress_bar" style="width: calc(8vmax * '.floatval($percentage/100).'); background-color: '.$problem['color'].';">
+										<h2 style="margin-top: 0; margin-bottom: 0;">'.$percentage.'%</h2>
+									</div>
+								</div>
+							</div>');
 				} else {
-					echo('<td colspan="3" style="background-image: '.$gradient.'">'.$status.'</td></tr>');
+					echo('<div>
+								'.$status.'
+							</div>');
 				}
+				echo('</a>');
 			}
+
 			if($isfound==0)
 			{
-				echo('
-				<div style="margin-left: auto; margin-right: auto; margin-top: 5vmax; text-align: center; display: flex; flex-direction: column; justify-content: cetner; width: 30%; padding: 3vmax;">
-					<i class="fa fa-hourglass-3" style="font-size: 7vmax;"></i>
-					<center style="margin-top: 2vmax; user-select: none;"><i>Jeszcze niczego tu nie ma!</i></center>
-				</div>
-				');
+				echo("<center>Jeszcze tu niczego nie ma!</center>");
 			}
 		?>
-	</table>
+	</div>
 	<br />
 	<br />
 </div>
