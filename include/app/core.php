@@ -120,18 +120,30 @@
 	function display_message($type, $header, $message): void
 	{
 		if(!isset($type) || !isset($header) || !isset($message)) kick();
-		echo('<div onClick="this.remove();" style="display: flex; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
-			<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 60vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">');
+		$type = htmlspecialchars($type, ENT_QUOTES, 'UTF-8');
+		$header = htmlspecialchars($header, ENT_QUOTES, 'UTF-8');
+		$message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+		if(empty($type) || empty($header) || empty($message)) kick();
 		
-		if($type=="error")
+		echo('<div onClick="this.remove();" style="display: flex; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
+			<div style="background-color: var(--bg); color: var(--text); width: 30vmax; max-height: 60vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">');
+
+		switch($type)
 		{
-			echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 80, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
-		} else if($type=="warning")
-		{
-			echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 172, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
-		} else {
-			echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(80, 143, 180); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
+			case "error":
+				echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 80, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
+				break;
+			case "warning":
+				echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 172, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
+				break;
+			case "success":
+				echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgba(80, 180, 132, 1); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
+				break;
+			default:
+				echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(80, 143, 180); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
+				break;
 		}
+
 		echo(htmlentities($message));
 
 		echo('<br /><br /></div>
