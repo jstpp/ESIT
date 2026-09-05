@@ -1,3 +1,7 @@
+<?php 
+	include_once(__DIR__.'/../../include/app/profiles/get_stats.php');
+?>
+
 <style>
 	#results {
 		display: flex;
@@ -88,7 +92,7 @@
 		cursor: pointer;
 	}
 
-	.dashboard_content_set:hover > div > * {
+	.dashboard_content_set > div > * {
 		transition: 0.3s;
 	}
 
@@ -114,55 +118,7 @@
 <div style="display: flex;">
 	<div id="dashboard_main" style="min-width: 72%; display: flex; flex-direction: column; align-items: stretch;">
 		<div class="window">
-			<h2 class="window_title">Twoje postępy</h2>
-			<?php
-				$db_query = $pdo->prepare('SELECT AVG(score_percentage) AS avg_score FROM SUBMISSIONS WHERE user_id=:uid');
-				$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
-
-				$avg_score = 0;
-				while($row = $db_query->fetch()) {
-					$avg_score = isset($row['avg_score']) ? round($row['avg_score'], 1) : 0;
-				}
-
-				$db_query = $pdo->prepare('SELECT
-					DATE(submission_time) as day,
-					SUM(score) as daily_points
-					FROM SUBMISSIONS
-					WHERE user_id = :uid
-					AND submission_time >= CURDATE() - INTERVAL 30 DAY
-					GROUP BY day
-					ORDER BY day ASC;');
-				$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
-
-				$data = $db_query->fetchAll(PDO::FETCH_ASSOC);
-
-				$labels = [];
-				$points = [];
-
-				$currentSum = 0;
-
-				$period = new DatePeriod(
-					new DateTime("-30 days"),
-					new DateInterval("P1D"),
-					new DateTime("+0 day")
-				);
-
-				$map = [];
-				foreach ($data as $row) {
-					$map[$row['day']] = $row['daily_points'];
-				}
-
-				foreach ($period as $date) {
-					$day = $date->format("Y-m-d");
-
-					if (isset($map[$day])) {
-						$currentSum += $map[$day];
-					}
-
-					$labels[] = $date->format("j M");
-					$points[] = $currentSum;
-				}
-			?>
+			<h3 class="window_title"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;Moje postępy</h3>
 			<script>
 				const dashboard_progress_pts = <?php echo json_encode($points); ?>;
 				const dashboard_labels = <?php echo json_encode($labels); ?>;
@@ -236,7 +192,7 @@
 			</script>
 		</div>
 		<div class="window">
-			<h2 class="window_title">Moje ostatnie rozwiązania</h2>
+			<h3 class="window_title"><i class="fa fa-flask"></i>&nbsp;&nbsp;Moje ostatnie rozwiązania</h3>
 			<div id="results">
 				<?php
 					$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, PROBLEMS.title AS title, PROBLEMS.type AS type, PROBLEMS.maxpoints AS max_pts, PROBLEMS.PROBLEM_ID AS problem_id, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 4');
@@ -334,7 +290,7 @@
 			<br />
 		</div>
 		<div class="window" style="flex: 1;">
-			<h2 class="window_title">Aktualności</h2>
+			<h3 class="window_title"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;Aktualności</h3>
 			<?php
 				$db_query = $pdo->prepare('SELECT * FROM ARTICLES ORDER BY id DESC LIMIT 3');
 				$db_query->execute();
@@ -379,7 +335,7 @@
 					echo('<a href="?p=channel&id='.$row['CHANNEL_ID'].'" style="flex: 1; text-decoration: none;"><div class="dashboard_content_set" style="background: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url(\''.$row['img_path'].'\'); background-size: cover;">
 				<div class="dashboard_content_set_metadata">
 					<h3>'.htmlentities($row['title']).'</h3>
-					<small style="top: -1vmax; position: relative;">Autor: '.htmlentities($row['author']).'</small>
+					<small style="top: -1vmax; position: relative;"><img src="https://api.dicebear.com/10.x/identicon/svg?seed='.htmlentities($row['author']).'" style="background-color: var(--text); width: 1vmax; border-radius: 0.5vmax; margin-bottom: -0.2vmax;" />&nbsp;&nbsp;'.htmlentities($row['author']).'</small>
 				</div>
 			</div></a>');
 				}

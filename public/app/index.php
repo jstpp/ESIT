@@ -177,6 +177,7 @@
 		?>
 		<div id="page_content">
 			<?php
+				include(__DIR__.'/../../include/app/profiles/profile.php');
 				include(__DIR__.'/../../include/app/'.$page_config['path']);
 			?>
 			<?php if (isset($page_config['menu_id'])): ?>

@@ -39,7 +39,7 @@
 </style>
 <div id="vertical_menu">
 	<div style="margin-left: 0.8vw; margin-top: 5vw; display: flex; gap: 1vmax;">
-		<img src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($_SESSION['AUTH_USERNAME']) ?>" style="width: 2.5vmax; border-radius: 1.25vmax; background-color: var(--text);"/>
+		<img src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($_SESSION['AUTH_USERNAME']) ?>" onClick="document.getElementById('profile_background_pane').style.display = 'flex';" style="cursor: pointer; width: 2.5vmax; border-radius: 1.25vmax; background-color: var(--text);"/>
 		<div>
 			<b><?php echo($_SESSION['AUTH_NAME']) ?> <?php echo($_SESSION['AUTH_SURNAME']) ?></b>
 			<br />
