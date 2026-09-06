@@ -48,13 +48,13 @@
 </style>
 
 <center>
-	<h1>Moje rozwiązania</h1>
+	<h1><?php echo(__("My solutions")); ?></h1>
 </center>
 <?php
 	include_plugins_for("my_solutions");
 ?>
 <div class="window">
-	<h2 class="window_title">Moje rozwiązania</h2>
+	<h2 class="window_title"><?php echo(__("My solutions")); ?></h2>
 	<div id="results">
 		<?php
 			$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, PROBLEMS.title AS title, PROBLEMS.type AS type, PROBLEMS.maxpoints AS max_pts, PROBLEMS.PROBLEM_ID AS problem_id, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC');
@@ -68,27 +68,27 @@
 				{
 					$gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
 					$percentage = "...";
-					$status = "<i class=\"fa fa-eye-slash\"></i>&nbsp;&nbsp;Wynik ukryty";
+					$status = "<i class=\"fa fa-eye-slash\"></i>&nbsp;&nbsp;".__("Result unavailable");
 				}
 				else if($row['score_percentage']==0)
 				{
 					$gradient = "linear-gradient(to left, rgba(255, 61, 110, 0.5) 0%,transparent 50%);";
 					$percentage = (int)($row['score_percentage']);
-					$status = "Całkowicie niepoprawne";
+					$status = __("Incorrect");
 				} else if ($row['score_percentage']==100)
 				{
 					$gradient = "linear-gradient(to left, rgba(0, 209, 10, 0.5) 0%,transparent 50%);";
 					$percentage = (int)($row['score_percentage']);
-					$status = "Bez błędów";
+					$status = __("Fully correct");
 				} else if ($row['score_percentage']==-1)
 				{
 					$gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
 					$percentage = "...";
-					$status = "W kolejce";
+					$status = __("In queue...");
 				} else {
 					$gradient = "linear-gradient(to left, rgba(142, 237, 40, 0.5) 0%,transparent 50%);";
 					$percentage = (int)($row['score_percentage']);
-					$status = "Częściowo poprawne";
+					$status = __("Partially correct");
 				}
 
 				switch($row['type'])
@@ -144,7 +144,7 @@
 
 			if($isfound==0)
 			{
-				echo("<center>Jeszcze tu niczego nie ma!</center>");
+				echo("<center>".__("There's nothing here yet!")."!</center>");
 			}
 		?>
 	</div>

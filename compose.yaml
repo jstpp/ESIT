@@ -25,6 +25,7 @@ services:
       - GID=${GID:-1001}
     volumes:
       - ./include/:/www/esit/include
+      - ./locale/:/www/esit/locale
       - ./public/img:/www/esit/public/img
       - ./public/include/resources:/www/esit/public/include/resources
     depends_on:

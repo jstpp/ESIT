@@ -254,16 +254,16 @@
 <div id="new_block_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
 	<span onClick="document.getElementById(\'new_block_dialog\').style.display = \'none\';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
 	<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
-		<h2 style="text-align: center;">Dodaj blok (zbiór zadań)</h2>
+		<h2 style="text-align: center;">'.__("New block").' ('.__("problemset").')</h2>
 		<br />
 		<form method="POST" action="process.php?r=create_problemset&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" id="new_block_form">
-			<input name="new_block_form_name" id="new_block_form_name" class="forminput_2" type="text" placeholder="Nazwa bloku" required/>
+			<input name="new_block_form_name" id="new_block_form_name" class="forminput_2" type="text" placeholder="'.__("Block title").'" required/>
 			<br />
 			<br />
 			<br />
-			Dostępność zależy od ukończenia:
+			'.__("Availability depends on completion").':
 			<select class="forminput_2" name="new_block_form_condition" id="new_block_form_condition">
-				<option value="none"><i>Niczego</i></option>');
+				<option value="none"><i>'.__("Nothing").'</i></option>');
 
 		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE channel_id=:cid');
 		$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
@@ -276,12 +276,12 @@
 			<br />
 			<br />
 			<br />
-			Czas publikacji:
+			'.__("Publish time").':
 			<input name="new_block_form_publish_time" id="new_block_form_publish_time" class="forminput_2" type="datetime-local" required/>
 			<br />
 		</form>
 		<br />
-		<a class="button" id="button_1" onClick="document.getElementById(\'new_block_form\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;Dodaj blok</a>
+		<a class="button" id="button_1" onClick="document.getElementById(\'new_block_form\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;'.__("Add block").'</a>
 		<br style="clear: both;"/>
 	</div>
 </div>');
@@ -289,8 +289,8 @@
 ?>
 <div style="display: flex; gap: 1vmax; align-items: flex-start;">
 	<div class="window" style="margin-right: 0; min-width: 50%;">
-		<h2 class="window_title" style="float: left;"><i class='fas fa-eye'></i>&nbsp;&nbsp;Dostępne dla Ciebie</h2>
-		<?php if(has_a_priority(3)) echo('<a onClick="document.getElementById(\'new_block_dialog\').style.display = \'flex\';" class="forminput" style="float: right; margin-right: 5%; margin-top: 2.5%;">Dodaj blok</a>'); ?>
+		<h2 class="window_title" style="float: left;"><i class='fas fa-eye'></i>&nbsp;&nbsp;<?php echo(__("Available for You")); ?></h2>
+		<?php if(has_a_priority(3)) echo('<a onClick="document.getElementById(\'new_block_dialog\').style.display = \'flex\';" class="forminput" style="float: right; margin-right: 5%; margin-top: 2.5%;">'.__("Add block").'</a>'); ?>
 		<div id="channel_content">
 			<?php
 				function generate_content($data, $pdo): void
@@ -313,13 +313,13 @@
 										<h2 style="text-align: center;">'.htmlentities($set['title']).'</h2>
 										<br />
 										<form method="POST" action="process.php?r=modify_problemset&sid='.$set['SET_ID'].'" id="update_block_form_'.$set['SET_ID'].'">
-											<input name="update_block_form_name" id="update_block_form_name" class="forminput_2" type="text" placeholder="Nazwa bloku" value="'.htmlentities($set['title']).'" required/>
+											<input name="update_block_form_name" id="update_block_form_name" class="forminput_2" type="text" placeholder="'.__("Block title").'" value="'.htmlentities($set['title']).'" required/>
 											<br />
 											<br />
 											<br />
-											Dostępność zależy od ukończenia:
+											'.__("Availability depends on completion").':
 											<select class="forminput_2" name="update_block_form_condition" id="update_block_form_condition">
-												<option value="none"><i>Niczego</i></option>');
+												<option value="none"><i>'.__("Nothing").'</i></option>');
 
 										$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE channel_id=:cid');
 										$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
@@ -337,12 +337,12 @@
 											<br />
 											<br />
 											<br />
-											Czas publikacji:
+											'.__("Publish time").':
 											<input name="update_block_form_publish_time" id="update_block_form_publish_time" class="forminput_2" type="datetime-local" value="'.htmlentities($set['publish_time']).'" required/>
 											<br />
 										</form>
 										<br />
-										<a class="button" id="button_1" onClick="document.getElementById(\'update_block_form_'.$set['SET_ID'].'\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;Zapisz ustawienia</a>
+										<a class="button" id="button_1" onClick="document.getElementById(\'update_block_form_'.$set['SET_ID'].'\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;'.__("Save changes").'</a>
 										<br style="clear: both;"/>
 									</div>
 								</div>');
@@ -405,19 +405,19 @@
 								}
 								echo('<div class="channel_content_chapter_pinned" style="order: -9999;">'.$set['title']);
 								if (!$availability['is_available']) {
-									echo('&emsp;<small style="color: rgba(128, 128, 128, 1);"><i class=\'fas fa-lock\'></i> Wymaga ukończenia: '.htmlentities($availability['condition_title']).'</small>');
+									echo('&emsp;<small style="color: rgba(128, 128, 128, 1);"><i class=\'fas fa-lock\'></i> '.__("Requires completion").': '.htmlentities($availability['condition_title']).'</small>');
 								} else if(in_array(0, $set_results[$set['SET_ID']]) || count($set_results[$set['SET_ID']])==0)
 								{
-									echo('&emsp;<small style="color: rgba(218, 130, 6, 1);"><i class=\'fas fa-rocket\'></i> W trakcie</small>');
+									echo('&emsp;<small style="color: rgba(218, 130, 6, 1);"><i class=\'fas fa-rocket\'></i> '.__("Started").'</small>');
 								} else {
-									echo('&emsp;<small style="color: rgba(14, 149, 109, 1);"><i class=\'fas fa-award\'></i> Ukończono</small>');
+									echo('&emsp;<small style="color: rgba(14, 149, 109, 1);"><i class=\'fas fa-award\'></i> '.__("Completed").'</small>');
 								}
 								echo('</div>');
 								if(has_a_priority(3))
 								{
 									echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
-										<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;Dodaj zadanie</a>
-										<a class="forminput" onClick="document.getElementById(\'update_block_dialog_'.$object['id'].'\').style.display = \'flex\';"><i class=\'fas fa-wrench\'></i>&nbsp;&nbsp;Ustawienia</a><br /><br /></div>');
+										<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;'.__("Add problem").'</a>
+										<a class="forminput" onClick="document.getElementById(\'update_block_dialog_'.$object['id'].'\').style.display = \'flex\';"><i class=\'fas fa-wrench\'></i>&nbsp;&nbsp;'.__("Settings").'</a><br /><br /></div>');
 								}
 								echo('
 									<br />
@@ -468,22 +468,22 @@
 				.then(response => response.json())
 				.then(data => {
 					if(!data.success) {
-						console.error('Błąd podczas zapisywania układu:', data.message);
+						console.error('<?php echo(__('Error during layout saving')); ?>:', data.message);
 					}
 				})
 				.catch(error => {
-					console.error('Błąd połączenia:', error);
+					console.error('<?php echo(__('Connection error')); ?>:', error);
 				});
 			}
 		});
 	</script>
 	<div class="window" style="margin-left: 0; align-self: stretch;">
-		<h2 class="window_title"><i class='fas fa-medal'></i>&nbsp;&nbsp;Wyniki</h2>
+		<h2 class="window_title"><i class='fas fa-medal'></i>&nbsp;&nbsp;<?php echo(__("Results")); ?></h2>
 		<div style="overflow: auto; width: 90%; margin-left: 5%;">
 			<table id="scoreboard">
 				<tr>
-					<th>Użytkownik</th>
-					<th>Suma</th>
+					<th><?php echo(__('Username')); ?></th>
+					<th><?php echo(__('Total')); ?></th>
 					<?php 
 						$problem_array = array();
 						$scores = array();
@@ -577,21 +577,21 @@
 </div>
 <div class="window" style="display: flex; gap: 2%;">
 	<div style="width: 68%;">
-		<h3 class="window_title" style="margin-left: 2.5%;">Informacje</h3>
+		<h3 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Informations")); ?></h3>
 		<p style="margin-left: 2.5%;"><?php echo(htmlentities($chdescription)); ?></p>
 		<br />
 		<?php
 			if(has_a_priority(3))
 			{
 				echo('
-				<a class="button" href="process.php?r=archive_channel&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" style="float: left; margin-left: 2.5%;"><i class=\'fas fa-archive\'></i>&nbsp;&nbsp;'.($chisarchived==1 ? 'Odarchiwizuj' : 'Archiwizuj').'</a>
+				<a class="button" href="process.php?r=archive_channel&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" style="float: left; margin-left: 2.5%;"><i class=\'fas fa-archive\'></i>&nbsp;&nbsp;'.($chisarchived==1 ? __("Unarchive") : __("Archive")).'</a>
 				<br style="clear: both;"/>');
 			}
 		?>
 		<br />
 	</div>
 	<div style="width: 30%;">
-		<h3 class="window_title">Autor</h3>
+		<h3 class="window_title"><?php echo(__("Author")); ?></h3>
 		<div style="font-size: 1vmax; margin-left: 5%; user-select: none;">
 			<p><img src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($chauthor); ?>" style="height: 1vmax; border-radius: 0.5vmax; background-color: var(--text); margin-bottom: -0.2vmax;" />
 			&nbsp;<?php echo($chauthor); ?></p>

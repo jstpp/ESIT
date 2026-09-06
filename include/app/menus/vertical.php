@@ -48,32 +48,32 @@
 	</div>
 	<br />
 	<br />
-	<a href="?p=dashboard" id="dashboard"><i class='fas fa-compass'></i>&emsp;Dashboard</a>
-	<a href="?p=settings" id="settings"><i class='fas fa-address-card'></i>&emsp;Ustawienia konta</a>
+	<a href="?p=dashboard" id="dashboard"><i class='fas fa-compass'></i>&emsp;<?php echo(__("Dashboard")); ?></a>
+	<a href="?p=settings" id="settings"><i class='fas fa-address-card'></i>&emsp;<?php echo(__("Account settings")); ?></a>
 	<?php
 		if(has_a_priority(3))
 		{
-			echo('<p class="category_title">Administracja</p>');
-			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-tools\'></i>&emsp;Konfiguracja</a>');
+			echo('<p class="category_title">'.__("Management").'</p>');
+			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-tools\'></i>&emsp;'.__("Configuration").'</a>');
 			if(boolval(get_misc_value('plugin_portal')))
 			{
-				echo('<a href="?p=portal" id="portal"><i class=\'fas fa-pen-nib\'></i>&emsp;Zarządzanie portalem</a>');
+				echo('<a href="?p=portal" id="portal"><i class=\'fas fa-pen-nib\'></i>&emsp;'.__("Portal management").'</a>');
 			}
-			echo('<a href="?p=diagnostics" id="diagnostics"><i class=\'fa fa-dashboard\'></i>&emsp;Diagnostyka</a>');
-			echo('<a href="?p=logs" id="logs"><i class=\'fas fas fa-stream\'></i>&emsp;Dziennik zdarzeń</a>');
+			echo('<a href="?p=diagnostics" id="diagnostics"><i class=\'fa fa-dashboard\'></i>&emsp;'.__("Diagnostics").'</a>');
+			echo('<a href="?p=logs" id="logs"><i class=\'fas fas fa-stream\'></i>&emsp;'.__("Logs").'</a>');
 			include_plugins_for("vertical_menu_administration");
 		}
 	?>
-	<p class="category_title">Treści</p>
-	<a href="?p=channels" id="contentsets"><i class='fas fa-pencil-ruler'></i>&emsp;Zbiory treści</a>
-	<a href="?p=mysolutions" id="mysolutions"><i class='fas fa-paper-plane'></i>&emsp;Moje rozwiązania</a>
+	<p class="category_title"><?php echo(__("Content")); ?></p>
+	<a href="?p=channels" id="contentsets"><i class='fas fa-pencil-ruler'></i>&emsp;<?php echo(__("Discover")); ?></a>
+	<a href="?p=mysolutions" id="mysolutions"><i class='fas fa-paper-plane'></i>&emsp;<?php echo(__("My solutions")); ?></a>
 	<?php
 		include_plugins_for("vertical_menu_problemsets");
 	?>
 	<?php
 		if(has_a_priority(4))
 		{
-			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-coffee\'></i>&emsp;Centrum twórców</a>');
+			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-coffee\'></i>&nbsp;&nbsp;&nbsp;'.__("Creators' center").'</a>');
 		}
 	?>
 

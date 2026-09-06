@@ -75,8 +75,8 @@
 </style>
 
 <center>
-	<h1>Centrum treści</h1> 
-	<?php if(has_a_priority(3)) echo('<a class="button" style="margin-right: 2.5%;" onClick="document.getElementById(\'new_set_dialog\').style.display = \'flex\';">Dodaj nowy kanał</a>'); ?>
+	<h1><?php echo(__("Content center")); ?></h1> 
+	<?php if(has_a_priority(3)) echo('<a class="button" style="margin-right: 2.5%;" onClick="document.getElementById(\'new_set_dialog\').style.display = \'flex\';">'.__("Add new channel").'</a>'); ?>
 	<br style="clear: both;" />
 </center>
 <?php
@@ -86,31 +86,31 @@
 <div id="new_set_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
 	<span onClick="document.getElementById(\'new_set_dialog\').style.display = \'none\';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
 	<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
-		<h2 style="text-align: center;">Dodaj zbiór zadań</h2>
+		<h2 style="text-align: center;">'.__("Add new channel").'</h2>
 		<br />
 		<form method="POST" id="new_set_form" action="process.php?r=create_channel" enctype="multipart/form-data">
-			<input name="setname" class="forminput_2" type="text" placeholder="Nazwa zbioru zadań*" onChange="validate_data();" required/>
+			<input name="setname" class="forminput_2" type="text" placeholder="'.__("Channel name").'*" onChange="validate_data();" required/>
 			<br />
-			<textarea name="description" class="forminput_2" placeholder="Opis zbioru zadań*" onChange="validate_data();" required></textarea>
+			<textarea name="description" class="forminput_2" placeholder="'.__("Channel description").'*" onChange="validate_data();" required></textarea>
 			<br />
 			<br />
-			Czas publikacji*:
+			'.__("Channel publish time").'*:
 			<input name="publish_time" class="forminput_2" type="datetime-local" onChange="validate_data();" required/>
 			<br />
 			<br />
-			Okładka:
+			'.__("Thumbnail").':
 			<input name="set_img" id="set_img" class="forminput_2" type="file" onChange="validate_data();"/>
 			<br />
 			<br />
 			<input name="isactive" id="isactive" type="checkbox" value="1" onChange="validate_data();" checked> 
-			<label for="isactive">Czy aktywny?</label>
+			<label for="isactive">'.__("Is active?").'</label>
 		</form>
 		<br />
-		<a class="button" id="button_1" onClick="document.getElementById(\'new_set_form\').submit();" style="display: none; margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;Dodaj kanał</a>
+		<a class="button" id="button_1" onClick="document.getElementById(\'new_set_form\').submit();" style="display: none; margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;'.__("Add channel").'</a>
 		<br style="clear: both;"/>
 		<fieldset id="r_i_validation" style="margin-top: 2vmax;">
-            <legend>Walidacja danych</legend>
-            <p class="data-invalid" id="c_1">Wypełnij wszystkie wymagane pola (*)</p>
+            <legend>'.__("Data validation").'</legend>
+            <p class="data-invalid" id="c_1">'.__("Fill all required textboxes").' (*)</p>
             <script>
                 let e = 0;
                 function check_data()
@@ -154,10 +154,10 @@
 		echo('<div class="content_window" onClick="window.location.href = \'?p=channel&id='.$row['sid'].'\';">
 		<div style="flex-grow: 5;">
 		<h2 class="window_title">'.$row['title']);
-		if($row['isarchived']==1) echo("&emsp;<span style='background-color: #d1b502; padding: 0.5vmax; border-radius: 10px;'>Zarchiwizowany</span>");
-		echo('</h2><i style="font-size: 0.6vw; color: gray; margin-left: 5%; margin-top: -0.5vw; display: block;">Kliknij, by przejść do zbioru</i>
+		if($row['isarchived']==1) echo("&emsp;<span style='background-color: #d1b502; padding: 0.5vmax; border-radius: 10px;'>".__("Archived")."</span>");
+		echo('</h2><i style="font-size: 0.6vw; color: gray; margin-left: 5%; margin-top: -0.5vw; display: block;">'.__("Click to enter the channel").'</i>
 		<p style="margin-left: 5%;">
-			<i class=\'fas fa-user\'></i>&nbsp;&nbsp;Autor: <b>'.$row['name']." ".$row['surname'].'</b><br />
+			<i class=\'fas fa-user\'></i>&nbsp;&nbsp;'.__("Author").': <b>'.$row['name']." ".$row['surname'].'</b><br />
 		</p>
 		<br />
 		</div>
@@ -171,7 +171,7 @@
 		echo('
 		<div style="margin-left: auto; margin-right: auto; margin-top: 5vmax; text-align: center; display: flex; flex-direction: column; justify-content: cetner; width: 30%; padding: 3vmax; background-color: var(--container-bg); box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg); border-radius: 1vw;" >
 			<i class="fa fa-hourglass-3" style="font-size: 7vmax;"></i>
-			<center style="margin-top: 2vmax; user-select: none;"><i>Jeszcze niczego tu nie ma!</i></center>
+			<center style="margin-top: 2vmax; user-select: none;"><i>'.__("There's nothing here yet!").'</i></center>
 		</div>
 		');
 	}

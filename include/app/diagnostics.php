@@ -66,30 +66,52 @@
         border-radius: 10px;
         margin: 0.5vw;
     }
+    .display_extension {
+        padding: 0.1vmax 0.5vmax;
+        margin: 0.3vmax;
+        border-radius: 0.5vmax;
+        border: 0.1vmax solid var(--text);
+        line-height: 1.75;
+        user-select: none;
+    }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <center>
-	<h1>Panel diagnostyczny</h1>
+	<h1><?php echo(__("Diagnostics panel")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title">Zasoby systemowe</h2>
-    <p>System operacyjny: <?php echo(php_uname()); ?></p>
-    <p>Procesor CPU: <?php echo(getNumOfCPUs()); ?> rdzeni</p>
-    <p>Pamięć RAM: <?php print(round(getMemory()['MemTotal']/1024/1024,2)); ?> GB</p>
+	<h2 class="window_title"><?php echo(__("System resources")); ?></h2>
+    <div>
+        <p><?php echo(__("OS details")); ?>: <?php echo(php_uname()); ?></p>
+        <p>CPU: <?php echo(getNumOfCPUs()); ?> <?php echo(__("cores")); ?></p>
+        <p>RAM: <?php print(round(getMemory()['MemTotal']/1024/1024,2)); ?> GB</p>
+        <br />
+    </div>
     <div style="display: flex; width: 90%; margin-left: 5%; gap: 5%;">
         <div style="width: 50%;">
-            <h3 style="margin: 0;">Zużycie pamięci [%]</h3>
+            <h3 style="margin: 0;"><?php echo(__("RAM memory usage")); ?> [%]</h3>
             <br />
             <canvas id="memory_usage_chart"></canvas>
         </div>
         <div style="width: 50%;">
-            <h3 style="margin: 0;">Zużycie procesora [%]</h3>
+            <h3 style="margin: 0;"><?php echo(__("CPU usage")); ?> [%]</h3>
             <br />
             <canvas id="cpu_usage_chart"></canvas>
         </div>
     </div>
     <br />
+    <br />
+    <p><?php echo(__("Loaded PHP extensions")); ?>:
+        <div style="width: 90%; margin-left: 5%; display: flex; flex-wrap: wrap;">
+            <?php
+                foreach(get_loaded_extensions() as $extension)
+                {
+                    print("<span class='display_extension'>".htmlentities($extension)."</span>");
+                }
+            ?>
+        </div>
+    </p>
     <script>
         cpu_usage_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         cpu_usage_chart = new Chart(document.getElementById('cpu_usage_chart'), {
@@ -160,9 +182,9 @@
     setInterval(update_stats, 1000);
 </script>
 <div class="window">
-	<h2 class="window_title">Podsumowanie</h2>
-    <p><small>Podsumowanie przedstawia wyniki powierzchownych testów.</p>
-    <h3 class="window_title">Konfiguracja</h3>
+	<h2 class="window_title"><?php echo(__("Summary")); ?></h2>
+    <p><small><?php echo(__("The summary shows the results of superficial tests.")); ?></small></p>
+    <h3 class="window_title"><?php echo(__("Configuration")); ?></h3>
     <?php
         $count = 0;
         foreach(configuration_diagnostics() as $row)
@@ -175,12 +197,12 @@
         if($count==0)
         {
             echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">Hurra! Nie ma zdarzeń wartych Twojej uwagi.</p>
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.__("Yay! There is no issues at the moment!").'</p>
             </div>');
         }
     ?>
     <br />
-    <h3 class="window_title">Dziennik zdarzeń</h3>
+    <h3 class="window_title"><?php echo(__("Event logs")); ?></h3>
     <?php
         $db_query = $pdo->prepare('SELECT * FROM LOGS WHERE category="fatal" OR category="error" OR category="exception" ORDER BY time DESC LIMIT 3');
         $db_query->execute();
@@ -207,7 +229,7 @@
         }
     ?>
     <br />
-    <a class="button" style="margin-right: 5%;" href="index.php?p=logs">Zobacz wszystkie</a>
+    <a class="button" style="margin-right: 5%;" href="index.php?p=logs"><?php echo(__("Display all")); ?></a>
     <br style="clear: both;"/>
     <br />
     <br />

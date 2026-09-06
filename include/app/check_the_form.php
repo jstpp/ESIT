@@ -51,11 +51,11 @@
 </script>
 
 <center>
-	<h1>Właśnie sprawdzasz pracę</h1>
+	<h1><?php echo(__("Currently evaluating user's solution")); ?></h1>
 </center>
 
 <div class="window">
-	<h3 class="window_title">Odpowiedź użytkownika <?php echo($row['username']); ?></h3>
+	<h3 class="window_title"><?php echo(__("Solution of user")); ?> <?php echo($row['username']); ?></h3>
 	<br />
 	<div style="user-select: text; margin-left: 5%; width: 88%; padding: 1% 1%; background-color: #dae2e6; color: #2a2c2e;">
 		<?php
@@ -66,22 +66,22 @@
 	<br />
 </div>
 <div class="window">
-	<h3 class="window_title">Twoja ocena</h3>
+	<h3 class="window_title"><?php echo(__("Grade")); ?></h3>
 	<form id="rate_form" method="POST" action="process.php?r=check_form&id=<?php echo($row['SUBMISSION_ID']); ?>">
 		<input type="number" class="forminput" id="pts" name="form_pts" style="margin-left: 5%;" min="0" max="<?php echo($row['maxpoints']); ?>"/>&emsp;/&emsp;<?php echo($row['maxpoints']); ?>
 		<br />
-		<h3 class="window_title">Ewentualny komentarz</h3>
+		<h3 class="window_title"><?php echo(__("Optional comment")); ?></h3>
 		<textarea name="form_comment" class="forminput" style="margin-left: 5%; width: 50%; border-radius: 0.3vmax;"></textarea>
 		<br />
 		<br />
 	</form>
-	<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('rate_form').submit();">Zatwierdź ocenę</a>
+	<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('rate_form').submit();"><?php echo(__("Submit your assessment")); ?></a>
 	<br />
 	<br />
 	<br />
 </div>
 <div class="window">
-	<h3 class="window_title">Treść zadania</h3>
+	<h3 class="window_title"><?php echo(__("Problem")); ?></h3>
 	<br />
 	<iframe src="content/quests/<?php echo($row['PROBLEM_ID']); ?>/pdf/<?php echo($row['PROBLEM_ID']); ?>.pdf" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
 	<br />

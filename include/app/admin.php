@@ -249,39 +249,39 @@
 </style>
 
 <center>
-	<h1>Panel administracyjny</h1>
+	<h1><?php echo(__("Configuration panel")); ?></h1>
 </center>
 <div id="user_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
 	<span onClick="document.getElementById('user_dialog').style.display = 'none';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
 	<div style="background-color: var(--bg); color: var(--text); width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
-		<h2 style="text-align: center;">Dodaj użytkownika</h2>
+		<h2 style="text-align: center;"><?php echo(__("Add new user")); ?></h2>
 		<br />
 		<form method="POST" id="user_form">
-			<input name="username" class="forminput_2" type="text" placeholder="Nazwa użytkownika" />
-			<input name="name" class="forminput_2" type="text" placeholder="Imię" />
-			<input name="surname" class="forminput_2" type="text" placeholder="Nazwisko" />
-			<input name="org" class="forminput_2" type="text" placeholder="Organizacja, ew. klasa" />
+			<input name="username" class="forminput_2" type="text" placeholder="<?php echo(__("Username")); ?>" />
+			<input name="name" class="forminput_2" type="text" placeholder="<?php echo(__("Name")); ?>" />
+			<input name="surname" class="forminput_2" type="text" placeholder="<?php echo(__("Surname")); ?>" />
+			<input name="org" class="forminput_2" type="text" placeholder="<?php echo(__("Organization")); ?>" />
 			<br />
 			<br />
-			<input name="mail" class="forminput_2" type="text" placeholder="Adres e-mail" />
-			<input name="password" class="forminput_2" type="password" placeholder="Hasło" />
-			<input name="priority" class="forminput_2" type="number" min="<?php echo($_SESSION['AUTH_LEVEL']+1); ?>" placeholder="Priorytet" />
+			<input name="mail" class="forminput_2" type="text" placeholder="<?php echo(__("E-mail address")); ?>" />
+			<input name="password" class="forminput_2" type="password" placeholder="<?php echo(__("Password")); ?>" />
+			<input name="priority" class="forminput_2" type="number" min="<?php echo($_SESSION['AUTH_LEVEL']+1); ?>" placeholder="<?php echo(__("Priority")); ?>" />
 		</form>
 		<br />
 		<br />
-		<a class="button" id="button_1" onClick="document.getElementById('user_form').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;Dodaj użytkownika</a>
-		<a class="button" id="button_2" onClick="document.getElementById('user_form').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-edit"></i>&nbsp;Zapisz zmiany</a>
-		<a class="button_red" id="button_3" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-remove"></i>&nbsp;Usuń użytkownika</a>
+		<a class="button" id="button_1" onClick="document.getElementById('user_form').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;<?php echo(__("Add new user")); ?></a>
+		<a class="button" id="button_2" onClick="document.getElementById('user_form').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-edit"></i>&nbsp;<?php echo(__("Save changes")); ?></a>
+		<a class="button_red" id="button_3" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-remove"></i>&nbsp;<?php echo(__("Delete user")); ?></a>
 		<br style="clear: both;"/>
 	</div>
 </div>
 <div id="plugins_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999;">
 	<span onClick="document.getElementById('plugins_dialog').style.display = 'none';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
 	<div style="background-color: var(--bg); color: var(--text); width: 80vw; height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax; overflow: auto;">
-		<h1 style="text-align: center;">Wyszukaj wtyczkę na GitHubie&nbsp;&nbsp;<i class="fa fa-github"></i></h1>
+		<h1 style="text-align: center;"><?php echo(__("Search for the plugin on GitHub")); ?>&nbsp;&nbsp;<i class="fa fa-github"></i></h1>
 		<center>
 			<small>
-				Wyszukiwarka wtyczek wyświetla repozytoria oznaczone tagiem <code>esit-plugins</code>
+				<?php echo(__("Plugin search displays repositories tagged with")); ?> <code>esit-plugins</code>
 			</small>
 		</center>
 		<br />
@@ -291,16 +291,16 @@
 		</div>
 		<div id="github_search_results" style="width: 90%; margin-left: 5%; display: none;">
 			<br />
-			<h3>Repozytoria użytkownika</h3>
+			<h3><?php echo(__("User's repos")); ?></h3>
 			<div class="github_search_results_item">
 				<img src="#" />
 				<p style="width: 80%;">
 					<b>Repo 1</b> by <b>jdoe</b><br />
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
 				</p>
 				<a class="download_button"><i class="fa fa-download"></i></a>
 			</div>		
-			<h3>Wyszukiwanie repozytoriów</h3>
+			<h3><?php echo(__("Repositories search")); ?></h3>
 		</div>
 		<script>
 			async function githubSearch() {
@@ -313,7 +313,7 @@
 
 				if(repo_result.items && repo_result.items.length > 0) {
 					const repoHeader = document.createElement('h3');
-					repoHeader.textContent = "Popularne repozytoria";
+					repoHeader.textContent = "<?php echo(__("Popular repos")); ?>";
 					resultsDiv.appendChild(repoHeader);
 
 					repo_result.items.forEach(repo => {
@@ -324,7 +324,7 @@
 							<img src="${repo.owner.avatar_url}" />
 							<p style="width: 80%;">
 								<b>${repo.name}</b> by <b>${repo.owner.login}</b><br/>
-								${repo.description || 'Brak opisu'}
+								${repo.description || '<?php echo(__("No description")); ?>'}
 							</p>
 							<a href="${repo.html_url}" target="_blank" class="download_button"><i class="fa fa-external-link"></i></a>
 							<a href="process.php?r=download_plugin&repo=` + repo.full_name + `&branch=` + repo.default_branch + `" class="download_button"><i class="fa fa-download"></i></a>
@@ -333,7 +333,7 @@
 					});
 				} else {
 					const notfoundDiv = document.createElement('center');
-					notfoundDiv.innerHTML = "<br /><br />Nie znaleziono wyników."
+					notfoundDiv.innerHTML = "<br /><br /><?php echo(__("No results")); ?>."
 					resultsDiv.appendChild(notfoundDiv);
 				}
 				document.getElementById("github_search_results").style.display = 'block';
@@ -344,46 +344,46 @@
 	</div>
 </div>
 <div id="settings_menu">
-	<p>Nawigacja:</p>
-	<a href="#initial_parameters">Podstawowe parametry</a>
-	<a href="#plugins">Wtyczki</a>
-	<a href="#users">Użytkownicy</a>
+	<p><?php echo(__("Navigation")); ?>:</p>
+	<a href="#initial_parameters"><?php echo(__("Initial parameters")); ?></a>
+	<a href="#plugins"><?php echo(__("Plugins")); ?></a>
+	<a href="#users"><?php echo(__("Users")); ?></a>
 </div>
 <div class="window" id="initial_parameters">
-	<h2 class="window_title">Podstawowe parametry</h2>
+	<h2 class="window_title"><?php echo(__("Initial parameters")); ?></h2>
 	<form method="POST" action="process.php?r=modify_config&category=general">
 		<?php
 			if(boolval(get_misc_value('plugin_portal'))) 
 			{
-				echo('<i class=\'fas fa-info-circle\' style="margin-left: 5%;"></i>&nbsp;&nbsp;Moduł "Portal" jest włączony: nazwę i MOTD zmienisz w zakładce <a href="?p=portal" style="color: #00b3ff; text-decoration: none;">Zarządzanie portalem</a>.<br /><br />'); 
+				echo('<i class=\'fas fa-info-circle\' style="margin-left: 5%;"></i>&nbsp;&nbsp;'.__('"Portal" module is active: title & MOTD can be changed in').' <a href="?p=portal" style="color: #00b3ff; text-decoration: none;">'.__('Portal management').'</a>.<br /><br />'); 
 			} else {
 				echo('<div class="dark-box">
-				<label for="general_title">Nazwa strony:&emsp;</label>
-				<input type="text" id="general_title" name="general_title" placeholder="Nazwa strony" value="'.get_misc_value('general_title').'">
+				<label for="general_title">'.__('Title').':&emsp;</label>
+				<input type="text" id="general_title" name="general_title" placeholder="'.__('Title').'" value="'.get_misc_value('general_title').'">
 			</div>
 			<div class="dark-box">
-				<label for="general_motd">Message Of The Day (MOTD strony):&emsp;</label>
-				<input type="text" id="general_motd" name="general_motd" placeholder="MOTD strony" value="'.get_misc_value('general_motd').'">
+				<label for="general_motd">Message Of The Day (MOTD):&emsp;</label>
+				<input type="text" id="general_motd" name="general_motd" placeholder="MOTD" value="'.get_misc_value('general_motd').'">
 			</div>');
 			}
 		?>
 		<div class="dark-box">
-			<label for="general_url">Domyślny adres URL:&emsp;</label>
-			<input type="text" id="general_url" name="general_url" placeholder="Domyślny adres URL" value="<?php echo(get_misc_value('general_url')); ?>">
-			<br /><small>Adres przez który łączysz się z aplikacją to "https://<b><?php echo($_SERVER['HTTP_HOST']); ?></b>".</small>
+			<label for="general_url"><?php echo(__("Default URL address")); ?>:&emsp;</label>
+			<input type="text" id="general_url" name="general_url" placeholder="<?php echo(__("Default URL address")); ?>" value="<?php echo(get_misc_value('general_url')); ?>">
+			<br /><small><?php echo(__("The address through which you connect to the app is:")); ?> "https://<b><?php echo($_SERVER['HTTP_HOST']); ?></b>".</small>
 		</div>
 		<div class="dark-box">
-			<label for="general_timezone">Domyślna strefa czasowa:&emsp;</label>
+			<label for="general_timezone"><?php echo(__("Default timezone")); ?>:&emsp;</label>
 			<input type="text" id="general_timezone" name="general_timezone" placeholder="Domyślna strefa czasowa" value="<?php echo(get_misc_value('general_timezone')); ?>">
-			<br /><small>Obecny czas systemowy to <b><?php echo(date("Y-m-d H:i:s")); ?></b> (<?php echo(date_default_timezone_get()); ?>).</small>
+			<br /><small><?php echo(__("Current system time:")); ?> <b><?php echo(date("Y-m-d H:i:s")); ?></b> (<?php echo(date_default_timezone_get()); ?>).</small>
 		</div>
 		<div class="dark-box">
-			<p>Maszyny sprawdzające</p>
+			<p><?php echo(__("Workers")); ?></p>
 			<label class="switch-checkbox">
 				<input type="checkbox" id="general_workers_localonly" name="general_workers_localonly" value="1" <?php echo(boolval(get_misc_value('general_workers_localonly')) ? 'checked' : ''); ?>>
 				<span class="switch-checkbox-toggle"></span>
 			</label>
-			<label for="general_workers_localonly">&emsp;Zezwalaj tylko na ruch lokalny.</label>
+			<label for="general_workers_localonly">&emsp;<?php echo(__("Allow only local traffic")); ?></label>
 			<div id="flex-allowed-IPs-container" style="display: flex; gap: 0.5vmax; flex-wrap: wrap;">
 				<?php 
 					$allowed_elements = json_decode(get_misc_value('general_workers_allowed_addr'));
@@ -426,7 +426,7 @@
 			</script>
 		</div>
 		<br />
-		<input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="Zapisz konfigurację">
+		<input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="<?php echo(__("Save configuration")); ?>">
 	</form>
 	<br />
 	<br />
@@ -434,17 +434,17 @@
 	<br />
 </div>
 <div class="window" id="plugins">
-	<h2 class="window_title">Wtyczki systemowe</h2>
+	<h2 class="window_title"><?php echo(__("System plugins")); ?></h2>
 	<form method="POST" action="process.php?r=modify_config&category=plugin">
 		<div class="dark-box">
 			<label class="switch-checkbox">
 				<input type="checkbox" name="plugin_portal" value="1" id="plugin_portal" <?php echo(boolval(get_misc_value('plugin_portal')) ? 'checked' : ''); ?>>
 				<span class="switch-checkbox-toggle"></span>
 			</label>
-			<label for="plugin_portal">&emsp;Portal</label>
+			<label for="plugin_portal">&emsp;<?php echo(__("Portal")); ?></label>
 			<br />
 			<br />
-			<i class='fas fa-info-circle'></i>&nbsp;&nbsp;Ustawienia modułu znajdziesz w zakładce <a href="?p=portal" style="color: #00b3ff; text-decoration: none;">Zarządzanie portalem</a>.
+			<i class='fas fa-info-circle'></i>&nbsp;&nbsp;<?php echo(__("Settings for this plugin can be found in")); ?> <a href="?p=portal" style="color: #00b3ff; text-decoration: none;"><?php echo(__("Portal management")); ?></a>.
 			<br />
 		</div>
 		<div class="dark-box">
@@ -452,10 +452,10 @@
 				<input type="checkbox" name="plugin_errors" value="1" id="plugin_errors" <?php echo(boolval(get_misc_value('plugin_errors')) ? 'checked' : ''); ?>>
 				<span class="switch-checkbox-toggle"></span>
 			</label>
-			<label for="plugin_errors">&emsp;Własna strona błędów</label>
+			<label for="plugin_errors">&emsp;<?php echo(__("Custom error page")); ?></label>
 			<div class="options">
-				<br /><label for="plugin_custom_error_broker_url">Adres URL:&emsp;</label>
-				<input type="text" id="plugin_custom_error_broker_url" name="plugin_custom_error_broker_url" placeholder="Adres URL" value="<?php echo(get_misc_value('plugin_custom_error_broker_url')); ?>">
+				<br /><label for="plugin_custom_error_broker_url"><?php echo(__("URL address")); ?>:&emsp;</label>
+				<input type="text" id="plugin_custom_error_broker_url" name="plugin_custom_error_broker_url" placeholder="<?php echo(__("URL address")); ?>" value="<?php echo(get_misc_value('plugin_custom_error_broker_url')); ?>">
 			</div>
 		</div>
 		<div class="dark-box">
@@ -463,18 +463,18 @@
 				<input type="checkbox" name="plugin_mailing" value="1" id="plugin_mailing" <?php echo(boolval(get_misc_value('plugin_mailing')) ? 'checked' : ''); ?>>
 				<span class="switch-checkbox-toggle"></span>
 			</label>
-			<label for="plugin_mailing">&emsp;Moduł mailingowy</label>
+			<label for="plugin_mailing">&emsp;<?php echo(__("Mailing")); ?></label>
 			<div class="options">
-				<br /><label for="plugin_mailing_module_host">Adres serwera pocztowego:&emsp;</label>
-				<input type="text" id="plugin_mailing_module_host" name="plugin_mailing_module_host" placeholder="Adres serwera pocztowego" value="<?php echo(get_misc_value('plugin_mailing_module_host')); ?>">
-				<br /><label for="plugin_mailing_module_port">Port:&emsp;</label>
-				<input type="text" id="plugin_mailing_module_port" name="plugin_mailing_module_port" placeholder="Port" value="<?php echo(get_misc_value('plugin_mailing_module_port')); ?>">
-				<br /><label for="plugin_mailing_module_username">Użytkownik serwera pocztowego:&emsp;</label>
-				<input type="text" id="plugin_mailing_module_username" name="plugin_mailing_module_username" placeholder="Użytkownik serwera pocztowego" value="<?php echo(get_misc_value('plugin_mailing_module_username')); ?>">
-				<br /><label for="plugin_mailing_module_password">Hasło serwera pocztowego:&emsp;</label>
-				<input type="password" id="plugin_mailing_module_password" name="plugin_mailing_module_password" placeholder="Hasło serwera pocztowego" value="<?php echo(get_misc_value('plugin_mailing_module_password')); ?>">
-				<br /><label for="plugin_mailing_module_protocol">Protokół dostępu (SSL, TLS, itp.):&emsp;</label>
-				<input type="text" id="plugin_mailing_module_protocol" name="plugin_mailing_module_protocol" placeholder="Protokół dostępu" value="<?php echo(get_misc_value('plugin_mailing_module_protocol')); ?>">
+				<br /><label for="plugin_mailing_module_host"><?php echo(__("Mail server address")); ?>:&emsp;</label>
+				<input type="text" id="plugin_mailing_module_host" name="plugin_mailing_module_host" placeholder="<?php echo(__("Mail server address")); ?>" value="<?php echo(get_misc_value('plugin_mailing_module_host')); ?>">
+				<br /><label for="plugin_mailing_module_port"><?php echo(__("Mail server port")); ?>:&emsp;</label>
+				<input type="text" id="plugin_mailing_module_port" name="plugin_mailing_module_port" placeholder="<?php echo(__("Mail server port")); ?>" value="<?php echo(get_misc_value('plugin_mailing_module_port')); ?>">
+				<br /><label for="plugin_mailing_module_username"><?php echo(__("Username")); ?>:&emsp;</label>
+				<input type="text" id="plugin_mailing_module_username" name="plugin_mailing_module_username" placeholder="<?php echo(__("Username")); ?>" value="<?php echo(get_misc_value('plugin_mailing_module_username')); ?>">
+				<br /><label for="plugin_mailing_module_password"><?php echo(__("Password")); ?>:&emsp;</label>
+				<input type="password" id="plugin_mailing_module_password" name="plugin_mailing_module_password" placeholder="<?php echo(__("Password")); ?>" value="<?php echo(get_misc_value('plugin_mailing_module_password')); ?>">
+				<br /><label for="plugin_mailing_module_protocol"><?php echo(__("Access protocole")); ?> (SSL, TLS, <?php echo(__("etc.")); ?>):&emsp;</label>
+				<input type="text" id="plugin_mailing_module_protocol" name="plugin_mailing_module_protocol" placeholder="<?php echo(__("Access protocole")); ?>" value="<?php echo(get_misc_value('plugin_mailing_module_protocol')); ?>">
 			</div>
 		</div>
 		<div class="dark-box">
@@ -482,14 +482,14 @@
 				<input type="checkbox" name="plugin_debugging" value="1" id="plugin_debugging" <?php echo(boolval(get_misc_value('plugin_debugging')) ? 'checked' : ''); ?>>
 				<span class="switch-checkbox-toggle"></span>
 			</label>
-			<label for="plugin_debugging">&emsp;Zaawansowany debugging</label>
+			<label for="plugin_debugging">&emsp;<?php echo(__("Advanced debugging")); ?></label>
 		</div>
 		<br />
 		<input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="Zapisz wtyczki syst.">
 	</form>
 	<br />
 	<br />
-	<h2 class="window_title">Wtyczki społeczności</h2>
+	<h2 class="window_title"><?php echo(__("Community plugins")); ?></h2>
 	<form method="POST" action="process.php?r=modify_config&category=community_plugin">
 		<?php
 			$plugins = array_slice(scandir("../../include/plugins/"),2);
@@ -501,9 +501,9 @@
 						<input type="checkbox" name="community_plugin_'.htmlentities($plugin).'" value="1" id="community_plugin_'.htmlentities($plugin).'" '.(boolval(get_misc_value('community_plugin_'.htmlentities($plugin))) ? 'checked' : '').'>
 						<span class="switch-checkbox-toggle"></span>
 					</label>
-					<label for="community_plugin_'.htmlentities($plugin).'">&emsp;Plugin zewnętrzny: <b>'.htmlentities($plugin).'</b></label>
+					<label for="community_plugin_'.htmlentities($plugin).'">&emsp;'.__("Community plugin").': <b>'.htmlentities($plugin).'</b></label>
 					<a href="process.php?r=modify_config&call=plugin_uninstall&plugin_name='.$plugin.'" class="remove_plugin"><i class="fa fa-trash"></i></a>');
-					if(!include_plugins_for("settings_configuration", $plugin)) echo("&emsp;<small>Wczytywanie wtyczki nie powiodło się.</small>");
+					if(!include_plugins_for("settings_configuration", $plugin)) echo("&emsp;<small>".__("Plugin loading unsuccessful").".</small>");
 					echo('	<br style="clear: both;"/>
 				</div>');
 			}
@@ -512,14 +512,14 @@
 				echo('<center style="color: var(--text);">
 					<br />
 					<i class="fa fa-search" style="font-size: 5vmax;"></i>
-					<p>Naciśnij <code>Znajdź wtyczki</code> by pobrać nowe modyfikacje.</p>
+					<p>'.__("Press").' <code>'.__("Find plugins").'</code> '.__("to explore new plugins").'.</p>
 					<br />
 				</center>');
 			}
 		?>
 		<br />
-		<input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="Zapisz wtyczki społ.">
-		<a class="button" onClick="document.getElementById('plugins_dialog').style.display = 'flex';" style="margin-right: 0.5%; font: inherit; border: none;">Znajdź wtyczki</a>
+		<input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="<?php echo(__("Save community plugins")); ?>">
+		<a class="button" onClick="document.getElementById('plugins_dialog').style.display = 'flex';" style="margin-right: 0.5%; font: inherit; border: none;"><?php echo(__("Find plugins")); ?></a>
 	</form>
 	<br />
 	<br />
@@ -527,11 +527,11 @@
 	<br />
 </div>
 <div class="window" id="users">
-	<h2 class="window_title">Użytkownicy</h2>
+	<h2 class="window_title"><?php echo(__("Users")); ?></h2>
 	<p style="margin-left: 5%;">
-		<i class='fas fa-info-circle'></i>&nbsp;&nbsp;W tej sekcji zmodyfikujesz uprawnienia użytkowników i nadasz uprawnienia nauczyciela
+		<i class='fas fa-info-circle'></i>&nbsp;&nbsp;<?php echo(__("In this section you can modify user permissions and grant additional permissions.")); ?>
 		<br />
-		<a class="button" style="margin-right: 5%;" onClick="add_user();"><i class="fa fa-plus"></i>&nbsp;Dodaj użytkownika</a>
+		<a class="button" style="margin-right: 5%;" onClick="add_user();"><i class="fa fa-plus"></i>&nbsp;<?php echo(__("Add user")); ?></a>
 
 		<br style="clear: both;" />
 		<?php 
@@ -546,7 +546,7 @@
 					<td><b><span id="org" style="display: none; font-size: 0.1vmin;">'.$row['organization'].'</span><span id="name">'.$row['name'].'</span> <span id="surname">'.$row['surname'].'</span> (<span id="username">'.$row['username'].'</span>)</b></td>
 					<td style="text-align: right;"><b style="padding: 1vmin 1.3vmin; border-radius: 0.2vmin; color: white; background-color: rgb(97, 0, 153);"><span id="priority">'.$row['role'].'</span></b></td>
 					<td><span id="mail">'.$row['mail'].'</span></td>
-					<td style="text-align: right;">Ostatnie logowanie: <b>'.$row['lastlogin'].'</b></td>
+					<td style="text-align: right;">'.__("Last login").': <b>'.$row['lastlogin'].'</b></td>
 				</tr>
 			</table>
 			<br style="clear: both;"/>
@@ -563,10 +563,10 @@
 					<td><b><span id="org" style="display: none; font-size: 0.1vmin;">'.$row['organization'].'</span><span id="name">'.$row['name'].'</span> <span id="surname">'.$row['surname'].'</span> (<span id="username">'.$row['username'].'</span>)</b></td>
 					<td style="text-align: right;"><b style="padding: 1vmin 1.3vmin; border-radius: 0.2vmin; color: white; background-color: rgb(0, 117, 153);"><span id="priority">'.$row['role'].'</span></b></td>
 					<td><span id="mail">'.$row['mail'].'</span></td>
-					<td style="text-align: right;">Ostatnie logowanie: <b>'.$row['lastlogin'].'</b></td>
+					<td style="text-align: right;">'.__("Last login").': <b>'.$row['lastlogin'].'</b></td>
 				</tr>
 			</table>
-			<a onClick="modify_user(\''.$row['USER_ID'].'\');"><i class="fa fa-edit"></i>&nbsp;Modyfikuj</a>
+			<a onClick="modify_user(\''.$row['USER_ID'].'\');"><i class="fa fa-edit"></i>&nbsp;'.__("Modify").'</a>
 			<br style="clear: both;"/>
 		</div>');
 			}

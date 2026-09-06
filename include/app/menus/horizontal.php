@@ -31,12 +31,12 @@
 	}
 </style>
 <div id="horizontal_menu">
-	<a href="../login/process.php?s=logout"><i class='fas fa-door-open'></i>&emsp;Wyloguj się</a>
-	<a onClick="document.getElementById('notifications_menu').style.display = 'block';"><i class='fa fa-bell'></i>&emsp;Powiadomienia</a>
+	<a href="../login/process.php?s=logout"><i class='fas fa-door-open'></i>&emsp;<?php echo(__("Log out")); ?></a>
+	<a onClick="document.getElementById('notifications_menu').style.display = 'block';"><i class='fa fa-bell'></i>&emsp;<?php echo(__("Notifications")); ?></a>
 	<?php
 		if(boolval(get_misc_value('plugin_portal')))
 		{
-			echo('<a href="../index.php"><i class=\'fa fa-bookmark\'></i>&emsp;Portal</a>');
+			echo('<a href="../index.php"><i class=\'fa fa-bookmark\'></i>&emsp;'.__('Portal').'</a>');
 		}
 		include_plugins_for("horizontal_menu");
 	?>

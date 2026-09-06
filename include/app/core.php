@@ -66,6 +66,33 @@
 	#              general toolbox				  #
 	###############################################
 
+	function __($text, $plural=null, $number=null) {
+		if (!isset($plural)) {
+			return _($text);
+		}
+		return ngettext($text, $plural, $number);
+	}
+
+	function init_i18n($domain): bool {
+		try {
+			$lang = "pl_PL.UTF-8";
+			
+			putenv("LC_ALL=".$lang);
+			putenv("LANG=".$lang);
+			putenv("LANGUAGE=".$lang);
+			
+			setlocale(LC_ALL, $lang);
+			
+			bindtextdomain($domain, __DIR__.'/../../locale');
+			bind_textdomain_codeset($domain, 'UTF-8');
+			textdomain($domain);
+			
+			return True;
+		} catch (Throwable $t) {
+			return False;
+		}
+	}
+
 	function get_misc_value($key): string
 	{
 		global $pdo;
@@ -412,12 +439,12 @@
 
 	function problem_type_identification($type): array {
 		$problem_types = [
-			'alg'     => ['full_name' => 'Algorytmiczne', 'icon' => 'fas fa-file-code', 'color' => 'rgba(0, 121, 250, 1)'],
-			'ctf'     => ['full_name' => 'Capture The Flag', 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
-			'och'     => ['full_name' => 'Pytania jednokrotnego wyboru', 'icon' => 'fa fa-check-square-o', 'color' => 'rgba(14, 149, 109, 1)'],
-			'mch'     => ['full_name' => 'Pytania wielokrotnego wyboru', 'icon' => 'fa fa-check-square', 'color' => 'rgba(218, 130, 6, 1)'],
-			'opn'     => ['full_name' => 'Zadanie otwarte', 'icon' => 'fa fa-pencil-square-o', 'color' => 'rgba(69, 47, 165, 1)'],
-			'unk'     => ['full_name' => 'Nieznane', 'icon' => 'fas fa-bug', 'color' => 'rgba(120, 120, 120, 1)']
+			'alg'     => ['full_name' => __('Algorithmic task'), 'icon' => 'fas fa-file-code', 'color' => 'rgba(0, 121, 250, 1)'],
+			'ctf'     => ['full_name' => __('Capture The Flag'), 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
+			'och'     => ['full_name' => __('Single choice Questions'), 'icon' => 'fa fa-check-square-o', 'color' => 'rgba(14, 149, 109, 1)'],
+			'mch'     => ['full_name' => __('Multiple choice Questions'), 'icon' => 'fa fa-check-square', 'color' => 'rgba(218, 130, 6, 1)'],
+			'opn'     => ['full_name' => __('Open-ended Questions'), 'icon' => 'fa fa-pencil-square-o', 'color' => 'rgba(69, 47, 165, 1)'],
+			'unk'     => ['full_name' => __('Unknown'), 'icon' => 'fas fa-bug', 'color' => 'rgba(120, 120, 120, 1)']
 		];
 
 		return $problem_types[$type] ?? [];
@@ -495,7 +522,6 @@
 	}
 
 
-
 	###############################################
 	#       just another extension point		  #
 	###############################################
@@ -538,4 +564,7 @@
 		insert_flash_message('warning', "Ups...", "Coś poszło nie tak. Spróbuj ponownie.");
 		parse_flash_messages();
 	}
+
+	init_i18n('messages');
+
 ?>

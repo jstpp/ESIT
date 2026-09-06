@@ -87,40 +87,40 @@
 </style>
 
 <center>
-	<h1>Ustawienia konta</h1>
+	<h1><?php echo(__("Account settings")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title">Podstawowe informacje</h2>
+	<h2 class="window_title"><?php echo(__("Basic information")); ?></h2>
 	<p style="margin-left: 5%;">
-		<i class="fa fa-address-book"></i>&nbsp;&nbsp;<b>Użytkownik:&emsp;&nbsp;<?php echo($user['username']." (".$user['name']." ".$user['surname'].")"); ?></b><br />
-		<i class="fa fa-bank"></i>&nbsp;&nbsp;<b>Organizacja:</b>&emsp;&nbsp;<?php echo($user['organization']); ?><br />
-		<i class="fa fa-envelope"></i>&nbsp;&nbsp;<b>Adres e-mail:</b>&emsp;<?php echo($user['mail']); ?><br />
+		<i class="fa fa-address-book"></i>&nbsp;&nbsp;<b><?php echo(__("Username")); ?>:&emsp;&nbsp;<?php echo($user['username']." (".$user['name']." ".$user['surname'].")"); ?></b><br />
+		<i class="fa fa-bank"></i>&nbsp;&nbsp;<b><?php echo(__("Organization")); ?>:</b>&emsp;&nbsp;<?php echo($user['organization']); ?><br />
+		<i class="fa fa-envelope"></i>&nbsp;&nbsp;<b><?php echo(__("E-mail address")); ?>:</b>&emsp;<?php echo($user['mail']); ?><br />
 	</p>
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">Bezpieczeństwo</h2>
-	<h3 style="margin-left: 5%;">Zmiana hasła</h3>
+	<h2 class="window_title"><?php echo(__("Security")); ?></h2>
+	<h3 style="margin-left: 5%;"><?php echo(__("Password change")); ?></h3>
 	<form id="change_password_form" method="POST" action="process.php?r=change_password" style="margin-left: 5%;">
-		<input type="password" class="forminput" name="password_old" placeholder="Stare hasło" required/>
-		<input type="password" class="forminput" name="password_new1" placeholder="Nowe hasło" required/>
-		<input type="password" class="forminput" name="password_new2" placeholder="Powtórz nowe hasło" required/>
-		<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('change_password_form').submit();">Zmień hasło</a>
+		<input type="password" class="forminput" name="password_old" placeholder="<?php echo(__("Old password")); ?>" required/>
+		<input type="password" class="forminput" name="password_new1" placeholder="<?php echo(__("New password")); ?>" required/>
+		<input type="password" class="forminput" name="password_new2" placeholder="<?php echo(__("Repeat new password")); ?>" required/>
+		<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('change_password_form').submit();"><?php echo(__("Change the password")); ?></a>
 	</form>
 	<br />
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">Wygląd</h2>
+	<h2 class="window_title"><?php echo(__("Appearance")); ?></h2>
 	<form id="appearance_form" method="POST" action="process.php?r=settings_appearance" style="margin-left: 5%;">
-		<label for="app_dark_theme">Tryb ciemny:&emsp;</label>
+		<label for="app_dark_theme"><?php echo(__("Dark mode")); ?>:&emsp;</label>
 		<select id="app_dark_theme" name="app_dark_theme" class="forminput">
-			<option value="1" <?php if(!isset($settings->{'dark_mode'}) or isset($settings->{'dark_mode'}) and $settings->{'dark_mode'}=="1") { echo('selected'); } ?>>Włączony</option>
-			<option value="0" <?php if(isset($settings->{'dark_mode'}) and $settings->{'dark_mode'}=="0") { echo('selected'); } ?>>Wyłączony</option>
+			<option value="1" <?php if(!isset($settings->{'dark_mode'}) or isset($settings->{'dark_mode'}) and $settings->{'dark_mode'}=="1") { echo('selected'); } ?>><?php echo(__("On")); ?></option>
+			<option value="0" <?php if(isset($settings->{'dark_mode'}) and $settings->{'dark_mode'}=="0") { echo('selected'); } ?>><?php echo(__("Off")); ?></option>
 		</select>
 		<br />
 		<br />
-		<label for="ace_theme">Motyw edytora kodu:&emsp;</label>
+		<label for="ace_theme"><?php echo(__("Code editor theme")); ?>:&emsp;</label>
 		<select id="ace_theme" name="ace_theme" class="forminput" onChange='editor.setTheme("ace/theme/"+document.getElementById("ace_theme").value.replace(".css",""));'>
 			<?php
 				$themes = scandir('modules/ace/css/theme');
@@ -159,7 +159,7 @@
 	</form>
 	<br />
 	<br />
-	<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('appearance_form').submit();">Zapisz ustawienia wyglądu</a>
+	<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('appearance_form').submit();"><?php echo(__("Save appearance settings")); ?></a>
 	<br />
 	<br />
 	<br />

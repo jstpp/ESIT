@@ -69,9 +69,9 @@
 <div id="notifications_menu">
 	<span style="float: right; font-size: 3vmax; margin-top: 3vw; margin-right: 1vmax; cursor: pointer" onClick="document.getElementById('notifications_menu').style.display = 'none';">×</span>
 	<p style="margin-left: 1vw; margin-top: 5vw;">
-		<b>Powiadomienia</b>
+		<b><?php echo(__("Notifications")); ?></b>
 		<br />
-		<span style="font-size: 0.8vw;">użytkownika <?php echo($_SESSION['AUTH_USERNAME']) ?></span>
+		<span style="font-size: 0.8vw;"><?php echo(__("for user")); ?> <?php echo($_SESSION['AUTH_USERNAME']) ?></span>
 	</p>
 	<br />
 	<?php

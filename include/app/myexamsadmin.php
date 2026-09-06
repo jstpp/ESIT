@@ -29,7 +29,7 @@
 </style>
 
 <center>
-	<h1>Formularze oczekujące na sprawdzenie</h1>
+	<h1><?php echo(__("Forms waiting for evaluation")); ?></h1>
 </center>
 <?php
 	$db_query = $pdo->prepare('SELECT PROBLEMS.title AS title, SUBMISSIONS.content AS content, SUBMISSIONS.SUBMISSION_ID AS subid, USERS.username AS username FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.content<>"-" AND SUBMISSIONS.score=-1 ORDER BY SUBMISSIONS.submission_time DESC');
@@ -53,7 +53,7 @@
 		echo('
 		<div style="margin-left: auto; margin-right: auto; margin-top: 5vmax; text-align: center; display: flex; flex-direction: column; justify-content: cetner; width: 30%; padding: 3vmax; background-color: var(--container-bg); box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg); border-radius: 1vw;">
 			<i class="fa fa-hourglass-3" style="font-size: 7vmax;"></i>
-			<center style="margin-top: 2vmax; user-select: none;"><i>Nie ma niczego do sprawdzenia!</i></center>
+			<center style="margin-top: 2vmax; user-select: none;"><i>'.__("There's nothing here yet!").'</i></center>
 		</div>
 		');
 	}

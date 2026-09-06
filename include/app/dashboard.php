@@ -113,12 +113,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <center>
-	<h1 style="font-size: 3.5vw; user-select: none; background: linear-gradient(315deg, rgba(0, 179, 255, 1) 0%, var(--text) 60%); -webkit-background-clip: text; color: transparent;">Witaj, <?php echo(htmlentities($_SESSION['AUTH_NAME'])); ?>!</h1>
+	<h1 style="font-size: 3.5vw; user-select: none; background: linear-gradient(315deg, rgba(0, 179, 255, 1) 0%, var(--text) 60%); -webkit-background-clip: text; color: transparent;"><?php echo(__("Hello")); ?>, <?php echo(htmlentities($_SESSION['AUTH_NAME'])); ?>!</h1>
 </center>
 <div style="display: flex;">
 	<div id="dashboard_main" style="min-width: 72%; display: flex; flex-direction: column; align-items: stretch;">
 		<div class="window">
-			<h3 class="window_title"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;Moje postępy</h3>
+			<h3 class="window_title"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;<?php echo(__("My progress")); ?></h3>
 			<script>
 				const dashboard_progress_pts = <?php echo json_encode($points); ?>;
 				const dashboard_labels = <?php echo json_encode($labels); ?>;
@@ -131,12 +131,12 @@
 							<?php echo($avg_score); ?>%
 						</div>
 					</div>
-					<small style="width: 100%; font-size: 0.8vw; margin-top: 2vmax;">Średnia poprawność</small>
+					<small style="width: 100%; font-size: 0.8vw; margin-top: 2vmax;"><?php echo(__("Average correctness")); ?></small>
 				</div>
 				<div style="max-height: 12vmax; width: calc(100% - 22vmax); padding: 1vmax; margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center;">
 					<canvas id="dashboard_progress_points" style="width: 100%; float: right;"></canvas>
 					<br />
-					<small style="width: 100%;">Ilość punktów w ciągu ostatnich 30 dni</small>
+					<small style="width: 100%;"><?php echo(__("Number of points in the last 30 days")); ?></small>
 				</div>
 			</div>
 			<br />
@@ -192,7 +192,7 @@
 			</script>
 		</div>
 		<div class="window">
-			<h3 class="window_title"><i class="fa fa-flask"></i>&nbsp;&nbsp;Moje ostatnie rozwiązania</h3>
+			<h3 class="window_title"><i class="fa fa-flask"></i>&nbsp;&nbsp;<?php echo(__("My last solutions")); ?></h3>
 			<div id="results">
 				<?php
 					$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, PROBLEMS.title AS title, PROBLEMS.type AS type, PROBLEMS.maxpoints AS max_pts, PROBLEMS.PROBLEM_ID AS problem_id, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 4');
@@ -206,27 +206,27 @@
 						{
 							$gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
 							$percentage = "...";
-							$status = "<i class=\"fa fa-eye-slash\"></i>&nbsp;&nbsp;Wynik ukryty";
+							$status = "<i class=\"fa fa-eye-slash\"></i>&nbsp;&nbsp;".__("Result unavailable");
 						}
 						else if($row['score_percentage']==0)
 						{
 							$gradient = "linear-gradient(to left, rgba(255, 61, 110, 0.5) 0%,transparent 50%);";
 							$percentage = (int)($row['score_percentage']);
-							$status = "Całkowicie niepoprawne";
+							$status = __("Incorrect");
 						} else if ($row['score_percentage']==100)
 						{
 							$gradient = "linear-gradient(to left, rgba(0, 209, 10, 0.5) 0%,transparent 50%);";
 							$percentage = (int)($row['score_percentage']);
-							$status = "Bez błędów";
+							$status = __("Fully correct");
 						} else if ($row['score_percentage']==-1)
 						{
 							$gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
 							$percentage = "...";
-							$status = "W kolejce";
+							$status = __("In queue...");
 						} else {
 							$gradient = "linear-gradient(to left, rgba(142, 237, 40, 0.5) 0%,transparent 50%);";
 							$percentage = (int)($row['score_percentage']);
-							$status = "Częściowo poprawne";
+							$status = __("Partially correct");
 						}
 
 						switch($row['type'])
@@ -282,7 +282,7 @@
 
 					if($isfound==0)
 					{
-						echo("<center>Jeszcze tu niczego nie ma!</center>");
+						echo("<center>".__("There's nothing here yet!")."</center>");
 					}
 				?>
 			</div>
@@ -290,7 +290,7 @@
 			<br />
 		</div>
 		<div class="window" style="flex: 1;">
-			<h3 class="window_title"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;Aktualności</h3>
+			<h3 class="window_title"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;<?php echo(__("News")); ?></h3>
 			<?php
 				$db_query = $pdo->prepare('SELECT * FROM ARTICLES ORDER BY id DESC LIMIT 3');
 				$db_query->execute();
@@ -312,7 +312,7 @@
 				}
 				if($news_count==0)
 				{
-					echo("<center>Jeszcze tu niczego nie ma!</center><br />");
+					echo("<center>".__("There's nothing here yet!")."</center><br />");
 				}
 			?>
 			<br />
@@ -322,7 +322,7 @@
 		<?php
 			include_plugins_for("dashboard_side_panel");
 		?>
-		<h3 class="window_title"><i class='fas fa-lightbulb'></i>&emsp;Proponowane</h3>
+		<h3 class="window_title"><i class='fas fa-lightbulb'></i>&emsp;<?php echo(__("You might also like")); ?></h3>
 		<div id="dashboard_propositions_bar">
 			<?php
 				$db_query = $pdo->prepare('SELECT *, USERS.username AS author FROM CHANNELS INNER JOIN USERS ON CHANNELS.author_id=USERS.USER_ID ORDER BY CHANNELS.CHANNEL_ID DESC LIMIT :limit;');

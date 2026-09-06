@@ -23,7 +23,7 @@
 
 <center>
 	<h1><?php echo($problemtitle); ?></h1>
-	<p style="font-weight: normal;"><i class='fas fa-hashtag'></i>&nbsp; ID: <?php echo($problemid); ?> &emsp; <i class='fas fa-user-circle'></i>&nbsp Autor: <?php echo($problemauthor); ?></p>
+	<p style="font-weight: normal;"><i class='fas fa-hashtag'></i>&nbsp; ID: <?php echo($problemid); ?> &emsp; <i class='fas fa-user-circle'></i>&nbsp <?php echo(__("Author")); ?>: <?php echo($problemauthor); ?></p>
 </center>
 
 <?php 

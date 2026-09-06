@@ -86,10 +86,10 @@
 </style>
 
 <center>
-	<h1>Dziennik zdarzeń</h1>
+	<h1><?php echo(__("Events log")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title">Dziennik zdarzeń</h2>
+	<h2 class="window_title"><?php echo(__("Events log")); ?></h2>
 	<?php
         $db_query = $pdo->prepare('SELECT * FROM LOGS WHERE category="fatal" OR category="error" OR category="exception" ORDER BY time DESC ');
         $db_query->execute();
@@ -111,7 +111,7 @@
         if($count==0)
         {
             echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">Hurra! Nie ma zdarzeń wartych Twojej uwagi.</p>
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.__("Yay! There is no issues at the moment!").'</p>
             </div>');
         }
     ?>

@@ -6,7 +6,7 @@ ARG GID
 ENV UID=${UID}
 ENV GID=${GID}
 
-RUN apk add zip libzip-dev unzip linux-headers && docker-php-ext-install pdo_mysql sockets zip && docker-php-ext-enable pdo_mysql
+RUN apk add zip libzip-dev unzip linux-headers gettext-dev icu-dev musl-locales && docker-php-ext-install pdo_mysql sockets zip gettext intl && docker-php-ext-enable pdo_mysql
 
 RUN addgroup -g ${GID} --system esit-group
 RUN adduser -G esit-group --system -D -s /bin/sh -u ${UID} esit-user
