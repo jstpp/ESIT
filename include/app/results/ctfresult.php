@@ -14,14 +14,14 @@
 	{
 		if($row['score']=='0')
 		{
-			$comment = "Nie udało Ci się przesłać poprawnej flagi. Szukaj dalej!";
+			$comment = __("You were unable to submit a valid flag. Please keep searching!");
 			$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
 		} else {
-			$comment = "Udało Ci się przesłać poprawną flagę. Cieszymy się Twoim szczęściem!";
+			$comment = __("You successfully submitted the correct flag. We're happy for you!");
 			$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
 		}
 	} else {
-		$comment = "Wynik weryfikacji twojej flagi nie jest jeszcze dostępny.";
+		$comment = __("The verification result for your flag is not available yet.");
 		$gradient = "linear-gradient(to left, gray 0%,transparent 50%);";
 	}
 ?>
@@ -53,7 +53,7 @@
 </style>
 
 <center>
-	<h1>Raport z zadania typu CTF</h1>
+	<h1><?php echo(__("CTF flag evaluation results")); ?></h1>
 </center>
 <div class="window">
 	<h2 class="window_title"><?php echo($row['title']); ?></h2>

@@ -18,26 +18,26 @@
 			{
 				$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Całkowicie niepoprawne";
+				$status = __("Incorrect");
 			} else if ($row['score_percentage']==100)
 			{
 				$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Bez błędów";
+				$status = __("Fully correct");
 			} else if ($row['score_percentage']==-1)
 			{
 				$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
 				$percentage = "...";
-				$status = "W kolejce";
+				$status = __("In queue");
 			} else {
 				$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Częściowo poprawne";
+				$status = __("Partially correct");
 			}
 		} else {
 			$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
 			$percentage = "...";
-			$status = "Wynik ukryty";
+			$status = __("Result unavailable");
 		}
 
 		$results = array();
@@ -89,7 +89,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <center>
-	<h1>Raport ze sprawdzania</h1>
+	<h1><?php echo(__("Evaluation report")); ?></h1>
 </center>
 <div class="window">
 	<h2 class="window_title"><?php echo($row['title']); ?> (#<?php echo($row['PROBLEM_ID']); ?>)</h2>
@@ -107,7 +107,7 @@
 		  new Chart(ctx, {
 			type: 'doughnut',
 			data: {
-			  labels: ["Odpowiedzi prawidłowe", "Przekroczono limit", "Odpowiedzi błędne"],
+			  labels: ["<?php echo(__("Correct anwsers")); ?>", "<?php echo(__("Limit exceeded")); ?>", "<?php echo(__("Incorrect anwsers")); ?>"],
 			  datasets: [{
 				data: [<?php echo($anws_correct); ?>, <?php echo($anws_resource); ?>, <?php echo($anws_wrong); ?>],
 				backgroundColor: ['#00d10a', '#ffc117', '#ff3d6e'],
@@ -134,7 +134,7 @@
 	<?php
 		if ($row['score_percentage']==-1 or strtotime($row['result_publish_time'])>strtotime("now"))
 		{
-			echo('<center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;Twoje rozwiązanie czeka na sprawdzenie lub jego wynik został tymczasowo ukryty. Wyniki będą dostępne niebawem.</center>');
+			echo('<center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;'.__("Your solution is waiting to be reviewed or its result has been temporarily hidden. The results will be available soon.").'</center>');
 		}
 	?>
 	<table class="results" id="summary" style="width: 90%; margin-right: 5%; margin-top: 4vmax;">
@@ -152,7 +152,7 @@
 	<br />
 </div>
 <div class="window" id="details">
-	<h3 class="window_title">Wyniki szczegółowe</h3>
+	<h3 class="window_title"><?php echo(__("Detailed results")); ?></h3>
 	<br />
 	<table class="results">
 		<?php
@@ -171,7 +171,7 @@
 					$rcolor = "#8eed28";
 				}
 				echo('<tr>
-				<td><b>Pakiet '.$r['test_id'].'</b></td>
+				<td><b>'.__("Test").' '.$r['test_id'].'</b></td>
 				<td><b><i class="fas fa-clock"></i>&nbsp;&nbsp;'.(float)$r['time'].'/'.$r['max_time'].'s</b></td>');
 				echo('<td style="background-color: '.$rcolor.'; color: #313136;">'.$r['comment'].'</td>
 				<td style="background-image: linear-gradient(to left,'.$rcolor.' 0%,transparent 50%);">'.($r['anws_correct']/($r['anws_correct']+$r['anws_wrong']+$r['anws_resource'])*100).'%</td>
@@ -183,7 +183,7 @@
 	<br />
 </div>
 <div class="window">
-	<h3 class="window_title">Twój kod</h3>
+	<h3 class="window_title"><?php echo(__("Your code")); ?></h3>
 	<br />
 	<div style="user-select: text; margin-left: 5%; width: 88%; padding: 1% 1%; background-color: #dae2e6; color: #2a2c2e;">
 		<code>

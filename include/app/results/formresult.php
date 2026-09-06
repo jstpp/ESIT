@@ -24,26 +24,26 @@
 			{
 				$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Całkowicie niepoprawne";
+				$status = __("Incorrect");
 			} else if ($row['score_percentage']==100)
 			{
 				$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Bez błędów";
+				$status = __("Fully correct");
 			} else if ($row['score_percentage']==-1)
 			{
 				$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
 				$percentage = "...";
-				$status = "W kolejce";
+				$status = __("In queue...");
 			} else {
 				$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Częściowo poprawne";
+				$status = __("Partially correct");
 			}
 		} else {
 			$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
 			$percentage = "...";
-			$status = "Wynik ukryty";
+			$status = __("Result unavailable");
 		}
 
 	} else {
@@ -91,7 +91,7 @@
 </script>
 
 <center>
-	<h1>Raport ze sprawdzania</h1>
+	<h1><?php echo(__("Evaluation results")); ?></h1>
 </center>
 <div class="window">
 	<h2 class="window_title"><?php echo($row['title']); ?> (#<?php echo($row['PROBLEM_ID']); ?>)</h2>
@@ -109,7 +109,7 @@
 		  new Chart(ctx, {
 			type: 'doughnut',
 			data: {
-			  labels: ["Odpowiedzi prawidłowe", "Odpowiedzi błędne"],
+			  labels: ["<?php echo(__("Correct [%]")); ?>", "<?php echo(__("Incorrect [%]")); ?>"],
 			  datasets: [{
 				data: [<?php echo((int)$percentage); ?>, <?php echo(100-(int)$percentage); ?>],
 				backgroundColor: ['#00d10a', '#ff3d6e'],
@@ -136,7 +136,7 @@
 	<?php
 		if ($row['score_percentage']==-1 or strtotime($row['result_publish_time'])>strtotime("now"))
 		{
-			echo('<center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;Twoje rozwiązanie czeka na sprawdzenie lub jego wynik jest tymczasowo ukryty. Wyniki będą dostępne po pewnym czasie.</center>');
+			echo('<center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;'.__("Your solution is waiting to be reviewed or its result has been temporarily hidden. The results will be available soon.").'</center>');
 		}
 	?>
 	<table class="results" id="summary" style="width: 90%; margin-right: 5%; margin-top: 4vmax;">
@@ -154,7 +154,7 @@
 	<br />
 </div>
 <div class="window">
-	<h3 class="window_title">Twoja odpowiedź</h3>
+	<h3 class="window_title"><?php echo(__("Your anwser")); ?></h3>
 	<br />
 	<div style="user-select: text; margin-left: 5%; width: 88%; padding: 1% 1%; background-color: #dae2e6; color: #2a2c2e;">
 		<?php
@@ -165,7 +165,7 @@
 	<?php
 		if($row['scomment']!="-" and $row['scomment']!="" and strtotime($row['result_publish_time'])<strtotime("now"))
 		{
-			echo('<p style="margin-left: 5%;"><b>Komentarz sprawdzającego: </b>'.$row['scomment'].'</p>');
+			echo('<p style="margin-left: 5%;"><b>'.__("Optional comment").': </b>'.$row['scomment'].'</p>');
 		}
 	?>
 	<br />

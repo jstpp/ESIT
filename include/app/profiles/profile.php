@@ -46,15 +46,15 @@
 		</center>
 		<div class="profile_stats_box">
 			<div>
-				Accuracy
+				<?php echo(__("Accuracy")); ?>
 				<h2><?php echo($avg_score); ?>%</h2>
 			</div>
 			<div>
-				Solutions amount
+				<?php echo(__("Solutions amount")); ?>
 				<h2><?php echo($submissions_total); ?></h2>
 			</div>
 			<div>
-				Total points
+				<?php echo(__("Total points")); ?>
 				<h2><?php echo($current_sum); ?></h2>
 			</div>
 		</div>

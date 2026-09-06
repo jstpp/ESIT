@@ -83,7 +83,7 @@
 </style>
 
 <center>
-	<h1>Modyfikacja posta</h1>
+	<h1><?php echo(__("Modify post")); ?></h1>
 </center>
 <?php
 	$db_query = $pdo->prepare('SELECT * FROM ARTICLES WHERE id=:pid');
@@ -103,19 +103,18 @@
 	<form id="new_post" method="POST" action="process.php?r=modifypost&id=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" enctype="multipart/form-data">
 		<center>
 			<br />
-			<label for="fname">Nazwa posta:</label>
+			<label for="fname"><?php echo(__("Title")); ?>:</label>
 			<input type="text" id="fname" name="fname" value="<?php echo($article_title)?>" style="font-size: 20px; width: 98%; text-align: center;" required><br><br>
 			<input type="hidden" name="fareahidden" id="fareahidden" value="none">
 		</center>
 		<br />
-		<p style="text-align: center;"><i>Zalecane jest nieustawianie konkretnej czcionki w tekście - w poście widać wówczas czcionkę domyślną dla Portalu.</p></i>
 		<textarea id="content_area" required>
 			<?php echo($article_content); ?>
 		</textarea>
 	</form>
 	<br />
-    <a href="?p=portal">Anuluj</a>
-	<a onClick="document.getElementById('fareahidden').value = tinymce.activeEditor.getContent(); document.getElementById('new_post').submit();">Opublikuj</a>
+    <a href="?p=portal"><?php echo(__("Cancel")); ?></a>
+	<a onClick="document.getElementById('fareahidden').value = tinymce.activeEditor.getContent(); document.getElementById('new_post').submit();"><?php echo(__("Save")); ?></a>
 	<br style="clear: both;"/>
 	<br />
 </div>

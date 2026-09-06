@@ -125,7 +125,7 @@
 <br />
 <div id="problem_type_select">
 	<div class="window" id="problem_type_select_window">
-		<h2 style="margin-left: 2.5%;">Wybierz typ zadania</h1>
+		<h2 style="margin-left: 2.5%;"><?php echo(__("Choose problem type")); ?></h1>
 		<div id="problem_type_select_flexbox" style="margin: 2.5%; display: flex; flex-wrap: wrap; gap: 0.5vmax;">
 			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(1);" style="background-color: <?php print(problem_type_identification('alg')['color']); ?>;">
 				<h3><?php print(problem_type_identification('alg')['full_name']); ?></h3><br />
@@ -152,51 +152,51 @@
 </div>
 <div id="problem_add_window" style="display: none;">
 	<center>
-		<h1>Nowe zadanie (w: <?php echo(htmlentities($settitle)); ?>)</h1>
+		<h1><?php echo(__("New problem")); ?> (<?php echo(__("in")); ?>: <?php echo(htmlentities($settitle)); ?>)</h1>
 	</center>
 	<br />
 	<br />
 	<form method="POST" action="process.php?r=add_problem&sid=<?php echo(htmlentities($setid)); ?>" enctype="multipart/form-data" id="newproblemform">
 		<div class="window" id="main_info">
-			<h2 class="window_title" style="margin-left: 2.5%;">Podstawowe informacje</h2>
+			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Basic information")); ?></h2>
 			<input type="text" name="problem_title" onChange="validate_data();" placeholder="Tytuł zadania" class="forminput" style="margin-left: 2.5%; width: 91.75%;" required />
 			<br />
 			<input type="hidden" id="problem_type" name="problem_type" value="0" />
 			<br />
-			<input type="number" name="problem_points" onChange="validate_data();" placeholder="Maks. liczba punktów" class="forminput" min="0" max="10000" style="margin-left: 2.5%; width: 15.5%; float: left;" required />
-			<input type="number" name="problem_maxattempts" onChange="validate_data();" placeholder="Maks. liczba podejść" class="forminput" min="0" style="margin-left: 0.5%; width: 15.5%; float: left;" required />
+			<input type="number" name="problem_points" onChange="validate_data();" placeholder="<?php echo(__("Max. points")); ?>" class="forminput" min="0" max="10000" style="margin-left: 2.5%; width: 15.5%; float: left;" required />
+			<input type="number" name="problem_maxattempts" onChange="validate_data();" placeholder="<?php echo(__("Max. attempts")); ?>" class="forminput" min="0" style="margin-left: 0.5%; width: 15.5%; float: left;" required />
 			<select class="forminput" name="problem_isarchived" onChange="validate_data();" style="margin-right: 2.5%; width: 55.5%; float: right;" required>
-				<option value="0">Publiczne</option>
-				<option value="1">Ukryte/zarchiwizowane</option>
+				<option value="0"><?php echo(__("Public")); ?></option>
+				<option value="1"><?php echo(__("Hidden/archived")); ?></option>
 			</select>
 			<br style="clear: both;"/>
 			<br />
-			<p style="margin-left: 2.5%; width: 95%;">Moment publikacji zadania:&emsp;<input type="datetime-local" onChange="validate_data();" class="forminput" name="publish_time" /></p>
-			<p style="margin-left: 2.5%; width: 95%;">Moment publikacji wyników:&emsp;<input type="datetime-local" onChange="validate_data();" class="forminput" name="result_publish_time" /></p>
+			<p style="margin-left: 2.5%; width: 95%;"><?php echo(__("Problem publishing time")); ?>:&emsp;<input type="datetime-local" onChange="validate_data();" class="forminput" name="publish_time" /></p>
+			<p style="margin-left: 2.5%; width: 95%;"><?php echo(__("Results publishing time")); ?>:&emsp;<input type="datetime-local" onChange="validate_data();" class="forminput" name="result_publish_time" /></p>
 			<br />
 		</div>
 		<div class="window" id="alg_pdf">
-			<h2 class="window_title" style="margin-left: 2.5%;">Treść</h2>
+			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Content")); ?></h2>
 			<input type="file" style="margin-left: 2.5%;" name="alg_file" accept=".pdf"/>
-			<p style="margin-left: 2.5%;">Plik zawierający treść zadania powinien być w formacie PDF.</p>
+			<p style="margin-left: 2.5%;"><?php echo(__("The file containing the content of the task should be in PDF format")); ?>.</p>
 			<br />
 		</div>
 		<div class="window" id="alg_tests">
-			<h2 class="window_title" style="margin-left: 2.5%;">Pakiety testów</h2>
-			<p style="margin-left: 2.5%;">Dopuszczone formaty wejścia: <code>.in</code>, wyjścia: <code>.out</code>.</p>
+			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Test packages")); ?></h2>
+			<p style="margin-left: 2.5%;"><?php echo(__("Available input formats")); ?>: <code>.in</code>, <?php echo(__("Available output formats")); ?>: <code>.out</code>.</p>
 			<br />
 			<div class="test_set" id="tab_1">
 				<span style="font-size: 3vmax; float: right; margin-right: 1%; cursor: pointer;">×</span>
-				<p><b>Pakiet 1:</b></p>
-				<p>Wejście&emsp;
+				<p><b><?php echo(__("Test")); ?> 1:</b></p>
+				<p><?php echo(__("Input")); ?>&emsp;
 				<input type="file" name="in_1" id="in_1" accept=".in"/></p>
-				<p>Wyjście&emsp;
+				<p><?php echo(__("Output")); ?>&emsp;
 				<input type="file" name="out_1" id="out_1" accept=".out"/></p>
 				<br />
-				<input type="number" name="time_1" id="time_1" placeholder="Maksymalny czas [s]" class="forminput" style="width: 30%;" step="0.01" max="600" min="0"/>
+				<input type="number" name="time_1" id="time_1" placeholder="<?php echo(__("Max. time")); ?> [s]" class="forminput" style="width: 30%;" step="0.01" max="600" min="0"/>
 				<br />
 				<br />
-				<input type="number" name="memory_1" id="memory_1" placeholder="Maksymalna pamięć [MiB]" class="forminput" style="width: 30%;" step="16" max="1024" min="16"/>
+				<input type="number" name="memory_1" id="memory_1" placeholder="<?php echo(__("Max. memory")); ?> [MiB]" class="forminput" style="width: 30%;" step="16" max="1024" min="16"/>
 				<br />
 				<br />
 			</div>
@@ -213,7 +213,7 @@
 					document.getElementById("tab_" + sets_count).querySelector("span").style.display = 'none';
 
 					const tab_label = new_tab.querySelector("p b");
-					tab_label.textContent = "Pakiet " + (sets_count+1) + ":";
+					tab_label.textContent = "<?php echo(__("Test")); ?> " + (sets_count+1) + ":";
 
 					const in_input = new_tab.querySelector("input[name^='in_']");
 					const out_input = new_tab.querySelector("input[name^='out_']");
@@ -245,32 +245,32 @@
 			</script>
 		</div>
 		<div class="window" id="ctf_file">
-			<h2 class="window_title" style="margin-left: 2.5%;">Plik (Capture The Flag)</h2>
+			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("File")); ?> (Capture The Flag)</h2>
 			<input type="file" style="margin-left: 2.5%;" name="ctf_file"/>
 			<br />
 			<br />
 		</div>
 		<div class="window" id="ctf_flag">
-			<h2 class="window_title" style="margin-left: 2.5%;">Flaga (Capture The Flag)</h2>
-			<input type="text" name="ctf_flag" placeholder="Poprawna flaga" class="forminput" style="margin-left: 2.5%; width: 91.75%;" required />
+			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Flag")); ?> (Capture The Flag)</h2>
+			<input type="text" name="ctf_flag" placeholder="<?php echo(__("Correct flag")); ?>" class="forminput" style="margin-left: 2.5%; width: 91.75%;" required />
 			<br />
 			<br />
 		</div>
 		<div class="window" id="test_questions_single">
-			<h2 class="window_title" style="margin-left: 2.5%;">Pytania</h2>
+			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Questions")); ?></h2>
 				<div class="test_set_question" id="q_tab_1">
 					<span style="font-size: 3vmax; float: right; margin-right: 1%; cursor: pointer;">×</span>
-					<p><b>Pytanie 1:</b></p>
-					<input type="text" placeholder="Pytanie" class="forminput" style="width: 96%;" name="s_question_1" id="s_question_1"/>
+					<p><b><?php echo(__("Question")); ?> 1:</b></p>
+					<input type="text" placeholder="<?php echo(__("Question")); ?>" class="forminput" style="width: 96%;" name="s_question_1" id="s_question_1"/>
 					<br />
 					<hr />
-					<input type="text" placeholder="Odpowiedź a" class="forminput" style="width: 21%;" name="q_a_1" id="q_a_1"/>
-					<input type="text" placeholder="Odpowiedź b" class="forminput" style="width: 21%;" name="q_b_1" id="q_b_1"/>
-					<input type="text" placeholder="Odpowiedź c" class="forminput" style="width: 21%;" name="q_c_1" id="q_c_1"/>
-					<input type="text" placeholder="Odpowiedź d" class="forminput" style="width: 21%;" name="q_d_1" id="q_d_1"/>
+					<input type="text" placeholder="<?php echo(__("Anwser")); ?> a" class="forminput" style="width: 21%;" name="q_a_1" id="q_a_1"/>
+					<input type="text" placeholder="<?php echo(__("Anwser")); ?> b" class="forminput" style="width: 21%;" name="q_b_1" id="q_b_1"/>
+					<input type="text" placeholder="<?php echo(__("Anwser")); ?> c" class="forminput" style="width: 21%;" name="q_c_1" id="q_c_1"/>
+					<input type="text" placeholder="<?php echo(__("Anwser")); ?> d" class="forminput" style="width: 21%;" name="q_d_1" id="q_d_1"/>
 					<br />
 					<hr />
-					<p>Poprawna odpowiedź:&emsp;
+					<p><?php echo(__("Correct anwser")); ?>:&emsp;
 					<input type="radio" value="a" name="correct_1" id="correct_1"/>a
 					<input type="radio" value="b" name="correct_1" id="correct_1"/>b
 					<input type="radio" value="c" name="correct_1" id="correct_1"/>c
@@ -278,7 +278,7 @@
 					</p>
 				</div>
 				<br />
-			<a class="forminput_a" id="add_btn" onClick="add_q_tab();" style="float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowe</a>
+			<a class="forminput_a" id="add_btn" onClick="add_q_tab();" style="float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;<?php echo(__("Add new")); ?></a>
 			<br style="clear: both;" />
 			<br />
 			<script>
@@ -290,7 +290,7 @@
 					document.getElementById("q_tab_" + sets_q_count).querySelector("span").style.display = 'none';
 
 					const tab_label = new_tab.querySelector("p b");
-					tab_label.textContent = "Pakiet " + (sets_q_count+1) + ":";
+					tab_label.textContent = "<?php echo(__("Question")); ?> " + (sets_q_count+1) + ":";
 
 					const question = new_tab.querySelector("input[name^='s_question_']");
 					const correct_input_a = new_tab.querySelector("input[name^='correct_'][value='a']");
@@ -339,20 +339,20 @@
 			</script>
 		</div>
 		<div class="window" id="test_questions_multiple">
-			<h2 class="window_title" style="margin-left: 2.5%;">Pytania</h2>
+			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Questions")); ?></h2>
 				<div class="test_set_question_m" id="qm_tab_1">
 					<span style="font-size: 3vmax; float: right; margin-right: 1%; cursor: pointer;">×</span>
-					<p><b>Pytanie 1:</b></p>
-					<input type="text" placeholder="Pytanie" class="forminput" style="width: 96%;" name="m_question_1" id="m_question_1"/>
+					<p><b><?php echo(__("Question")); ?> 1:</b></p>
+					<input type="text" placeholder="<?php echo(__("Question")); ?>" class="forminput" style="width: 96%;" name="m_question_1" id="m_question_1"/>
 					<br />
 					<hr />
-					<input type="text" placeholder="Odpowiedź a" class="forminput" style="width: 21%;" name="qm_a_1" id="qm_a_1"/>
-					<input type="text" placeholder="Odpowiedź b" class="forminput" style="width: 21%;" name="qm_b_1" id="qm_b_1"/>
-					<input type="text" placeholder="Odpowiedź c" class="forminput" style="width: 21%;" name="qm_c_1" id="qm_c_1"/>
-					<input type="text" placeholder="Odpowiedź d" class="forminput" style="width: 21%;" name="qm_d_1" id="qm_d_1"/>
+					<input type="text" placeholder="<?php echo(__("Anwser")); ?> a" class="forminput" style="width: 21%;" name="qm_a_1" id="qm_a_1"/>
+					<input type="text" placeholder="<?php echo(__("Anwser")); ?> b" class="forminput" style="width: 21%;" name="qm_b_1" id="qm_b_1"/>
+					<input type="text" placeholder="<?php echo(__("Anwser")); ?> c" class="forminput" style="width: 21%;" name="qm_c_1" id="qm_c_1"/>
+					<input type="text" placeholder="<?php echo(__("Anwser")); ?> d" class="forminput" style="width: 21%;" name="qm_d_1" id="qm_d_1"/>
 					<br />
 					<hr />
-					<p>Poprawna odpowiedź:&emsp;
+					<p><?php echo(__("Correct anwser")); ?>:&emsp;
 					<input type="checkbox" value="a" name="correct_a_1" id="correct_a_1"/>a
 					<input type="checkbox" value="b" name="correct_b_1" id="correct_b_1"/>b
 					<input type="checkbox" value="c" name="correct_c_1" id="correct_c_1"/>c
@@ -360,7 +360,7 @@
 					</p>
 				</div>
 				<br />
-			<a class="forminput_a" id="add_btn" onClick="add_qm_tab();" style="float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowe</a>
+			<a class="forminput_a" id="add_btn" onClick="add_qm_tab();" style="float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;<?php echo(__("Add new")); ?></a>
 			<br style="clear: both;" />
 			<br />
 			<script>
@@ -372,7 +372,7 @@
 					document.getElementById("qm_tab_" + sets_qm_count).querySelector("span").style.display = 'none';
 
 					const tab_label = new_tab.querySelector("p b");
-					tab_label.textContent = "Pakiet " + (sets_qm_count+1) + ":";
+					tab_label.textContent = "<?php echo(__("Question")); ?> " + (sets_qm_count+1) + ":";
 
 					const question = new_tab.querySelector("input[name^='m_question_']");
 					const correct_input_a = new_tab.querySelector("input[name^='correct_a_']");
@@ -477,13 +477,13 @@
 	</script>
 	<div class="window">
 		<br />
-		<a class="forminput_a" id="button_1" onClick="document.getElementById('newproblemform').submit();" style="display: none; float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowe zadanie</a>
-		<a class="forminput_a" href="index.php?p=channel&id=<?php echo($setid); ?>" style="float: right; margin-right: 2.5%;"><i class="fa fa-close"></i>&nbsp;&nbsp;Anuluj</a>
+		<a class="forminput_a" id="button_1" onClick="document.getElementById('newproblemform').submit();" style="display: none; float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;<?php echo(__("Add new problem")); ?></a>
+		<a class="forminput_a" href="index.php?p=channel&id=<?php echo($setid); ?>" style="float: right; margin-right: 2.5%;"><i class="fa fa-close"></i>&nbsp;&nbsp;<?php echo(__("Cancel")); ?></a>
 		<br style="clear: both;" />
 		<br />
 		<fieldset id="r_i_validation" style="margin-top: 2vmax; width: 92.5%; margin: auto;">
-			<legend>Walidacja danych</legend>
-			<p class="data-invalid" id="c_1">Wypełnij wszystkie podstawowe pola</p>
+			<legend><?php echo(__("Input validation")); ?></legend>
+			<p class="data-invalid" id="c_1"><?php echo(__("Fill all required textboxes.")); ?></p>
 			<script>
 				let e = 0;
 				function check_data()

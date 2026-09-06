@@ -83,26 +83,26 @@
 </style>
 
 <center>
-	<h1>Nowy post</h1>
+	<h1><?php echo(__("New post")); ?></h1>
 </center>
 <div class="window">
 	<form id="new_post" method="POST" action="process.php?r=addpost" enctype="multipart/form-data">
 		<center>
 			<br />
-			<label for="fname">Nazwa posta:</label>
+			<label for="fname"><?php echo(__("Title")); ?>:</label>
 			<input type="text" id="fname" name="fname" style="font-size: 20px; width: 98%; text-align: center;" required><br><br>
-			<label for="fimage">Okładka posta: &nbsp;</label>
+			<label for="fimage"><?php echo(__("Thumbnail")); ?>: &nbsp;</label>
 			<input type="file" id="fimage" name="fimage" style="text-align: center;" required>
 			<input type="hidden" name="fareahidden" id="fareahidden" value="none">
 		</center>
 		<br />
-		<p style="text-align: center;"><i>Zalecane jest nieustawianie konkretnej czcionki w tekście - w poście widać wówczas czcionkę domyślną dla Portalu.</p></i>
+		<p style="text-align: center;"><i><?php echo(__("It is recommended not to set a specific font in the text - the default font for the Portal will then be visible in the post.")); ?></p></i>
 		<textarea id="content_area" required>
 		</textarea>
 	</form>
 	<br />
-    <a href="?p=portal">Anuluj</a>
-	<a onClick="document.getElementById('fareahidden').value = tinymce.activeEditor.getContent(); document.getElementById('new_post').submit();">Opublikuj</a>
+    <a href="?p=portal"><?php echo(__("Cancel")); ?></a>
+	<a onClick="document.getElementById('fareahidden').value = tinymce.activeEditor.getContent(); document.getElementById('new_post').submit();"><?php echo(__("Publish")); ?></a>
 	<br style="clear: both;"/>
 	<br />
 </div>

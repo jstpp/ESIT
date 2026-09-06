@@ -32,26 +32,26 @@
 			{
 				$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Całkowicie niepoprawne";
+				$status = __("Incorrect");
 			} else if ($row['score_percentage']==100)
 			{
 				$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Bez błędów";
+				$status = __("Fully correct");
 			} else if ($row['score_percentage']==-1)
 			{
 				$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
 				$percentage = "...";
-				$status = "W kolejce";
+				$status = __("In queue...");
 			} else {
 				$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
 				$percentage = $row['score_percentage']."%";
-				$status = "Częściowo poprawne";
+				$status = __("Partially correct");
 			}
 		} else {
 			$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
 			$percentage = "...";
-			$status = "Wynik ukryty";
+			$status = __("Result unavailable");
 		}
 
 	} else {
@@ -88,7 +88,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <center>
-	<h1>Raport ze sprawdzania</h1>
+	<h1><?php echo(__("Evaluation results")); ?></h1>
 </center>
 <div class="window">
 	<h2 class="window_title"><?php echo($row['title']); ?> (#<?php echo($row['PROBLEM_ID']); ?>)</h2>
@@ -106,7 +106,7 @@
 		  new Chart(ctx, {
 			type: 'doughnut',
 			data: {
-			  labels: ["Odpowiedzi prawidłowe", "Odpowiedzi błędne"],
+			  labels: ["<?php echo(__("Correct anwsers")); ?>", "<?php echo(__("Incorrect anwsers")); ?>"],
 			  datasets: [{
 				data: [<?php echo((int)$percentage); ?>, <?php echo(100-(int)$percentage); ?>],
 				backgroundColor: ['#00d10a', '#ff3d6e'],

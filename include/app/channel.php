@@ -577,7 +577,7 @@
 </div>
 <div class="window" style="display: flex; gap: 2%;">
 	<div style="width: 68%;">
-		<h3 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Informations")); ?></h3>
+		<h3 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Information")); ?></h3>
 		<p style="margin-left: 2.5%;"><?php echo(htmlentities($chdescription)); ?></p>
 		<br />
 		<?php

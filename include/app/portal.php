@@ -115,12 +115,12 @@
 </style>
 
 <center>
-	<h1>Ustawienia portalu</h1>
+	<h1><?php echo(__("Portal settings")); ?></h1>
 </center>
 <div class="window">
 	<p>
-		<h2 class="window_title">Edytuj aktualności</h2>&emsp;
-		<a style="margin-left: 5%; float: left;" class="button" href="?p=addpost">Dodaj post</a>
+		<h2 class="window_title"><?php echo(__("Edit news")); ?></h2>&emsp;
+		<a style="margin-left: 5%; float: left;" class="button" href="?p=addpost"><?php echo(__("Add new post")); ?></a>
 	</p>
 	<br />
 	<?php
@@ -143,9 +143,9 @@
 					<td>'.htmlentities($article_time).'</td>
 				</tr>
 			</table>
-			<a class="deletebutton" href="process.php?r=deletepost&id='.htmlentities($article_id).'">Usuń</a>
-			<a class="button" href="?p=modifypost&id='.htmlentities($article_id).'">Modyfikuj</a>
-			<a class="button" href="../content.php?id='.htmlentities($article_id).'">Zobacz</a>
+			<a class="deletebutton" href="process.php?r=deletepost&id='.htmlentities($article_id).'">'.__("Delete").'</a>
+			<a class="button" href="?p=modifypost&id='.htmlentities($article_id).'">'.__("Modify").'</a>
+			<a class="button" href="../content.php?id='.htmlentities($article_id).'">'.__("Read").'</a>
 			<br style="clear: both;"/>
 		</div>');
         }
@@ -154,26 +154,26 @@
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">Ustawienia ogólne</h2>&emsp;
+	<h2 class="window_title"><?php echo(__("General settings")); ?></h2>&emsp;
 	<form id="misc_general_form" method="POST" action="process.php?r=modify_resources&mode=general">
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-keyboard-o" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_title" placeholder="Nazwa strony" value="<?php echo(get_misc_value('general_title')); ?>" />
+			<i class="fa fa-keyboard-o" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_title" placeholder="<?php echo(__("Website title")); ?>" value="<?php echo(get_misc_value('general_title')); ?>" />
 		</div>
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			&nbsp;<i class="fa fa-i-cursor" style="font-size: 2vw;"></i>&emsp;&emsp;<input class="forminput" style="width: 80%" type="text" name="g_motd" placeholder="MOTD strony" value="<?php echo(get_misc_value('general_motd')); ?>" />
+			&nbsp;<i class="fa fa-i-cursor" style="font-size: 2vw;"></i>&emsp;&emsp;<input class="forminput" style="width: 80%" type="text" name="g_motd" placeholder="MOTD" value="<?php echo(get_misc_value('general_motd')); ?>" />
 		</div>
 	</form>
 	<br />
-	<a class="forminput_a" style="float: right; margin-right: 5%;" onClick="document.getElementById('misc_general_form').submit();">Zapisz ustawienia</a>
+	<a class="button" style="float: right; margin-right: 5%;" onClick="document.getElementById('misc_general_form').submit();"><?php echo(__("Save settings")); ?></a>
 	<br style="clear: both;" />
 	<br />
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">Szablon portalu</h2>
-	<p style="margin-left: 5%; margin-top: 0;">Nazwa: <b>Default template</b><br />
-	Wersja: <b>1.0.0</b><br />
-	Autor: <b>jstpp</b></p>
+	<h2 class="window_title"><?php echo(__("Portal template")); ?></h2>
+	<p style="margin-left: 5%; margin-top: 0;"><?php echo(__("Name")); ?>: <b><?php echo(__("Default template")); ?></b><br />
+	<?php echo(__("Version")); ?>: <b>1.0.0</b><br />
+	<?php echo(__("Author")); ?>: <b>jstpp</b></p>
 	<div id="template_files">
 		<?php
 			function list_template_files($template_dir)
@@ -202,7 +202,7 @@
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">Terminy wydarzeń</h2>
+	<h2 class="window_title"><?php echo(__("Events timeline")); ?></h2>
 	<form id="resources_terms_form" method="POST" action="process.php?r=modify_resources&mode=terms" enctype="multipart/form-data">
 		<?php
 			$db_query = $pdo->prepare('SELECT * FROM TERMS;');
@@ -213,9 +213,9 @@
 			{
 				$count_terms++;
 				echo('<div class="window_card window_card_term" id="term_'.$count_terms.'">
-				<input type="text" style="width: 40%;" class="forminput" name="term_name_'.$count_terms.'" placeholder="Nazwa etapu" value="'.$term['term_name'].'" />
-				<input type="datetime-local" class="forminput" name="term_begin_'.$count_terms.'" placeholder="Początek" value="'.$term['term_begin'].'" />
-				<input type="datetime-local" class="forminput" name="term_end_'.$count_terms.'" placeholder="Koniec" value="'.$term['term_end'].'" />');
+				<input type="text" style="width: 40%;" class="forminput" name="term_name_'.$count_terms.'" placeholder="'.__("Title").'" value="'.$term['term_name'].'" />
+				<input type="datetime-local" class="forminput" name="term_begin_'.$count_terms.'" placeholder="'.__("Start").'" value="'.$term['term_begin'].'" />
+				<input type="datetime-local" class="forminput" name="term_end_'.$count_terms.'" placeholder="'.__("Finish").'" value="'.$term['term_end'].'" />');
 				if($count_terms!=1)
 				{
 					echo('<span style="font-size: 2.5vmax; float: right; margin-right: 2vw; cursor: pointer; display: none;" onClick="document.getElementById(\'term_'.($count_terms).'\').remove(); document.getElementById(\'term_'.($count_terms-1).'\').querySelector(\'span\').style.display = \'block\';">×</span>');
@@ -226,9 +226,9 @@
 			}
 		?>
 		<div class="window_card window_card_term" id="term_<?php echo($count_terms+1); ?>">
-			<input type="text" style="width: 40%;" class="forminput" name="term_name_<?php echo($count_terms+1); ?>" placeholder="Nazwa etapu" />
-			<input type="datetime-local" class="forminput" name="term_begin_<?php echo($count_terms+1); ?>" placeholder="Początek" />
-			<input type="datetime-local" class="forminput" name="term_end_<?php echo($count_terms+1); ?>" placeholder="Koniec" />
+			<input type="text" style="width: 40%;" class="forminput" name="term_name_<?php echo($count_terms+1); ?>" placeholder="<?php echo(__("Title")); ?>" />
+			<input type="datetime-local" class="forminput" name="term_begin_<?php echo($count_terms+1); ?>" placeholder="<?php echo(__("Start")); ?>" />
+			<input type="datetime-local" class="forminput" name="term_end_<?php echo($count_terms+1); ?>" placeholder="<?php echo(__("Finish")); ?>" />
 			<span style="font-size: 2.5vmax; float: right; margin-right: 2vw; cursor: pointer;">×</span>
 		</div>
 		<script>
@@ -238,8 +238,8 @@
 			});
 		</script>
 		<br />
-		<a class="forminput_a" style="float: right; margin-right: 5%;" onClick="document.getElementById('resources_terms_form').submit();">Zapisz terminy</a>
-		<a class="forminput_a" id="add_btn" onClick="add_term();" style="float: right; margin-right: 0.2vw;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowy</a>
+		<a class="button" style="float: right; margin-right: 5%;" onClick="document.getElementById('resources_terms_form').submit();"><?php echo(__("Save timeline")); ?></a>
+		<a class="button" id="add_btn" onClick="add_term();" style="float: right; margin-right: 0.2vw;"><i class="fa fa-plus"></i>&nbsp;&nbsp;<?php echo(__("Add new element")); ?></a>
 		<br style="clear: both;"/>
 		<br />
 	</form>
@@ -281,7 +281,7 @@
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">Media społecznościowe</h2>
+	<h2 class="window_title"><?php echo(__('"Social" media')); ?></h2>
 	<?php
 		$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name LIKE "social_media_%"');
 		$db_query->execute();
@@ -295,24 +295,24 @@
 	?>
 	<form id="misc_social_media_form" method="POST" action="process.php?r=modify_resources&mode=socialmedia">
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-youtube-play" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="yt_href" placeholder="Link do YoutTube" value="<?php if(isset($socialmedia_yt)) echo($socialmedia_yt['misc_value']); ?>" />
+			<i class="fa fa-youtube-play" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="yt_href" placeholder="<?php echo(__("Link to")); ?> YoutTube" value="<?php if(isset($socialmedia_yt)) echo($socialmedia_yt['misc_value']); ?>" />
 		</div>
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-instagram" style="font-size: 2vw;"></i>&emsp;&nbsp;&nbsp;<input class="forminput" style="width: 80%" type="text" name="ig_href" placeholder="Link do Instagram" value="<?php if(isset($socialmedia_ig)) echo($socialmedia_ig['misc_value']); ?>" />
+			<i class="fa fa-instagram" style="font-size: 2vw;"></i>&emsp;&nbsp;&nbsp;<input class="forminput" style="width: 80%" type="text" name="ig_href" placeholder="<?php echo(__("Link to")); ?> Instagram" value="<?php if(isset($socialmedia_ig)) echo($socialmedia_ig['misc_value']); ?>" />
 		</div>
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-facebook-square" style="font-size: 2vw;"></i>&emsp;&nbsp;&nbsp;<input class="forminput" style="width: 80%" type="text" name="fb_href" placeholder="Link do Facebook" value="<?php if(isset($socialmedia_fb)) echo($socialmedia_fb['misc_value']); ?>" />
+			<i class="fa fa-facebook-square" style="font-size: 2vw;"></i>&emsp;&nbsp;&nbsp;<input class="forminput" style="width: 80%" type="text" name="fb_href" placeholder="<?php echo(__("Link to")); ?> Facebook" value="<?php if(isset($socialmedia_fb)) echo($socialmedia_fb['misc_value']); ?>" />
 		</div>
 	</form>
 	<br />
-	<a class="forminput_a" style="float: right; margin-right: 5%;" onClick="document.getElementById('misc_social_media_form').submit();">Zapisz ustawienia</a>
+	<a class="button" style="float: right; margin-right: 5%;" onClick="document.getElementById('misc_social_media_form').submit();"><?php echo(__("Save settings")); ?></a>
 	<br style="clear: both;" />
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">Dokumenty</h2>
+	<h2 class="window_title"><?php echo(__("Documents")); ?></h2>
 	<div style="margin-left: 5%;" class="saved_files_table">
-		<h3>Zapisane:</h3>
+		<h3><?php echo(__("Published")); ?>:</h3>
 		<div style="margin-left: 2%;">
 			<?php
 				$db_query = $pdo->prepare('SELECT * FROM PORTAL_RESOURCES WHERE resource_type="documents"');
@@ -320,20 +320,20 @@
 
 				while($row = $db_query->fetch())
 				{
-					echo('<p><i class="fa fa-file-pdf-o"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">Podejrzyj</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">Usuń</a></p>');
+					echo('<p><i class="fa fa-file-pdf-o"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Remove").'</a></p>');
 				}
 			?>
 		</div>
-		<h3>Do dodania:</h3>
+		<h3><?php echo(__("Queue")); ?>:</h3>
 	</div>
 	<form id="resources_docs_form" method="POST" action="process.php?r=modify_resources&mode=docs" enctype="multipart/form-data">
 		<div class="window_card window_card_document" id="document_1">
-			<input class="forminput" type="text" name="document_name_1" placeholder="Nazwa dokumentu" />&emsp;
+			<input class="forminput" type="text" name="document_name_1" placeholder="<?php echo(__("Document title")); ?>" />&emsp;
 			<input type="file" name="document_file_1"/>
 			<span style="font-size: 2.5vmax; float: right; margin-right: 2vw; cursor: pointer;">×</span>
 		</div>
-		<a class="forminput_a" style="float: right; margin-right: 5%;" onClick="document.getElementById('resources_docs_form').submit();">Zapisz dokumenty</a>
-		<a class="forminput_a" id="add_btn" onClick="add_document();" style="float: right; margin-right: 0.2vw;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowy</a>
+		<a class="button" style="float: right; margin-right: 5%;" onClick="document.getElementById('resources_docs_form').submit();"><?php echo(__("Save documents")); ?></a>
+		<a class="button" id="add_btn" onClick="add_document();" style="float: right; margin-right: 0.2vw;"><i class="fa fa-plus"></i>&nbsp;&nbsp;<?php echo(__("Add document")); ?></a>
 		<br />
 		<br />
 		<br />
@@ -372,9 +372,9 @@
 </div>
 
 <div class="window">
-	<h2 class="window_title">Zadania pokazowe</h2>
+	<h2 class="window_title"><?php echo(__("Problems for warm-up")); ?></h2>
 	<div style="margin-left: 5%;" class="saved_files_table">
-		<h3>Zapisane:</h3>
+		<h3><?php echo(__("Published")); ?>:</h3>
 		<div style="margin-left: 2%;">
 			<?php
 				$db_query = $pdo->prepare('SELECT * FROM PORTAL_RESOURCES WHERE resource_type="quests"');
@@ -385,26 +385,26 @@
 					if($row['is_actual']==1)
 					{
 						$r_new = 0;
-						$archive_button_text = "Archiwizuj";
+						$archive_button_text = __("Archive");
 					} else {
 						$r_new = 1;
-						$archive_button_text = "Dodaj do bieżącej edycji";
+						$archive_button_text = __("Add to current session");
 					}
-					echo('<p><i class="fa fa-file-pdf-o"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">Podejrzyj</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">Usuń</a>&emsp;<a href="process.php?r=modify_resources&mode=archive&rid='.$row['RESOURCE_ID'].'&rnew='.$r_new.'">'.$archive_button_text.'</a></p>');
+					echo('<p><i class="fa fa-file-pdf-o"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Delete").'</a>&emsp;<a href="process.php?r=modify_resources&mode=archive&rid='.$row['RESOURCE_ID'].'&rnew='.$r_new.'">'.$archive_button_text.'</a></p>');
 				}
 			?>
 	</div>
-	<h3>Do dodania:</h3>
+	<h3><?php echo(__("Queue")); ?>:</h3>
 	</div>
 	<form id="resources_quests_form" method="POST" action="process.php?r=modify_resources&mode=quests" enctype="multipart/form-data">
 		<div class="window_card window_card_quest" id="quest_1">
-			<input class="forminput" type="text" name="quest_name_1" placeholder="Nazwa zestawu" />&emsp;
+			<input class="forminput" type="text" name="quest_name_1" placeholder="<?php echo(__("Problem name")); ?>" />&emsp;
 			<input type="file" name="quest_file_1"/>
 			<span style="font-size: 2.5vmax; float: right; margin-right: 2vw; cursor: pointer;">×</span>
-			<p><input type="checkbox" name="is_actual_1" value="1" id="is_actual_1"/>&nbsp;<label for="is_actual">Bieżąca edycja</label></p>
+			<p><input type="checkbox" name="is_actual_1" value="1" id="is_actual_1"/>&nbsp;<label for="is_actual"><?php echo(__("Current session")); ?></label></p>
 		</div>
-		<a class="forminput_a" style="float: right; margin-right: 5%;" onClick="document.getElementById('resources_quests_form').submit();">Zapisz zestawy</a>
-		<a class="forminput_a" id="add_btn" onClick="add_quest();" style="float: right; margin-right: 0.2vw;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj zestaw</a>
+		<a class="button" style="float: right; margin-right: 5%;" onClick="document.getElementById('resources_quests_form').submit();"><?php echo(__("Save problems")); ?></a>
+		<a class="button" id="add_btn" onClick="add_quest();" style="float: right; margin-right: 0.2vw;"><i class="fa fa-plus"></i>&nbsp;&nbsp;<?php echo(__("Add problem")); ?></a>
 	</form>
 	<br />
 	<br />
@@ -446,9 +446,9 @@
 	</script>
 </div>
 <div class="window">
-	<h2 class="window_title">Partnerzy</h2>
+	<h2 class="window_title"><?php echo(__("Partners")); ?></h2>
 	<div style="margin-left: 5%;" class="saved_files_table">
-		<h3>Zapisane:</h3>
+		<h3><?php echo(__("Published")); ?>:</h3>
 		<div style="margin-left: 2%;">
 			<?php
 				$db_query = $pdo->prepare('SELECT * FROM PORTAL_RESOURCES WHERE resource_type="logo"');
@@ -456,21 +456,21 @@
 
 				while($row = $db_query->fetch())
 				{
-					echo('<p><img src="'.$row['resource_path'].'" style="max-height: 3vw; max-width: 2vw;"/>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">Podejrzyj</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">Usuń</a></p>');
+					echo('<p><img src="'.$row['resource_path'].'" style="max-height: 3vw; max-width: 2vw;"/>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Delete").'</a></p>');
 				}
 			?>
 		</div>
-		<h3>Do dodania:</h3>
+		<h3><?php echo(__("Queue")); ?>:</h3>
 	</div>
 	<form id="resources_logo_form" method="POST" action="process.php?r=modify_resources&mode=logo" enctype="multipart/form-data">
 		<div class="window_card window_card_logo" id="logo_1">
-			<input class="forminput" type="text" name="logo_name_1" placeholder="Nazwa partnera" />&emsp;
-			<input class="forminput" type="text" name="logo_href_1" placeholder="Link partnera" />&emsp;
+			<input class="forminput" type="text" name="logo_name_1" placeholder="<?php echo(__("Title")); ?>" />&emsp;
+			<input class="forminput" type="text" name="logo_href_1" placeholder="<?php echo(__("URL")); ?>" />&emsp;
 			<input type="file" name="logo_file_1"/>
 			<span style="font-size: 2.5vmax; float: right; margin-right: 2vw; cursor: pointer;">×</span>
 		</div>
-		<a class="forminput_a" style="float: right; margin-right: 5%;" onClick="document.getElementById('resources_logo_form').submit();">Zapisz partnerów</a>
-		<a class="forminput_a" id="add_btn" onClick="add_logo();" style="float: right; margin-right: 0.2vw;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowego</a>
+		<a class="button" style="float: right; margin-right: 5%;" onClick="document.getElementById('resources_logo_form').submit();"><?php echo(__("Save partners")); ?></a>
+		<a class="button" id="add_btn" onClick="add_logo();" style="float: right; margin-right: 0.2vw;"><i class="fa fa-plus"></i>&nbsp;&nbsp;<?php echo(__("Add new partner")); ?></a>
 		<br />
 		<br />
 		<br />
@@ -516,7 +516,7 @@
 	<textarea id="editor_send_content" name="editor_send_content" style="display: none;" readonly></textarea>
 </form>
 <div class="window">
-	<h2 class="window_title">Edytuj stronę główną</h2>
+	<h2 class="window_title"><?php echo(__("Edit main page")); ?></h2>
 	<div style="width: 40%; margin-left: 5%; float: left;">
 		<div id="editor" style="position: relative; height: 60vmin; width: 100%; border-radius: 2vmin;"></div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -547,12 +547,12 @@
 	<iframe id="main_page_content" onLoad="if(i===0){main_page_load(this); i = 1;}" src="../include/elements/main_page_content.php" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
 	<br style="clear: both;" />
 	<br />
-	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_main'; document.getElementById('modify_content_form').submit();">Zapisz zawartość</a>
+	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_main'; document.getElementById('modify_content_form').submit();"><?php echo(__("Save all")); ?></a>
 	<br style="clear: both;" />
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">FAQ</h2>
+	<h2 class="window_title"><?php echo(__("Edit FAQ")); ?></h2>
 	<div style="width: 40%; margin-left: 5%; float: left;">
 		<div id="editor_faq" style="position: relative; height: 60vmin; width: 100%; border-radius: 2vmin;"></div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -583,12 +583,12 @@
 	<iframe id="faq_content" onLoad="if(j===0){faq_load(this); j = 1;}" src="../include/elements/faq_content.php" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
 	<br style="clear: both;" />
 	<br />
-	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor_f.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_faq'; document.getElementById('modify_content_form').submit();">Zapisz zawartość</a>
+	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor_f.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_faq'; document.getElementById('modify_content_form').submit();"><?php echo(__("Save all")); ?></a>
 	<br style="clear: both;" />
 	<br />
 </div>
 <div class="window">
-	<h2 class="window_title">Dane kontaktowe</h2>
+	<h2 class="window_title"><?php echo(__("Edit contact page")); ?></h2>
 	<div style="width: 40%; margin-left: 5%; float: left;">
 		<div id="editor_contact" style="position: relative; height: 60vmin; width: 100%; border-radius: 2vmin;"></div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -619,7 +619,7 @@
 	<iframe id="contact_content" onLoad="if(k===0){contact_load(this); k = 1;}" src="../include/elements/contact_info.php" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
 	<br style="clear: both;" />
 	<br />
-	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor_c.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_contact'; document.getElementById('modify_content_form').submit();">Zapisz zawartość</a>
+	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor_c.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_contact'; document.getElementById('modify_content_form').submit();"><?php echo(__("Save all")); ?></a>
 	<br style="clear: both;" />
 	<br />
 </div>

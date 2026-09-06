@@ -127,7 +127,7 @@
 		<center style="position: fixed; width: 100%; height: 99vh;">
 			<div class="window" id="default_login_window">
 				<form method="POST" action="process.php?s=auth">
-					<h2>Logowanie</h2>
+					<h2><?php echo(__("Log in")); ?></h2>
 					<br />
 					<?php
 						if(isset($_GET['response']))
@@ -135,46 +135,46 @@
 							if ($_GET['response']=="failed")
 							{
 								echo("<div class='prompt_window'>
-									<p>Logowanie nie powiodło się. <br />Spróbuj ponownie!</p>
+									<p>".__("Login unsuccessful").". <br />".__("Try again")."!</p>
 								</div>
 								<br />");
 							} else if ($_GET['response']=="logout")
 							{
 								echo("<div class='prompt_window' style='background-color: #00b3ff; border-left: 0.5vmax solid rgb(4, 103, 145);'>
-									<p>Wylogowano pomyślnie,<br /><a href='../' style='color: white; font-weight: bold; text-decoration: dotted;'>wróć na stronę główną</a>!</p>
+									<p>".__("Logged out successfully").",<br /><a href='../' style='color: white; font-weight: bold; text-decoration: dotted;'>".__("Return to the main site")."</a>!</p>
 								</div>
 								<br />");
 							} else if ($_GET['response']=="registered")
 							{
 								echo("<div class='prompt_window' style='background-color: #00b3ff; border-left: 0.5vmax solid rgb(4, 103, 145);'>
-									<p>Rejestracja powiodła się!<br />Teraz możesz się zalogować.</p>
+									<p>".__("Registration successful")."!<br />".__("You can log in now").".</p>
 								</div>
 								<br />");
 							} else if ($_GET['response']=="passrecoverysuccess")
 							{
 								echo("<div class='prompt_window' style='background-color: #00b3ff; border-left: 0.5vmax solid rgb(4, 103, 145);'>
-									<p>Twoje hasło zostało pomyślnie zmienione - teraz możesz się zalogować.</p>
+									<p>".__("Your password has been changed successfully")." - ".__("You can log in now").".</p>
 								</div>
 								<br />");
 							}
 						}
 					?>
 					
-					<input class="login_input" type="text" name="auth_username" placeholder="Nazwa użytkownika" required />
+					<input class="login_input" type="text" name="auth_username" placeholder="<?php echo(__("Username")); ?>" required />
 					<br />
 					<br />
-					<input class="login_input" type="password" name="auth_password" placeholder="Hasło" required />
+					<input class="login_input" type="password" name="auth_password" placeholder="<?php echo(__("Password")); ?>" required />
 					<br />
-					<?php if(boolval(get_misc_value('plugin_mailing'))) echo('<a onClick=\'document.getElementById("password_recovery_window_mail").style.display = "block"; document.getElementById("default_login_window").style.display = "none";\' class="simple_href" style="float: left; margin-top: 0.5vmax; margin-left: 7%; font-size: 1vmax;">Nie pamiętasz hasła?</a>'); ?>
+					<?php if(boolval(get_misc_value('plugin_mailing'))) echo('<a onClick=\'document.getElementById("password_recovery_window_mail").style.display = "block"; document.getElementById("default_login_window").style.display = "none";\' class="simple_href" style="float: left; margin-top: 0.5vmax; margin-left: 7%; font-size: 1vmax;">'.__("Forgot your password?").'</a>'); ?>
 					<br />
-					<input class="login_submit" type="submit" value="Zaloguj się" />
+					<input class="login_submit" type="submit" value="<?php echo(__("Log in")); ?>" />
 					<br style="clear: both;"/>
 				</form>
-				<p>Nie masz jeszcze konta? <a class="simple_href" href="../rejestracja.php">Zarejestruj się</a>.</p>
+				<p><?php echo(__("Don't have an account yet?")); ?> <a class="simple_href" href="../rejestracja.php"><?php echo(__("Create an account")); ?></a>.</p>
 			</div>
 			<div class="window" id="password_recovery_window_mail" style="display: none;">
 				<form method="POST" action="process.php?s=passrecovery_mail">
-					<h2>Odzyskaj hasło</h2>
+					<h2><?php echo(__("Password recovery")); ?></h2>
 					<br />
 					<?php
 						if(isset($_GET['passrecoverymail']))
@@ -186,13 +186,13 @@
 								if ($_GET['response']=="fail")
 								{
 									echo("<div class='prompt_window'>
-										<p>Nie udało się wysłać Ci maila. <br />Spróbuj ponownie!</p>
+										<p>".__("We couldn't send You recovery mail").". <br />".__("Try again")."!</p>
 									</div>
 									<br />");
 								} else if ($_GET['response']=="success")
 								{
 									echo("<div class='prompt_window' style='background-color: #00b3ff; border-left: 0.5vmax solid rgb(4, 103, 145);'>
-										<p>Mail wysłany pomyślnie! Sprawdź swoją skrzynkę pocztową (w tym SPAM).</p>
+										<p>".__("Email sent successfully! Please check your email (including SPAM).")."</p>
 									</div>
 									<br />");
 								}
@@ -200,19 +200,19 @@
 						}
 					?>
 					
-					<input class="login_input" type="text" name="recovery_pass_mail" id="recovery_pass_mail" placeholder="Adres e-mail" required />
+					<input class="login_input" type="text" name="recovery_pass_mail" id="recovery_pass_mail" placeholder="<?php echo(__("E-mail address")); ?>" required />
 					<br />
 					<br />
 					<br />
-					<input class="login_submit" type="submit" value="Wyślij link" />
-					<a href="index.php" class="login_submit_gray" style="margin-right: 0.5vmax;">Anuluj</a>
+					<input class="login_submit" type="submit" value="<?php echo(__("Send link")); ?>" />
+					<a href="index.php" class="login_submit_gray" style="margin-right: 0.5vmax;"><?php echo(__("Cancel")); ?></a>
 					<br style="clear: both;"/>
 					<br />
 				</form>
 			</div>
 			<div class="window" id="password_recovery_window_pass" style="display: none;">
 				<form method="POST" action="process.php?s=passrecovery_pass">
-					<h2>Odzyskaj hasło</h2>
+					<h2><?php echo(__("Password recovery")); ?></h2>
 					<br />
 					<?php
 						$ok = 1;
@@ -229,7 +229,7 @@
 								if(!isset($_GET['response'])) 
 								{
 									echo("<div class='prompt_window'>
-										<p>Brak dostępu.</p>
+										<p>".__("Access denied").".</p>
 									</div>
 									<br />");
 									$ok = 0;
@@ -241,7 +241,7 @@
 								if ($_GET['response']=="fail")
 								{
 									echo("<div class='prompt_window'>
-										<p>Coś poszło nie tak. <br />Spróbuj ponownie. </p>
+										<p>".__("Something went wrong").". <br />".__("Try again").". </p>
 									</div>
 									<br />");
 								}
@@ -249,14 +249,14 @@
 						}
 					?>
 					
-					<input class="login_input" type="password" name="recovery_pass_1" id="recovery_pass_1" placeholder="Nowe hasło" required />
+					<input class="login_input" type="password" name="recovery_pass_1" id="recovery_pass_1" placeholder="<?php echo(__("New password")); ?>" required />
 					<br />
 					<br />
-					<input class="login_input" type="password" name="recovery_pass_2" id="recovery_pass_2" placeholder="Powtórz nowe hasło" required />
+					<input class="login_input" type="password" name="recovery_pass_2" id="recovery_pass_2" placeholder="<?php echo(__("Repeat new password")); ?>" required />
 					<br />
 					<br />
 					<br />
-					<input class="login_submit" type="submit" id="recovery_pass_3" value="Zmień hasło" />
+					<input class="login_submit" type="submit" id="recovery_pass_3" value="<?php echo(__("Change password")); ?>" />
 					<?php
 						if($ok==0)
 						{
