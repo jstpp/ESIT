@@ -16,14 +16,14 @@
 		if($row['score']=='0')
 		{
 			$comment = __("You were unable to submit a valid flag. Please keep searching!");
-			$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
+			$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 5%);";
 		} else {
 			$comment = __("You successfully submitted the correct flag. We're happy for you!");
-			$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
+			$gradient = "linear-gradient(to left,#00d10a 0%,transparent 5%);";
 		}
 	} else {
 		$comment = __("The verification result for your flag is not available yet.");
-		$gradient = "linear-gradient(to left, gray 0%,transparent 50%);";
+		$gradient = "linear-gradient(to left, gray 0%,transparent 5%);";
 	}
 ?>
 <style>
@@ -57,16 +57,25 @@
 	<h1><?php echo(__("CTF flag evaluation results")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title"><?php echo($row['title']); ?></h2>
-	<p style="margin-left: 5%;"><i class='fas fa-info-circle'></i>&nbsp;&nbsp;<?php echo($comment); ?></p>
-	<table class="results" style="width: 90%; margin-right: 5%; margin-top: 4vmax;">
-		<tr>
-			<td><?php echo($row['submission_time']); ?></td>
-			<td><i class='<?php echo($ident['icon']); ?>'></i>&nbsp;<?php echo($ident['full_name']); ?></td>
-			<td><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score']); } else { echo("???"); }?>/<?php echo($row['maxpoints']); ?></td>
-			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score_percentage']); } else { echo("???"); }?>%</td>
-		</tr>
-	</table>
+	<h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=problem&id=<?php echo($row['PROBLEM_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['PROBLEM_ID']); ?>)</h2>
+	<div style="width: 85%; margin-left: 5%; padding: 2vmax; background-image: <?php echo($gradient); ?>; background-color: var(--container-hover-bg); border-radius: 1vmax;">
+		<?php
+			if ($row['score_percentage']!=-1 and strtotime($row['result_publish_time'])<strtotime("now"))
+			{
+				echo("<div style=\"width: fit-content; padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: ".$ident['color']."\"><b><i class='".$ident['icon']."'></i>&nbsp;&nbsp;".$ident['full_name']."</b></div>");
+				echo("<b><br />ID: #".$row['SUBMISSION_ID']."</b>");
+				echo("<p><i class='fas fa-info-circle'></i>&nbsp;&nbsp;".$comment."</p>");
+				echo("<p>");
+				echo(__("Submission timestamp").":&emsp;<code>".htmlentities($row['submission_time'])."</code><br />");
+				echo(__("Verification timestamp").":&emsp;<code>".htmlentities($row['verification_time'])."</code>");
+
+				echo("<h4>".__("Total").":&emsp;<code>".htmlentities($row['score'])."/".htmlentities($row['maxpoints'])."</code></h4>");
+			} else {
+				echo('<br /><center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;'.__("Your solution is waiting to be reviewed or its result has been temporarily hidden. The results will be available soon.").'</center>');
+			}
+		?>
+		<br />
+	</div>
 	<br style="clear: both;" />
 	<br />
 	<br />

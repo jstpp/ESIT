@@ -23,26 +23,26 @@
 		{
 			if($row['score_percentage']==0)
 			{
-				$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 50%);";
+				$gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 5%);";
 				$percentage = $row['score_percentage']."%";
 				$status = __("Incorrect");
 			} else if ($row['score_percentage']==100)
 			{
-				$gradient = "linear-gradient(to left,#00d10a 0%,transparent 50%);";
+				$gradient = "linear-gradient(to left,#00d10a 0%,transparent 5%);";
 				$percentage = $row['score_percentage']."%";
 				$status = __("Fully correct");
 			} else if ($row['score_percentage']==-1)
 			{
-				$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
+				$gradient = "linear-gradient(to left,gray 0%,transparent 5%);";
 				$percentage = "...";
 				$status = __("In queue...");
 			} else {
-				$gradient = "linear-gradient(to left,#8eed28 0%,transparent 50%);";
+				$gradient = "linear-gradient(to left,#8eed28 0%,transparent 5%);";
 				$percentage = $row['score_percentage']."%";
 				$status = __("Partially correct");
 			}
 		} else {
-			$gradient = "linear-gradient(to left,gray 0%,transparent 50%);";
+			$gradient = "linear-gradient(to left,gray 0%,transparent 5%);";
 			$percentage = "...";
 			$status = __("Result unavailable");
 		}
@@ -95,14 +95,38 @@
 	<h1><?php echo(__("Evaluation results")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title"><?php echo($row['title']); ?> (#<?php echo($row['PROBLEM_ID']); ?>)</h2>
+	<h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=problem&id=<?php echo($row['PROBLEM_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['PROBLEM_ID']); ?>)</h2>
 	<br />
-	<div id="charts" style="margin-left: 5%; width: 90%;">
-		<center>
-			<div id="genv" style="width: 240px; height: 240px;">
-				<canvas id="gen1"></canvas>
+	<div style="margin-left: 5%; width: 90%;">
+		<div style="display: flex; gap: 2vmax;">
+			<div id="charts" style="padding: 2vmax; background-color: var(--container-hover-bg); width: fit-content; border-radius: 1vmax;">
+				<div id="genv" style="width: 240px; height: 240px; position: relative;">
+					<canvas id="gen1"></canvas>
+					<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 2vmax;">
+						<?php echo($percentage); ?>
+					</div>
+				</div>
 			</div>
-		</center>
+
+			<div style="padding: 2vmax; background-image: <?php echo($gradient); ?>; background-color: var(--container-hover-bg); width: auto; border-radius: 1vmax; flex-grow: 5;">
+				<?php
+					if ($row['score_percentage']!=-1 and strtotime($row['result_publish_time'])<strtotime("now"))
+					{
+						echo("<div style=\"width: fit-content; padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: ".$ident['color']."\"><b><i class='".$ident['icon']."'></i>&nbsp;&nbsp;".$ident['full_name']."</b></div>");
+						echo("<b><br />ID: #".$row['SUBMISSION_ID']."</b>");
+						echo("<p>");
+						echo(__("Status").":&emsp;<code>".htmlentities($status)."</code><br />");
+						echo(__("Submission timestamp").":&emsp;<code>".htmlentities($row['submission_time'])."</code><br />");
+						echo(__("Verification timestamp").":&emsp;<code>".htmlentities($row['verification_time'])."</code>");
+
+						echo("<h4>".__("Total").":&emsp;<code>".htmlentities($row['score'])."/".htmlentities($row['maxpoints'])."</code></h4>");
+					} else {
+						echo('<br /><center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;'.__("Your solution is waiting to be reviewed or its result has been temporarily hidden. The results will be available soon.").'</center>');
+					}
+				?>
+				<br />
+			</div>
+		</div>
     
 		<script>
 		  const ctx = document.getElementById('gen1');
@@ -120,7 +144,7 @@
 			options: {
 				responsive: true,
 				borderWidth: 0,
-				cutout: 98,
+				cutout: 70,
 				plugins: {
 					legend: {
 						display: false
@@ -133,24 +157,6 @@
 		  });
 		</script>
 	</div>
-	<br />
-	<?php
-		if ($row['score_percentage']==-1 or strtotime($row['result_publish_time'])>strtotime("now"))
-		{
-			echo('<center><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;'.__("Your solution is waiting to be reviewed or its result has been temporarily hidden. The results will be available soon.").'</center>');
-		}
-	?>
-	<table class="results" id="summary" style="width: 90%; margin-right: 5%; margin-top: 4vmax;">
-		<tr>
-			<td><?php echo($row['submission_time']); ?></td>
-			<td><?php echo($row['verification_time']); ?></td>
-			<td><i class='<?php echo($ident['icon']); ?>'></i>&nbsp;<?php echo($ident['full_name']); ?></td>
-			<td style="background-image: <?php echo($gradient); ?>"><?php echo($status); ?></td>
-			<td><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score']); } else { echo("???"); }?>/<?php echo($row['maxpoints']); ?></td>
-			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($percentage); } else { echo("???"); } ?></td>
-		</tr>
-	</table>
-	<br style="clear: both;" />
 	<br />
 	<br />
 </div>
