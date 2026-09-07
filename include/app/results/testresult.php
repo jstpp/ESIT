@@ -11,6 +11,7 @@
 		}
 
 		$row = $db_query->fetch();
+		$ident = ($row['type']==4) ? problem_type_identification('mch') : problem_type_identification('och');
 		$questions = array();
 
 		$db_query = $pdo->prepare('SELECT * FROM TEST_QUESTIONS WHERE problem_id=:pid');
@@ -134,7 +135,7 @@
 		<tr>
 			<td><?php echo($row['submission_time']); ?></td>
 			<td><?php echo($row['verification_time']); ?></td>
-			<td><i class='fas fa-check-square'></i>&nbsp;&nbsp;Jednokrotnego wyboru</td>
+			<td><i class='<?php echo($ident['icon']); ?>'></i>&nbsp;<?php echo($ident['full_name']); ?></td>
 			<td style="background-image: <?php echo($gradient); ?>"><?php echo($status); ?></td>
 			<td><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score']); } else { echo("???"); } ?>/<?php echo($row['maxpoints']); ?></td>
 			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($percentage); } else { echo("???"); }?></td>

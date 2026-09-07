@@ -1,4 +1,5 @@
 <?php
+	$ident = problem_type_identification('ctf');
 	if($_SESSION['AUTH_LEVEL']<5)
 	{
 		$db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
@@ -61,7 +62,7 @@
 	<table class="results" style="width: 90%; margin-right: 5%; margin-top: 4vmax;">
 		<tr>
 			<td><?php echo($row['submission_time']); ?></td>
-			<td><i class='fas fa-flag'></i></i>&nbsp;&nbsp;Capture The Flag</td>
+			<td><i class='<?php echo($ident['icon']); ?>'></i>&nbsp;<?php echo($ident['full_name']); ?></td>
 			<td><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score']); } else { echo("???"); }?>/<?php echo($row['maxpoints']); ?></td>
 			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score_percentage']); } else { echo("???"); }?>%</td>
 		</tr>

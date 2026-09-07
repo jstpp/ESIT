@@ -32,6 +32,7 @@
 		'general_motd' => 'Change your MOTD',
 		'general_url' => 'http://localhost',
 		'general_timezone' => 'Europe/Warsaw',
+		'default_language' => 'en_US.UTF-8',
 		'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1"]',
 		'general_trusted_proxies' => '["127.0.0.1", "::1"]',
 		'plugin_custom_error_broker_url' => 'http://localhost',
@@ -39,7 +40,7 @@
 		'plugin_mailing_module_port' => 587,
 		'plugin_mailing_module_username' => 'YourUsername',
 		'plugin_mailing_module_password' => 'YourPassword',
-		'plugin_mailing_module_protocol' => 'starttls'
+		'plugin_mailing_module_protocol' => 'starttls',
 	);
 
 	###############################################
@@ -75,8 +76,8 @@
 
 	function init_i18n($domain, $lang = ""): string {
 		try {	
-			if(strlen($lang)<5) $lang = $_SESSION['lang'] ?? "en_US.UTF-8";
-			if(!init_i18n_is_valid_locale($lang)) return "en_US.UTF-8";
+			if(strlen($lang)<5) $lang = $_SESSION['lang'] ?? get_misc_value("default_language");
+			if(!init_i18n_is_valid_locale($lang)) return get_misc_value("default_language");
 
 			setlocale(LC_ALL, $lang);
 			bindtextdomain($domain, __DIR__.'/../../locale');
@@ -85,7 +86,7 @@
 			
 			return $lang;
 		} catch (Throwable $t) {
-			return "en_US.UTF-8";
+			return get_misc_value("default_language");
 		}
 	}
 
@@ -449,9 +450,9 @@
 		$problem_types = [
 			'alg'     => ['full_name' => __('Algorithmic task'), 'icon' => 'fas fa-file-code', 'color' => 'rgba(0, 121, 250, 1)'],
 			'ctf'     => ['full_name' => __('Capture The Flag'), 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
-			'och'     => ['full_name' => __('Single choice Questions'), 'icon' => 'fa fa-check-square-o', 'color' => 'rgba(14, 149, 109, 1)'],
-			'mch'     => ['full_name' => __('Multiple choice Questions'), 'icon' => 'fa fa-check-square', 'color' => 'rgba(218, 130, 6, 1)'],
-			'opn'     => ['full_name' => __('Open-ended Questions'), 'icon' => 'fa fa-pencil-square-o', 'color' => 'rgba(69, 47, 165, 1)'],
+			'och'     => ['full_name' => __('Single choice'), 'icon' => 'fa fa-check-square-o', 'color' => 'rgba(14, 149, 109, 1)'],
+			'mch'     => ['full_name' => __('Multiple choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgba(218, 130, 6, 1)'],
+			'opn'     => ['full_name' => __('Open-ended'), 'icon' => 'fa fa-pencil-square-o', 'color' => 'rgba(69, 47, 165, 1)'],
 			'unk'     => ['full_name' => __('Unknown'), 'icon' => 'fas fa-bug', 'color' => 'rgba(120, 120, 120, 1)']
 		];
 

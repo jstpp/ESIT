@@ -57,7 +57,7 @@ Check the ESIT custom configuration options [here](setup/README.md).
 > When running docker installation remember to check if your custom config matches the credentials in [compose.yaml](compose.yaml).
 
 ## Translation
-Although the code variables and comments are in English, ESIT will provide an English GUI soon. Feel free to add translations.
+Feel free to add translations. Currently supported languages: 🇺🇸 `English`, 🇵🇱 `Polish`.
 
 ## More information
 For more information see:

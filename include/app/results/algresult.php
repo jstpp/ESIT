@@ -1,4 +1,5 @@
 <?php
+	$ident = problem_type_identification('alg');
 	if(isset($_GET['sid']))
 	{
 		if($_SESSION['AUTH_LEVEL']<5)
@@ -141,7 +142,7 @@
 		<tr>
 			<td><?php echo($row['submission_time']); ?></td>
 			<td><?php echo($row['verification_time']); ?></td>
-			<td><i class='fas fa-cloud'></i>&nbsp;Algorytmiczne</td>
+			<td><i class='<?php echo($ident['icon']); ?>'></i>&nbsp;<?php echo($ident['full_name']); ?></td>
 			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($status); } ?></td>
 			<td><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($row['score']); } ?>/<?php echo($row['maxpoints']); ?></td>
 			<td style="background-image: <?php echo($gradient); ?>"><?php if(strtotime($row['result_publish_time'])<strtotime("now")) { echo($percentage); } ?></td>
