@@ -63,7 +63,7 @@
 
 
 	###############################################
-	#              general toolbox				  #
+	#          	         i18n					  #
 	###############################################
 
 	function __($text, $plural=null, $number=null) {
@@ -73,25 +73,33 @@
 		return ngettext($text, $plural, $number);
 	}
 
-	function init_i18n($domain): bool {
-		try {
-			$lang = "pl_PL.UTF-8";
-			
-			putenv("LC_ALL=".$lang);
-			putenv("LANG=".$lang);
-			putenv("LANGUAGE=".$lang);
-			
+	function init_i18n($domain, $lang = ""): string {
+		try {	
+			if(strlen($lang)<5) $lang = $_SESSION['lang'] ?? "en_US.UTF-8";
+			if(!init_i18n_is_valid_locale($lang)) return "en_US.UTF-8";
+
 			setlocale(LC_ALL, $lang);
-			
 			bindtextdomain($domain, __DIR__.'/../../locale');
 			bind_textdomain_codeset($domain, 'UTF-8');
 			textdomain($domain);
 			
-			return True;
+			return $lang;
 		} catch (Throwable $t) {
-			return False;
+			return "en_US.UTF-8";
 		}
 	}
+
+	function init_i18n_is_valid_locale($lang): bool
+	{
+		return preg_match(
+			'/^[a-z]{2,3}(?:_[A-Z]{2}|\-[A-Z]{2})?(?:\.[A-Za-z0-9_-]+)?$/',
+			$lang
+		) === 1;
+	}
+
+	###############################################
+	#              general toolbox				  #
+	###############################################
 
 	function get_misc_value($key): string
 	{
@@ -565,6 +573,6 @@
 		parse_flash_messages();
 	}
 
-	init_i18n('messages');
+	$_SESSION['lang'] = isset($_GET['lang'], $_SESSION['lang']) ? init_i18n('messages', $_GET['lang']) : init_i18n('messages');
 
 ?>
