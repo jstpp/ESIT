@@ -3,8 +3,8 @@
 	$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
 
 	while($row = $db_query->fetch()) {
-		$avg_score = isset($row['avg_score']) ? round($row['avg_score'], 1) : 0;
-        $submissions_total = isset($row['submissions_total']) ? round($row['submissions_total'], 1) : 0;
+		$avg_score = max(isset($row['avg_score']) ? round($row['avg_score'], 1) : 0, 0);
+        $submissions_total = max(isset($row['submissions_total']) ? round($row['submissions_total'], 1) : 0, 0);
 	}
 
 	$db_query = $pdo->prepare('SELECT
@@ -29,7 +29,7 @@
 	);
 
 	foreach ($data as $row) {
-		$map[$row['day']] = $row['daily_points'];
+		$map[$row['day']] = max($row['daily_points'], 0);
 	}
 
 	foreach ($period as $date) {
@@ -38,6 +38,6 @@
 			$current_sum += $map[$day];
 		}
 		$labels[] = $date->format("j M");
-		$points[] = $current_sum;
+		$points[] = max($current_sum, 0);
 	}
 ?>

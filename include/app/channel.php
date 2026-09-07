@@ -399,6 +399,7 @@
 										echo('</div>
 											</div>
 										</a>');
+										array_push($set_results[$set['SET_ID']], round($maxscore/$row['maxpoints']*100, 0));
 									}
 								} else {
 									echo('<h1 style="text-align: center; margin-bottom: -1vmax;"><i class=\'fas fa-lock\'></i></h1>');

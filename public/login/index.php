@@ -121,6 +121,35 @@
 				color:rgb(47, 120, 151);
 			}
 
+			.i18n_select {
+				height: 2vmax;
+				width: fit-content;
+				padding: 0.25vmax;
+				background-color: var(--container-hover-bg);
+				border-radius: 0.5vmax;
+				display: flex;
+				flex-direction: row;
+				gap: 0.25vmax;
+				cursor: pointer;
+				user-select: none;
+
+				position: fixed;
+				bottom: 1vmax;
+				left: 1vmax;
+			}
+
+			.i18n_select_flag {
+				background-repeat: no-repeat;
+				background-size: cover;
+				width: 2vmax;
+				border-radius: 0.5vmax;
+				display: none;
+			}
+
+			.i18n_select_active {
+				display: flex;
+			}
+
 		</style>
 	</head>
 	<body>
@@ -268,5 +297,29 @@
 				</form>
 			</div>
 		</center>
+		<div class="i18n_select">
+			<div id="en_US.UTF-8" class="i18n_select_flag" style="background-image: url('../img/i18n/flags/us.svg');" onClick="i18n_select_choose(this);">&emsp;</div>
+			<div id="pl_PL.UTF-8" class="i18n_select_flag" style="background-image: url('../img/i18n/flags/pl.svg');" onClick="i18n_select_choose(this);">&emsp;</div>
+		</div>
+
+		<script>
+			var i18n_select_mode = 0;
+			const flags = document.querySelectorAll(".i18n_select_flag")
+			document.getElementById('<?php echo($_SESSION['lang']); ?>').style.display = 'flex';
+			function i18n_select_choose(x) {
+				if (i18n_select_mode === 1) {
+					i18n_select_mode = 0;
+
+					const urlParams = new URLSearchParams(window.location.search);
+					urlParams.set('lang', x.id);
+					window.location.search = urlParams.toString();
+				} else {
+					for(let i = 0; i < flags.length; i++){
+						flags[i].style.display = 'flex';
+					}
+					i18n_select_mode = 1;
+				}
+			}
+		</script>
 	</body>
 </html>

@@ -159,7 +159,7 @@
 	<form method="POST" action="process.php?r=add_problem&sid=<?php echo(htmlentities($setid)); ?>" enctype="multipart/form-data" id="newproblemform">
 		<div class="window" id="main_info">
 			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Basic information")); ?></h2>
-			<input type="text" name="problem_title" onChange="validate_data();" placeholder="Tytuł zadania" class="forminput" style="margin-left: 2.5%; width: 91.75%;" required />
+			<input type="text" name="problem_title" onChange="validate_data();" placeholder="<?php echo(__("Problem title")); ?>" class="forminput" style="margin-left: 2.5%; width: 91.75%;" required />
 			<br />
 			<input type="hidden" id="problem_type" name="problem_type" value="0" />
 			<br />

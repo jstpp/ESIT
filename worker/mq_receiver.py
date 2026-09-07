@@ -55,8 +55,10 @@ def main():
             logfile.flush()
 
             if (submission["submission_lang"]=="py"):
+                print(str(time.ctime())+' | Executing PYTHON script.')
                 api.lib.send(compilers.python.run(submission), submission)
             elif (submission["submission_lang"]=="cpp"):
+                print(str(time.ctime())+' | Executing C++ script.')
                 api.lib.send(compilers.cpp.run(submission), submission)
 
         channel.basic_consume(queue='esit', on_message_callback=callback, auto_ack=True)

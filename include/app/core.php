@@ -30,7 +30,7 @@
 	$default_variables = array(
 		'general_title' => 'My First ESIT app',
 		'general_motd' => 'Change your MOTD',
-		'general_url' => 'http://localhost',
+		'general_url' => 'http://web',
 		'general_timezone' => 'Europe/Warsaw',
 		'default_language' => 'en_US.UTF-8',
 		'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1"]',
@@ -230,7 +230,7 @@
 
 	function net_check_if_trusted(): bool
 	{
-		$allowed = json_decode(get_misc_value('general_workers_allowed_addr'), true);
+		$allowed = json_decode(get_misc_value('general_workers_allowed_addr'), true);	
         return is_array($allowed) && in_array(get_real_client_ip(), $allowed, true);
 	}
 

@@ -256,7 +256,7 @@
 								break;
 						}
 
-						echo('<a href="index.php?p=ctfresult&sid='.$row['id'].'" class="dashboard_results_block" style="background-image: '.$gradient.';">
+						echo('<a href="index.php?p='.$resultdest.'&sid='.$row['id'].'" class="dashboard_results_block" style="background-image: '.$gradient.';">
 							<div style="display: flex; flex-direction: column; flex: 1;">
 								<h2 style="margin: 0 0 0.5vmax 0;">'.htmlentities($row['title']).'</h2>
 								<small style="font-size: 0.7vmax; background-color: '.$problem['color'].'; width: 8vmax; text-align: center; padding: 0.4vmax; border-radius: 1vmax;"><i class="'.$problem['icon'].'"></i>&nbsp;&nbsp;'.$problem['full_name'].'</small>
