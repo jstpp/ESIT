@@ -4,10 +4,10 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 rm -Rf "$SCRIPT_DIR/../public/portal"
 rm -Rf "$SCRIPT_DIR/../include/portal"
 git clone https://github.com/jstpp/ESITDefaultTemplate.git "$SCRIPT_DIR/../public/portal"
-cp -r "$SCRIPT_DIR/../public/portal/include" "$SCRIPT_DIR/../include/portal"
+chmod -R 0777 "$SCRIPT_DIR/../public/portal"
 cp -r "$SCRIPT_DIR/../public/portal/img/"* "$SCRIPT_DIR/../public/img/"
 
-# Create missing files
+# Create missing directories
 chmod -R 0777 "$SCRIPT_DIR/../public/img"
 mkdir "$SCRIPT_DIR/../public/img/articles/"
 mkdir "$SCRIPT_DIR/../public/img/articles/header/"

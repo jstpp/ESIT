@@ -8,9 +8,9 @@
       remove_script_host : false,
       convert_urls : true,
       xss_sanitization: true,
-      plugins: 'print preview powerpaste directionality advcode visualblocks visualchars fullscreen image link codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists checklist wordcount textpattern pageembed charmap tinycomments quickbars linkchecker emoticons advtable',
+      plugins: 'print preview powerpaste directionality advcode visualblocks visualchars fullscreen image link codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount charmap quickbars emoticons',
       menubar: 'file edit view insert format tools table tc help',
-      toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | charmap emoticons | preview | insertfile image media pageembed template link anchor codesample | showcomments addcomment',
+      toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | charmap emoticons | preview | insertfile image media pageembed template link anchor codesample | showcomments addcomment',
       height: 500
     });
 </script>
@@ -43,7 +43,7 @@
 	}
 
 	.portal_articles_card {
-		margin_left: 5%;
+		margin-left: 5%;
 	}
 
 	.org_user {
@@ -104,7 +104,7 @@
 		<center>
 			<br />
 			<label for="fname"><?php echo(__("Title")); ?>:</label>
-			<input type="text" id="fname" name="fname" value="<?php echo($article_title)?>" style="font-size: 20px; width: 98%; text-align: center;" required><br><br>
+			<input type="text" id="fname" name="fname" value="<?php echo(htmlspecialchars($article_title, ENT_QUOTES, 'UTF-8')); ?>" style="font-size: 20px; width: 98%; text-align: center;" required><br><br>
 			<input type="hidden" name="fareahidden" id="fareahidden" value="none">
 		</center>
 		<br />

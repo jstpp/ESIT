@@ -10,7 +10,7 @@
 		$db_query = $pdo->prepare('DELETE FROM ARTICLES WHERE id=:pid');
 		$db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 
-		if(file_exists($headerimagename) and $headerimagename!="img/placeholder.jpeg") unlink("../".$headerimagename);
+		if(file_exists($headerimagename) and $headerimagename!="img/placeholder.jpeg") unlink($headerimagename);
 		redirect("index.php?p=portal");
 	} catch (Throwable $t) {
 		extended_exception_handler($t);

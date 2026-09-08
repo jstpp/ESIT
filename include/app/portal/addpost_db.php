@@ -1,5 +1,5 @@
 <?php
-	if(!is_logged_in() || !has_a_priority(3)) kick();
+	if(!has_a_priority(3)) kick();
 	try 
 	{
 		$target_dir = "../img/articles/header";

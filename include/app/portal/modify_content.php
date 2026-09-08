@@ -1,5 +1,5 @@
 <?php
-    if(!isset($_GET['page']) || !is_logged_in() || !has_a_priority(3)) kick();
+    if(!isset($_GET['page']) || !has_a_priority(3)) kick();
     $content = $_POST['editor_send_content'];
     
     if($_GET['page']=="portal_main")

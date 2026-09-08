@@ -370,7 +370,7 @@
 		<div class="dark-box">
 			<label for="general_url"><?php echo(__("Default URL address")); ?>:&emsp;</label>
 			<input type="text" id="general_url" name="general_url" placeholder="<?php echo(__("Default URL address")); ?>" value="<?php echo(get_misc_value('general_url')); ?>">
-			<br /><small><?php echo(__("The address through which you connect to the app is:")); ?> "https://<b><?php echo($_SERVER['HTTP_HOST']); ?></b>".</small>
+			<br /><small><?php echo(__("The address through which you connect to the app is:")); ?> "<?php echo(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? "https://" : "http://"); ?><b><?php echo($_SERVER['HTTP_HOST']); ?></b>".</small>
 		</div>
 		<div class="dark-box">
 			<label for="general_timezone"><?php echo(__("Default timezone")); ?>:&emsp;</label>

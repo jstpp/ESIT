@@ -1,5 +1,5 @@
 <?php
-	if(!is_logged_in() || !has_a_priority(3) || !filter_var($_GET['id'], FILTER_VALIDATE_INT)) kick();
+	if(!has_a_priority(3) || !filter_var($_GET['id'], FILTER_VALIDATE_INT)) kick();
 	if(empty(trim($_POST['fname'])) || empty(trim($_POST['fareahidden']))) redirect("index.php?p=portal&error");
 	try 
 	{

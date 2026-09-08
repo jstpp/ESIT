@@ -360,13 +360,13 @@
 		$placeholder = "../img/placeholder.jpeg";
 
 		if(!isset($img) || !isset($target_root_dir) || !isset($img['tmp_name']) || $img['error'] !== UPLOAD_ERR_OK) {
-			echo "Sorry, something went wrong. (1)";
+			#echo "Sorry, something went wrong. (1)";
 			return $placeholder;
 		}
 
 		$base_dir = realpath($target_root_dir);
 		if (!$base_dir || !is_dir($base_dir)) {
-			echo "Sorry, something went wrong. (2)";
+			#echo "Sorry, something went wrong. (2)";
 			return $placeholder;
 		}
 
@@ -383,7 +383,7 @@
 					return $placeholder;
 				}
 
-				if ($img["size"] > 1000000) {
+				if ($img["size"] > 20000000) {
 					#echo "Image is too large! (4)";
 					return $placeholder;
 				}
