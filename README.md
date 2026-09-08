@@ -32,7 +32,7 @@ The service should be available on `localhost:80` unless you change it. The firs
 
 ## Technical details
 ### Evaluation of algorithmic solutions
-ESIT uses [nsjail](https://github.com/google/nsjail) to isolate algorithmic solutions and uses default mechanisms of compilers or OS to measure the parameters of compilation. Currently, it supports **Python** (3.11) and **C++** (C++20).
+ESIT uses [nsjail](https://github.com/google/nsjail) to isolate algorithmic solutions and uses default mechanisms of compilers or OS to measure the parameters of compilation. Currently, it supports **Python** (3.13) and **C++** (C++20).
 
 ![Screenshot of algorythmic submission interface](public/img/screenshots/screenshot-2.png)
 

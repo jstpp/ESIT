@@ -1,6 +1,6 @@
 # ESIT | worker
 ## Evaluation of algorythmic solutions
-ESIT uses [nsjail](https://github.com/google/nsjail) to isolate algorythmic solutions and uses default mechanisms of compilers or OS to measure the parameters of compilation. Currently, it supports **python** (3.11) and **C++** (C++20).
+ESIT uses [nsjail](https://github.com/google/nsjail) to isolate algorythmic solutions and uses default mechanisms of compilers or OS to measure the parameters of compilation. Currently, it supports **python** (3.13) and **C++** (C++20).
 
 ## Manual start
 To start the worker without running entire [compose.yaml](../compose.yaml) You should prepare proper environment by running worker's [dockerfile](../setup/worker-dockerfile). Take into consideration, that worker's container uses privileged mode to enable containerization (nsjail sandboxes). 
