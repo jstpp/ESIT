@@ -171,16 +171,14 @@
         {
             if(process_alg_check($_FILES['in_'.($i+1)], "in") and process_alg_check($_FILES['out_'.($i+1)], "out"))
             {
-                $db_query = $pdo->prepare('INSERT INTO ALG_TEST_LIST (test_author_id, problem_id, max_time, max_memory) VALUES (:aid, :pid, :time, :memory)');
-                $db_query->execute(['aid' => $_SESSION['AUTH_ID'], 'pid' => $problem_id, 'time' => $_POST['time_'.($i+1)], 'memory' => $_POST['memory_'.($i+1)]]);
+                $db_query = $pdo->prepare('INSERT INTO ALG_TEST_LIST (test_author_id, problem_id, max_time, max_memory, weight) VALUES (:aid, :pid, :time, :memory, :weight)');
+                $db_query->execute(['aid' => $_SESSION['AUTH_ID'], 'pid' => $problem_id, 'time' => $_POST['time_'.($i+1)], 'memory' => $_POST['memory_'.($i+1)], 'weight' => $_POST['weight_'.($i+1)]]);
                 $test_id = $pdo->lastInsertId();
                 process_alg_file($_FILES['in_'.($i+1)], "in", $problem_id, $test_id);
                 process_alg_file($_FILES['out_'.($i+1)], "out", $problem_id, $test_id);
 
                 echo("Test ".($i+1)." - OK");
                 $j++;
-            } else {
-                echo("Test ".($i+1)." - ERROR");
             }
             $i++;
         }

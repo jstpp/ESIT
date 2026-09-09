@@ -199,6 +199,9 @@
 				<input type="number" name="memory_1" id="memory_1" placeholder="<?php echo(__("Max. memory")); ?> [MiB]" class="forminput" style="width: 30%;" step="16" max="1024" min="16"/>
 				<br />
 				<br />
+				<input type="number" name="weight_1" id="weight_1" placeholder="<?php echo(__("Weight")); ?>" class="forminput" style="width: 30%;" step="1"/>
+				<br />
+				<br />
 			</div>
 			<br />
 			<a class="forminput_a" id="add_btn" onClick="add_tab();" style="float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowy</a>
@@ -219,6 +222,7 @@
 					const out_input = new_tab.querySelector("input[name^='out_']");
 					const time_input = new_tab.querySelector("input[name^='time_']");
 					const memory_input = new_tab.querySelector("input[name^='memory_']");
+					const weight_input = new_tab.querySelector("input[name^='weight_']");
 
 					in_input.name = "in_" + (sets_count+1);
 					in_input.id = "in_" + (sets_count+1);
@@ -233,6 +237,9 @@
 
 					memory_input.name = "memory_" + (sets_count+1);
 					memory_input.id = "memory_" + (sets_count+1);
+
+					weight_input.name = "weight_" + (sets_count+1);
+					weight_input.id = "weight_" + (sets_count+1);
 
 					const closeBtn = new_tab.querySelector("span");
 					closeBtn.addEventListener("click", function () {

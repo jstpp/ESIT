@@ -10,7 +10,7 @@
 		'send_alg_solution'   		=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'worker/mq_producer.php', 'required' => ['lang', 'pid']],
 		'api_get_results'	  		=> ['mode' => 'worker-api', 'priority' => 0, 'path' => 'worker/api/api_get_results.php'],
 		'ask_for_inout'	  	  		=> ['mode' => 'worker-api', 'priority' => 0, 'path' => 'worker/api/api_ask_for_inout.php'],
-		'registration_is_unique'	=> ['mode' => 'public', 'priority' => 0, 'path' => 'portal/registration_is_unique.php'],
+		'registration_is_unique'	=> ['mode' => 'public', 'priority' => 0, 'path' => '../public/include/registration_is_unique.php'],
 		'add_problem'				=> ['mode' => 'interactive', 'priority' => 3, 'path' => 'app/problems/add_problem_script.php'],
 		'verify_ctf'				=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/problems/verify_ctf_script.php'],
 		'verify_test'				=> ['mode' => 'interactive', 'priority' => 0, 'path' => 'app/problems/verify_test_anwsers.php'],

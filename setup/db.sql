@@ -19,7 +19,8 @@ CREATE TABLE `ALG_TEST_LIST` (
   `test_author_id` int(11) NOT NULL,
   `problem_id` int(11) NOT NULL,
   `max_time` double NOT NULL,
-  `max_memory` int(11) NOT NULL
+  `max_memory` int(11) NOT NULL,
+  `weight` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
