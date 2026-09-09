@@ -10,4 +10,5 @@
 /public/img/problemsets/header/*
 /public/img/plugins/*
 /include/plugins/*
+*~
 *.pyc
