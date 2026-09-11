@@ -79,7 +79,7 @@
 				<br />
 				<select class="forminput" name="lang" id="lang" onChange="lchange();" style="float: left; margin-left: 5%;">
 					<option value="cpp">C++ (g++ dla C++20)</option>
-					<option value="python">Python (Python 3.10)</option>
+					<option value="python">Python (Python 3.13)</option>
 				</select>
 				<input type="submit" value="Prześlij odpowiedź" class="forminput" style="float: right; margin-right: 5%;" onClick="document.getElementById(\'editor_code\').innerHTML = editor.getValue();"/>
 				<br style="clear: both;"/>

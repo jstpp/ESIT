@@ -378,6 +378,10 @@
 			<br /><small><?php echo(__("Current system time:")); ?> <b><?php echo(date("Y-m-d H:i:s")); ?></b> (<?php echo(date_default_timezone_get()); ?>).</small>
 		</div>
 		<div class="dark-box">
+			<label for="general_default_language"><?php echo(__("Default language")); ?>:&emsp;</label>
+			<input type="text" id="general_default_language" name="general_default_language" placeholder="Domyślna język aplikacji" value="<?php echo(get_misc_value('general_default_language')); ?>">
+		</div>
+		<div class="dark-box">
 			<p><?php echo(__("Workers")); ?></p>
 			<label class="switch-checkbox">
 				<input type="checkbox" id="general_workers_localonly" name="general_workers_localonly" value="1" <?php echo(boolval(get_misc_value('general_workers_localonly')) ? 'checked' : ''); ?>>

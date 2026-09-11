@@ -19,12 +19,12 @@ def run(submission):
     
     genfile = sys.stdout
     for turn in submission['tests']:
-        print(datetime.datetime.now(), " | Compilation of submission ", submission['submission_id'], " (test", turn['TEST_ID'], ")")
+        print(datetime.datetime.now(), " | Testing submission ", submission['submission_id'], " (test", turn['TEST_ID'], ")")
         try:
             genfile = sys.stdout
             logfile = open(output_dir + "/" + str(turn['TEST_ID']) + ".log","w")
         except Exception as e:
-            print("A compiler exception occured - compilation error for test " + str(turn['TEST_ID']))
+            print("A compiler exception occured - error for test " + str(turn['TEST_ID']))
             return "fail"
 
         try:

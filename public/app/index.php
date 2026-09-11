@@ -59,8 +59,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Aplikacja | <?php  echo(htmlspecialchars($general_title)); ?></title>
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+		<title><?php echo(__("App")); ?> | <?php  echo(htmlspecialchars($general_title)); ?></title>
+		<link href="/include/fonts/Montserrat/Montserrat.css" rel="stylesheet">
 		<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 		<script src="https://kit.fontawesome.com/8a8540bd68.js" crossorigin="anonymous"></script>
 		<style> 

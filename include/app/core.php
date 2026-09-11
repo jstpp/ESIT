@@ -37,7 +37,7 @@
 		'general_motd' => 'Change your MOTD',
 		'general_url' => 'http://web',
 		'general_timezone' => 'Europe/Warsaw',
-		'default_language' => 'en_US.UTF-8',
+		'general_default_language' => 'en_US.UTF-8',
 		'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1"]',
 		'general_trusted_proxies' => '["127.0.0.1", "::1"]',
 		'plugin_custom_error_broker_url' => 'http://localhost',
@@ -81,8 +81,8 @@
 
 	function init_i18n($domain, $lang = ""): string {
 		try {	
-			if(strlen($lang)<5) $lang = $_SESSION['lang'] ?? get_misc_value("default_language");
-			if(!init_i18n_is_valid_locale($lang)) return get_misc_value("default_language");
+			if(strlen($lang)<5) $lang = $_SESSION['lang'] ?? get_misc_value("general_default_language");
+			if(!init_i18n_is_valid_locale($lang)) return get_misc_value("general_default_language");
 
 			setlocale(LC_ALL, $lang);
 			bindtextdomain($domain, __DIR__.'/../../locale');
@@ -91,7 +91,7 @@
 			
 			return $lang;
 		} catch (Throwable $t) {
-			return get_misc_value("default_language");
+			return get_misc_value("general_default_language");
 		}
 	}
 

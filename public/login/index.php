@@ -9,8 +9,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+		<link href="/include/fonts/Montserrat/Montserrat.css" rel="stylesheet">
 		<script src="https://kit.fontawesome.com/8a8540bd68.js" crossorigin="anonymous"></script>
+		<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 		<style> 
 			body {
 				margin: 0;
