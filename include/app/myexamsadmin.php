@@ -52,7 +52,7 @@
 	{
 		echo('
 		<div style="margin-left: auto; margin-right: auto; margin-top: 5vmax; text-align: center; display: flex; flex-direction: column; justify-content: cetner; width: 30%; padding: 3vmax; background-color: var(--container-bg); box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg); border-radius: 1vw;">
-			<i class="fa fa-hourglass-3" style="font-size: 7vmax;"></i>
+			<i class="fa fa-hourglass-3" style="font-size: 7vmax; margin: auto;"></i>
 			<center style="margin-top: 2vmax; user-select: none;"><i>'.__("There's nothing here yet!").'</i></center>
 		</div>
 		');

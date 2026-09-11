@@ -102,7 +102,7 @@
 	<?php
 		if(has_a_priority(4))
 		{
-			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-coffee\'></i>&nbsp;&nbsp;&nbsp;'.__("Creators' center").'</a>');
+			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-coffee\'></i>&emsp;'.__("Creators' center").'</a>');
 		}
 	?>
 

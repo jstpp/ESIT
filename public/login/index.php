@@ -10,7 +10,7 @@
 <html>
 	<head>
 		<link href="/include/fonts/Montserrat/Montserrat.css" rel="stylesheet">
-		<script src="https://kit.fontawesome.com/8a8540bd68.js" crossorigin="anonymous"></script>
+		<link href="/include/fonts/fontawesome/css/all.min.css" rel="stylesheet">
 		<link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 		<style> 
 			body {
