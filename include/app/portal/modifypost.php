@@ -1,17 +1,19 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.3.1/tinymce.min.js" referrerpolicy="origin"></script>
-
+<script src="/include/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
       selector: 'textarea#content_area',
-      images_upload_url: 'process.php?r=getimg',
+	  images_upload_url: 'process.php?r=getimg',
       relative_urls : false,
       remove_script_host : false,
       convert_urls : true,
       xss_sanitization: true,
-      plugins: 'print preview powerpaste directionality advcode visualblocks visualchars fullscreen image link codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount charmap quickbars emoticons',
+      plugins: 'preview directionality visualblocks visualchars fullscreen link codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount charmap quickbars emoticons',
       menubar: 'file edit view insert format tools table tc help',
-      toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | charmap emoticons | preview | insertfile image media pageembed template link anchor codesample | showcomments addcomment',
-      height: 500
+      toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | charmap emoticons | preview | insertfile media pageembed template link anchor codesample | showcomments addcomment',
+      height: 500,
+	  base_url: '/include/js/tinymce',
+	  license_key: 'gpl',
+	  promotion: false
     });
 </script>
 

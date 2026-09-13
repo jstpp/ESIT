@@ -10,5 +10,7 @@
 /public/img/problemsets/header/*
 /public/img/plugins/*
 /include/plugins/*
+/setup/npm/node_modules/
+/setup/npm/*.js
 *~
 *.pyc

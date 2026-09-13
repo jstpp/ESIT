@@ -238,7 +238,7 @@
 	
 	
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.7/Sortable.js" integrity="sha512-aUIczPo0e7N7BM7pIVe8I0XbFrT5jy9IjFSHuxhyb64yfHZ4JL10tKpTK/y8tWVB/hcO2YYfvQwbv3o+srga+g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/include/js/sortablejs/Sortable.js" type="text/javascript"></script>
 <img id="set_header_img" src="<?php echo htmlspecialchars($chimgpath, ENT_QUOTES, 'UTF-8'); ?>" />
 <br />
 <br />

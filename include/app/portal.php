@@ -157,7 +157,7 @@
 	<h2 class="window_title"><?php echo(__("General settings")); ?></h2>&emsp;
 	<form id="misc_general_form" method="POST" action="process.php?r=modify_resources&mode=general">
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-keyboard-o" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_title" placeholder="<?php echo(__("Website title")); ?>" value="<?php echo(get_misc_value('general_title')); ?>" />
+			<i class="fa fa-keyboard" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_title" placeholder="<?php echo(__("Website title")); ?>" value="<?php echo(get_misc_value('general_title')); ?>" />
 		</div>
 		<div class="window_card" style="display: flex; align-items: center;"> 
 			&nbsp;<i class="fa fa-i-cursor" style="font-size: 2vw;"></i>&emsp;&emsp;<input class="forminput" style="width: 80%" type="text" name="g_motd" placeholder="MOTD" value="<?php echo(get_misc_value('general_motd')); ?>" />
@@ -320,7 +320,7 @@
 
 				while($row = $db_query->fetch())
 				{
-					echo('<p><i class="fa fa-file-pdf-o"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Remove").'</a></p>');
+					echo('<p><i class="fa fa-file-pdf"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Remove").'</a></p>');
 				}
 			?>
 		</div>
@@ -390,7 +390,7 @@
 						$r_new = 1;
 						$archive_button_text = __("Add to current session");
 					}
-					echo('<p><i class="fa fa-file-pdf-o"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Delete").'</a>&emsp;<a href="process.php?r=modify_resources&mode=archive&rid='.$row['RESOURCE_ID'].'&rnew='.$r_new.'">'.$archive_button_text.'</a></p>');
+					echo('<p><i class="fa fa-file-pdf"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Delete").'</a>&emsp;<a href="process.php?r=modify_resources&mode=archive&rid='.$row['RESOURCE_ID'].'&rnew='.$r_new.'">'.$archive_button_text.'</a></p>');
 				}
 			?>
 	</div>
@@ -519,7 +519,7 @@
 	<h2 class="window_title"><?php echo(__("Edit main page")); ?></h2>
 	<div style="width: 40%; margin-left: 5%; float: left;">
 		<div id="editor" style="position: relative; height: 60vmin; width: 100%; border-radius: 2vmin;"></div>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			var i = 0;
 			var editor = ace.edit("editor");
@@ -555,7 +555,6 @@
 	<h2 class="window_title"><?php echo(__("Edit FAQ")); ?></h2>
 	<div style="width: 40%; margin-left: 5%; float: left;">
 		<div id="editor_faq" style="position: relative; height: 60vmin; width: 100%; border-radius: 2vmin;"></div>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			var j = 0;
 			var editor_f = ace.edit("editor_faq");
@@ -591,7 +590,6 @@
 	<h2 class="window_title"><?php echo(__("Edit contact page")); ?></h2>
 	<div style="width: 40%; margin-left: 5%; float: left;">
 		<div id="editor_contact" style="position: relative; height: 60vmin; width: 100%; border-radius: 2vmin;"></div>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			var k = 0;
 			var editor_c = ace.edit("editor_contact");

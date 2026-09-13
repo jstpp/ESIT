@@ -110,7 +110,7 @@
 		color: white;
 	}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/include/js/chart.js/chart.js"></script>
 
 <center>
 	<h1 style="font-size: 3.5vw; user-select: none; background: linear-gradient(315deg, rgba(0, 179, 255, 1) 0%, var(--text) 60%); -webkit-background-clip: text; color: transparent;"><?php echo(__("Hello")); ?>, <?php echo(htmlentities($_SESSION['AUTH_NAME'])); ?>!</h1>

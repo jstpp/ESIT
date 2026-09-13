@@ -147,7 +147,7 @@
 			<textarea id="editor_code" name="example_code_editor" style="display: none;" readonly>
 			</textarea>
 			<div id="editor" style="position: relative; height: 5vmin; width: 100%; border-radius: 2vmin;"></div>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" type="text/javascript" charset="utf-8"></script>
+			<script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 			<script>
 				var editor = ace.edit("editor");
 				editor.setValue('int main() { std::cout<<"Hi!"; }', 1);

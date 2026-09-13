@@ -75,6 +75,7 @@
 		echo('
 		<div class="window" id="mysolution">
 			<form method="POST" action="process.php?r=send_alg_solution&pid='.$problemid.'">
+				<script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 				<h2 class="window_title">Twoje rozwiązanie</h2>
 				<br />
 				<select class="forminput" name="lang" id="lang" onChange="lchange();" style="float: left; margin-left: 5%;">
@@ -87,7 +88,6 @@
 				<div id="sendtext" style="width: 90%; margin-left: 5%;">
 					<textarea id="editor_code" name="sendtext" style="display: none;" readonly></textarea>
 					<div id="editor" style="position: relative; height: 60vmin; width: 100%; border-radius: 2vmin;"></div>
-					<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" type="text/javascript" charset="utf-8"></script>
 					<script>
 						var editor = ace.edit("editor");
 						editor.setTheme("ace/theme/'.str_replace('.css','',$settings->{'code_editor_theme'}).'");

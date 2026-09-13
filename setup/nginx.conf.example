@@ -1,3 +1,5 @@
+user esit-user esit-group;
+
 events {
         worker_connections 768;
         # multi_accept on;

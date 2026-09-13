@@ -77,9 +77,7 @@
 		padding: 0.2vw 0.2vw;
 	}
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="/include/js/chart.js/chart.js" type="text/javascript"></script>
 <script>
 	MathJax = {
 	tex: {
@@ -88,7 +86,7 @@
 	};
 </script>
 <script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+  src="/include/js/mathjax/tex-chtml.js">
 </script>
 
 <center>

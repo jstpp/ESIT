@@ -85,9 +85,7 @@
 		margin: 0;
 	}
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="/include/js/chart.js/chart.js" type="text/javascript"></script>
 <center>
 	<h1><?php echo(__("Evaluation results")); ?></h1>
 </center>
