@@ -160,7 +160,7 @@
 			<i class="fa fa-keyboard" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_title" placeholder="<?php echo(__("Website title")); ?>" value="<?php echo(get_misc_value('general_title')); ?>" />
 		</div>
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			&nbsp;<i class="fa fa-i-cursor" style="font-size: 2vw;"></i>&emsp;&emsp;<input class="forminput" style="width: 80%" type="text" name="g_motd" placeholder="MOTD" value="<?php echo(get_misc_value('general_motd')); ?>" />
+			<i class="fa fa-i-cursor" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_motd" placeholder="MOTD" value="<?php echo(get_misc_value('general_motd')); ?>" />
 		</div>
 	</form>
 	<br />
@@ -295,13 +295,13 @@
 	?>
 	<form id="misc_social_media_form" method="POST" action="process.php?r=modify_resources&mode=socialmedia">
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-youtube-play" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="yt_href" placeholder="<?php echo(__("Link to")); ?> YoutTube" value="<?php if(isset($socialmedia_yt)) echo($socialmedia_yt['misc_value']); ?>" />
+			<i class="fa-brands fa-youtube" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="yt_href" placeholder="<?php echo(__("Link to")); ?> YoutTube" value="<?php if(isset($socialmedia_yt)) echo($socialmedia_yt['misc_value']); ?>" />
 		</div>
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-instagram" style="font-size: 2vw;"></i>&emsp;&nbsp;&nbsp;<input class="forminput" style="width: 80%" type="text" name="ig_href" placeholder="<?php echo(__("Link to")); ?> Instagram" value="<?php if(isset($socialmedia_ig)) echo($socialmedia_ig['misc_value']); ?>" />
+			<i class="fa-brands fa-instagram" style="font-size: 2vw;"></i>&emsp;&nbsp;&nbsp;<input class="forminput" style="width: 80%" type="text" name="ig_href" placeholder="<?php echo(__("Link to")); ?> Instagram" value="<?php if(isset($socialmedia_ig)) echo($socialmedia_ig['misc_value']); ?>" />
 		</div>
 		<div class="window_card" style="display: flex; align-items: center;"> 
-			<i class="fa fa-facebook-square" style="font-size: 2vw;"></i>&emsp;&nbsp;&nbsp;<input class="forminput" style="width: 80%" type="text" name="fb_href" placeholder="<?php echo(__("Link to")); ?> Facebook" value="<?php if(isset($socialmedia_fb)) echo($socialmedia_fb['misc_value']); ?>" />
+			<i class="fa-brands fa-facebook-square" style="font-size: 2vw;"></i>&emsp;&nbsp;&nbsp;<input class="forminput" style="width: 80%" type="text" name="fb_href" placeholder="<?php echo(__("Link to")); ?> Facebook" value="<?php if(isset($socialmedia_fb)) echo($socialmedia_fb['misc_value']); ?>" />
 		</div>
 	</form>
 	<br />

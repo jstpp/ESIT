@@ -141,53 +141,54 @@
 			</div>
 			<br />
 			<script>
-			
-				dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_anwsers'), {
-					type: 'doughnut',
+				document.addEventListener('DOMContentLoaded', () => {
+					dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_anwsers'), {
+						type: 'doughnut',
+						data: {
+						labels: ["Odpowiedzi prawidłowe", "Odpowiedzi błędne"],
+						datasets: [{
+							data: [<?php echo($avg_score); ?>, <?php echo(100-$avg_score); ?>],
+							backgroundColor: ['rgb(0, 179, 255)', 'rgba(21, 33, 46, 1)']
+						}]
+						},
+						options: {
+							responsive: true,
+							borderWidth: 0,
+							cutout: '75%',
+							plugins: {
+								legend: {
+									display: false
+								},
+								tooltip: {
+									enabled: false
+								}
+							}
+						}
+					});
+
+					dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_points'), {
+					type: "line",
 					data: {
-					labels: ["Odpowiedzi prawidłowe", "Odpowiedzi błędne"],
-					datasets: [{
-						data: [<?php echo($avg_score); ?>, <?php echo(100-$avg_score); ?>],
-						backgroundColor: ['rgb(0, 179, 255)', 'rgba(21, 33, 46, 1)']
-					}]
+						labels: dashboard_labels,
+						datasets: [{ 
+							data: dashboard_progress_pts,
+							borderColor: "rgb(0, 179, 255)",
+							pointRadius: 2,
+							fill: true,
+						}]
 					},
 					options: {
 						responsive: true,
-						borderWidth: 0,
-						cutout: '75%',
+						maintainAspectRatio: false,
 						plugins: {
-							legend: {
-								display: false
-							},
-							tooltip: {
-								enabled: false
-							}
+							legend: { display: false }
+						},
+						y: {
+							suggestedMin: 0,
+							suggestedMax: 100
 						}
 					}
-				});
-
-				dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_points'), {
-				type: "line",
-				data: {
-					labels: dashboard_labels,
-					datasets: [{ 
-						data: dashboard_progress_pts,
-						borderColor: "rgb(0, 179, 255)",
-						pointRadius: 2,
-						fill: true,
-					}]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: { display: false }
-					},
-					y: {
-						suggestedMin: 0,
-						suggestedMax: 100
-					}
-				}
+					});
 				});
 			</script>
 		</div>

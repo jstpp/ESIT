@@ -85,7 +85,7 @@
 		cursor: pointer;
 	}
 </style>
-
+<script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <center>
 	<h1><?php echo(__("Account settings")); ?></h1>
 </center>
@@ -121,25 +121,7 @@
 		<br />
 		<br />
 		<label for="ace_theme"><?php echo(__("Code editor theme")); ?>:&emsp;</label>
-		<select id="ace_theme" name="ace_theme" class="forminput" onChange='editor.setTheme("ace/theme/"+document.getElementById("ace_theme").value.replace(".css",""));'>
-			<?php
-				$themes = scandir('modules/ace/css/theme');
-
-				for($i = 2; $i<count($themes); $i++)
-				{
-					if(isset($settings->{'code_editor_theme'}) and $settings->{'code_editor_theme'}==$themes[$i])
-					{
-						echo('<option value="'.$themes[$i].'" selected>'.str_replace(array('_','.css'), ' ', $themes[$i]).'</option>');
-					} else {
-						if(!isset($settings->{'code_editor_theme'}) and $themes[$i]=="dracula.css")
-						{
-							echo('<option value="'.$themes[$i].'" selected>'.str_replace(array('_','.css'), ' ', $themes[$i]).'</option>');
-						} else {
-							echo('<option value="'.$themes[$i].'">'.str_replace(array('_','.css'), ' ', $themes[$i]).'</option>');
-						}
-					}
-				}
-			?>
+		<select id="ace_theme" name="ace_theme" class="forminput">
 		</select>
 		<br />
 		<br />
@@ -147,16 +129,51 @@
 			<textarea id="editor_code" name="example_code_editor" style="display: none;" readonly>
 			</textarea>
 			<div id="editor" style="position: relative; height: 5vmin; width: 100%; border-radius: 2vmin;"></div>
-			<script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
-			<script>
-				var editor = ace.edit("editor");
+		</div>
+	</form>
+	<script>
+		const select = document.getElementById('ace_theme');
+		const currentTheme = '<?php echo(htmlspecialchars($settings->{'code_editor_theme'} ?? 'dracula', ENT_QUOTES, 'UTF-8')); ?>.css';
+		const editor = ace.edit("editor");
+
+		fetch('../include/js/ace-builds/css/theme/')
+			.then(response => response.text())
+			.then(html => {
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(html, 'text/html');
+
+				const themes = Array.from(doc.querySelectorAll('a'))
+					.map(a => a.getAttribute('href'))
+					.filter(name => name && name.endsWith('.css'));
+
+				themes.forEach(theme => {
+					const option = document.createElement('option');
+
+					option.value = theme
+						.replace('.css', '');
+					option.textContent = theme
+						.replace('.css', '')
+						.replaceAll('_', ' ');
+
+					if (currentTheme === theme) {
+						option.selected = true;
+					}
+
+					select.appendChild(option);
+				});
+
 				editor.setValue('int main() { std::cout<<"Hi!"; }', 1);
 				editor.setTheme("ace/theme/"+document.getElementById('ace_theme').value.replace('.css',''));
 				editor.session.setMode("ace/mode/c_cpp");
 				editor.setReadOnly(true);
-			</script>
-		</div>
-	</form>
+			});
+
+		select.addEventListener('change', function () {
+			editor.setTheme(
+				'ace/theme/' + this.value
+			);
+		});
+	</script>
 	<br />
 	<br />
 	<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('appearance_form').submit();"><?php echo(__("Save appearance settings")); ?></a>

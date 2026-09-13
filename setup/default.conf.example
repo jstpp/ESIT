@@ -18,4 +18,8 @@ server {
                 include snippets/fastcgi-php.conf;
                 fastcgi_pass php-fpm:9000;
         }
+
+        location /include/js/ace-builds/css/theme/ {
+                autoindex on;
+        }
 }
