@@ -278,7 +278,7 @@
 <div id="plugins_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999;">
 	<span onClick="document.getElementById('plugins_dialog').style.display = 'none';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
 	<div style="background-color: var(--bg); color: var(--text); width: 80vw; height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax; overflow: auto;">
-		<h1 style="text-align: center;"><?php echo(__("Search for the plugin on GitHub")); ?>&nbsp;&nbsp;<i class="fa fa-github"></i></h1>
+		<h1 style="text-align: center;"><?php echo(__("Search for the plugin on GitHub")); ?>&nbsp;&nbsp;<i class="fa-brands fa-github"></i></h1>
 		<center>
 			<small>
 				<?php echo(__("Plugin search displays repositories tagged with")); ?> <code>esit-plugins</code>
@@ -506,9 +506,15 @@
 						<span class="switch-checkbox-toggle"></span>
 					</label>
 					<label for="community_plugin_'.htmlentities($plugin).'">&emsp;'.__("Community plugin").': <b>'.htmlentities($plugin).'</b></label>
-					<a href="process.php?r=modify_config&call=plugin_uninstall&plugin_name='.$plugin.'" class="remove_plugin"><i class="fa fa-trash"></i></a>');
+					');
+				if(boolval(get_misc_value('community_plugin_'.htmlentities($plugin))))
+				{
 					if(!include_plugins_for("settings_configuration", $plugin)) echo("&emsp;<small>".__("Plugin loading unsuccessful").".</small>");
-					echo('	<br style="clear: both;"/>
+				} else {
+					echo('<a href="process.php?r=modify_config&call=plugin_uninstall&plugin_name='.$plugin.'" class="remove_plugin"><i class="fa fa-trash"></i></a>');
+					echo("<small>&emsp;".__("Plugin inactive")."</small>");
+				}
+				echo('	<br style="clear: both;"/>
 				</div>');
 			}
 

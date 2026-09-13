@@ -1,7 +1,7 @@
 <?php
     class PluginManager {
         private $pdo;
-        private  $plugins = array();
+        private $plugins = array();
 
         public function __construct($db) {
             $this->pdo = $db;
@@ -49,7 +49,7 @@
             $destPath = __DIR__.'/../../plugins/'.explode("/",$repo)[1];
 
             try {
-                if(!is_dir($destPath)) mkdir($destPath);
+                if(!is_dir($destPath)) mkdir($destPath, 0777, true);
 
                 $repoContent = file_get_contents($repoUrl);
                 if(!empty($repoContent)) file_put_contents($destPath."/".$branch.".zip", $repoContent);
@@ -99,7 +99,7 @@
             $cleanName = $this->sanitize_plugin_name($pluginName);
             $setupFile = __DIR__."/../../plugins/{$cleanName}/setup.php";
 
-            if (!file_exists($setupFile)) return false;
+            if (!file_exists($setupFile)) return False;
 
             try {
                 if(!isset($plugins[$cleanName])) $plugins[$cleanName] = include($setupFile);
