@@ -354,6 +354,37 @@
 		return rmdir($dir);
 	}
 
+	function extract_zip($path, $dest): bool
+	{
+		$zip = new ZipArchive();
+		if($zip->open($path) !== True) return False;
+
+		$real_base_dir = realpath($dest);
+		if ($real_base_dir === False) 
+		{
+			$zip->close();
+			return False;
+		}
+
+		for ($i = 0; $i<$zip->numFiles; $i++) 
+		{
+			$filename = $zip->getNameIndex($i);
+			if (strpos($filename, '../') !== False || strpos($filename, '..\\') !== False) {
+				$zip->close();
+				return False;
+			}
+
+			if (strpos($filename, '/') === 0 || strpos($filename, '\\') === 0) {
+				$zip->close();
+				return False;
+			}
+		}
+
+		$success = $zip->extractTo($real_base_dir);
+    	$zip->close();
+		return $success;
+	}
+
 	function load_img_input($img = null, $target_root_dir = null): string
 	{
 		$allowed_types = [
