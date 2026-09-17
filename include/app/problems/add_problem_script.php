@@ -117,10 +117,10 @@
 	}
 
     $sid = filter_var($_GET['sid'] ?? null, FILTER_VALIDATE_INT);
-    if(!has_a_priority(3) || !$sid) kick();
+    if(!has_permission('main.channels.add_problem') || !$sid) kick();
 
-    $db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:setid AND (author_id=:aid OR :perm<=3)');
-	$db_query->execute(['setid' => $sid, 'aid' => $_SESSION['AUTH_ID'], 'perm' => $_SESSION['AUTH_LEVEL']]);
+    $db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:setid AND author_id=:aid');
+	$db_query->execute(['setid' => $sid, 'aid' => $_SESSION['AUTH_ID']]);
     $row = $db_query->fetch();
 
 	if(!$row) kick();

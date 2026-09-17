@@ -15,25 +15,25 @@
     $general_title = $db_query->fetchColumn() ?: "ESIT";
 
 	$allowed_pages = [
-		'dashboard'     => ['priority' => 0, 'path' => 'dashboard.php', 'menu_id' => 'dashboard'],
-		'admin'         => ['priority' => 3, 'path' => 'admin.php', 'menu_id' => 'admin'],
-		'channels'   	=> ['priority' => 0, 'path' => 'channels.php', 'menu_id' => 'channels'],
-		'mysolutions'   => ['priority' => 0, 'path' => 'mysolutions.php', 'menu_id' => 'mysolutions'],
-		'myexamsadmin'  => ['priority' => 4, 'path' => 'myexamsadmin.php', 'menu_id' => 'myexamsadmin'],
-		'settings'      => ['priority' => 0, 'path' => 'settings.php', 'menu_id' => 'settings'],
-		'portal'        => ['priority' => 3, 'path' => 'portal.php', 'menu_id' => 'portal'],
-		'diagnostics'   => ['priority' => 3, 'path' => 'diagnostics.php', 'menu_id' => 'diagnostics'],
-		'logs'    		=> ['priority' => 3, 'path' => 'logs.php', 'menu_id' => 'logs'],
-		'algresult'     => ['priority' => 0, 'path' => 'results/algresult.php'],
-		'testresult'    => ['priority' => 0, 'path' => 'results/testresult.php'],
-		'ctfresult'     => ['priority' => 0, 'path' => 'results/ctfresult.php'],
-		'formresult'    => ['priority' => 0, 'path' => 'results/formresult.php'],
-		'problem'       => ['priority' => 0, 'path' => 'problem.php', 'required' => ['id']],
-		'channel'       => ['priority' => 0, 'path' => 'channel.php'],
-		'addpost'       => ['priority' => 3, 'path' => 'portal/addpost.php'],
-		'modifypost'    => ['priority' => 3, 'path' => 'portal/modifypost.php'],
-		'addproblem'    => ['priority' => 3, 'path' => 'add_problem.php'],
-		'check_the_form'=> ['priority' => 3, 'path' => 'check_the_form.php'],
+		'dashboard'     => ['permission' => 'main.display.dashboard', 'path' => 'dashboard.php', 'menu_id' => 'dashboard'],
+		'admin'         => ['permission' => 'main.display.admin.configuration', 'path' => 'admin.php', 'menu_id' => 'admin'],
+		'channels'   	=> ['permission' => 'main.display.channels', 'path' => 'channels.php', 'menu_id' => 'channels'],
+		'mysolutions'   => ['permission' => 'main.display.mysolutions', 'path' => 'mysolutions.php', 'menu_id' => 'mysolutions'],
+		'myexamsadmin'  => ['permission' => 'main.display.channels.myexamsadmin', 'path' => 'myexamsadmin.php', 'menu_id' => 'myexamsadmin'],
+		'settings'      => ['permission' => 'main.display.user_settings', 'path' => 'settings.php', 'menu_id' => 'settings'],
+		'portal'        => ['permission' => 'main.display.portal.settings', 'path' => 'portal.php', 'menu_id' => 'portal'],
+		'diagnostics'   => ['permission' => 'main.display.admin.diagnostics', 'path' => 'diagnostics.php', 'menu_id' => 'diagnostics'],
+		'logs'    		=> ['permission' => 'main.display.admin.logs', 'path' => 'logs.php', 'menu_id' => 'logs'],
+		'algresult'     => ['permission' => 'main.display.algresult.user', 'path' => 'results/algresult.php'],
+		'testresult'    => ['permission' => 'main.display.testresult.user', 'path' => 'results/testresult.php'],
+		'ctfresult'     => ['permission' => 'main.display.ctfresult.user', 'path' => 'results/ctfresult.php'],
+		'formresult'    => ['permission' => 'main.display.formresult.user', 'path' => 'results/formresult.php'],
+		'problem'       => ['permission' => 'main.display.problem', 'path' => 'problem.php', 'required' => ['id']],
+		'channel'       => ['permission' => 'main.display.channel', 'path' => 'channel.php'],
+		'addpost'       => ['permission' => 'main.display.portal.addpost', 'path' => 'portal/addpost.php'],
+		'modifypost'    => ['permission' => 'main.display.portal.modifypost', 'path' => 'portal/modifypost.php'],
+		'addproblem'    => ['permission' => 'main.display.channels.addproblem', 'path' => 'add_problem.php'],
+		'check_the_form'=> ['permission' => 'main.display.channels.check_the_form', 'path' => 'check_the_form.php'],
 	];
 
 	$current_p = $_GET['p'] ?? 'dashboard';
@@ -42,15 +42,11 @@
 	}
 	$page_config = $allowed_pages[$current_p];
 
-	if ($page_config['priority'] > 0 && !has_a_priority($page_config['priority'])) {
-		kick();
-	}
+	if (!has_permission($page_config['permission'])) kick();
 
 	if (isset($script_config['required'])) {
         foreach ($script_config['required'] as $req) {
-            if (!isset($_GET[$req]) && !isset($_POST[$req])) {
-                kick();
-            }
+            if (!isset($_GET[$req]) && !isset($_POST[$req])) kick();
         }
     }
 

@@ -11,7 +11,7 @@ SET time_zone = "+01:00";
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `ALG_TEST_LIST`
+-- Table structure for table `ALG_TEST_LIST`
 --
 
 CREATE TABLE `ALG_TEST_LIST` (
@@ -26,7 +26,7 @@ CREATE TABLE `ALG_TEST_LIST` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `ARTICLES`
+-- Table structure for table `ARTICLES`
 --
 
 CREATE TABLE `ARTICLES` (
@@ -41,7 +41,7 @@ CREATE TABLE `ARTICLES` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `LOGS`
+-- Table structure for table `LOGS`
 --
 
 CREATE TABLE `LOGS` (
@@ -56,7 +56,7 @@ CREATE TABLE `LOGS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `NOTIFICATIONS`
+-- Table structure for table `NOTIFICATIONS`
 --
 
 CREATE TABLE `NOTIFICATIONS` (
@@ -71,7 +71,7 @@ CREATE TABLE `NOTIFICATIONS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `PORTAL_RESOURCES`
+-- Table structure for table `PORTAL_RESOURCES`
 --
 
 CREATE TABLE `PORTAL_RESOURCES` (
@@ -86,7 +86,7 @@ CREATE TABLE `PORTAL_RESOURCES` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `MISC`
+-- Table structure for table `MISC`
 --
 
 CREATE TABLE `MISC` (
@@ -98,7 +98,7 @@ CREATE TABLE `MISC` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `PLUGINS`
+-- Table structure for table `PLUGINS`
 --
 
 CREATE TABLE `PLUGINS` (
@@ -111,7 +111,7 @@ CREATE TABLE `PLUGINS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `PROBLEMS`
+-- Table structure for table `PROBLEMS`
 --
 
 CREATE TABLE `PROBLEMS` (
@@ -131,7 +131,7 @@ CREATE TABLE `PROBLEMS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `CHANNELS`
+-- Table structure for table `CHANNELS`
 --
 
 CREATE TABLE `CHANNELS` (
@@ -148,7 +148,7 @@ CREATE TABLE `CHANNELS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `PROBLEMSETS`
+-- Table structure for table `PROBLEMSETS`
 --
 
 CREATE TABLE `PROBLEMSETS` (
@@ -163,7 +163,7 @@ CREATE TABLE `PROBLEMSETS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `RESULTS`
+-- Table structure for table `RESULTS`
 --
 
 CREATE TABLE `RESULTS` (
@@ -182,7 +182,7 @@ CREATE TABLE `RESULTS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `SUBMISSIONS`
+-- Table structure for table `SUBMISSIONS`
 --
 
 CREATE TABLE `SUBMISSIONS` (
@@ -203,7 +203,7 @@ CREATE TABLE `SUBMISSIONS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `TERMS`
+-- Table structure for table `TERMS`
 --
 
 CREATE TABLE `TERMS` (
@@ -216,7 +216,7 @@ CREATE TABLE `TERMS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `TEST_QUESTIONS`
+-- Table structure for table `TEST_QUESTIONS`
 --
 
 CREATE TABLE `TEST_QUESTIONS` (
@@ -229,14 +229,13 @@ CREATE TABLE `TEST_QUESTIONS` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `USERS`
+-- Table structure for table `USERS`
 --
 
 CREATE TABLE `USERS` (
   `USER_ID` int(11) NOT NULL,
   `username` text NOT NULL,
   `password` text NOT NULL,
-  `role` int(11) NOT NULL,
   `mail` text NOT NULL,
   `joined` datetime NOT NULL DEFAULT current_timestamp(),
   `lastlogin` datetime NOT NULL DEFAULT current_timestamp(),
@@ -246,12 +245,53 @@ CREATE TABLE `USERS` (
   `settings` text NOT NULL DEFAULT ('{"code_editor_theme":"dracula.css","dark_mode":"1"}')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Indeksy dla zrzutów tabel
+-- Table structure for table `ROLES`
+--
+
+CREATE TABLE `ROLES` (
+  `ROLE_ID` int(11) NOT NULL,
+  `role_name` text NOT NULL,
+  `description` text NOT NULL,
+  `icon` text NOT NULL,
+  `color` text NOT NULL,
+  `priority` int(11) NOT NULL DEFAULT 100
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `AFFILIATION`
+--
+
+CREATE TABLE `AFFILIATION` (
+  `AFFILIATION_ID` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PERMISSIONS`
+--
+
+CREATE TABLE `PERMISSIONS` (
+  `PERMISSION_ID` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `permission` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Indexes for table dumps
 --
 
 --
--- Indeksy dla tabeli `ALG_TEST_LIST`
+-- Indexes for table `ALG_TEST_LIST`
 --
 ALTER TABLE `ALG_TEST_LIST`
   ADD PRIMARY KEY (`TEST_ID`),
@@ -259,44 +299,44 @@ ALTER TABLE `ALG_TEST_LIST`
   ADD KEY `tests_author_id` (`test_author_id`);
 
 --
--- Indeksy dla tabeli `ARTICLES`
+-- Indexes for table `ARTICLES`
 --
 ALTER TABLE `ARTICLES`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeksy dla tabeli `NOTIFICATIONS`
+-- Indexes for table `NOTIFICATIONS`
 --
 ALTER TABLE `NOTIFICATIONS`
   ADD PRIMARY KEY (`NOTIFICATION_ID`),
   ADD KEY `notifications_user_id` (`user_id`);
 
 --
--- Indeksy dla tabeli `PORTAL_RESOURCES`
+-- Indexes for table `PORTAL_RESOURCES`
 --
 ALTER TABLE `PORTAL_RESOURCES`
   ADD PRIMARY KEY (`RESOURCE_ID`);
 
 --
--- Indeksy dla tabeli `LOGS`
+-- Indexes for table `LOGS`
 --
 ALTER TABLE `LOGS`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeksy dla tabeli `MISC`
+-- Indexes for table `MISC`
 --
 ALTER TABLE `MISC`
   ADD PRIMARY KEY (`MISC_ID`);
 
 --
--- Indeksy dla tabeli `PLUGINS`
+-- Indexes for table `PLUGINS`
 --
 ALTER TABLE `PLUGINS`
   ADD PRIMARY KEY (`VALUE_ID`);
 
 --
--- Indeksy dla tabeli `PROBLEMS`
+-- Indexes for table `PROBLEMS`
 --
 ALTER TABLE `PROBLEMS`
   ADD PRIMARY KEY (`PROBLEM_ID`),
@@ -304,14 +344,14 @@ ALTER TABLE `PROBLEMS`
   ADD KEY `author_id` (`author_id`);
 
 --
--- Indeksy dla tabeli `CHANNELS`
+-- Indexes for table `CHANNELS`
 --
 ALTER TABLE `CHANNELS`
   ADD PRIMARY KEY (`CHANNEL_ID`),
   ADD KEY `author_2_id` (`author_id`);
 
 --
--- Indeksy dla tabeli `PROBLEMSETS`
+-- Indexes for table `PROBLEMSETS`
 --
 ALTER TABLE `PROBLEMSETS`
   ADD PRIMARY KEY (`SET_ID`),
@@ -319,14 +359,14 @@ ALTER TABLE `PROBLEMSETS`
   ADD KEY `channel_of_problemset` (`channel_id`);
 
 --
--- Indeksy dla tabeli `RESULTS`
+-- Indexes for table `RESULTS`
 --
 ALTER TABLE `RESULTS`
   ADD PRIMARY KEY (`RESULT_ID`),
   ADD KEY `result_submission_id` (`submission_id`);
 
 --
--- Indeksy dla tabeli `SUBMISSIONS`
+-- Indexes for table `SUBMISSIONS`
 --
 ALTER TABLE `SUBMISSIONS`
   ADD PRIMARY KEY (`SUBMISSION_ID`),
@@ -335,23 +375,44 @@ ALTER TABLE `SUBMISSIONS`
   ADD KEY `submission_problemset_id` (`problemset_id`);
 
 --
--- Indeksy dla tabeli `TERMS`
+-- Indexes for table `TERMS`
 --
 ALTER TABLE `TERMS`
   ADD PRIMARY KEY (`TERM_ID`);
 
 --
--- Indeksy dla tabeli `TEST_QUESTIONS`
+-- Indexes for table `TEST_QUESTIONS`
 --
 ALTER TABLE `TEST_QUESTIONS`
   ADD PRIMARY KEY (`QUESTION_ID`),
   ADD KEY `question_problem_id` (`problem_id`);
 
 --
--- Indeksy dla tabeli `USERS`
+-- Indexes for table `USERS`
 --
 ALTER TABLE `USERS`
   ADD PRIMARY KEY (`USER_ID`);
+
+--
+-- Indexes for table `ROLES`
+--
+ALTER TABLE `ROLES`
+  ADD PRIMARY KEY (`ROLE_ID`);
+
+--
+-- Indexes for table `AFFILIATION`
+--
+ALTER TABLE `AFFILIATION`
+  ADD PRIMARY KEY (`AFFILIATION_ID`),
+  ADD KEY `aff_user_id` (`user_id`),
+  ADD KEY `aff_role_id` (`role_id`);
+
+--
+-- Indexes for table `PERMISSIONS`
+--
+ALTER TABLE `PERMISSIONS`
+  ADD PRIMARY KEY (`PERMISSION_ID`),
+  ADD KEY `permission_role_id` (`role_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -448,6 +509,24 @@ ALTER TABLE `USERS`
   MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `ROLES`
+--
+ALTER TABLE `ROLES`
+  MODIFY `ROLE_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `PERMISSIONS`
+--
+ALTER TABLE `PERMISSIONS`
+  MODIFY `PERMISSION_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `AFFILIATION`
+--
+ALTER TABLE `AFFILIATION`
+  MODIFY `AFFILIATION_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -503,6 +582,21 @@ ALTER TABLE `SUBMISSIONS`
 --
 ALTER TABLE `TEST_QUESTIONS`
   ADD CONSTRAINT `question_problem_id` FOREIGN KEY (`problem_id`) REFERENCES `PROBLEMS` (`PROBLEM_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Constraints for table `AFFILIATION`
+--
+ALTER TABLE `AFFILIATION`
+  ADD CONSTRAINT `affiliation_role` FOREIGN KEY (`role_id`) REFERENCES `ROLES` (`ROLE_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `affiliation_user` FOREIGN KEY (`user_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Constraints for table `PERMISSIONS`
+--
+ALTER TABLE `PERMISSIONS`
+  ADD CONSTRAINT `permission_role` FOREIGN KEY (`role_id`) REFERENCES `ROLES` (`ROLE_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

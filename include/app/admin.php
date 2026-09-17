@@ -261,11 +261,21 @@
 			<input name="name" class="forminput_2" type="text" placeholder="<?php echo(__("Name")); ?>" />
 			<input name="surname" class="forminput_2" type="text" placeholder="<?php echo(__("Surname")); ?>" />
 			<input name="org" class="forminput_2" type="text" placeholder="<?php echo(__("Organization")); ?>" />
+			<select name="role" class="forminput_2">
+				<?php
+					$db_query = $pdo->prepare('SELECT * FROM ROLES WHERE priority>:user_priority ORDER BY priority');
+					$db_query->execute(['user_priority' => $_SESSION['AUTH_ROLE']['priority']]);
+
+					while($row = $db_query->fetch())
+					{
+						echo("<option value=".$row['ROLE_ID'].">".$row['role_name']."</option>");
+					}
+				?>
+			</select>
 			<br />
 			<br />
 			<input name="mail" class="forminput_2" type="text" placeholder="<?php echo(__("E-mail address")); ?>" />
 			<input name="password" class="forminput_2" type="password" placeholder="<?php echo(__("Password")); ?>" />
-			<input name="priority" class="forminput_2" type="number" min="<?php echo($_SESSION['AUTH_LEVEL']+1); ?>" placeholder="<?php echo(__("Priority")); ?>" />
 		</form>
 		<br />
 		<br />
@@ -347,6 +357,7 @@
 	<p><?php echo(__("Navigation")); ?>:</p>
 	<a href="#initial_parameters"><?php echo(__("Initial parameters")); ?></a>
 	<a href="#plugins"><?php echo(__("Plugins")); ?></a>
+	<a href="#roles"><?php echo(__("Roles")); ?></a>
 	<a href="#users"><?php echo(__("Users")); ?></a>
 </div>
 <div class="window" id="initial_parameters">
@@ -536,49 +547,55 @@
 	<br />
 	<br />
 </div>
+<div class="window" id="roles">
+	<h2 class="window_title"><?php echo(__("Roles")); ?></h2>
+	<p style="margin-left: 5%;">
+		<i class='fas fa-info-circle'></i>&nbsp;&nbsp;<?php echo(__("In this section you can modify groups or add a new one.")); ?>
+		<br />
+		<br style="clear: both;" />
+		<?php
+			$db_query = $pdo->prepare('SELECT * FROM ROLES ORDER BY priority');
+			$db_query->execute();
+
+			while($row = $db_query->fetch())
+			{
+				echo('<div class="org_user" style="display: flex; align-items: center; background: linear-gradient(to right,'.$row['color'].' 0%,var(--container-hover-bg) 3%);">
+					<b style="width: 20%; margin-right: 1vmax;"><i class="'.htmlentities(__($row['icon'])).'"></i>&emsp;'.htmlentities(__($row['role_name'])).'</b>
+					<p style="flex-grow: 5; margin-right: 1vmax;">'.htmlentities($row['priority']).'</p>
+					<p style="text-align: right; margin-right: 1vmax;">'.htmlentities(__($row['description'])).'</p>
+				');
+				echo('<br style="clear: both;"/>
+				</div>');
+			}
+		?>
+	</p>
+	<br />
+</div>
 <div class="window" id="users">
 	<h2 class="window_title"><?php echo(__("Users")); ?></h2>
 	<p style="margin-left: 5%;">
-		<i class='fas fa-info-circle'></i>&nbsp;&nbsp;<?php echo(__("In this section you can modify user permissions and grant additional permissions.")); ?>
+		<i class='fas fa-info-circle'></i>&nbsp;&nbsp;<?php echo(__("In this section you can modify users' data and grant additional permissions.")); ?>
 		<br />
 		<a class="button" style="margin-right: 5%;" onClick="add_user();"><i class="fa fa-plus"></i>&nbsp;<?php echo(__("Add user")); ?></a>
-
 		<br style="clear: both;" />
 		<?php 
-			$db_query = $pdo->prepare('SELECT * FROM USERS WHERE role=:xrole');
-			$db_query->execute(['xrole' => $_SESSION['AUTH_LEVEL']]);
+			$db_query = $pdo->prepare('SELECT * FROM USERS');
+			$db_query->execute();
 
 			while($row = $db_query->fetch())
 			{
 				echo('<div class="org_user">
-			<table style="border-spacing: 3vmin;">
-				<tr id="user_'.$row['USER_ID'].'">
-					<td><b><span id="org" style="display: none; font-size: 0.1vmin;">'.$row['organization'].'</span><span id="name">'.$row['name'].'</span> <span id="surname">'.$row['surname'].'</span> (<span id="username">'.$row['username'].'</span>)</b></td>
-					<td style="text-align: right;"><b style="padding: 1vmin 1.3vmin; border-radius: 0.2vmin; color: white; background-color: rgb(97, 0, 153);"><span id="priority">'.$row['role'].'</span></b></td>
-					<td><span id="mail">'.$row['mail'].'</span></td>
-					<td style="text-align: right;">'.__("Last login").': <b>'.$row['lastlogin'].'</b></td>
-				</tr>
-			</table>
-			<br style="clear: both;"/>
-		</div>');
-			}
-			$db_query = $pdo->prepare('SELECT * FROM USERS WHERE role>:xrole ORDER BY role');
-			$db_query->execute(['xrole' => $_SESSION['AUTH_LEVEL']]);
-
-			while($row = $db_query->fetch())
-			{
-				echo('<div class="org_user">
-			<table style="border-spacing: 3vmin;">
-				<tr id="user_'.$row['USER_ID'].'">
-					<td><b><span id="org" style="display: none; font-size: 0.1vmin;">'.$row['organization'].'</span><span id="name">'.$row['name'].'</span> <span id="surname">'.$row['surname'].'</span> (<span id="username">'.$row['username'].'</span>)</b></td>
-					<td style="text-align: right;"><b style="padding: 1vmin 1.3vmin; border-radius: 0.2vmin; color: white; background-color: rgb(0, 117, 153);"><span id="priority">'.$row['role'].'</span></b></td>
-					<td><span id="mail">'.$row['mail'].'</span></td>
-					<td style="text-align: right;">'.__("Last login").': <b>'.$row['lastlogin'].'</b></td>
-				</tr>
-			</table>
-			<a onClick="modify_user(\''.$row['USER_ID'].'\');"><i class="fa fa-edit"></i>&nbsp;'.__("Modify").'</a>
-			<br style="clear: both;"/>
-		</div>');
+					<table style="border-spacing: 3vmin;">
+						<tr id="user_'.$row['USER_ID'].'">
+							<td>'.get_roles($row['USER_ID'])[0]['role_name'].'</td>
+							<td><b><span id="org" style="display: none; ">'.$row['organization'].'</span><span id="name">'.$row['name'].'</span> <span id="surname">'.$row['surname'].'</span> (<span id="username">'.$row['username'].'</span>)</b></td>
+							<td><span id="mail">'.$row['mail'].'</span></td>
+							<td style="text-align: right;">'.__("Last login").': <b>'.$row['lastlogin'].'</b></td>
+						</tr>
+					</table>');
+				if(get_roles($row['USER_ID'])[0]['priority']>$_SESSION['AUTH_ROLE']['priority']) echo('<a onClick="modify_user(\''.$row['USER_ID'].'\');"><i class="fa fa-edit"></i>&nbsp;'.__("Modify").'</a>');
+				echo('<br style="clear: both;"/>
+				</div>');
 			}
 		?>
 	</p>
@@ -592,7 +609,6 @@
 			document.querySelector('#user_dialog input[name="surname"]').value = document.querySelector('#user_'+userid+' #surname').innerHTML;
 			document.querySelector('#user_dialog input[name="org"]').value = document.querySelector('#user_'+userid+' #org').innerHTML;
 			document.querySelector('#user_dialog input[name="mail"]').value = document.querySelector('#user_'+userid+' #mail').innerHTML;
-			document.querySelector('#user_dialog input[name="priority"]').value = document.querySelector('#user_'+userid+' #priority').innerHTML;
 			document.querySelector('#user_dialog #button_3').href = 'process.php?r=remove_user&uid='+userid;
 
 			document.querySelector('#user_dialog input[name="password"]').style.display = 'none';
@@ -611,7 +627,6 @@
 			document.querySelector('#user_dialog input[name="name"]').value = "";
 			document.querySelector('#user_dialog input[name="surname"]').value = "";
 			document.querySelector('#user_dialog input[name="mail"]').value = "";
-			document.querySelector('#user_dialog input[name="priority"]').value = "";
 			document.querySelector('#user_dialog input[name="org"]').value = "";
 
 			document.querySelector('#user_dialog input[name="password"]').style.display = 'block';

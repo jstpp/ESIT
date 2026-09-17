@@ -1,5 +1,5 @@
 <?php
-	if(!has_a_priority(3)) kick();
+	if (!is_logged_in() || !has_permission('main.portal.addpost')) kick();
 	try 
 	{
 		$target_dir = "../img/articles/header";

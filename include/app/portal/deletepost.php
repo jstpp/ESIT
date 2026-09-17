@@ -1,5 +1,5 @@
 <?php
-	if(!has_a_priority(3)) kick();
+	if(!is_logged_in() || !has_permission('main.portal.deletepost')) kick();
 	if(filter_var($_GET['id'], FILTER_VALIDATE_INT)===False || filter_var($_GET['id'], FILTER_VALIDATE_INT)===null) kick();
 	try 
 	{

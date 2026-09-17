@@ -224,7 +224,7 @@
         if($count==0)
         {
             echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">Hurra! Nie ma zdarzeń wartych Twojej uwagi.</p>
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.__("Yay! There is no issues at the moment!").'</p>
             </div>');
         }
     ?>

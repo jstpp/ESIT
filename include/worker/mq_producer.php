@@ -103,10 +103,10 @@
     $submission_type = "normal";
     if(isset($_GET['mode']))
     {
-        if($_GET['mode']=="silent" and $_SESSION['AUTH_LEVEL'] <=5)
+        if($_GET['mode']=="silent" and has_permission('main.solutions.exec.silent'))
         {
             $submission_type = "silent";
-        } else if($_GET['mode']=="recheck" and $_SESSION['AUTH_LEVEL'] <=3)
+        } else if($_GET['mode']=="recheck" and has_permission('main.solutions.exec.recheck'))
         {
             $submission_type = "recheck";
         }

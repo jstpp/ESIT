@@ -1,5 +1,5 @@
 <?php
-    if(!is_logged_in() || !has_a_priority(3)) kick();
+    if(!is_logged_in() || !has_permission('main.channels.create_problemset')) kick();
     if(!isset($_GET['cid'], $_POST['new_block_form_name'], $_POST['new_block_form_condition'], $_POST['new_block_form_publish_time'])) redirect("index.php?p=channels&error");
     
     $cid = filter_var($_GET['cid'] ?? null, FILTER_VALIDATE_INT);

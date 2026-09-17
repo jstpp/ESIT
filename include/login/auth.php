@@ -16,21 +16,10 @@
 			$_SESSION['AUTH_USERNAME'] = $row['username'];
 			$_SESSION['AUTH_NAME'] = $row['name'];
 			$_SESSION['AUTH_SURNAME'] = $row['surname'];
-			$_SESSION['AUTH_LEVEL'] = $row['role'];
 			$_SESSION['AUTH_MAIL'] = $row['mail'];
 			$_SESSION['AUTH_LAST_LOGIN'] = $row['lastlogin'];
 			$_SESSION['SESSION_TIMEOUT'] = time()+18000;
-
-			if($row['role']==1)
-			{
-				$_SESSION['AUTH_ROLE'] = "administrator";
-			} else if($row['role']==5)
-			{
-				$_SESSION['AUTH_ROLE'] = "nauczyciel";
-			} else
-			{
-				$_SESSION['AUTH_ROLE'] = "użytkownik";
-			}
+			$_SESSION['AUTH_ROLE'] = get_roles($row['USER_ID'])[0];
 			
 			$db_query = $pdo->prepare('UPDATE USERS SET lastlogin=:lastlogin WHERE USER_ID=:uid');
     		$db_query->execute(['lastlogin' => date('Y/m/d H:i:s'), 'uid' => $_SESSION['AUTH_ID']]);

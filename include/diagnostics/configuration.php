@@ -28,6 +28,6 @@
             ]);
         }
 
-        return $results;
+        return (has_permission('main.display.admin.diagnostics')) ? $results : [];
     }
 ?>

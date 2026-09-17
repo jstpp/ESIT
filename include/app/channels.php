@@ -76,11 +76,11 @@
 
 <center>
 	<h1><?php echo(__("Content center")); ?></h1> 
-	<?php if(has_a_priority(3)) echo('<a class="button" style="margin-right: 2.5%;" onClick="document.getElementById(\'new_set_dialog\').style.display = \'flex\';">'.__("Add new channel").'</a>'); ?>
+	<?php if(has_permission('main.channels.create_channel')) echo('<a class="button" style="margin-right: 2.5%;" onClick="document.getElementById(\'new_set_dialog\').style.display = \'flex\';">'.__("Add new channel").'</a>'); ?>
 	<br style="clear: both;" />
 </center>
 <?php
-	if(has_a_priority(3))
+	if(has_permission('main.channels.create_channel'))
 	{
 		echo('
 <div id="new_set_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">

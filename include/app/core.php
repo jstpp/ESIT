@@ -73,9 +73,7 @@
 	###############################################
 
 	function __($text, $plural=null, $number=null) {
-		if (!isset($plural)) {
-			return _($text);
-		}
+		if (!isset($plural)) return _($text);
 		return ngettext($text, $plural, $number);
 	}
 
@@ -115,18 +113,10 @@
 		$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name=:key LIMIT 1');
 		$db_query->execute(['key' => $key]);
 
-		if($row = $db_query->fetch())
-		{
-			return $row['misc_value'];
-		}
+		if($row = $db_query->fetch()) return $row['misc_value'];
 
 		global $default_variables;
-		if(isset($default_variables[$key]))
-		{
-			return $default_variables[$key];
-		} else {
-			return "";
-		}
+		return (isset($default_variables[$key])) ? $default_variables[$key] : "";
 	}
 
 	function force_to_login(): void
@@ -205,22 +195,44 @@
 	{
 		return isset($_SESSION['AUTH_ID']);
 	}
-
-	function is_admin(): bool
+	
+	function get_roles($user_id = 0): array
 	{
-		return isset($_SESSION['AUTH_LEVEL']) && $_SESSION['AUTH_LEVEL']<=3;
+		global $pdo;
+
+		if(!is_logged_in()) return [];
+		if($user_id===0) $user_id = $_SESSION['AUTH_ID'];
+
+		$db_query = $pdo->prepare('SELECT ROLES.* FROM ROLES INNER JOIN AFFILIATION ON ROLES.ROLE_ID=AFFILIATION.role_id WHERE AFFILIATION.user_id=:uid ORDER BY ROLES.priority');
+		$db_query->execute(['uid' => $user_id]);
+
+		$result = $db_query->fetchAll();
+		return (count($result)>0) ? $result : [];
 	}
 
-	function has_a_priority($n): bool
+	function has_permission($permission_name, $user_id = 0): bool
 	{
-		return isset($_SESSION['AUTH_LEVEL']) && $_SESSION['AUTH_LEVEL']<=$n;
+		global $pdo;
+
+		if (!is_logged_in())
+		{
+			$db_query = $pdo->prepare('SELECT PERMISSION_ID FROM PERMISSIONS INNER JOIN ROLES ON PERMISSIONS.role_id=ROLES.ROLE_ID WHERE ROLES.role_name="undefined" AND (PERMISSIONS.permission LIKE :permission1 OR PERMISSIONS.permission="*" OR RIGHT(PERMISSIONS.permission, 1)="*" AND :permission2 LIKE CONCAT(LEFT(PERMISSIONS.permission, LENGTH(PERMISSIONS.permission) - 1), "%"))');
+			$db_query->execute(['permission1' => $permission_name, 'permission2' => $permission_name]);
+			return ($db_query->fetch()) ? True : False;
+		}
+
+		if ($user_id===0) $user_id = $_SESSION['AUTH_ID'];
+		$db_query = $pdo->prepare('SELECT PERMISSION_ID FROM PERMISSIONS INNER JOIN AFFILIATION ON PERMISSIONS.role_id=AFFILIATION.role_id WHERE AFFILIATION.user_id=:uid AND (PERMISSIONS.permission LIKE :permission1 OR PERMISSIONS.permission="*" OR RIGHT(PERMISSIONS.permission, 1)="*" AND :permission2 LIKE CONCAT(LEFT(PERMISSIONS.permission, LENGTH(PERMISSIONS.permission) - 1), "%"))');
+		$db_query->execute(['uid' => $user_id, 'permission1' => $permission_name, 'permission2' => $permission_name]);
+		
+		return ($db_query->fetch()) ? True : False;
 	}
 
 	function check_session_timeout(): void
 	{
-		if(isset($_SESSION['SESSION_TIMEOUT']))
+		if (isset($_SESSION['SESSION_TIMEOUT']))
 		{
-			if($_SESSION['SESSION_TIMEOUT']<strtotime("now"))
+			if ($_SESSION['SESSION_TIMEOUT'] < time())
 			{
 				session_destroy();
 				force_to_login();
@@ -243,16 +255,12 @@
 	{
 		$remote_addr = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 
-		if (!in_array($remote_addr, json_decode(get_misc_value('general_trusted_proxies'), true), true)) {
-			return $remote_addr;
-		}
+		if (!in_array($remote_addr, json_decode(get_misc_value('general_trusted_proxies'), true), true)) return $remote_addr;
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 			$client_ip = trim($ips[0]);
 
-			if (filter_var($client_ip, FILTER_VALIDATE_IP)) {
-				return $client_ip;
-			}
+			if (filter_var($client_ip, FILTER_VALIDATE_IP)) return $client_ip;
 		}
 
 		return $remote_addr;
@@ -260,56 +268,47 @@
 
 	function include_plugins_for($element, $plugin = null): bool
 	{
-		if(isset($element))
-		{
-			global $pdo;
-			$element = basename($element);
-			if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $element)) {
-				return False; 
-			}
-			$base_dir = realpath(__DIR__ . "/../plugins");
+		if(!isset($element)) return False;
 
-			if(!isset($plugin)) {
-				$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_value=1 AND misc_name LIKE "community_plugin_%"');
-				$db_query->execute();
+		global $pdo;
+		$element = basename($element);
+		if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $element)) {
+			return False; 
+		}
+		$base_dir = realpath(__DIR__ . "/../plugins");
 
-				while($row = $db_query->fetch())
-				{
-					$plugin_name = substr($row['misc_name'], 17);
-            
-					if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin_name)) {
-						continue;
-					}
+		if (!isset($plugin)) {
+			$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_value=1 AND misc_name LIKE "community_plugin_%"');
+			$db_query->execute();
 
-					$plugin_path = realpath($base_dir . "/" . $plugin_name . "/include/" . $element . ".php");
+			while($row = $db_query->fetch())
+			{
+				$plugin_name = substr($row['misc_name'], 17);
+				if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin_name)) continue;
+				$plugin_path = realpath($base_dir . "/" . $plugin_name . "/include/" . $element . ".php");
 
-					try {
-						if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) {
-							include($plugin_path);
-						}
-					} catch (Throwable $e) {
-						continue;
-					}
-				}
-			} else {
 				try {
-					if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin)) return False;
-
-					$plugin_path = realpath($base_dir . "/" . $plugin . "/include/" . $element . ".php");
-					
-					if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) {
-						include($plugin_path);
-					} else {
-						return False;
-					}
+					if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) include($plugin_path);
 				} catch (Throwable $e) {
+					continue;
+				}
+			}
+		} else {
+			try {
+				if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin)) return False;
+
+				$plugin_path = realpath($base_dir . "/" . $plugin . "/include/" . $element . ".php");
+				
+				if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) {
+					include($plugin_path);
+				} else {
 					return False;
 				}
+			} catch (Throwable $e) {
+				return False;
 			}
-			return True;
-		} else {
-			return False;
 		}
+		return True;
 	}
 
 	function copy_directory($src, $dst): bool 
@@ -395,66 +394,31 @@
 
 		$placeholder = "../img/placeholder.jpeg";
 
-		if(!isset($img) || !isset($target_root_dir) || !isset($img['tmp_name']) || $img['error'] !== UPLOAD_ERR_OK) {
-			#echo "Sorry, something went wrong. (1)";
-			return $placeholder;
-		}
+		if(!isset($img) || !isset($target_root_dir) || !isset($img['tmp_name']) || $img['error'] !== UPLOAD_ERR_OK) return $placeholder;
 
 		$base_dir = realpath($target_root_dir);
-		if (!$base_dir || !is_dir($base_dir)) {
-			#echo "Sorry, something went wrong. (2)";
+		if (!$base_dir || !is_dir($base_dir)) return $placeholder;
+
+		if(!isset($img, $target_root_dir)) return $placeholder;
+
+		try {
+			$finfo = new finfo(FILEINFO_MIME_TYPE);
+			$mime_type = $finfo->file($img["tmp_name"]);
+
+			if (getimagesize($img["tmp_name"]) == false) return $placeholder;
+			if ($img["size"] > 20000000) return $placeholder;
+			if (!array_key_exists($mime_type, $allowed_types)) return $placeholder;		
+
+			$index = hash('sha256', (new DateTime())->format('Uv') . random_bytes(5));
+			$target_file = $base_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
+
+			if (file_exists($target_file)) return $placeholder;
+			if (strpos($target_file, $base_dir) !== 0) return $placeholder;
+			if (!move_uploaded_file($img["tmp_name"], $target_file)) return $placeholder;
+		} catch (Throwable $e) {
 			return $placeholder;
 		}
-
-		if(isset($img) && isset($target_root_dir))
-		{
-
-			try {
-				$finfo = new finfo(FILEINFO_MIME_TYPE);
-				$mime_type = $finfo->file($img["tmp_name"]);
-				$check = getimagesize($img["tmp_name"]);
-
-				if($check == false) {
-					#echo "File is not an image. (3)";
-					return $placeholder;
-				}
-
-				if ($img["size"] > 20000000) {
-					#echo "Image is too large! (4)";
-					return $placeholder;
-				}
-
-				if (!array_key_exists($mime_type, $allowed_types)) {
-					#echo "Only JPG, JPEG, PNG and WEBP are allowed. (5)";
-					return $placeholder;
-				}
-
-				$index = hash('sha256', (new DateTime())->format('Uv') . random_bytes(5));
-				$target_file = $base_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
-
-				if (file_exists($target_file)) {
-					#echo "Sorry, file already exists. (6)";
-					return $placeholder;
-				}
-
-				if (strpos($target_file, $base_dir) !== 0) {
-					#echo "Sorry, something went wrong. (7)";
-					return $placeholder;
-				}
-
-				if (!move_uploaded_file($img["tmp_name"], $target_file)) {
-					#echo "<br/>Sorry, an error occurred. (8)";
-					return $placeholder;
-				}
-			} catch (Throwable $e) {
-				#echo "<br/>Sorry, an error occurred. (9)";
-				return $placeholder;
-			}
-			return $target_root_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
-		} else {
-			#echo "<br/>Sorry, an error occurred. (10)";
-			return $placeholder;
-		}
+		return $target_root_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
 	}
 
 	function parse_flash_messages(): void
@@ -471,9 +435,7 @@
 
 	function insert_flash_message($type, $header, $content = null): void
 	{
-		if (!isset($_SESSION['flash_messages']) || !is_array($_SESSION['flash_messages'])) {
-			$_SESSION['flash_messages'] = [];
-		}
+		if (!isset($_SESSION['flash_messages']) || !is_array($_SESSION['flash_messages'])) $_SESSION['flash_messages'] = [];
 
 		$_SESSION['flash_messages'][] = [
 			'type'    => $type,
@@ -588,7 +550,7 @@
 
 	include(__DIR__."/../diagnostics/error_handler.php");
 
-	if (is_logged_in() and has_a_priority(3)) {
+	if (is_logged_in() and has_permission('main.admin.plugins.%')) {
 		include_once(__DIR__."/plugins/plugin_manager.php");
 		$plugin_manager = new PluginManager($pdo);
 	}
@@ -608,6 +570,18 @@
 	{
 		insert_flash_message('warning', "Ups...", "Coś poszło nie tak. Spróbuj ponownie.");
 		parse_flash_messages();
+	}
+
+	try {
+		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM ROLES');
+		$db_query->execute();
+		if ($db_query->fetch()['count'] === 0) 
+		{
+			include(__DIR__."/../app/config/init_roles.php");
+			load_initial_roles($pdo);
+		}
+	} catch (Throwable $t) {
+		extended_exception_handler($t);
 	}
 
 	$_SESSION['lang'] = isset($_GET['lang'], $_SESSION['lang']) ? init_i18n('messages', $_GET['lang']) : init_i18n('messages');

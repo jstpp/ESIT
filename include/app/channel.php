@@ -248,7 +248,7 @@
 <br />
 <br />
 <?php
-	if(has_a_priority(3))
+	if(has_permission('main.channels.create_problemset'))
 	{
 		echo('
 <div id="new_block_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
@@ -290,7 +290,7 @@
 <div style="display: flex; gap: 1vmax; align-items: flex-start;">
 	<div class="window" style="margin-right: 0; min-width: 50%;">
 		<h2 class="window_title" style="float: left;"><i class='fas fa-eye'></i>&nbsp;&nbsp;<?php echo(__("Available for You")); ?></h2>
-		<?php if(has_a_priority(3)) echo('<a onClick="document.getElementById(\'new_block_dialog\').style.display = \'flex\';" class="forminput" style="float: right; margin-right: 5%; margin-top: 2.5%;">'.__("Add block").'</a>'); ?>
+		<?php if(has_permission('main.channels.create_problemset')) echo('<a onClick="document.getElementById(\'new_block_dialog\').style.display = \'flex\';" class="forminput" style="float: right; margin-right: 5%; margin-top: 2.5%;">'.__("Add block").'</a>'); ?>
 		<div id="channel_content">
 			<?php
 				function generate_content($data, $pdo): void
@@ -350,7 +350,7 @@
 								$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:pid');
 								$db_query->execute(['pid' => $object['id']]);
 								$set_results[$set['SET_ID']] = [];
-								if($availability['is_available'] or has_a_priority(3))
+								if($availability['is_available'] or has_permission('main.display.all_resources'))
 								{
 									while($row = $db_query->fetch())
 									{
@@ -414,7 +414,7 @@
 									echo('&emsp;<small style="color: rgba(14, 149, 109, 1);"><i class=\'fas fa-award\'></i> '.__("Completed").'</small>');
 								}
 								echo('</div>');
-								if(has_a_priority(3))
+								if(has_permission('main.channels.add_problem'))
 								{
 									echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
 										<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;'.__("Add problem").'</a>
@@ -582,7 +582,7 @@
 		<p style="margin-left: 2.5%;"><?php echo(htmlentities($chdescription)); ?></p>
 		<br />
 		<?php
-			if(has_a_priority(3))
+			if(has_permission('main.channels.archive_channel'))
 			{
 				echo('
 				<a class="button" href="process.php?r=archive_channel&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" style="float: left; margin-left: 2.5%;"><i class=\'fas fa-archive\'></i>&nbsp;&nbsp;'.($chisarchived==1 ? __("Unarchive") : __("Archive")).'</a>

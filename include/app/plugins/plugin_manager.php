@@ -39,6 +39,7 @@
 
         public function download($repo, $branch): bool
         {
+            if (!has_permission('main.admin.plugins.download')) return False;
             if (empty($repo) || empty($branch)) return False;
             if (!preg_match('/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+$/', $repo)) return False;
             if (!preg_match('/^[a-zA-Z0-9_-]+$/', $branch)) return False;
@@ -71,6 +72,7 @@
 
         public function install($plugin_name): bool
         {
+            if(!has_permission('main.admin.plugins.install')) return False;
             if(!isset($plugin_name)) return False;
 
             try {
@@ -96,6 +98,7 @@
 
         public function uninstall($plugin_name): bool
         {
+            if(!has_permission('main.admin.plugins.uninstall')) return False;
             if(!isset($plugin_name)) return False;
 
             try {

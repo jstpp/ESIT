@@ -72,7 +72,7 @@
 		<div>
 			<b><?php echo($_SESSION['AUTH_NAME']) ?> <?php echo($_SESSION['AUTH_SURNAME']) ?></b>
 			<br />
-			<span style="font-size: 0.8vw;"><?php echo($_SESSION['AUTH_USERNAME']) ?> • <?php echo($_SESSION['AUTH_ROLE']) ?></span>
+			<span style="user-select: none; font-size: 0.7vw; background-color: <?php echo($_SESSION['AUTH_ROLE']['color']) ?>; padding: 0.1vw 0.5vw; border-radius: 0.5vw;"><i class="<?php echo(__($_SESSION['AUTH_ROLE']['icon'])) ?>"></i>&nbsp;&nbsp;<?php echo(__($_SESSION['AUTH_ROLE']['role_name'])) ?><span>
 		</div>
 	</div>
 	<br />
@@ -80,18 +80,15 @@
 	<a href="?p=dashboard" id="dashboard"><i class='fas fa-compass'></i>&emsp;<?php echo(__("Dashboard")); ?></a>
 	<a href="?p=settings" id="settings"><i class='fas fa-address-card'></i>&emsp;<?php echo(__("Account settings")); ?></a>
 	<?php
-		if(has_a_priority(3))
+		if (has_permission('main.display.admin.%') || has_permission('main.display.portal.settings')) echo('<p class="category_title">'.__("Management").'</p>');
+		if (has_permission('main.display.admin.configuration')) echo('<a href="?p=admin" id="admin"><i class=\'fas fa-tools\'></i>&emsp;'.__("Configuration").'</a>');
+		if (boolval(get_misc_value('plugin_portal')) and has_permission('main.portal.settings'))
 		{
-			echo('<p class="category_title">'.__("Management").'</p>');
-			echo('<a href="?p=admin" id="admin"><i class=\'fas fa-tools\'></i>&emsp;'.__("Configuration").'</a>');
-			if(boolval(get_misc_value('plugin_portal')))
-			{
-				echo('<a href="?p=portal" id="portal"><i class=\'fas fa-pen-nib\'></i>&emsp;'.__("Portal management").'</a>');
-			}
-			echo('<a href="?p=diagnostics" id="diagnostics"><i class=\'fa fa-dashboard\'></i>&emsp;'.__("Diagnostics").'</a>');
-			echo('<a href="?p=logs" id="logs"><i class=\'fas fas fa-stream\'></i>&emsp;'.__("Logs").'</a>');
-			include_plugins_for("vertical_menu_administration");
+			echo('<a href="?p=portal" id="portal"><i class=\'fas fa-pen-nib\'></i>&emsp;'.__("Portal management").'</a>');
 		}
+		if (has_permission('main.display.admin.diagnostics')) echo('<a href="?p=diagnostics" id="diagnostics"><i class=\'fa fa-dashboard\'></i>&emsp;'.__("Diagnostics").'</a>');
+		if (has_permission('main.display.admin.logs')) echo('<a href="?p=logs" id="logs"><i class=\'fas fas fa-stream\'></i>&emsp;'.__("Logs").'</a>');
+		include_plugins_for("vertical_menu_administration");
 	?>
 	<p class="category_title"><?php echo(__("Content")); ?></p>
 	<a href="?p=channels" id="contentsets"><i class='fas fa-pencil-ruler'></i>&emsp;<?php echo(__("Discover")); ?></a>
@@ -100,7 +97,7 @@
 		include_plugins_for("vertical_menu_problemsets");
 	?>
 	<?php
-		if(has_a_priority(4))
+		if(has_permission('main.display.channels.myexamsadmin'))
 		{
 			echo('<a href="?p=myexamsadmin" id="myexamsadmin"><i class=\'fas fa-coffee\'></i>&emsp;'.__("Creators' center").'</a>');
 		}

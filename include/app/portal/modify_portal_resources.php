@@ -60,7 +60,7 @@
 	}
     
 
-    if(!isset($_GET['mode']) || !has_a_priority(3)) kick();
+    if(!isset($_GET['mode']) || !is_logged_in() || !has_permission('main.portal.modify_resources')) kick();
     $org_link = get_misc_value("general_url");
     
     try {

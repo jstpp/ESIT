@@ -1,6 +1,6 @@
 <?php
     $id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
-    if(!is_logged_in() || !has_a_priority(4) || !isset($_POST['form_pts']) || !$id) kick();
+    if(!is_logged_in() || !has_permission('main.channels.check_form') || !isset($_POST['form_pts']) || !$id) kick();
 
     try {
         $db_query = $pdo->prepare('UPDATE SUBMISSIONS SET verification_time=:vertime, score=:score1, score_percentage=(100*:score2/(SELECT DISTINCT maxpoints FROM PROBLEMS INNER JOIN SUBMISSIONS ON PROBLEMS.PROBLEM_ID=SUBMISSIONS.problem_id WHERE SUBMISSION_ID=:sid1)), comment=:comment WHERE SUBMISSION_ID=:sid2');

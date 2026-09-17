@@ -20,7 +20,7 @@
     $publish_time = strtotime($problem_data['publish_time'] ?? 'now');
 
     if(!($publish_time < strtotime("now")
-        || is_logged_in() && $_SESSION['AUTH_LEVEL']<=3
+        || is_logged_in() && has_permission('main.display.all_resources')
         || is_logged_in() && $problem_data['author_id'] == $_SESSION['AUTH_ID']))
     {
         http_response_code(404);

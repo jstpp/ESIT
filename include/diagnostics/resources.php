@@ -23,7 +23,7 @@
         return sys_getloadavg()[0];
     }
 
-    if (isset($_GET['call']) and has_a_priority(3))
+    if (isset($_GET['call']) and has_permission('main.display.admin.diagnostics'))
     {
         if ($_GET['call']=="getall") {
             echo json_encode([

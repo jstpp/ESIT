@@ -2,7 +2,7 @@
 	$ident = problem_type_identification('opn');
 	if(isset($_GET['sid']))
 	{
-		if($_SESSION['AUTH_LEVEL']<5)
+		if(has_permission('main.display.all_results'))
 		{
 			$db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
 			$db_query->execute(['sid' => $_GET['sid']]);

@@ -1,19 +1,9 @@
 <?php
-	if(isset($_GET['sid']))
-	{
-		if($_SESSION['AUTH_LEVEL']<=3)
-		{
-			$db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID INNER JOIN USERS ON USERS.USER_ID=SUBMISSIONS.user_id WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
-			$db_query->execute(['sid' => $_GET['sid']]);
-		} else {
-			kick();
-		}
-
-		$row = $db_query->fetch();
-
-	} else {
-		kick();
-	}
+	if (!has_permission('main.display.channels.check_the_form') || !isset($_GET['sid'])) kick();
+	
+	$db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID INNER JOIN USERS ON USERS.USER_ID=SUBMISSIONS.user_id WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
+	$db_query->execute(['sid' => $_GET['sid']]);
+	$row = $db_query->fetch();
 ?>
 <style>
 	.window .forminput {

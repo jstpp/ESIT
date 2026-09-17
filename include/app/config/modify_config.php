@@ -1,5 +1,5 @@
 <?php
-    if(!is_logged_in() || !has_a_priority(3) || !isset($plugin_manager)) kick();
+    if(!is_logged_in() || !has_permission('main.admin.modify_config') || !isset($plugin_manager)) kick();
 
     if(isset($_GET['call'], $_GET['plugin_name']) and $_GET['call']=="plugin_uninstall")
     {

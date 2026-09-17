@@ -1,5 +1,5 @@
 <?php
-    if(!has_a_priority(3)) kick();
+    if(!is_logged_in() || !has_permission('main.portal.tinyupload')) kick();
 
     try {
         $accepted_origins = array("http://localhost", "http://192.168.1.1", get_misc_value('general_url'));
