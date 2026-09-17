@@ -81,7 +81,7 @@
         background: orange;
     }
     .diag_info .circle {
-        background: rgb(0, 179, 255);
+        background: var(--highlight-color);
     }
 </style>
 

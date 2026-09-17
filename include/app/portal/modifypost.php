@@ -13,7 +13,8 @@
       height: 500,
 	  base_url: '/include/js/tinymce',
 	  license_key: 'gpl',
-	  promotion: false
+	  promotion: false,
+	  skin: '<?php echo (isset($settings) && $settings->dark_mode == 0) ? 'oxide' : 'oxide-dark' ?>'
     });
 </script>
 
@@ -73,7 +74,7 @@
 		text-decoration: none;
 		margin-left: 0.5vw;
 
-		background-color: #00b3ff;
+		background-color: var(--highlight-color);
 		color: white;
 		border-radius: 5px;
 		cursor: pointer;

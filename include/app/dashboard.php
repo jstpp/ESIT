@@ -88,7 +88,7 @@
 	}
 
 	.dashboard_content_set:hover {
-		box-shadow: 0 0 0.1vmax 0.2vmax rgb(0, 179, 255);
+		box-shadow: 0 0 0.1vmax 0.2vmax var(--highlight-color);
 		cursor: pointer;
 	}
 
@@ -148,7 +148,7 @@
 						labels: ["Odpowiedzi prawidłowe", "Odpowiedzi błędne"],
 						datasets: [{
 							data: [<?php echo($avg_score); ?>, <?php echo(100-$avg_score); ?>],
-							backgroundColor: ['rgb(0, 179, 255)', 'rgba(21, 33, 46, 1)']
+							backgroundColor: ['rgba(0, 179, 255, 1)', 'rgba(21, 33, 46, 1)']
 						}]
 						},
 						options: {
@@ -172,7 +172,7 @@
 						labels: dashboard_labels,
 						datasets: [{ 
 							data: dashboard_progress_pts,
-							borderColor: "rgb(0, 179, 255)",
+							borderColor: "rgba(0, 179, 255, 1)",
 							pointRadius: 2,
 							fill: true,
 						}]

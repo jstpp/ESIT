@@ -1,6 +1,6 @@
 <style>
 	.window a {
-		color: rgb(0, 179, 255);
+		color: var(--highlight-color);
 		font-weight: bold;
 		text-decoration: none;
 	}
@@ -29,7 +29,7 @@
 		cursor: pointer;
 	}
 	.window .choice_option:checked {
-		background-color: rgb(0, 179, 255);
+		background-color: var(--highlight-color);
 		padding: 0.40vw 0.40vw;
 	}
 	.window label {

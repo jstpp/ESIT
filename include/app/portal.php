@@ -98,7 +98,7 @@
 	}
 
 	.saved_files_table a {
-		color: #00b3ff;
+		color: var(--highlight-color);
 		transition: 0.3s;
 	}
 	.saved_files_table a:hover {

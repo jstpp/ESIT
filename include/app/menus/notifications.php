@@ -17,14 +17,14 @@
 
 	#notifications_menu a {
 		text-decoration: none;
-		color: #00b3ff;
+		color: var(--highlight-color);
 		padding: 0.3vmax;
 		cursor: pointer;
 		transition: 0.2s;
 	}
 	#notifications_menu a:hover {
 		color: white;
-		background-color: color: #00b3ff;
+		background-color: color: var(--highlight-color);
 	}
 
 	#notifications_menu .category_title {

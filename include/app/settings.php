@@ -62,7 +62,7 @@
 		padding: 1vw 1vw;
 		float: right;
 
-		background-color: #00b3ff;
+		background-color: var(--highlight-color);
 		color: white;
 		border-radius: 5px;
 		cursor: pointer;

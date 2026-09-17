@@ -1,6 +1,6 @@
 <style>
 	.window a {
-		color: rgb(0, 179, 255);
+		color: var(--highlight-color);
 		font-weight: bold;
 		text-decoration: none;
 	}

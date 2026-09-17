@@ -272,9 +272,8 @@
 
 		global $pdo;
 		$element = basename($element);
-		if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $element)) {
-			return False; 
-		}
+		if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $element)) return False; 
+		
 		$base_dir = realpath(__DIR__ . "/../plugins");
 
 		if (!isset($plugin)) {
@@ -526,6 +525,17 @@
 
 		$_SESSION['api_rate_limit_tick'][] = $now;
 		return count($_SESSION['api_rate_limit_tick']) <= $limit;
+	}
+
+	function import_user_settings(): array
+	{
+		global $pdo;
+
+		$db_query = $pdo->prepare('SELECT * FROM USERS WHERE USER_ID=:uid LIMIT 1');
+		$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
+		$user = $db_query->fetch();
+
+		return $user ?? [];
 	}
 
 

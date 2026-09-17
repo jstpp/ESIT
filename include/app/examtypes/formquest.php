@@ -12,13 +12,14 @@
       height: 500,
 	  base_url: '/include/js/tinymce',
 	  license_key: 'gpl',
-	  promotion: false
+	  promotion: false,
+	  skin: '<?php echo (isset($settings) && $settings->dark_mode == 0) ? 'oxide' : 'oxide-dark' ?>'
     });
 </script>
 
 <style>
 	.window a {
-		color: rgb(0, 179, 255);
+		color: var(--highlight-color);
 		font-weight: bold;
 		text-decoration: none;
 	}

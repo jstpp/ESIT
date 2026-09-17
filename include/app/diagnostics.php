@@ -30,7 +30,7 @@
         background: orange;
     }
     .diag_info .circle {
-        background: rgb(0, 179, 255);
+        background: var(--highlight-color);
     }
     
     .diagnostics_feedback {
@@ -120,7 +120,7 @@
             labels: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
             datasets: [{ 
             data: cpu_usage_data,
-            borderColor: "rgb(0, 179, 255)",
+            borderColor: "rgba(0, 179, 255, 1)",
             pointRadius: 2,
             tension: 0.4,
             fill: true,
@@ -144,7 +144,7 @@
             labels: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
             datasets: [{ 
             data: memory_usage_data,
-            borderColor: "rgb(0, 179, 255)",
+            borderColor: "rgba(0, 179, 255, 1)",
             pointRadius: 2,
             tension: 0.4,
             fill: true,

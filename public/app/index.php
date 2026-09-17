@@ -4,11 +4,8 @@
 	if(!is_logged_in()) force_to_login();
 	check_session_timeout();
 
-	$db_query = $pdo->prepare('SELECT * FROM USERS WHERE USER_ID=:uid LIMIT 1');
-	$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
-
-	$user = $db_query->fetch();
-	$settings = $user ? json_decode($user['settings']) : null;
+	$user = import_user_settings();
+	$settings = $user ? json_decode($user['settings']) : [];
 
 	$db_query = $pdo->prepare('SELECT misc_value FROM MISC WHERE misc_name LIKE "general_title" LIMIT 1');
     $db_query->execute();
@@ -69,21 +66,23 @@
 				--container-bg: rgba(32, 43, 54, 1);
 				--container-hover-bg: rgba(21, 33, 46, 1);
 				--container-hover-bg-textbox: rgba(6, 20, 34, 1);
-				--text: #dae2e6;
+				--text: rgba(218, 226, 230, 1);
 				--horizontal-menu-bg: rgba(21, 33, 46, 1);
 				--vertical-menu-bg: rgba(32, 43, 54, 1);
 				--notifications-menu-bg: rgba(32, 43, 54, 0.8);
+				--highlight-color: rgba(0, 179, 255, 1);
 			}
 
 			[data-theme="light"] {
-				--bg: #dae2e6;
-				--container-bg: #c8c8c8;
+				--bg: rgba(218, 226, 230, 1);
+				--container-bg: rgba(200, 200, 200, 1);
 				--container-hover-bg:rgb(170, 170, 170);
-				--container-hover-bg-textbox: #dae2e6;
-				--text: #3e4145;
-				--horizontal-menu-bg: #a5a5a5;
-				--vertical-menu-bg: #c8c8c8;
+				--container-hover-bg-textbox: rgba(218, 226, 230, 1);
+				--text: rgba(62, 65, 69, 1);
+				--horizontal-menu-bg: rgba(165, 165, 165, 1);
+				--vertical-menu-bg: rgba(200, 200, 200, 1);
 				--notifications-menu-bg: rgba(200,200,200,0.8);
+				--highlight-color: rgba(0, 119, 255, 1);
 			}
 
 			[data-theme="dark"] {
@@ -94,6 +93,7 @@
 				--horizontal-menu-bg: rgba(21, 33, 46, 1);
 				--vertical-menu-bg: rgba(32, 43, 54, 1);
 				--notifications-menu-bg: rgba(32, 43, 54, 0.8);
+				--highlight-color: rgba(0, 179, 255, 1);
 			}
 
 			body {
@@ -142,7 +142,7 @@
 
 			.window a {
 				text-decoration: none;
-				color: rgb(0, 179, 255);
+				color: var(--highlight-color);
 			}
 			.button {
 				padding: 1vw 1vw;
@@ -150,7 +150,7 @@
 				text-decoration: none;
 				margin-left: 0.5vw;
 
-				background-color: #00b3ff;
+				background-color: var(--highlight-color);
 				color: white !important;
 				border-radius: 5px;
 				cursor: pointer;
@@ -181,7 +181,7 @@
 					const activeMenu = document.getElementById(<?= json_encode($page_config['menu_id']) ?>);
 					if (activeMenu) {
 						activeMenu.style.background = 'var(--container-hover-bg)'; 
-						activeMenu.style.color = '#00b3ff';
+						activeMenu.style.color = 'var(--highlight-color)';
 					}
 				</script>
 			<?php endif; ?>

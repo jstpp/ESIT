@@ -27,7 +27,7 @@
 	}
 	.window table a {
 		text-decoration: none;
-		color: rgb(0, 179, 255);
+		color: var(--highlight-color);
 	}
 	.window table td {
 		border-top: 0.1vw solid gray;
@@ -91,7 +91,7 @@
 		padding: 1vw 1vw;
 		float: right;
 
-		background-color: #00b3ff;
+		background-color: var(--highlight-color);
 		color: white;
 		border-radius: 5px;
 		cursor: pointer;
@@ -552,7 +552,7 @@
 						{
 							if($_SESSION['AUTH_ID']==$u)
 							{
-								echo('<tr style="background-color: rgb(0, 179, 255); font-weight: bold;">');
+								echo('<tr style="background-color: var(--highlight-color); font-weight: bold;">');
 							} else {
 								echo('<tr>');
 							}

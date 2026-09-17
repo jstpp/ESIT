@@ -23,7 +23,7 @@
 	}
 	.window table a {
 		text-decoration: none;
-		color: rgb(0, 179, 255);
+		color: var(--highlight-color);
 	}
 	.window table td {
 		border-top: 0.1vw solid gray;

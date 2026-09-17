@@ -62,7 +62,7 @@
 		padding: 1vw 1vw;
 		float: right;
 
-		background-color: #00b3ff;
+		background-color: var(--highlight-color);
 		color: white;
 		border-radius: 5px;
 		cursor: pointer;
@@ -171,7 +171,7 @@
 		border-radius: 100%;
 	}
 	.switch-checkbox input:checked + .switch-checkbox-toggle {
-		background-color: #00b3ff;
+		background-color: var(--highlight-color);
 	}
 	.switch-checkbox input:checked + .switch-checkbox-toggle:before {
 		transform: translateX(0.9vmax);
@@ -201,7 +201,7 @@
 		align-items: center;
 	}
 	#settings_menu a {
-		color: #00b3ff; 
+		color: var(--highlight-color); 
 		text-decoration: none;
 		transition: 0.3s;
 	}
@@ -214,7 +214,7 @@
 		cursor: pointer;
 	}
 	#search_icon:hover {
-		color: #00b3ff;
+		color: var(--highlight-color);
 	}
 
 	.github_search_results_item {
@@ -244,7 +244,7 @@
 		color: white;
 	}
 	.download_button:hover {
-		color: #00b3ff;
+		color: var(--highlight-color);
 	}
 </style>
 
@@ -366,7 +366,7 @@
 		<?php
 			if(boolval(get_misc_value('plugin_portal'))) 
 			{
-				echo('<i class=\'fas fa-info-circle\' style="margin-left: 5%;"></i>&nbsp;&nbsp;'.__('"Portal" module is active: title & MOTD can be changed in').' <a href="?p=portal" style="color: #00b3ff; text-decoration: none;">'.__('Portal management').'</a>.<br /><br />'); 
+				echo('<i class=\'fas fa-info-circle\' style="margin-left: 5%;"></i>&nbsp;&nbsp;'.__('"Portal" module is active: title & MOTD can be changed in').' <a href="?p=portal" style="color: var(--highlight-color); text-decoration: none;">'.__('Portal management').'</a>.<br /><br />'); 
 			} else {
 				echo('<div class="dark-box">
 				<label for="general_title">'.__('Title').':&emsp;</label>
@@ -459,7 +459,7 @@
 			<label for="plugin_portal">&emsp;<?php echo(__("Portal")); ?></label>
 			<br />
 			<br />
-			<i class='fas fa-info-circle'></i>&nbsp;&nbsp;<?php echo(__("Settings for this plugin can be found in")); ?> <a href="?p=portal" style="color: #00b3ff; text-decoration: none;"><?php echo(__("Portal management")); ?></a>.
+			<i class='fas fa-info-circle'></i>&nbsp;&nbsp;<?php echo(__("Settings for this plugin can be found in")); ?> <a href="?p=portal" style="color: var(--highlight-color); text-decoration: none;"><?php echo(__("Portal management")); ?></a>.
 			<br />
 		</div>
 		<div class="dark-box">
