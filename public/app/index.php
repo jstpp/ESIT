@@ -25,7 +25,7 @@
 		'testresult'    => ['permission' => 'main.display.testresult.user', 'path' => 'results/testresult.php'],
 		'ctfresult'     => ['permission' => 'main.display.ctfresult.user', 'path' => 'results/ctfresult.php'],
 		'formresult'    => ['permission' => 'main.display.formresult.user', 'path' => 'results/formresult.php'],
-		'problem'       => ['permission' => 'main.display.problem', 'path' => 'problem.php', 'required' => ['id']],
+		'content'       => ['permission' => 'main.display.content', 'path' => 'content.php', 'required' => ['id']],
 		'channel'       => ['permission' => 'main.display.channel', 'path' => 'channel.php'],
 		'addpost'       => ['permission' => 'main.display.portal.addpost', 'path' => 'portal/addpost.php'],
 		'modifypost'    => ['permission' => 'main.display.portal.modifypost', 'path' => 'portal/modifypost.php'],

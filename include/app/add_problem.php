@@ -127,25 +127,25 @@
 	<div class="window" id="problem_type_select_window">
 		<h2 style="margin-left: 2.5%;"><?php echo(__("Choose problem type")); ?></h1>
 		<div id="problem_type_select_flexbox" style="margin: 2.5%; display: flex; flex-wrap: wrap; gap: 0.5vmax;">
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(1);" style="background-color: <?php print(problem_type_identification('alg')['color']); ?>;">
-				<h3><?php print(problem_type_identification('alg')['full_name']); ?></h3><br />
-				<i class="<?php print(problem_type_identification('alg')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(1);" style="background-color: <?php print(content_type_identification('alg')['color']); ?>;">
+				<h3><?php print(content_type_identification('alg')['full_name']); ?></h3><br />
+				<i class="<?php print(content_type_identification('alg')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(2);" style="background-color: <?php print(problem_type_identification('ctf')['color']); ?>;">
-				<h3><?php print(problem_type_identification('ctf')['full_name']); ?></h3><br />
-				<i class="<?php print(problem_type_identification('ctf')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(2);" style="background-color: <?php print(content_type_identification('ctf')['color']); ?>;">
+				<h3><?php print(content_type_identification('ctf')['full_name']); ?></h3><br />
+				<i class="<?php print(content_type_identification('ctf')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(3);" style="background-color: <?php print(problem_type_identification('och')['color']); ?>;">
-				<h3><?php print(problem_type_identification('och')['full_name']); ?></h3><br />
-				<i class="<?php print(problem_type_identification('och')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(3);" style="background-color: <?php print(content_type_identification('och')['color']); ?>;">
+				<h3><?php print(content_type_identification('och')['full_name']); ?></h3><br />
+				<i class="<?php print(content_type_identification('och')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(4);" style="background-color: <?php print(problem_type_identification('mch')['color']); ?>;">
-				<h3><?php print(problem_type_identification('mch')['full_name']); ?></h3><br />
-				<i class="<?php print(problem_type_identification('mch')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(4);" style="background-color: <?php print(content_type_identification('mch')['color']); ?>;">
+				<h3><?php print(content_type_identification('mch')['full_name']); ?></h3><br />
+				<i class="<?php print(content_type_identification('mch')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
-			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(5);" style="background-color: <?php print(problem_type_identification('opn')['color']); ?>;">
-				<h3><?php print(problem_type_identification('opn')['full_name']); ?></h3><br />
-				<i class="<?php print(problem_type_identification('opn')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
+			<div class="problem_type_select_flexbox_option" onClick="validate_data(); typeSelect(5);" style="background-color: <?php print(content_type_identification('opn')['color']); ?>;">
+				<h3><?php print(content_type_identification('opn')['full_name']); ?></h3><br />
+				<i class="<?php print(content_type_identification('opn')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
 		</div>
 	</div>

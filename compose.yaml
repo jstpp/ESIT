@@ -10,6 +10,7 @@ services:
     volumes:
       - ./include/:/www/esit/include
       - ./public/img:/www/esit/public/img
+      - ./public/login:/www/esit/public/login
       - ./public/include/resources:/www/esit/public/include/resources
       - ./setup/nginx.conf.example:/etc/nginx/nginx.conf
       - ./setup/default.conf.example:/etc/nginx/conf.d/default.conf
@@ -27,6 +28,7 @@ services:
       - ./include/:/www/esit/include
       - ./locale/:/www/esit/locale
       - ./public/img:/www/esit/public/img
+      - ./public/login:/www/esit/public/login
       - ./public/include/resources:/www/esit/public/include/resources
     depends_on:
       - rabbitmq

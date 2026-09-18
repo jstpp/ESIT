@@ -1,10 +1,6 @@
 <?php
 	include(__DIR__.'/../../include/app/core.php');
-	if(isset($_SESSION['AUTH_ID']))
-	{
-		echo('<meta http-equiv="refresh" content="0; url=../app/index.php" />');
-		die;
-	}
+	if(isset($_SESSION['AUTH_ID'])) redirect("../app/index.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -190,7 +186,7 @@
 						}
 					?>
 					
-					<input class="login_input" type="text" name="auth_username" placeholder="<?php echo(__("Username")); ?>" required />
+					<input class="login_input" type="text" name="auth_username_or_mail" placeholder="<?php echo(__("Username or e-mail address")); ?>" required />
 					<br />
 					<br />
 					<input class="login_input" type="password" name="auth_password" placeholder="<?php echo(__("Password")); ?>" required />
@@ -200,7 +196,7 @@
 					<input class="login_submit" type="submit" value="<?php echo(__("Log in")); ?>" />
 					<br style="clear: both;"/>
 				</form>
-				<p><?php echo(__("Don't have an account yet?")); ?> <a class="simple_href" href="../rejestracja.php"><?php echo(__("Create an account")); ?></a>.</p>
+				<p><?php echo(__("Don't have an account yet?")); ?> <a class="simple_href" href="<?php echo(boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php'); ?>"><?php echo(__("Create an account")); ?></a>.</p>
 			</div>
 			<div class="window" id="password_recovery_window_mail" style="display: none;">
 				<form method="POST" action="process.php?s=passrecovery_mail">

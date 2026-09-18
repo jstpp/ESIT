@@ -356,19 +356,19 @@
 									{
 										switch($row['type']){
 											case 1:
-												$contenttype = problem_type_identification('alg');
+												$contenttype = content_type_identification('alg');
 												break;
 											case 2:
-												$contenttype = problem_type_identification('ctf');
+												$contenttype = content_type_identification('ctf');
 												break;
 											case 3:
-												$contenttype = problem_type_identification('och');
+												$contenttype = content_type_identification('och');
 												break;
 											case 4:
-												$contenttype = problem_type_identification('mch');
+												$contenttype = content_type_identification('mch');
 												break;
 											case 5:
-												$contenttype = problem_type_identification('opn');
+												$contenttype = content_type_identification('opn');
 												break;
 										}
 
@@ -382,7 +382,7 @@
 										} else {
 											$maxscore = 0;
 										}
-										echo('<a class="channel_content_block_final" href="index.php?p=problem&id='.$row['PROBLEM_ID'].'" style="color: inherit;">
+										echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['PROBLEM_ID'].'" style="color: inherit;">
 											<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
 											<div class="channel_content_block_title">
 												<b class="channel_content_block_title_text">#'.$row['PROBLEM_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>

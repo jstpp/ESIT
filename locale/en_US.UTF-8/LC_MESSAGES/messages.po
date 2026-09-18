@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 10:34+0200\n"
+"POT-Creation-Date: 2026-09-18 13:35+0200\n"
 "PO-Revision-Date: 2026-09-09 18:23+0200\n"
 "Last-Translator: jstpp <jstpp_github@proton.me>\n"
 "Language-Team: \n"
@@ -18,110 +18,202 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: ../public/app/index.php:58
+#: ../public/app/index.php:55
 msgid "App"
 msgstr ""
 
-#: ../public/login/index.php:160 ../public/login/index.php:200
-msgid "Log in"
-msgstr "Log in"
+#: ../public/login/register.php:234 ../include/app/portal.php:174
+#: ../include/app/admin.php:261
+msgid "Name"
+msgstr "Name"
 
-#: ../public/login/index.php:168
-msgid "Login unsuccessful"
-msgstr "Login unsuccessful"
+#: ../public/login/register.php:238 ../include/app/admin.php:262
+msgid "Surname"
+msgstr "Surname"
 
-#: ../public/login/index.php:168 ../public/login/index.php:219
-#: ../public/login/index.php:274
-msgid "Try again"
-msgstr "Try again"
+#: ../public/login/register.php:242 ../include/app/settings.php:96
+#: ../include/app/admin.php:263
+msgid "Organization"
+msgstr "Organization"
 
-#: ../public/login/index.php:174
-msgid "Logged out successfully"
-msgstr "Logged out successfully"
-
-#: ../public/login/index.php:174
-msgid "Return to the main site"
-msgstr "Return to the main site"
-
-#: ../public/login/index.php:180
-msgid "Registration successful"
-msgstr "Registration successful"
-
-#: ../public/login/index.php:180 ../public/login/index.php:186
-msgid "You can log in now"
-msgstr "You can log in now"
-
-#: ../public/login/index.php:186
-msgid "Your password has been changed successfully"
-msgstr "Your password has been changed successfully"
-
-#: ../public/login/index.php:193 ../include/app/channel.php:486
+#: ../public/login/register.php:246 ../include/app/channel.php:486
 #: ../include/app/settings.php:95 ../include/app/admin.php:260
 #: ../include/app/admin.php:487 ../include/app/admin.php:488
 msgid "Username"
 msgstr "Username"
 
-#: ../public/login/index.php:196 ../include/app/admin.php:278
-#: ../include/app/admin.php:489 ../include/app/admin.php:490
-msgid "Password"
-msgstr "Password"
-
-#: ../public/login/index.php:198
-msgid "Forgot your password?"
-msgstr "Forgot your password?"
-
-#: ../public/login/index.php:203
-msgid "Don't have an account yet?"
-msgstr "Don't have an account yet?"
-
-#: ../public/login/index.php:203
-msgid "Create an account"
-msgstr "Create an account"
-
-#: ../public/login/index.php:207 ../public/login/index.php:245
-msgid "Password recovery"
-msgstr "Password recovery"
-
-#: ../public/login/index.php:219
-msgid "We couldn't send You recovery mail"
-msgstr "We couldn't send You recovery mail"
-
-#: ../public/login/index.php:225
-msgid "Email sent successfully! Please check your email (including SPAM)."
-msgstr "Email sent successfully! Please check your email (including SPAM)."
-
-#: ../public/login/index.php:233 ../include/app/settings.php:97
-#: ../include/app/admin.php:277
+#: ../public/login/register.php:250 ../public/login/index.php:229
+#: ../include/app/settings.php:97 ../include/app/admin.php:277
 msgid "E-mail address"
 msgstr "E-mail address"
 
-#: ../public/login/index.php:237
+#: ../public/login/register.php:254 ../public/login/index.php:192
+#: ../include/app/admin.php:278 ../include/app/admin.php:489
+#: ../include/app/admin.php:490
+msgid "Password"
+msgstr "Password"
+
+#: ../public/login/register.php:258
+#, fuzzy
+msgid "Repeat password"
+msgstr "Repeat new password"
+
+#: ../public/login/register.php:261 ../public/login/register.php:270
+msgid "Register"
+msgstr ""
+
+#: ../public/login/register.php:272 ../include/app/add_problem.php:492
+msgid "Input validation"
+msgstr "Input validation"
+
+#: ../public/login/register.php:273
+#, fuzzy
+msgid "Your username"
+msgstr "Username"
+
+#: ../public/login/register.php:274
+msgid "...must be at least 6 characters long"
+msgstr ""
+
+#: ../public/login/register.php:275 ../public/login/register.php:287
+msgid "...must be unique"
+msgstr ""
+
+#: ../public/login/register.php:276
+msgid "...cannot contain special characters other than _ or -"
+msgstr ""
+
+#: ../public/login/register.php:278
+#, fuzzy
+msgid "Your password"
+msgstr "New password"
+
+#: ../public/login/register.php:279
+msgid "...must be at least 8 characters long"
+msgstr ""
+
+#: ../public/login/register.php:280
+msgid "...must contain at least 1 special character"
+msgstr ""
+
+#: ../public/login/register.php:281
+msgid "...must contain at least 1 uppercase letter"
+msgstr ""
+
+#: ../public/login/register.php:282
+msgid "...must contain at least 1 digit"
+msgstr ""
+
+#: ../public/login/register.php:283
+msgid "...must match the password entered in the second field"
+msgstr ""
+
+#: ../public/login/register.php:285
+#, fuzzy
+msgid "Your email address"
+msgstr "E-mail address"
+
+#: ../public/login/register.php:286
+msgid "...must have a valid format"
+msgstr ""
+
+#: ../public/login/register.php:289
+msgid "Name of the organization you belong to"
+msgstr ""
+
+#: ../public/login/register.php:290
+msgid "...must be provided by you"
+msgstr ""
+
+#: ../public/login/index.php:156 ../public/login/index.php:196
+msgid "Log in"
+msgstr "Log in"
+
+#: ../public/login/index.php:164
+msgid "Login unsuccessful"
+msgstr "Login unsuccessful"
+
+#: ../public/login/index.php:164 ../public/login/index.php:215
+#: ../public/login/index.php:270
+msgid "Try again"
+msgstr "Try again"
+
+#: ../public/login/index.php:170
+msgid "Logged out successfully"
+msgstr "Logged out successfully"
+
+#: ../public/login/index.php:170
+msgid "Return to the main site"
+msgstr "Return to the main site"
+
+#: ../public/login/index.php:176
+msgid "Registration successful"
+msgstr "Registration successful"
+
+#: ../public/login/index.php:176 ../public/login/index.php:182
+msgid "You can log in now"
+msgstr "You can log in now"
+
+#: ../public/login/index.php:182
+msgid "Your password has been changed successfully"
+msgstr "Your password has been changed successfully"
+
+#: ../public/login/index.php:189
+#, fuzzy
+msgid "Username or e-mail address"
+msgstr "E-mail address"
+
+#: ../public/login/index.php:194
+msgid "Forgot your password?"
+msgstr "Forgot your password?"
+
+#: ../public/login/index.php:199
+msgid "Don't have an account yet?"
+msgstr "Don't have an account yet?"
+
+#: ../public/login/index.php:199
+msgid "Create an account"
+msgstr "Create an account"
+
+#: ../public/login/index.php:203 ../public/login/index.php:241
+msgid "Password recovery"
+msgstr "Password recovery"
+
+#: ../public/login/index.php:215
+msgid "We couldn't send You recovery mail"
+msgstr "We couldn't send You recovery mail"
+
+#: ../public/login/index.php:221
+msgid "Email sent successfully! Please check your email (including SPAM)."
+msgstr "Email sent successfully! Please check your email (including SPAM)."
+
+#: ../public/login/index.php:233
 msgid "Send link"
 msgstr "Send link"
 
-#: ../public/login/index.php:238 ../include/app/add_problem.php:488
-#: ../include/app/portal/modifypost.php:118
-#: ../include/app/portal/addpost.php:106
+#: ../public/login/index.php:234 ../include/app/add_problem.php:488
+#: ../include/app/portal/modifypost.php:119
+#: ../include/app/portal/addpost.php:107
 msgid "Cancel"
 msgstr "Cancel"
 
-#: ../public/login/index.php:262
+#: ../public/login/index.php:258
 msgid "Access denied"
 msgstr "Access denied"
 
-#: ../public/login/index.php:274
+#: ../public/login/index.php:270
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
-#: ../public/login/index.php:282 ../include/app/settings.php:106
+#: ../public/login/index.php:278 ../include/app/settings.php:106
 msgid "New password"
 msgstr "New password"
 
-#: ../public/login/index.php:285 ../include/app/settings.php:107
+#: ../public/login/index.php:281 ../include/app/settings.php:107
 msgid "Repeat new password"
 msgstr "Repeat new password"
 
-#: ../public/login/index.php:289
+#: ../public/login/index.php:285
 msgid "Change password"
 msgstr "Change password"
 
@@ -155,7 +247,7 @@ msgstr "Channel description"
 msgid "Channel publish time"
 msgstr "Channel publish time"
 
-#: ../include/app/channels.php:101 ../include/app/portal/addpost.php:96
+#: ../include/app/channels.php:101 ../include/app/portal/addpost.php:97
 msgid "Thumbnail"
 msgstr "Thumbnail"
 
@@ -184,7 +276,7 @@ msgid "Click to enter the channel"
 msgstr "Click to enter the channel"
 
 #: ../include/app/channels.php:160 ../include/app/portal.php:176
-#: ../include/app/channel.php:595 ../include/app/problem.php:26
+#: ../include/app/channel.php:595 ../include/app/content.php:26
 msgid "Author"
 msgstr "Author"
 
@@ -209,11 +301,11 @@ msgstr ""
 msgid "moderator"
 msgstr ""
 
-#: ../include/app/config/init_roles.php:75
+#: ../include/app/config/init_roles.php:77
 msgid "portal_editor"
 msgstr ""
 
-#: ../include/app/config/init_roles.php:86
+#: ../include/app/config/init_roles.php:88
 #, fuzzy
 msgid "content_creator"
 msgstr "Content center"
@@ -227,28 +319,28 @@ msgstr "Events log"
 msgid "Yay! There is no issues at the moment!"
 msgstr "Yay! There is no issues at the moment!"
 
-#: ../include/app/check_the_form.php:54
+#: ../include/app/check_the_form.php:44
 msgid "Currently evaluating user's solution"
 msgstr "Currently evaluating user's solution"
 
-#: ../include/app/check_the_form.php:58
+#: ../include/app/check_the_form.php:48
 msgid "Solution of user"
 msgstr "Solution of user"
 
-#: ../include/app/check_the_form.php:69
+#: ../include/app/check_the_form.php:59
 msgid "Grade"
 msgstr "Grade"
 
-#: ../include/app/check_the_form.php:73
+#: ../include/app/check_the_form.php:63
 #: ../include/app/results/formresult.php:173
 msgid "Optional comment"
 msgstr "Optional comment"
 
-#: ../include/app/check_the_form.php:78
+#: ../include/app/check_the_form.php:68
 msgid "Submit your assessment"
 msgstr "Submit your assessment"
 
-#: ../include/app/check_the_form.php:84
+#: ../include/app/check_the_form.php:74
 msgid "Problem"
 msgstr "Problem"
 
@@ -382,10 +474,6 @@ msgstr "Add new"
 msgid "Add new problem"
 msgstr "Add new problem"
 
-#: ../include/app/add_problem.php:492
-msgid "Input validation"
-msgstr "Input validation"
-
 #: ../include/app/add_problem.php:493
 msgid "Fill all required textboxes."
 msgstr "Fill all required textboxes."
@@ -429,26 +517,26 @@ msgstr "In queue..."
 msgid "Partially correct"
 msgstr "Partially correct"
 
-#: ../include/app/portal/modifypost.php:88
+#: ../include/app/portal/modifypost.php:89
 msgid "Modify post"
 msgstr "Modify post"
 
-#: ../include/app/portal/modifypost.php:108
-#: ../include/app/portal/addpost.php:94 ../include/app/portal.php:216
+#: ../include/app/portal/modifypost.php:109
+#: ../include/app/portal/addpost.php:95 ../include/app/portal.php:216
 #: ../include/app/portal.php:229 ../include/app/portal.php:467
 #: ../include/app/admin.php:372 ../include/app/admin.php:373
 msgid "Title"
 msgstr "Title"
 
-#: ../include/app/portal/modifypost.php:119
+#: ../include/app/portal/modifypost.php:120
 msgid "Save"
 msgstr "Save"
 
-#: ../include/app/portal/addpost.php:88
+#: ../include/app/portal/addpost.php:89
 msgid "New post"
 msgstr "New post"
 
-#: ../include/app/portal/addpost.php:101
+#: ../include/app/portal/addpost.php:102
 msgid ""
 "It is recommended not to set a specific font in the text - the default font "
 "for the Portal will then be visible in the post."
@@ -456,7 +544,7 @@ msgstr ""
 "It is recommended not to set a specific font in the text - the default font "
 "for the Portal will then be visible in the post."
 
-#: ../include/app/portal/addpost.php:107
+#: ../include/app/portal/addpost.php:108
 msgid "Publish"
 msgstr "Publish"
 
@@ -477,7 +565,7 @@ msgstr "Add new post"
 msgid "Delete"
 msgstr "Delete"
 
-#: ../include/app/portal.php:147 ../include/app/admin.php:595
+#: ../include/app/portal.php:147 ../include/app/admin.php:596
 msgid "Modify"
 msgstr "Modify"
 
@@ -500,10 +588,6 @@ msgstr "Save settings"
 #: ../include/app/portal.php:173
 msgid "Portal template"
 msgstr "Portal template"
-
-#: ../include/app/portal.php:174 ../include/app/admin.php:261
-msgid "Name"
-msgstr "Name"
 
 #: ../include/app/portal.php:174
 msgid "Default template"
@@ -905,33 +989,37 @@ msgstr "Incorrect [%]"
 msgid "Your anwser"
 msgstr "Your anwser"
 
-#: ../include/app/core.php:459
+#: ../include/app/core.php:448
 msgid "Algorithmic task"
 msgstr "Algorithmic task"
 
-#: ../include/app/core.php:460
+#: ../include/app/core.php:449
 msgid "Capture The Flag"
 msgstr "Capture The Flag"
 
-#: ../include/app/core.php:461
+#: ../include/app/core.php:450
 msgid "Single choice"
 msgstr "Single choice "
 
-#: ../include/app/core.php:462
+#: ../include/app/core.php:451
 msgid "Multiple choice"
 msgstr "Multiple choice"
 
-#: ../include/app/core.php:463
+#: ../include/app/core.php:452
 msgid "Open-ended"
 msgstr "Open-ended"
 
-#: ../include/app/core.php:464
+#: ../include/app/core.php:453
+msgid "Video"
+msgstr ""
+
+#: ../include/app/core.php:454
+msgid "Article"
+msgstr ""
+
+#: ../include/app/core.php:455
 msgid "Unknown"
 msgstr "Unknown"
-
-#: ../include/app/settings.php:96 ../include/app/admin.php:263
-msgid "Organization"
-msgstr "Organization"
 
 #: ../include/app/settings.php:102
 msgid "Security"
@@ -1024,10 +1112,6 @@ msgstr "Configuration panel"
 #: ../include/app/admin.php:257 ../include/app/admin.php:282
 msgid "Add new user"
 msgstr "Add new user"
-
-#: ../include/app/admin.php:262
-msgid "Surname"
-msgstr "Surname"
 
 #: ../include/app/admin.php:284
 msgid "Delete user"
@@ -1209,7 +1293,7 @@ msgstr ""
 msgid "Add user"
 msgstr "Add user"
 
-#: ../include/app/admin.php:592
+#: ../include/app/admin.php:593
 msgid "Last login"
 msgstr "Last login"
 

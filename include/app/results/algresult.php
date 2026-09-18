@@ -1,5 +1,5 @@
 <?php
-	$ident = problem_type_identification('alg');
+	$ident = content_type_identification('alg');
 	if(!isset($_GET['sid'])) kick();
 	
 	if(has_permission('main.display.all_results'))
@@ -89,7 +89,7 @@
 	<h1><?php echo(__("Evaluation report")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=problem&id=<?php echo($row['PROBLEM_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['PROBLEM_ID']); ?>)</h2>
+	<h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=content&id=<?php echo($row['PROBLEM_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['PROBLEM_ID']); ?>)</h2>
 	<br />
 	<div style="margin-left: 5%; width: 90%;">
 		<div style="display: flex; gap: 2vmax;">

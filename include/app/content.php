@@ -29,19 +29,19 @@
 <?php 
 	if($problemtype==1)
 	{
-		include(__DIR__.'/../../include/app/examtypes/algquest.php');
+		include(__DIR__.'/../../include/app/problemtypes/algquest.php');
 	} else if($problemtype==2)
 	{
-		include(__DIR__.'/../../include/app/examtypes/ctfquest.php');
+		include(__DIR__.'/../../include/app/problemtypes/ctfquest.php');
 	} else if($problemtype==3)
 	{
-		include(__DIR__.'/../../include/app/examtypes/classicquest.php');
+		include(__DIR__.'/../../include/app/problemtypes/classicquest.php');
 	} else if($problemtype==4)
 	{
-		include(__DIR__.'/../../include/app/examtypes/multiplechoicequest.php');
+		include(__DIR__.'/../../include/app/problemtypes/multiplechoicequest.php');
 	} else if($problemtype==5)
 	{
-		include(__DIR__.'/../../include/app/examtypes/formquest.php');
+		include(__DIR__.'/../../include/app/problemtypes/formquest.php');
 	} else {
 		kick();
 	}

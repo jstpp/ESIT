@@ -1,11 +1,11 @@
 <?php
-	if(!isset($_POST['auth_username']) || !isset($_POST['auth_password'])) 
+	if(!isset($_POST['auth_username_or_mail']) || !isset($_POST['auth_password'])) 
 	{
 		redirect('index.php?response=failed');
 	}
 
-	$db_query = $pdo->prepare('SELECT * FROM USERS WHERE username=:usr');
-    $db_query->execute(['usr' => $_POST['auth_username']]);
+	$db_query = $pdo->prepare('SELECT * FROM USERS WHERE username=:usr1 OR mail=:usr2');
+    $db_query->execute(['usr1' => $_POST['auth_username_or_mail'], 'usr2' => $_POST['auth_username_or_mail']]);
 
 	if($row = $db_query->fetch())
 	{

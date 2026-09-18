@@ -8,13 +8,13 @@
         || !is_string($_POST['org']) 
         || !is_string($_POST['mail']) 
         || !is_string($_POST['name'])
-        || !is_string($_POST['surname'])) redirect("../rejestracja.php?error");
-        if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $_POST['username'])) redirect("../rejestracja.php?error");
-        if ($_POST['pass']!=$_POST['pass_repeat']) redirect("../rejestracja.php?error");
-        if (mb_strlen($_POST['pass'])<8 || mb_strlen($_POST['pass'])>50 || mb_strlen($_POST['username'])<6) redirect("../rejestracja.php?error");
-        if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) redirect("../rejestracja.php?error");
-        if (is_an_user($_POST['username']) || is_an_user($_POST['mail'])) redirect("../rejestracja.php?error");
-        if (empty(trim($_POST['name'])) || empty(trim($_POST['surname'])) || empty(trim($_POST['org']))) redirect("../rejestracja.php?error");
+        || !is_string($_POST['surname'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $_POST['username'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if ($_POST['pass']!=$_POST['pass_repeat']) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (mb_strlen($_POST['pass'])<8 || mb_strlen($_POST['pass'])>50 || mb_strlen($_POST['username'])<6) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (is_an_user($_POST['username']) || is_an_user($_POST['mail'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (empty(trim($_POST['name'])) || empty(trim($_POST['surname'])) || empty(trim($_POST['org']))) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
     }
      catch (Throwable $t) {
         extended_exception_handler($t);
@@ -54,6 +54,6 @@
             extended_exception_handler($t2);
         }
         extended_exception_handler($t);
-        redirect("../rejestracja.php?error");
+        redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
     }
 ?>

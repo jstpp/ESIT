@@ -443,13 +443,15 @@
 		];
 	}
 
-	function problem_type_identification($type): array {
+	function content_type_identification($type): array {
 		$problem_types = [
 			'alg'     => ['full_name' => __('Algorithmic task'), 'icon' => 'fas fa-file-code', 'color' => 'rgba(0, 121, 250, 1)'],
 			'ctf'     => ['full_name' => __('Capture The Flag'), 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
-			'och'     => ['full_name' => __('Single choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgba(14, 149, 109, 1)'],
-			'mch'     => ['full_name' => __('Multiple choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgba(218, 130, 6, 1)'],
+			'och'     => ['full_name' => __('Single choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgb(1, 120, 84)'],
+			'mch'     => ['full_name' => __('Multiple choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgb(218, 98, 6)'],
 			'opn'     => ['full_name' => __('Open-ended'), 'icon' => 'fa fa-pencil-square', 'color' => 'rgba(69, 47, 165, 1)'],
+			'vid'	  => ['full_name' => __('Video'), 'icon' => 'fas fa-play', 'color' => 'rgb(165, 47, 165)'],
+			'art'	  => ['full_name' => __('Article'), 'icon' => 'fas fa-book-open', 'color' => 'rgb(110, 67, 14)'],
 			'unk'     => ['full_name' => __('Unknown'), 'icon' => 'fas fa-bug', 'color' => 'rgba(120, 120, 120, 1)']
 		];
 

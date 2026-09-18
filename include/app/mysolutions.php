@@ -94,27 +94,27 @@
 				switch($row['type'])
 				{
 					case 1:
-						$problem = problem_type_identification('alg');
+						$problem = content_type_identification('alg');
 						$resultdest = "algresult";
 						break;
 					case 2:
-						$problem = problem_type_identification('ctf');
+						$problem = content_type_identification('ctf');
 						$resultdest = "ctfresult";
 						break;
 					case 3:
-						$problem = problem_type_identification('och');
+						$problem = content_type_identification('och');
 						$resultdest = "testresult";
 						break;
 					case 4:
-						$problem = problem_type_identification('mch');
+						$problem = content_type_identification('mch');
 						$resultdest = "testresult";
 						break;
 					case 5:
-						$problem = problem_type_identification('opn');
+						$problem = content_type_identification('opn');
 						$resultdest = "formresult";
 						break;
 					default:
-						$problem = problem_type_identification('unk');
+						$problem = content_type_identification('unk');
 						break;
 				}
 

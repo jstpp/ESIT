@@ -1,5 +1,5 @@
 <?php
-	$ident = problem_type_identification('ctf');
+	$ident = content_type_identification('ctf');
 	if(has_permission('main.display.all_results'))
 	{
 		$db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
@@ -57,7 +57,7 @@
 	<h1><?php echo(__("CTF flag evaluation results")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=problem&id=<?php echo($row['PROBLEM_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['PROBLEM_ID']); ?>)</h2>
+	<h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=content&id=<?php echo($row['PROBLEM_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['PROBLEM_ID']); ?>)</h2>
 	<div style="width: 85%; margin-left: 5%; padding: 2vmax; background-image: <?php echo($gradient); ?>; background-color: var(--container-hover-bg); border-radius: 1vmax;">
 		<?php
 			if ($row['score_percentage']!=-1 and strtotime($row['result_publish_time'])<strtotime("now"))
