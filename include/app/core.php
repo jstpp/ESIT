@@ -483,7 +483,7 @@
 		}
 		$required_set_id = $condition->id;
 
-		$db_query = $pdo->prepare('SELECT PROBLEM_ID, maxpoints FROM PROBLEMS WHERE problemset = :pid');
+		$db_query = $pdo->prepare('SELECT CONTENT_ID, maxpoints FROM CONTENT WHERE problemset = :pid');
 		$db_query->execute(['pid' => $required_set_id]);
 		$problems = $db_query->fetchAll();
 
@@ -496,7 +496,7 @@
 		foreach ($problems as $row) {
 			$cdb_query = $pdo->prepare('SELECT MAX(score) AS maxscore FROM SUBMISSIONS WHERE problem_id = :pid AND user_id = :uid');
 			$cdb_query->execute([
-				'pid' => $row['PROBLEM_ID'], 
+				'pid' => $row['CONTENT_ID'], 
 				'uid' => $_SESSION['AUTH_ID']
 			]);
 			$ctx = $cdb_query->fetch();

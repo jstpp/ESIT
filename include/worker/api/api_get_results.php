@@ -132,7 +132,7 @@
 
         $notification_content = "Twoje rozwiązanie do zadania #".$submission['problem_id']." zostało sprawdzone!<br/><a href='index.php?p=mysolutions'><i class='fa fa-eye'></i>&nbsp;Moje rozwiązania</a>";
 
-        $db_query = $pdo->prepare('UPDATE SUBMISSIONS SET verification_time=CURRENT_TIMESTAMP, score=(:percentage1*(SELECT DISTINCT maxpoints FROM PROBLEMS WHERE PROBLEM_ID=:pid)), score_percentage=(:percentage2*100) WHERE SUBMISSION_ID=:sid');
+        $db_query = $pdo->prepare('UPDATE SUBMISSIONS SET verification_time=CURRENT_TIMESTAMP, score=(:percentage1*(SELECT DISTINCT maxpoints FROM CONTENT WHERE CONTENT_ID=:pid)), score_percentage=(:percentage2*100) WHERE SUBMISSION_ID=:sid');
         $db_query->execute(['sid' => $submission['submission_id'], "percentage1" => $percentage, "percentage2" => $percentage, "pid" => $submission['problem_id']]);
 
         $db_query = $pdo->prepare('INSERT INTO NOTIFICATIONS (user_id, content, type) VALUES (:uid, :content, "success")');

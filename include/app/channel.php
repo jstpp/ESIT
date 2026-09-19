@@ -347,7 +347,7 @@
 									</div>
 								</div>');
 								echo('<div class="channel_content_block channel_content_chapter" data-id="'.$object['id'].'">');
-								$db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE problemset=:pid');
+								$db_query = $pdo->prepare('SELECT * FROM CONTENT WHERE problemset=:pid');
 								$db_query->execute(['pid' => $object['id']]);
 								$set_results[$set['SET_ID']] = [];
 								if($availability['is_available'] or has_permission('main.display.all_resources'))
@@ -373,7 +373,7 @@
 										}
 
 										$cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts, MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
-										$cdb_query->execute(['pid' => $row['PROBLEM_ID'], 'uid' => $_SESSION['AUTH_ID']]);
+										$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
 										$ctx = $cdb_query->fetch();
 
 										if((int)$ctx['maxscore']!=-1)
@@ -382,10 +382,10 @@
 										} else {
 											$maxscore = 0;
 										}
-										echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['PROBLEM_ID'].'" style="color: inherit;">
+										echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['CONTENT_ID'].'" style="color: inherit;">
 											<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
 											<div class="channel_content_block_title">
-												<b class="channel_content_block_title_text">#'.$row['PROBLEM_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
+												<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
 												<div class="channel_content_block_element_details">
 													<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'">
 														'.($row['maxattempts']-$ctx['attempts']).' prób
@@ -491,13 +491,13 @@
 						$temp_table_user_ids = array();
 						$temp_table_total_scores = array();
 
-						$db_query = $pdo->prepare('SELECT PROBLEMS.* FROM PROBLEMS INNER JOIN PROBLEMSETS ON PROBLEMS.problemset=PROBLEMSETS.SET_ID INNER JOIN CHANNELS ON PROBLEMSETS.channel_id=CHANNELS.CHANNEL_ID WHERE CHANNELS.CHANNEL_ID=:cid AND result_publish_time<:currenttime ORDER BY PROBLEM_ID DESC');
+						$db_query = $pdo->prepare('SELECT CONTENT.* FROM CONTENT INNER JOIN PROBLEMSETS ON CONTENT.problemset=PROBLEMSETS.SET_ID INNER JOIN CHANNELS ON PROBLEMSETS.channel_id=CHANNELS.CHANNEL_ID WHERE CHANNELS.CHANNEL_ID=:cid AND result_publish_time<:currenttime ORDER BY CONTENT_ID DESC');
 						$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
 						while($row = $db_query->fetch())
 						{
-							echo('<th>#'.$row['PROBLEM_ID'].'</th>');
-							array_push($problem_array, $row['PROBLEM_ID']);
+							echo('<th>#'.$row['CONTENT_ID'].'</th>');
+							array_push($problem_array, $row['CONTENT_ID']);
 
 						}
 						
@@ -505,7 +505,7 @@
 
 						foreach($problem_array as $p)
 						{
-							$db_query = $pdo->prepare('SELECT SUBMISSIONS.user_id AS user_id, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, SUBMISSIONS.problem_id AS problem_id, USERS.username AS username, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.problem_id=:pids AND PROBLEMS.result_publish_time<:currenttime ORDER BY SUBMISSIONS.problem_id DESC');
+							$db_query = $pdo->prepare('SELECT SUBMISSIONS.user_id AS user_id, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, SUBMISSIONS.problem_id AS problem_id, USERS.username AS username, CONTENT.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.problem_id=:pids AND CONTENT.result_publish_time<:currenttime ORDER BY SUBMISSIONS.problem_id DESC');
 							$db_query->execute(['pids' => $p, 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
 							while($row = $db_query->fetch())

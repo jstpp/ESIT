@@ -1,5 +1,5 @@
 <?php
-    if(!is_logged_in() || !has_permission('main.channels.create_channel'))) kick();
+    if(!is_logged_in() || !has_permission('main.channels.create_channel')) kick();
     if(!isset($_POST['setname'], $_POST['description'], $_POST['publish_time'])) redirect("index.php?p=channels&error");
 
     $isarchived = (isset($_POST['isactive']) && $_POST['isactive'] === '1') ? 0 : 1;

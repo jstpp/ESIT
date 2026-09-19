@@ -1,5 +1,5 @@
 <?php
-	$db_query = $pdo->prepare('SELECT PROBLEMS.PROBLEM_ID AS id, PROBLEMS.type AS type, PROBLEMS.problemset AS problemset, PROBLEMS.maxpoints AS maxpoints, PROBLEMS.title AS title, PROBLEMS.publish_time AS publish_time, USERS.name AS authorname, USERS.surname AS authorsurname, PROBLEMS.maxattempts AS maxattempts FROM PROBLEMS INNER JOIN USERS ON USERS.USER_ID=PROBLEMS.author_id WHERE PROBLEMS.PROBLEM_ID=:pid');
+	$db_query = $pdo->prepare('SELECT CONTENT.CONTENT_ID AS id, CONTENT.type AS type, CONTENT.problemset AS problemset, CONTENT.maxpoints AS maxpoints, CONTENT.title AS title, CONTENT.publish_time AS publish_time, USERS.name AS authorname, USERS.surname AS authorsurname, CONTENT.maxattempts AS maxattempts FROM CONTENT INNER JOIN USERS ON USERS.USER_ID=CONTENT.author_id WHERE CONTENT.CONTENT_ID=:pid');
     $db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 	$isfound = 0;
     while($row = $db_query->fetch())

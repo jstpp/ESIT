@@ -7,7 +7,7 @@
         $cid = filter_var($_GET['cid'], FILTER_VALIDATE_INT);
     }
     
-    $db_query = $pdo->prepare('SELECT * FROM PROBLEMS WHERE PROBLEM_ID=:problemid');
+    $db_query = $pdo->prepare('SELECT * FROM CONTENT WHERE CONTENT_ID=:problemid');
     $db_query->execute(['problemid' => $cid]);
     $problem_data = $db_query->fetch();
 

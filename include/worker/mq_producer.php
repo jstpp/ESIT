@@ -96,7 +96,7 @@
         kick();
     }
 
-    $db_query = $pdo->prepare('INSERT INTO SUBMISSIONS (problem_id, problemset_id, user_id, verification_time, score, score_percentage, submission_lang) VALUES (:pid, (SELECT DISTINCT problemset FROM PROBLEMS WHERE PROBLEM_ID=:xpid), :uid, :ver_time, -1, -1, :sub_lang)');
+    $db_query = $pdo->prepare('INSERT INTO SUBMISSIONS (problem_id, problemset_id, user_id, verification_time, score, score_percentage, submission_lang) VALUES (:pid, (SELECT DISTINCT problemset FROM CONTENT WHERE CONTENT_ID=:xpid), :uid, :ver_time, -1, -1, :sub_lang)');
     $db_query->execute(['pid' => $_GET['pid'], 'xpid' => $_GET['pid'], 'uid' => $_SESSION['AUTH_ID'], "ver_time" => "1900-01-01 10:00:00", "sub_lang" => $submission_lang]);
     $submission_id = $pdo->lastInsertId();
     

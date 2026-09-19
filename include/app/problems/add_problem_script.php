@@ -129,7 +129,7 @@
     {
         try
         {
-            $db_query = $pdo->prepare('INSERT INTO PROBLEMS (title, author_id, type, maxattempts, maxpoints, problemset, result_publish_time, publish_time, isarchived) VALUES (:title, :aid, :type, :maxattempts, :maxpoints, :sid, :resultpublishtime, :publishtime, :isarchived)');
+            $db_query = $pdo->prepare('INSERT INTO CONTENT (title, author_id, type, maxattempts, maxpoints, problemset, result_publish_time, publish_time, isarchived) VALUES (:title, :aid, :type, :maxattempts, :maxpoints, :sid, :resultpublishtime, :publishtime, :isarchived)');
             $db_query->execute(['title' => trim($_POST['problem_title']), 'aid' => $_SESSION['AUTH_ID'], 'type' => filter_var($_POST['problem_type'], FILTER_VALIDATE_INT), 'maxattempts' => filter_var($_POST['problem_maxattempts'], FILTER_VALIDATE_INT), 'maxpoints' => filter_var($_POST['problem_points'], FILTER_VALIDATE_INT), 'sid' => filter_var($_GET['sid'], FILTER_VALIDATE_INT), 'resultpublishtime' => $_POST['result_publish_time'], 'publishtime' => $_POST['publish_time'], 'isarchived' => filter_var($_POST['problem_isarchived'], FILTER_VALIDATE_INT)]);
             $problem_id = $pdo->lastInsertId();
         } catch (Throwable $t){
@@ -169,7 +169,7 @@
             process_ctf_public_create_root($problem_id);
             process_ctf_public_file($_FILES['ctf_file'], $problem_id);
 
-            $db_query = $pdo->prepare('UPDATE PROBLEMS SET comment=:flag WHERE PROBLEM_ID=:pid');
+            $db_query = $pdo->prepare('UPDATE CONTENT SET comment=:flag WHERE CONTENT_ID=:pid');
             $db_query->execute(['flag' => $_POST['ctf_flag'], 'pid' => $problem_id]);
             
         } else if((int)$_POST['problem_type']==3)
@@ -188,7 +188,7 @@
                 $correct = $correct.$aws.'
     ';
             }
-            $db_query = $pdo->prepare('UPDATE PROBLEMS SET comment=:correct WHERE PROBLEM_ID=:pid');
+            $db_query = $pdo->prepare('UPDATE CONTENT SET comment=:correct WHERE CONTENT_ID=:pid');
             $db_query->execute(['correct' => $correct, 'pid' => $problem_id]);
 
 
@@ -212,7 +212,7 @@
                 $correct = $correct.$aws.'
     ';
             }
-            $db_query = $pdo->prepare('UPDATE PROBLEMS SET comment=:correct WHERE PROBLEM_ID=:pid');
+            $db_query = $pdo->prepare('UPDATE CONTENT SET comment=:correct WHERE CONTENT_ID=:pid');
             $db_query->execute(['correct' => $correct, 'pid' => $problem_id]);
 
 
@@ -229,5 +229,5 @@
         redirect("index.php?p=channels&error");
     }
 
-    redirect('index.php?p=quest&id='.filter_var($problem_id, FILTER_VALIDATE_INT));
+    redirect('index.php?p=content&id='.filter_var($problem_id, FILTER_VALIDATE_INT));
 ?>

@@ -3,10 +3,10 @@
 	{
 		if(has_permission('main.display.all_results'))
 		{
-			$db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
+			$db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
 			$db_query->execute(['sid' => $_GET['sid']]);
 		} else {
-			$db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid AND SUBMISSIONS.user_id=:uid');
+			$db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid AND SUBMISSIONS.user_id=:uid');
 			$db_query->execute(['sid' => $_GET['sid'], 'uid' => $_SESSION['AUTH_ID']]);
 		}
 
@@ -15,7 +15,7 @@
 		$questions = array();
 
 		$db_query = $pdo->prepare('SELECT * FROM TEST_QUESTIONS WHERE problem_id=:pid');
-		$db_query->execute(['pid' => $row['PROBLEM_ID']]);
+		$db_query->execute(['pid' => $row['CONTENT_ID']]);
 
 		while($x = $db_query->fetch())
 		{
@@ -90,7 +90,7 @@
 	<h1><?php echo(__("Evaluation results")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=content&id=<?php echo($row['PROBLEM_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['PROBLEM_ID']); ?>)</h2>
+	<h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=content&id=<?php echo($row['CONTENT_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['CONTENT_ID']); ?>)</h2>
 	<br />
 	<div style="margin-left: 5%; width: 90%;">
 		<div style="display: flex; gap: 2vmax;">

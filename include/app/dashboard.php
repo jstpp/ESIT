@@ -196,7 +196,7 @@
 			<h3 class="window_title"><i class="fa fa-flask"></i>&nbsp;&nbsp;<?php echo(__("My last solutions")); ?></h3>
 			<div id="results">
 				<?php
-					$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, PROBLEMS.title AS title, PROBLEMS.type AS type, PROBLEMS.maxpoints AS max_pts, PROBLEMS.PROBLEM_ID AS problem_id, PROBLEMS.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 4');
+					$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, CONTENT.title AS title, CONTENT.type AS type, CONTENT.maxpoints AS max_pts, CONTENT.CONTENT_ID AS problem_id, CONTENT.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 4');
 					$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
 
 					$isfound = 0;

@@ -32,7 +32,7 @@
 	<h1><?php echo(__("Forms waiting for evaluation")); ?></h1>
 </center>
 <?php
-	$db_query = $pdo->prepare('SELECT PROBLEMS.title AS title, SUBMISSIONS.content AS content, SUBMISSIONS.SUBMISSION_ID AS subid, USERS.username AS username FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN PROBLEMS ON SUBMISSIONS.problem_id=PROBLEMS.PROBLEM_ID WHERE SUBMISSIONS.content<>"-" AND SUBMISSIONS.score=-1 ORDER BY SUBMISSIONS.submission_time DESC');
+	$db_query = $pdo->prepare('SELECT CONTENT.title AS title, SUBMISSIONS.content AS content, SUBMISSIONS.SUBMISSION_ID AS subid, USERS.username AS username FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.content<>"-" AND SUBMISSIONS.score=-1 ORDER BY SUBMISSIONS.submission_time DESC');
     $db_query->execute();
 
 	$count = 0;
