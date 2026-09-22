@@ -143,8 +143,7 @@ CREATE TABLE `CHANNELS` (
   `img_path` text NOT NULL DEFAULT ('../img/placeholder.jpeg'),
   `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
   `layout` text NOT NULL DEFAULT ('{}'),
-  `isarchived` int(11) NOT NULL DEFAULT 0,
-  `followers` int(11) NOT NULL DEFAULT 0
+  `isarchived` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -244,9 +243,7 @@ CREATE TABLE `USERS` (
   `name` text NOT NULL,
   `surname` text NOT NULL,
   `organization` text NOT NULL,
-  `settings` text NOT NULL DEFAULT ('{"code_editor_theme":"dracula.css","dark_mode":"1"}'),
-  `follows` text NOT NULL DEFAULT ('{"follows":[]}'),
-  `stars` text NOT NULL DEFAULT ('{"stars":[]}')
+  `settings` text NOT NULL DEFAULT ('{"code_editor_theme":"dracula.css","dark_mode":"1"}')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -286,6 +283,30 @@ CREATE TABLE `PERMISSIONS` (
   `PERMISSION_ID` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
   `permission` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `FOLLOWS`
+--
+
+CREATE TABLE `FOLLOWS` (
+  `FOLLOW_ID` int(11) NOT NULL,
+  `channel_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `STARS`
+--
+
+CREATE TABLE `STARS` (
+  `STAR_ID` int(11) NOT NULL,
+  `content_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -419,6 +440,22 @@ ALTER TABLE `PERMISSIONS`
   ADD KEY `permission_role_id` (`role_id`);
 
 --
+-- Indexes for table `FOLLOWS`
+--
+ALTER TABLE `FOLLOWS`
+  ADD PRIMARY KEY (`FOLLOW_ID`),
+  ADD KEY `fol_user_id` (`user_id`),
+  ADD KEY `fol_channel_id` (`channel_id`);
+
+--
+-- Indexes for table `STARS`
+--
+ALTER TABLE `STARS`
+  ADD PRIMARY KEY (`STAR_ID`),
+  ADD KEY `sta_user_id` (`user_id`),
+  ADD KEY `sta_content_id` (`content_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -531,6 +568,18 @@ ALTER TABLE `AFFILIATION`
   MODIFY `AFFILIATION_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `FOLLOWS`
+--
+ALTER TABLE `FOLLOWS`
+  MODIFY `FOLLOW_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `STARS`
+--
+ALTER TABLE `STARS`
+  MODIFY `STAR_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -594,6 +643,24 @@ COMMIT;
 ALTER TABLE `AFFILIATION`
   ADD CONSTRAINT `affiliation_role` FOREIGN KEY (`role_id`) REFERENCES `ROLES` (`ROLE_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `affiliation_user` FOREIGN KEY (`user_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Constraints for table `FOLLOWS`
+--
+ALTER TABLE `FOLLOWS`
+  ADD CONSTRAINT `follow_channel` FOREIGN KEY (`channel_id`) REFERENCES `CHANNELS` (`CHANNEL_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `follow_user` FOREIGN KEY (`user_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `unique_follow` UNIQUE (`user_id`, `channel_id`);
+COMMIT;
+
+--
+-- Constraints for table `STARS`
+--
+ALTER TABLE `STARS`
+  ADD CONSTRAINT `star_content` FOREIGN KEY (`content_id`) REFERENCES `CONTENT` (`CONTENT_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `star_user` FOREIGN KEY (`user_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `unique_stars` UNIQUE (`user_id`, `content_id`);
 COMMIT;
 
 --

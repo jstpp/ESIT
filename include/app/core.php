@@ -540,6 +540,50 @@
 		return $user ?? [];
 	}
 
+	function count_channel_followers($channel_id): int
+	{
+		global $pdo;
+
+		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM FOLLOWERS WHERE channel_id=:cid');
+		$db_query->execute(['cid' => $channel_id]);
+		$count = $db_query->fetch()['count'];
+
+		return $count ?? 0;
+	}
+
+	function count_content_stars($content_id): int
+	{
+		global $pdo;
+
+		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM STARS WHERE content_id=:cid');
+		$db_query->execute(['cid' => $content_id]);
+		$count = $db_query->fetch()['count'];
+
+		return $count ?? 0;
+	}
+
+	function check_star($content_id, $user_id): bool
+	{
+		global $pdo;
+
+		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM STARS WHERE content_id=:cid AND user_id=:uid');
+		$db_query->execute(['cid' => $content_id, 'uid' =>  $user_id]);
+		$count = $db_query->fetch()['count'];
+
+		return ($count>0) ? True : False;
+	}
+
+	function check_follow($channel_id, $user_id): bool
+	{
+		global $pdo;
+
+		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM FOLLOWS WHERE channel_id=:cid AND user_id=:uid');
+		$db_query->execute(['cid' => $channel_id, 'uid' =>  $user_id]);
+		$count = $db_query->fetch()['count'];
+
+		return ($count>0) ? True : False;
+	}
+
 
 	###############################################
 	#       just another extension point		  #

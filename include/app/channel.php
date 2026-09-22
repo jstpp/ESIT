@@ -1,22 +1,16 @@
 <?php
 	$db_query = $pdo->prepare('SELECT * FROM CHANNELS INNER JOIN USERS ON CHANNELS.author_id=USERS.USER_ID WHERE CHANNEL_ID=:setid');
 	$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
-	$isfound = 0;
 
-	while($row = $db_query->fetch())
+	if($row = $db_query->fetch())
 	{
-		$isfound++;
 		$chtitle = $row['title'];
 		$chimgpath = $row['img_path'];
 		$chdescription = $row['description'];
 		$chauthor = $row['username'];
 		$chisarchived = $row['isarchived'];
-		$chfollowers = $row['followers'];
 		$chlayout = json_decode($row['layout']);
-	}
-
-	if($isfound!=1) 
-	{ 
+	} else {
 		kick();
 	}
 ?>
@@ -267,7 +261,7 @@
 <script src="/include/js/sortablejs/Sortable.js" type="text/javascript"></script>
 <img id="set_header_img" src="<?php echo htmlspecialchars($chimgpath, ENT_QUOTES, 'UTF-8'); ?>" />
 <a href="process.php?r=follow_channel&id=<?php echo($_GET['id']); ?>" class="follow_box">
-	<i class="far fa-bell"></i>&nbsp;<?php echo((in_array($_GET['id'], $_SESSION['CONTENT_FOLLOWS'])) ? __('Unfollow') : __('Follow')); ?>&nbsp;
+	<i class="far fa-bell"></i>&nbsp;<?php echo((check_follow($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unfollow') : __('Follow')); ?>&nbsp;
 </a>
 <br />
 <br />
@@ -420,7 +414,7 @@
 														'.($row['maxattempts']-$ctx['attempts']).' prób
 													</div>
 													<div class="channel_content_block_stars" style="background-color: '.$contenttype['color'].'">
-														<i class="far fa-star"></i>&nbsp;'.max($row['stars'],0).'
+														<i class="far fa-star"></i>&nbsp;'.max(count_content_stars($row['CONTENT_ID']),0).'
 													</div>');
 										if(strtotime($row['result_publish_time'])<strtotime("now"))
 										{

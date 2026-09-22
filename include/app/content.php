@@ -43,7 +43,7 @@
 </style>
 
 <a href="process.php?r=star_content&id=<?php echo($problemid); ?>" class="star_box">
-	<i class="far fa-star"></i>&nbsp;<?php echo((in_array($problemid, $_SESSION['CONTENT_STARS'])) ? __('Unstar') : __('Star')); ?>&nbsp;
+	<i class="far fa-star"></i>&nbsp;<?php echo((check_star($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unstar') : __('Star')); ?>&nbsp;
 </a>
 
 <center>
