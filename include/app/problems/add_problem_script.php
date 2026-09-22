@@ -229,5 +229,14 @@
         redirect("index.php?p=channels&error");
     }
 
+    try {
+        $db_query = $pdo->prepare('INSERT INTO NOTIFICATIONS (user_id, content) SELECT f.user_id, :content FROM FOLLOWS f WHERE f.channel_id = :cid');
+        $db_query->execute(['content' => 'New problems in channels followed by You.', 'cid' => $row['channel_id']]);
+
+    } catch (Throwable $t){
+        extended_exception_handler($t);
+        redirect("index.php?p=channels&error");
+    }
+
     redirect('index.php?p=content&id='.filter_var($problem_id, FILTER_VALIDATE_INT));
 ?>
