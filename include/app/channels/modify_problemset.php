@@ -36,6 +36,7 @@
 
         redirect("index.php?p=channel&id=".$cid);
     } catch (Throwable $t) {
+        extended_exception_handler($t);
         redirect("index.php?p=channels&error");
     }
 ?>

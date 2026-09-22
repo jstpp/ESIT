@@ -125,7 +125,8 @@ CREATE TABLE `CONTENT` (
   `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
   `result_publish_time` datetime NOT NULL DEFAULT current_timestamp(),
   `isarchived` int(11) NOT NULL,
-  `comment` text NOT NULL DEFAULT ('-')
+  `comment` text NOT NULL DEFAULT ('-'),
+  `stars` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -142,7 +143,8 @@ CREATE TABLE `CHANNELS` (
   `img_path` text NOT NULL DEFAULT ('../img/placeholder.jpeg'),
   `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
   `layout` text NOT NULL DEFAULT ('{}'),
-  `isarchived` int(11) NOT NULL DEFAULT 0
+  `isarchived` int(11) NOT NULL DEFAULT 0,
+  `followers` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -242,7 +244,9 @@ CREATE TABLE `USERS` (
   `name` text NOT NULL,
   `surname` text NOT NULL,
   `organization` text NOT NULL,
-  `settings` text NOT NULL DEFAULT ('{"code_editor_theme":"dracula.css","dark_mode":"1"}')
+  `settings` text NOT NULL DEFAULT ('{"code_editor_theme":"dracula.css","dark_mode":"1"}'),
+  `follows` text NOT NULL DEFAULT ('{"follows":[]}'),
+  `stars` text NOT NULL DEFAULT ('{"stars":[]}')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

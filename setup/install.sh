@@ -1,5 +1,10 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+# Adjust permissions to directories (for servers with strict access control)
+chmod -R 0775 "$SCRIPT_DIR/../setup/"
+chmod -R 0775 "$SCRIPT_DIR/../include/"
+chmod -R 0775 "$SCRIPT_DIR/../public/"
+
 # Download default portal template
 rm -Rf "$SCRIPT_DIR/../public/portal"
 rm -Rf "$SCRIPT_DIR/../include/portal"

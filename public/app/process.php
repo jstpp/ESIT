@@ -32,6 +32,8 @@
 		'change_password'			=> ['mode' => 'interactive', 'permission' => 'main.change_password', 'path' => 'app/settings/change_password.php'],
 		'diag_server_resources'		=> ['mode' => 'non-interactive', 'permission' => 'main.diag_server_resources', 'path' => 'diagnostics/resources.php'],
 		'get_content'				=> ['mode' => 'content-delivery', 'permission' => 'main.get_content', 'path' => 'app/content_delivery/get_content.php'],
+		'follow_channel'			=> ['mode' => 'interactive', 'permission' => 'main.social.follow_channel', 'path' => 'app/channels/follow_channel.php', 'required' => ['id']],
+		'star_content'				=> ['mode' => 'interactive', 'permission' => 'main.social.star_content', 'path' => 'app/problems/star_content.php', 'required' => ['id']]
 	];
 
 	$current_r = $_GET['r'] ?? 'none';

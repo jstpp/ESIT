@@ -11,6 +11,7 @@
 		$chdescription = $row['description'];
 		$chauthor = $row['username'];
 		$chisarchived = $row['isarchived'];
+		$chfollowers = $row['followers'];
 		$chlayout = json_decode($row['layout']);
 	}
 
@@ -163,7 +164,8 @@
 		cursor: pointer;
 	}
 	.channel_content_block_final:hover .channel_content_block_icon,
-	.channel_content_block_final:hover .channel_content_block_available_attempts {
+	.channel_content_block_final:hover .channel_content_block_available_attempts,
+	.channel_content_block_final:hover .channel_content_block_stars {
 		box-shadow: inset 0 0 1vmax rgba(0, 0, 0, 0.4);
 		background-color: var(--text) !important;
 		color: var(--container-hover-bg-textbox);
@@ -210,7 +212,14 @@
 	}
 	.channel_content_block_available_attempts {
 		width: auto;
+		justify-content: center;
 		margin-left: 1vmax;
+		text-align: center;
+		padding: 0.5vmax;
+		border-radius: 0.5vmax;
+	}
+	.channel_content_block_stars {
+		width: auto;
 		justify-content: center;
 		text-align: center;
 		padding: 0.5vmax;
@@ -235,11 +244,31 @@
 	.channel_content_block_progress_bar span {
 		margin-left: 0.5vmax;
 	}
+	.follow_box {
+		position: absolute; 
+		right: 1.5vmax; 
+		margin-top: 1vmax; 
+		font-size: 1vmax;
+		padding: 0.5vmax;
+		cursor: pointer;
+		transition: 0.3s;
+		border-radius: 0.5vmax;
+		background-color: var(--text);
+		color: var(--bg);
+		text-decoration: none;
+	}
+	.follow_box:hover {
+		color: var(--text);
+		background: transparent;
+	}
 	
 	
 </style>
 <script src="/include/js/sortablejs/Sortable.js" type="text/javascript"></script>
 <img id="set_header_img" src="<?php echo htmlspecialchars($chimgpath, ENT_QUOTES, 'UTF-8'); ?>" />
+<a href="process.php?r=follow_channel&id=<?php echo($_GET['id']); ?>" class="follow_box">
+	<i class="far fa-bell"></i>&nbsp;<?php echo((in_array($_GET['id'], $_SESSION['CONTENT_FOLLOWS'])) ? __('Unfollow') : __('Follow')); ?>&nbsp;
+</a>
 <br />
 <br />
 <center>
@@ -387,8 +416,11 @@
 											<div class="channel_content_block_title">
 												<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
 												<div class="channel_content_block_element_details">
-													<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'">
+													<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'; right: 0;">
 														'.($row['maxattempts']-$ctx['attempts']).' prób
+													</div>
+													<div class="channel_content_block_stars" style="background-color: '.$contenttype['color'].'">
+														<i class="far fa-star"></i>&nbsp;'.max($row['stars'],0).'
 													</div>');
 										if(strtotime($row['result_publish_time'])<strtotime("now"))
 										{

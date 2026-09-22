@@ -45,7 +45,9 @@
                     'main.display.ctfresult.user',
                     'main.display.formresult.user',
                     'main.display.problem',
-                    'main.display.channel'
+                    'main.display.channel',
+                    'main.social.star_content',
+                    'main.social.follow_channel'
                 )
             ),
             array(
