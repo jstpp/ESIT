@@ -5,21 +5,21 @@ import datetime, math
     
 def run(submission):
     try:
-        root_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../solutions/" + submission['submission_id'])
+        root_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../solutions/" + str(submission['submission_id']))
         code_file = root_dir + "/code/" + submission['submission_id'] + ".py"
         output_dir = root_dir + "/output"
         time_dir = root_dir + "/time"
         misc_dir = root_dir + "/misc"
-        input_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../inout/" + submission['problem_id'] + "/in")
+        input_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../inout/" + str(submission['problem_id']) + "/in")
         
     except Exception as e:
-        print("A compiler exception occured - not enough arguments when calling script")
+        print("A compiler exception occured - " + str(e))
         return "fail"
 
     
     genfile = sys.stdout
     for turn in submission['tests']:
-        print(datetime.datetime.now(), " | Testing submission ", submission['submission_id'], " (test", turn['TEST_ID'], ")")
+        print(datetime.datetime.now(), " | Testing submission ", str(submission['submission_id']), " (test", turn['TEST_ID'], ")")
         try:
             genfile = sys.stdout
             logfile = open(output_dir + "/" + str(turn['TEST_ID']) + ".log","w")

@@ -395,9 +395,13 @@
 												break;
 										}
 
-										$cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts, MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
+										$cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid AND mode=1');
 										$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
 										$ctx = $cdb_query->fetch();
+
+										$cdb_query = $pdo->prepare('SELECT MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
+										$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
+										$ctx['maxscore'] = $cdb_query->fetch()['maxscore'];
 
 										if((int)$ctx['maxscore']!=-1)
 										{

@@ -64,7 +64,14 @@ services:
       dockerfile: ./setup/worker-dockerfile
     volumes:
       - ./worker/:/worker/
-    privileged: true
+    cap_add:
+      - SYS_ADMIN
+      - SYS_CHROOT
+      - SETUID
+      - SETGID
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
     command: python3 /worker/mq_receiver.py
     depends_on:
       mysql:

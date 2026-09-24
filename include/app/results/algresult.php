@@ -82,9 +82,47 @@
 		color: #2a2c2e;
 		padding: 0.2vw 0.2vw;
 	}
+
+	#reevaluation_div {
+		position: absolute; 
+		right: 1.5vmax; 
+		margin-top: 1vmax; 
+		font-size: 1vmax;
+		display: flex;
+		gap: 0.5vmax;
+	}
+	.reevaluation_request_box {
+		padding: 0.5vmax;
+		cursor: pointer;
+		transition: 0.3s;
+		border-radius: 0.5vmax;
+		background-color: var(--text);
+		color: var(--bg);
+		text-decoration: none;
+	}
+	.reevaluation_request_box:hover {
+		color: var(--text);
+		background: transparent;
+	}
 </style>
 <script src="/include/js/chart.js/chart.js" type="text/javascript"></script>
 
+<div id="reevaluation_div">
+	<?php 
+		if(has_permission('main.solutions.request_recheck'))
+		{
+			echo('<a href="process.php?r=request_recheck&sid='.$_GET['sid'].'" class="reevaluation_request_box">
+				<i class="fa fa-bullhorn"></i>&nbsp;'.__("Request reevaluation").'&nbsp;
+			</a>');
+		}
+		if(has_permission('main.solutions.exec.recheck'))
+		{
+			echo('<a href="process.php?r=problem_recheck&sid='.$_GET['sid'].'&mode=recheck" class="reevaluation_request_box">
+				<i class="fa fa-bug"></i>&nbsp;'.__("Reevaluate").'&nbsp;
+			</a>');
+		}
+	?>
+</div>
 <center>
 	<h1><?php echo(__("Evaluation report")); ?></h1>
 </center>

@@ -54,8 +54,8 @@ def ask_for_inout(data):
         headers={"Content-Type": "application/json; charset=utf-8"}
 
         api_connection = requests.post(data['listenerUrl'] + "/app/process.php?r=ask_for_inout", json=data_to_send, headers=headers)
-        print("API response:", api_connection.content)
-        decode_and_extract_zip(api_connection.content, str(os.path.dirname(os.path.realpath(__file__))) + "/../inout/" + data['problem_id'])
+        #print("API response:", api_connection.content)
+        decode_and_extract_zip(api_connection.content, str(os.path.dirname(os.path.realpath(__file__))) + "/../inout/" + str(data['problem_id']))
 
         return True
     except Exception as exception:
@@ -65,7 +65,7 @@ def ask_for_inout(data):
 def prepare(data):
     try:
         print(str(time.ctime())+f' | Unpacking user\'s submission to problem {data["problem_id"]} received from {data["listenerUrl"]}...')
-        decode_and_extract_zip(data['submission_file'], str(os.path.dirname(os.path.realpath(__file__))) + "/../solutions/" + data['submission_id'])
+        decode_and_extract_zip(data['submission_file'], str(os.path.dirname(os.path.realpath(__file__))) + "/../solutions/" + str(data['submission_id']))
         return True
     except Exception as exception:
         print(f"EXCEPTION | lib.py: prepare(): {exception}")
@@ -103,7 +103,7 @@ def send(status, data):
             data_to_decrypt['nonce'] = base64.b64encode(encrypted[1]).decode('utf-8')
             data_to_decrypt['tag'] = base64.b64encode(encrypted[2]).decode('utf-8')
             api_connection = requests.post(data['listenerUrl'] + "/app/process.php?r=api_get_results", json=data_to_decrypt, headers=headers)
-            print(api_connection.content)
+            #print(api_connection.content)
         else:
             print("An error occured when transfering the file!")
 

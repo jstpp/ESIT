@@ -47,7 +47,8 @@
                     'main.display.problem',
                     'main.display.channel',
                     'main.social.star_content',
-                    'main.social.follow_channel'
+                    'main.social.follow_channel',
+                    'main.solutions.request_recheck'
                 )
             ),
             array(

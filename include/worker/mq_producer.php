@@ -8,51 +8,49 @@
     function savesubmission($submission_id, $content, $submission_lang)
 	{
         try {
-            if (!file_exists(__DIR__."/solutions/".$submission_id))
-            {
-                mkdir(__DIR__."/solutions/".$submission_id, 0777, true);
-                mkdir(__DIR__."/solutions/".$submission_id."/code", 0777, true);
-                mkdir(__DIR__."/solutions/".$submission_id."/misc", 0777, true);
-                mkdir(__DIR__."/solutions/".$submission_id."/time", 0777, true);
-                mkdir(__DIR__."/solutions/".$submission_id."/output", 0777, true);
+            if (file_exists(__DIR__."/solutions/".$submission_id)) return False;
+            if (!isset($_POST['sendtext']) && !isset($_GET['sid'])) return False;
 
-                chmod(__DIR__."/solutions/".$submission_id, 0777);
-                chmod(__DIR__."/solutions/".$submission_id."/code", 0777);
-                chmod(__DIR__."/solutions/".$submission_id."/misc", 0777);
-                chmod(__DIR__."/solutions/".$submission_id."/time", 0777);
-                chmod(__DIR__."/solutions/".$submission_id."/output", 0777);
+            mkdir(__DIR__."/solutions/".$submission_id, 0777, True);
+            mkdir(__DIR__."/solutions/".$submission_id."/code", 0777, True);
+            mkdir(__DIR__."/solutions/".$submission_id."/misc", 0777, True);
+            mkdir(__DIR__."/solutions/".$submission_id."/time", 0777, True);
+            mkdir(__DIR__."/solutions/".$submission_id."/output", 0777, True);
 
-                $codefile = fopen(__DIR__."/solutions/".$submission_id."/code/".$submission_id.".".$submission_lang, "w");
-                if(isset($_POST['sendtext'])) {
-                    fwrite($codefile, $content);
-                    fclose($codefile);
-                    return true;
-                } else {
-                    die;
-                }
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            return false;
+            chmod(__DIR__."/solutions/".$submission_id, 0777);
+            chmod(__DIR__."/solutions/".$submission_id."/code", 0777);
+            chmod(__DIR__."/solutions/".$submission_id."/misc", 0777);
+            chmod(__DIR__."/solutions/".$submission_id."/time", 0777);
+            chmod(__DIR__."/solutions/".$submission_id."/output", 0777);
+
+            $codefile = fopen(__DIR__."/solutions/".$submission_id."/code/".$submission_id.".".$submission_lang, "w");
+            fwrite($codefile, $content);
+            fclose($codefile);
+
+            return True;
+
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return False;
         }
-		
-        return false;
 	}
 
     function mqsend($mq_host, $mq_port, $mq_user, $mq_password, $data)
 	{
+        try {
+            $connection = new AMQPStreamConnection($mq_host, $mq_port, $mq_user, $mq_password);
+            $channel = $connection->channel();
 
-		$connection = new AMQPStreamConnection($mq_host, $mq_port, $mq_user, $mq_password);
-		$channel = $connection->channel();
+            $msg = new AMQPMessage($data);
+            $channel->basic_publish($msg, '', 'esit'); 
 
-		$msg = new AMQPMessage($data);
-		$channel->basic_publish($msg, '', 'esit'); 
-
-		$channel->close();
-		$connection->close();
-        echo "Connection closed successfully.";
-        return true;
+            $channel->close();
+            $connection->close();
+            return True;
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return False;
+        }
 	}
 
     function zip_submission($submission_id)
@@ -61,90 +59,117 @@
         $zipcreated = __DIR__.'/solutions/'.$submission_id."/".$submission_id.".zip";
         $zip = new ZipArchive;
 
-        if($zip -> open($zipcreated, ZipArchive::CREATE ) === TRUE) 
-        {
-            $files = scandir($pathdir);
-            foreach ($files as $file) {
-                if ($file == '.' || $file == '..') continue;
-                $zip -> addEmptyDir($file);
-                if(is_dir($pathdir.$file))
-                {
-                    $dir = opendir($pathdir.$file);
-                    while($next_file = readdir($dir)) {
-                        if ($next_file == '.' || $next_file == '..') continue;
-                        if(is_file($pathdir.$file."/".$next_file)) {
-                            $zip -> addFile($pathdir.$file."/".$next_file, $file."/".$next_file);
+        try {
+            if($zip -> open($zipcreated, ZipArchive::CREATE) === TRUE) 
+            {
+                $files = scandir($pathdir);
+                foreach ($files as $file) {
+                    if ($file == '.' || $file == '..') continue;
+                    $zip -> addEmptyDir($file);
+                    if(is_dir($pathdir.$file))
+                    {
+                        $dir = opendir($pathdir.$file);
+                        while($next_file = readdir($dir)) {
+                            if ($next_file == '.' || $next_file == '..') continue;
+                            if(is_file($pathdir.$file."/".$next_file)) {
+                                $zip -> addFile($pathdir.$file."/".$next_file, $file."/".$next_file);
+                            }
                         }
                     }
                 }
+                $zip ->close();
             }
-            $zip ->close();
+            return $zipcreated;
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return '-';
         }
-        return $zipcreated;
     }
 
-    echo("Loading...");
-    if(isset($_POST['lang']) and is_logged_in())
-    {
-        if($_POST['lang']=="cpp")
-        {
-            $submission_lang = "cpp";
-        } else {
-            $submission_lang = "py";
-        }
-    } else {
-        kick();
-    }
-
-    $db_query = $pdo->prepare('INSERT INTO SUBMISSIONS (problem_id, problemset_id, user_id, verification_time, score, score_percentage, submission_lang) VALUES (:pid, (SELECT DISTINCT problemset FROM CONTENT WHERE CONTENT_ID=:xpid), :uid, :ver_time, -1, -1, :sub_lang)');
-    $db_query->execute(['pid' => $_GET['pid'], 'xpid' => $_GET['pid'], 'uid' => $_SESSION['AUTH_ID'], "ver_time" => "1900-01-01 10:00:00", "sub_lang" => $submission_lang]);
-    $submission_id = $pdo->lastInsertId();
+    $sid = filter_var($_GET['sid'] ?? null, FILTER_VALIDATE_INT);
+    $pid = filter_var($_GET['pid'] ?? null, FILTER_VALIDATE_INT);
+    if((!isset($_POST['lang']) && !$sid) || !is_logged_in()) kick();
     
+    try {
+        if($sid && has_permission('main.solutions.exec.recheck'))
+        {
+            $db_query = $pdo->prepare('SELECT * FROM SUBMISSIONS WHERE SUBMISSION_ID=:sid');
+            $db_query->execute(['sid' => $sid]);
+            if($recheck_submission = $db_query->fetch()) 
+            {
+                $submission_lang = $recheck_submission['submission_lang'];
+                $uid = $recheck_submission['user_id'];
+                $pid = $recheck_submission['problem_id'];
+                $sendtext = file_get_contents(__DIR__."/solutions/".$sid."/code/".$sid.".".$submission_lang);
+            } else {
+                kick();
+            }
+        } else {
+            if(!$pid) kick();
+            $submission_lang = ($_POST['lang']=="cpp") ? "cpp" : "py";
+            $uid = $_SESSION['AUTH_ID'];
+            $sendtext = $_POST['sendtext'];
+        }
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
+        redirect("/app/index.php?p=channels&error");
+    }
+
     $submission_type = "normal";
+    $submission_mode = 1;
     if(isset($_GET['mode']))
     {
-        if($_GET['mode']=="silent" and has_permission('main.solutions.exec.silent'))
+        if($_GET['mode']=="silent" && has_permission('main.solutions.exec.silent'))
         {
             $submission_type = "silent";
-        } else if($_GET['mode']=="recheck" and has_permission('main.solutions.exec.recheck'))
+            $submission_mode = 2;
+        } else if($_GET['mode']=="recheck" && has_permission('main.solutions.exec.recheck'))
         {
             $submission_type = "recheck";
+            $submission_mode = 3;
         }
     }
 
-    savesubmission($submission_id, $_POST['sendtext'], $submission_lang);
+    $db_query = $pdo->prepare('INSERT INTO SUBMISSIONS (problem_id, problemset_id, user_id, verification_time, score, score_percentage, submission_lang, mode) VALUES (:pid, (SELECT DISTINCT problemset FROM CONTENT WHERE CONTENT_ID=:xpid), :uid, :ver_time, -1, -1, :sub_lang, :mode)');
+    $db_query->execute(['pid' => $pid, 'xpid' => $pid, 'uid' => $uid, "ver_time" => "1900-01-01 10:00:00", "sub_lang" => $submission_lang, "mode" => $submission_mode]);
+    $submission_id = $pdo->lastInsertId();
+
+    savesubmission($submission_id, $sendtext, $submission_lang);
 
     $tests = array();
     $db_query = $pdo->prepare('SELECT * FROM ALG_TEST_LIST WHERE problem_id=:pid');
-    $db_query->execute(['pid' => $_GET['pid']]);
+    $db_query->execute(['pid' => $pid]);
+
     while($row = $db_query->fetch())
 	{
         array_push($tests, $row);
     }
+    if(count($tests)<1) kick();
 
-    if(count($tests)<1)
-    {
-        kick();
+    try {
+        $myObj = new stdClass();
+
+        $myObj->submission_id = $submission_id; 
+        $myObj->submission_type = $submission_type;
+        $myObj->user_id = $_SESSION['AUTH_ID'];
+        $myObj->problem_id = $pid; 
+        $myObj->submission_lang = $submission_lang;
+        $myObj->tests = $tests;
+        $myObj->listenerUrl = get_misc_value('general_url');
+        $myObj->submission_time = date('Y-m-d H:i:s');
+        $myObj->submission_file = base64_encode(file_get_contents(zip_submission($submission_id)));
+
+        $data = json_encode($myObj);
+        mqsend($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $data); #credentials from app/core.php
+
+        if ($submission_type=="recheck" && $sid) {
+            $db_query = $pdo->prepare('DELETE FROM REEVALUATION_REQUESTS WHERE submission_id=:sid');
+            $db_query->execute(['sid' => $sid]);
+        }
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
+        redirect("/app/index.php?p=channels&error");
     }
-
-
-    $problem_id = $_GET['pid'];
-
-    $myObj = new stdClass();
-
-    $myObj->submission_id = $submission_id; 
-    $myObj->submission_type = $submission_type;
-	$myObj->user_id = $_SESSION['AUTH_ID'];
-    $myObj->problem_id = $problem_id; 
-    $myObj->submission_lang = $submission_lang;
-    $myObj->tests = $tests;
-    $myObj->listenerUrl = get_misc_value('general_url');
-    $myObj->submission_time = date('Y-m-d H:i:s');
-    $myObj->submission_file = base64_encode(file_get_contents(zip_submission($submission_id)));
-
-    $data = json_encode($myObj);
-
-    mqsend($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $data); #credentials from app/core.php
 
     redirect("index.php?p=algresult&sid=".$submission_id);
     die;

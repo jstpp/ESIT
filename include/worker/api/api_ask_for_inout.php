@@ -39,7 +39,7 @@
     $tag = base64_decode($data['tag']);
 
     $content = json_decode(openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, $options=0, base64_decode($data['nonce']), $tag), true);
-
+    
     if(isset($content['worker_addr']))
     {
         if(is_dir(__DIR__.'/../alg/'.$content['problem_id']."/"))

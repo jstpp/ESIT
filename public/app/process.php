@@ -33,7 +33,9 @@
 		'diag_server_resources'		=> ['mode' => 'non-interactive', 'permission' => 'main.diag_server_resources', 'path' => 'diagnostics/resources.php'],
 		'get_content'				=> ['mode' => 'content-delivery', 'permission' => 'main.get_content', 'path' => 'app/content_delivery/get_content.php'],
 		'follow_channel'			=> ['mode' => 'interactive', 'permission' => 'main.social.follow_channel', 'path' => 'app/channels/follow_channel.php', 'required' => ['id']],
-		'star_content'				=> ['mode' => 'interactive', 'permission' => 'main.social.star_content', 'path' => 'app/problems/star_content.php', 'required' => ['id']]
+		'star_content'				=> ['mode' => 'interactive', 'permission' => 'main.social.star_content', 'path' => 'app/problems/star_content.php', 'required' => ['id']],
+		'problem_recheck'   		=> ['mode' => 'interactive', 'permission' => 'main.solutions.exec.recheck', 'path' => 'worker/mq_producer.php', 'required' => ['sid']],
+		'request_recheck'   		=> ['mode' => 'interactive', 'permission' => 'main.solutions.request_recheck', 'path' => 'app/problems/request_reevaluation.php', 'required' => ['sid']]
 	];
 
 	$current_r = $_GET['r'] ?? 'none';

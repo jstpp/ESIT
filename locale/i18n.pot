@@ -211,11 +211,11 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
-#: ../include/app/myexamsadmin.php:32
+#: ../include/app/creatorcenter.php:32
 msgid "Forms waiting for evaluation"
 msgstr ""
 
-#: ../include/app/myexamsadmin.php:56 ../include/app/channels.php:174
+#: ../include/app/creatorcenter.php:56 ../include/app/channels.php:174
 #: ../include/app/mysolutions.php:147 ../include/app/dashboard.php:286
 #: ../include/app/dashboard.php:316
 msgid "There's nothing here yet!"

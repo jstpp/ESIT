@@ -55,7 +55,6 @@
 		background-color: var(--bg);
 	}
 </style>
-
 <div class="window">
 	<h2 class="window_title">Treść zadania</h2>
 	<iframe src="process.php?r=get_content&mode=pdf&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
@@ -66,7 +65,23 @@
 </div>
 <div class="window">
 	<p style="margin-left: 5%;">
-		<i class='fas fa-info-circle'></i>&emsp;Rozwiązanie do tego zadania możesz wysłać jeszcze <b>7 razy</b>.<br />
+		<?php
+			$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM SUBMISSIONS WHERE problem_id=:setid AND user_id=:uid AND mode=1');
+			$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'uid' => $_SESSION['AUTH_ID']]);
+
+			$count = $db_query->fetch()['count'];
+
+			if($maxattempts-$count>1)
+			{
+				$howmanytimes = "Rozwiązanie do tego zadania możesz wysłać jeszcze <b>".($maxattempts-$count)." razy</b>.";
+			} else if ($maxattempts-$count==0)
+			{
+				$howmanytimes = "Rozwiązanie do tego zadania możesz wysłać jeszcze <b>1 raz</b>.";
+			} else {
+				$howmanytimes = "Wykorzystałeś_aś już wszystkie próby!";
+			}
+		?>
+		<i class='fas fa-info-circle'></i>&emsp;<?php echo($howmanytimes); ?><br /><br />
 		<i class='fas fa-clock'></i>&emsp;Test sprawdzany przez komisję. Wyniki pojawią się dopiero po pewnym czasie.
 	</p>
 </div>

@@ -4,6 +4,8 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 chmod -R 0775 "$SCRIPT_DIR/../setup/"
 chmod -R 0775 "$SCRIPT_DIR/../include/"
 chmod -R 0775 "$SCRIPT_DIR/../public/"
+chmod -R 0775 "$SCRIPT_DIR/../locale/"
+chmod -R 0775 "$SCRIPT_DIR/../worker/"
 
 # Download default portal template
 rm -Rf "$SCRIPT_DIR/../public/portal"

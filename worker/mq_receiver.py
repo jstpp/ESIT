@@ -38,6 +38,26 @@ def main():
     print(str(time.ctime())+' | Logging directory: '+str(os.path.abspath(os.getcwd()))+'/logs/worker.log')
 
     try:
+        from landlockpy import Landlock
+        landlock_available = True
+    except ImportError:
+        landlock_available = False
+        print(str(time.ctime())+" | Landlock is not supported. It may decrease level of worker security.")
+
+    try:
+        if landlock_available:
+            restictions = Landlock(
+                read=["."],
+                write=["./solutions", "./inout", "./logs"],
+                exec=["/usr", "/lib", "/lib64", "/bin", "/etc", "/dev/null", "./compilers", "./api", "./sandboxing"],
+            )
+            restictions.apply()
+            print(str(time.ctime())+" | Landlock restrictions initialized successfully.")   
+    except Exception:
+        landlock_available = False
+        print(str(time.ctime())+" | Landlock initialization failed. It may decrease level of worker security.")   
+
+    try:
         global logfile
         orginal_stdout = sys.stdout
         logfile = open(os.path.dirname(os.path.realpath(__file__))+'/logs/worker.log', 'a')

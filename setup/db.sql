@@ -312,6 +312,19 @@ CREATE TABLE `STARS` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `REEVALUATION_REQUESTS`
+--
+
+CREATE TABLE `REEVALUATION_REQUESTS` (
+  `REQUEST_ID` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `submission_id` int(11) NOT NULL,
+  `comment` text NOT NULL DEFAULT ('Comment not defined.')
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Indexes for table dumps
 --
 
@@ -456,6 +469,14 @@ ALTER TABLE `STARS`
   ADD KEY `sta_content_id` (`content_id`);
 
 --
+-- Indexes for table `REEVALUATION_REQUESTS`
+--
+ALTER TABLE `REEVALUATION_REQUESTS`
+  ADD PRIMARY KEY (`REQUEST_ID`),
+  ADD KEY `rer_user_id` (`user_id`),
+  ADD KEY `rer_submission_id` (`submission_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -580,6 +601,12 @@ ALTER TABLE `STARS`
   MODIFY `STAR_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `REEVALUATION_REQUESTS`
+--
+ALTER TABLE `REEVALUATION_REQUESTS`
+  MODIFY `REQUEST_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -668,6 +695,14 @@ COMMIT;
 --
 ALTER TABLE `PERMISSIONS`
   ADD CONSTRAINT `permission_role` FOREIGN KEY (`role_id`) REFERENCES `ROLES` (`ROLE_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Constraints for table `REEVALUATION_REQUESTS`
+--
+ALTER TABLE `REEVALUATION_REQUESTS`
+  ADD CONSTRAINT `c_rer_user_id` FOREIGN KEY (`user_id`) REFERENCES `USERS` (`USER_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `c_rer_submission_id` FOREIGN KEY (`submission_id`) REFERENCES `SUBMISSIONS` (`SUBMISSION_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

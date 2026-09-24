@@ -16,7 +16,7 @@
 		'admin'         => ['permission' => 'main.display.admin.configuration', 'path' => 'admin.php', 'menu_id' => 'admin'],
 		'channels'   	=> ['permission' => 'main.display.channels', 'path' => 'channels.php', 'menu_id' => 'channels'],
 		'mysolutions'   => ['permission' => 'main.display.mysolutions', 'path' => 'mysolutions.php', 'menu_id' => 'mysolutions'],
-		'myexamsadmin'  => ['permission' => 'main.display.channels.myexamsadmin', 'path' => 'myexamsadmin.php', 'menu_id' => 'myexamsadmin'],
+		'creatorcenter'  => ['permission' => 'main.display.channels.creatorcenter', 'path' => 'creatorcenter.php', 'menu_id' => 'creatorcenter'],
 		'settings'      => ['permission' => 'main.display.user_settings', 'path' => 'settings.php', 'menu_id' => 'settings'],
 		'portal'        => ['permission' => 'main.display.portal.settings', 'path' => 'portal.php', 'menu_id' => 'portal'],
 		'diagnostics'   => ['permission' => 'main.display.admin.diagnostics', 'path' => 'diagnostics.php', 'menu_id' => 'diagnostics'],
