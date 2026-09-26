@@ -48,12 +48,14 @@
 	$anws_correct = 0; #Correct anwsers
 	$anws_wrong = 0; #Wrong anwsers
 	$anws_resource = 0; #Out of time or out of memory
+	$anws_syserror = 0; #System errors
 
 	while($xr = $db_query->fetch())
 	{
 		$anws_correct += $xr['anws_correct']*$xr['weight'];
 		$anws_wrong += $xr['anws_wrong']*$xr['weight'];
 		$anws_resource += $xr['anws_resource']*$xr['weight'];
+		$anws_syserror += $xr['anws_syserror']*$xr['weight'];
 		array_push($results, $xr);
 	}
 ?>
@@ -166,10 +168,10 @@
 		  new Chart(ctx, {
 			type: 'doughnut',
 			data: {
-			  labels: ["<?php echo(__("Correct anwsers")); ?>", "<?php echo(__("Limit exceeded")); ?>", "<?php echo(__("Incorrect anwsers")); ?>"],
+			  labels: ["<?php echo(__("Correct anwsers")); ?>", "<?php echo(__("Limit exceeded")); ?>", "<?php echo(__("Incorrect anwsers")); ?>", "<?php echo(__("System errors")); ?>"],
 			  datasets: [{
-				data: [<?php echo($anws_correct); ?>, <?php echo($anws_resource); ?>, <?php echo($anws_wrong); ?>],
-				backgroundColor: ['#00d10a', '#ffc117', '#ff3d6e'],
+				data: [<?php echo($anws_correct); ?>, <?php echo($anws_resource); ?>, <?php echo($anws_wrong); ?>, <?php echo($anws_syserror); ?>],
+				backgroundColor: ['#00d10a', '#ffc117', '#ff3d6e', '#ff00f7'],
 				weight: [1],
 			  }]
 			},
@@ -199,7 +201,10 @@
 		<?php
 			foreach($results as $r)
 			{
-				if($r['anws_correct']==0 and $r['anws_resource']>0)
+				if($r['anws_syserror']!=0)
+				{
+					$rcolor = "#ff00f7";
+				} else if($r['anws_correct']==0 and $r['anws_resource']>0)
 				{
 					$rcolor = "#ffc117";
 				} else if($r['anws_wrong']==0 and $r['anws_resource']==0 and $r['anws_correct']>0)
@@ -215,7 +220,7 @@
 				<td><b>'.__("Test").' '.$r['test_id'].'</b></td>
 				<td><b><i class="fas fa-clock"></i>&nbsp;&nbsp;'.(float)$r['time'].'/'.$r['max_time'].'s</b></td>');
 				echo('<td style="background-color: '.$rcolor.'; color: #313136;">'.$r['comment'].'</td>
-				<td style="background-image: linear-gradient(to left,'.$rcolor.' 0%,transparent 50%);">'.($r['anws_correct']/($r['anws_correct']+$r['anws_wrong']+$r['anws_resource'])*100).'%</td>
+				<td style="background-image: linear-gradient(to left,'.$rcolor.' 0%,transparent 50%);">'.round($r['anws_correct']/($r['anws_correct']+$r['anws_wrong']+$r['anws_resource']+$r['anws_syserror'])*100, 2).'%</td>
 				</tr>');
 			}
 		?>

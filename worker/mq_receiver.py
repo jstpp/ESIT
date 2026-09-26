@@ -80,23 +80,38 @@ def main(
                 print(str(time.ctime())+f" | Landlock initialization failed. It may decrease level of worker security: {e}")
 
         def callback(ch, method, properties, body):
-            print(str(time.ctime())+f' | Received {body}')
-            submission = json.loads(body)
+            try:
+                print(str(time.ctime())+f' | Received {body}')
+                submission = json.loads(body)
 
-            if not (prepare_inout(submission)):
-                print(str(time.ctime())+f' | An error occured when worker was preparing inout for submission {submission["submission_id"]}.')
-            
-            api.lib.prepare(submission)
-            logfile.flush()
+                if not (prepare_inout(submission)):
+                    print(str(time.ctime())+f' | An error occured when worker was preparing inout for submission {submission["submission_id"]}.')
+                    raise Exception("An error occured when worker was preparing inout for submission")
 
-            if (submission["submission_lang"]=="py"):
-                print(str(time.ctime())+' | Executing PYTHON script.')
-                api.lib.send(compilers.python.run(submission), submission)
-            elif (submission["submission_lang"]=="cpp"):
-                print(str(time.ctime())+' | Executing C++ script.')
-                api.lib.send(compilers.cpp.run(submission), submission)
+                api.lib.prepare(submission)
+                logfile.flush()
 
-        channel.basic_consume(queue='esit', on_message_callback=callback, auto_ack=True)
+                if (submission["submission_lang"]=="py"):
+                    print(str(time.ctime())+' | Executing PYTHON script.')
+                    api.lib.send(compilers.python.run(submission), submission)
+                elif (submission["submission_lang"]=="cpp"):
+                    print(str(time.ctime())+' | Executing C++ script.')
+                    api.lib.send(compilers.cpp.run(submission), submission)
+
+            except Exception:
+                channel.basic_nack(
+                    delivery_tag=method.delivery_tag,
+                    requeue=False,
+                )
+                api.lib.send("fail", submission)
+                print(str(time.ctime())+f' | Submission {submission['submission_id']} returned to the queue due to exception.')
+            else:
+                channel.basic_ack(
+                    delivery_tag=method.delivery_tag,
+                )
+
+
+        channel.basic_consume(queue='esit', on_message_callback=callback, auto_ack=False)
 
         print(str(time.ctime())+' | Waiting for messages. To exit press CTRL+C')
         logfile.flush()

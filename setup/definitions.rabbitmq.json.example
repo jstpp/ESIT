@@ -42,11 +42,31 @@
         "auto_delete": false,
         "arguments": {
           "x-queue-mode": "lazy",
+          "x-queue-type": "classic",
+          "x-dead-letter-exchange": "esit.dlx",
+          "x-dead-letter-routing-key": "esit"
+        }
+      },
+      {
+        "name": "esit.dlq",
+        "vhost": "/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {
           "x-queue-type": "classic"
         }
       }
     ],
     "exchanges": [
+      {
+        "name": "esit.dlx",
+        "vhost": "/",
+        "type": "direct",
+        "durable": true,
+        "auto_delete": false,
+        "internal": false,
+        "arguments": {}
+      }
     ],
     "bindings": [
       {
@@ -57,6 +77,14 @@
         "routing_key": "esit",
         "arguments": {
         }
+      },
+      {
+        "source": "esit.dlx",
+        "vhost": "/",
+        "destination": "esit.dlq",
+        "destination_type": "queue",
+        "routing_key": "esit",
+        "arguments": {}
       }
     ]
   }
