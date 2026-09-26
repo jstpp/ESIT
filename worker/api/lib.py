@@ -19,7 +19,7 @@ def encrypt(data, key):
 
 def decrypt(data, key):
     try:
-        cipher = AES.new((key[:16].encode('utf-8')), AES.MODE_GCM, data[1].encode('utf-8'))
+        cipher = AES.new((key[:16].encode('utf-8')), AES.MODE_GCM, data[1])
         result = cipher.decrypt(data[0]).decode('utf-8')
         return result
     except Exception as exception:

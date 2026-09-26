@@ -55,7 +55,7 @@
                             $sm['result'] = "<-resource->";
                             break;
                         case 255:
-                            $sm['result'] = "<-systemerror->";
+                            $sm['result'] = "<-error->";
                             break;
                     }
                 }
@@ -71,22 +71,20 @@
             {
                 $correctanwser = fgets($checkfile);
                 $anwser = ($i<=count($solution_array)-1) ? $solution_array[$i] : "";
+                if(feof($checkfile) && trim($correctanwser) === "") break;
 
                 if(preg_replace('/\s+/', '', $correctanwser)==preg_replace('/\s+/', '',$anwser))
                 {
                     if((float)$sm['max_time']<(float)$sm['exec_time'])
                     {
-                        #$anws_resource++;
                         $sm['anws_resource']++;
                         $sm['comment'] = "Przekroczono limit czasu";
                     } else {
-                        #$anws_correct++;
                         $sm['anws_correct']++;
                     }
                 } else {
                     if((float)$sm['max_time']<(float)$sm['exec_time'])
                     {
-                        #$anws_resource++;
                         $sm['anws_resource']++;
                         $sm['comment'] = "Przekroczono limit czasu";
                     } else {
@@ -95,22 +93,18 @@
                         and $sm['result']!="<-systemerror->")
                         {
                             if(!isset($sm['comment'])) $sm['comment'] = "Otrzymano <code>".htmlentities(preg_replace('/\s+/', '',$anwser))."</code> a oczekiwano <code>".htmlentities(preg_replace('/\s+/', '', $correctanwser))."</code> (...)";
-                            #$anws_wrong++;
                             $sm['anws_wrong']++;
                         } else if ($sm['result']=="<-error->")
                         {
                             $sm['comment'] = "Błąd kompilacji";
-                            #$anws_wrong++;
                             $sm['anws_wrong']++;
                         } else if ($sm['result']=="<-resource->")
                         {
                             $sm['comment'] = "Przekroczono limit pamięci";
-                            #$anws_resource++;
                             $sm['anws_resource']++;
                         } else if ($sm['result']=="<-systemerror->")
                         {
                             $sm['comment'] = "Błąd systemu";
-                            #$anws_resource++;
                             $sm['anws_resource']++;
                         }
                     }

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import compilers.python, compilers.cpp
+import tests.run as tests
 import api.lib
 import pika, sys, os, json, time
 import pandas as pd
@@ -10,8 +11,8 @@ def connect_to_queue():
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq', port='5672', credentials=credentials)) #and here!
         channel = connection.channel()
         print(str(time.ctime())+' | Successfully connected to the queue.')
-    except:
-        print(str(time.ctime())+' | Can\'t connect to the database. Trying to reconnect...')
+    except Exception as e:
+        print(str(time.ctime())+f' | Can\'t connect to the database: {e}. Trying to reconnect...')
         time.sleep(10)
         channel = connect_to_queue()
 
@@ -34,36 +35,39 @@ def prepare_inout(submission):
         raise Exception(f"EXCEPTION | mq_receiver.py: prepare_inout(): {exception}")
 
 def main():
-    print(str(time.ctime())+' | Worker is starting...')
-    print(str(time.ctime())+' | Logging directory: '+str(os.path.abspath(os.getcwd()))+'/logs/worker.log')
-
-    try:
-        from landlockpy import Landlock
-        landlock_available = True
-    except ImportError:
-        landlock_available = False
-        print(str(time.ctime())+" | Landlock is not supported. It may decrease level of worker security.")
-
-    try:
-        if landlock_available:
-            restictions = Landlock(
-                read=["."],
-                write=["./solutions", "./inout", "./logs"],
-                exec=["/usr", "/lib", "/lib64", "/bin", "/etc", "/dev/null", "./compilers", "./api", "./sandboxing"],
-            )
-            restictions.apply()
-            print(str(time.ctime())+" | Landlock restrictions initialized successfully.")   
-    except Exception:
-        landlock_available = False
-        print(str(time.ctime())+" | Landlock initialization failed. It may decrease level of worker security.")   
-
     try:
         global logfile
         orginal_stdout = sys.stdout
-        logfile = open(os.path.dirname(os.path.realpath(__file__))+'/logs/worker.log', 'a')
+        logfile = open(os.path.dirname(os.path.realpath(__file__))+'/logs/worker.log', 'a', buffering=1)
         sys.stdout = logfile
 
+        print(str(time.ctime())+' | Worker initialization...')
+        print(str(time.ctime())+' | Testing current configuration...')
+        if not tests.is_ok(quiet=True):
+            print(str(time.ctime())+' | Testing detected errors. Worker initialization has been canceled. To start the worker, fix all errors first.')
+            sys.exit(1)
+        else:
+            print(str(time.ctime())+' | Testing finished. No errors found.') 
+
+        print(str(time.ctime())+' | Logging directory: '+str(os.path.abspath(os.getcwd()))+'/logs/worker.log')
+    except Exception as exception:
+        raise Exception(f"EXCEPTION | mq_receiver.py: main(): {exception}") 
+
+    try:
         channel = connect_to_queue()
+        try:
+            from landlockpy import AccessNet, AccessFS, Ruleset
+            with Ruleset(handled_fs=AccessFS.NONE,handled_net=AccessNet.CONNECT_TCP) as rs:
+                rs.allow_port(53, AccessNet.CONNECT_TCP)
+                rs.allow_port(80, AccessNet.CONNECT_TCP)
+                rs.allow_port(443, AccessNet.CONNECT_TCP)
+                rs.restrict()
+            print(str(time.ctime())+" | Landlock restrictions initialized successfully.")   
+            landlock_available = True
+        except Exception as e:
+            landlock_available = False
+            print(str(time.ctime())+f" | Landlock initialization failed. It may decrease level of worker security. {e}")
+
         def callback(ch, method, properties, body):
             print(str(time.ctime())+f' | Received {body}')
             submission = json.loads(body)
