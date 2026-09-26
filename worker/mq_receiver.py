@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import compilers.python, compilers.cpp
 import tests.run as tests
 import api.lib
@@ -32,9 +33,12 @@ def prepare_inout(submission):
                 print(str(time.ctime())+f' | Inout set for submission {submission["submission_id"]} not found. **Filling the gap failed!**')
                 return False
     except Exception as exception:
-        raise Exception(f"EXCEPTION | mq_receiver.py: prepare_inout(): {exception}")
+        raise Exception(f"mq_receiver.py: prepare_inout(): {exception}")
 
-def main():
+def main(
+    EnforcedTesting = True,
+    EnforcedLandlock = True
+):
     try:
         global logfile
         orginal_stdout = sys.stdout
@@ -44,14 +48,17 @@ def main():
         print(str(time.ctime())+' | Worker initialization...')
         print(str(time.ctime())+' | Testing current configuration...')
         if not tests.is_ok(quiet=True):
-            print(str(time.ctime())+' | Testing detected errors. Worker initialization has been canceled. To start the worker, fix all errors first.')
-            sys.exit(1)
+            if EnforcedTesting:
+                print(str(time.ctime())+' | Testing detected errors. Worker initialization has been canceled. To start the worker, fix all errors first.')
+                sys.exit(1)
+            else:
+                print(str(time.ctime())+' | Testing detected errors. Worker initialization should be canceled but EnforcedTesting is set to `false`. Ignored.')
         else:
             print(str(time.ctime())+' | Testing finished. No errors found.') 
 
         print(str(time.ctime())+' | Logging directory: '+str(os.path.abspath(os.getcwd()))+'/logs/worker.log')
     except Exception as exception:
-        raise Exception(f"EXCEPTION | mq_receiver.py: main(): {exception}") 
+        raise Exception(f"mq_receiver.py: main(): {exception}") 
 
     try:
         channel = connect_to_queue()
@@ -66,7 +73,11 @@ def main():
             landlock_available = True
         except Exception as e:
             landlock_available = False
-            print(str(time.ctime())+f" | Landlock initialization failed. It may decrease level of worker security. {e}")
+            if EnforcedLandlock:
+                print(str(time.ctime())+f" | Landlock initialization failed. Worker initialization has been canceled: {e}")
+                sys.exit(1)
+            else:
+                print(str(time.ctime())+f" | Landlock initialization failed. It may decrease level of worker security: {e}")
 
         def callback(ch, method, properties, body):
             print(str(time.ctime())+f' | Received {body}')
@@ -91,7 +102,7 @@ def main():
         logfile.flush()
         channel.start_consuming()
     except Exception as exception:
-        raise Exception(f"EXCEPTION | mq_receiver.py: main(): {exception}")
+        raise Exception(f"mq_receiver.py: main(): {exception}")
     
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@ def encrypt(data, key):
         result.append(tag)
         return result
     except Exception as exception:
-        print(f"EXCEPTION | lib.py: encrypt(): {exception}")
+        print(str(time.ctime())+f" | EXCEPTION | lib.py: encrypt(): {exception}")
         return False
 
 def decrypt(data, key):
@@ -23,18 +23,23 @@ def decrypt(data, key):
         result = cipher.decrypt(data[0]).decode('utf-8')
         return result
     except Exception as exception:
-        print(f"EXCEPTION | lib.py: decrypt(): {exception}")
+        print(str(time.ctime())+f" | EXCEPTION | lib.py: decrypt(): {exception}")
         return False
 
 def decode_and_extract_zip(b64string, output_dir):
     try:
         zip_bytes = base64.b64decode(b64string)
         zip_stream = io.BytesIO(zip_bytes)
+        target_dir = os.path.abspath(output_dir)
 
         with zipfile.ZipFile(zip_stream, 'r') as zip_ref:
-            zip_ref.extractall(output_dir)                  #It can throw an exception when worker is not trusted and api returns some html elements except of encoded file.
+            for member in zip_ref.infolist():
+                target_path = os.path.abspath(os.path.join(target_dir, member.filename))
+                if os.path.commonpath([target_dir, target_path]) != target_dir:
+                    raise Exception(f"ZipSlip: {member.filename}")
+                zip_ref.extract(member, target_dir)
     except Exception as exception:
-        print(f"EXCEPTION | lib.py: decode_and_extract_zip(): {exception}")
+        print(str(time.ctime())+f" | EXCEPTION | lib.py: decode_and_extract_zip(): {exception}")
         return False
     else:
         return True
@@ -59,7 +64,7 @@ def ask_for_inout(data):
 
         return True
     except Exception as exception:
-        print(f"EXCEPTION | lib.py: ask_for_inout(): {exception}")
+        print(str(time.ctime())+f" | EXCEPTION | lib.py: ask_for_inout(): {exception}")
         return False
 
 def prepare(data):
@@ -68,7 +73,7 @@ def prepare(data):
         decode_and_extract_zip(data['submission_file'], str(os.path.dirname(os.path.realpath(__file__))) + "/../solutions/" + str(data['submission_id']))
         return True
     except Exception as exception:
-        print(f"EXCEPTION | lib.py: prepare(): {exception}")
+        print(str(time.ctime())+f" | EXCEPTION | lib.py: prepare(): {exception}")
         return False
 
 def prepare_base64(data):
@@ -78,14 +83,14 @@ def prepare_base64(data):
             encoded_zip = base64.b64encode(zip_bytes).decode('utf-8')
         return encoded_zip
     except Exception as exception:
-        print(f"EXCEPTION | lib.py: prepare_base64(): {exception}")
+        print(str(time.ctime())+f" | EXCEPTION | lib.py: prepare_base64(): {exception}")
         return False
 
 def prepare_file_transfer(dir_id):
     try:
         shutil.make_archive(str(os.path.dirname(os.path.realpath(__file__)))+"/../solutions/"+str(dir_id)+"/"+str(dir_id), 'zip', str(os.path.dirname(os.path.realpath(__file__)))+"/../solutions/"+str(dir_id))
     except Exception as exception:
-        print(f"EXCEPTION | lib.py: prepare_file_transfer(): {exception}")
+        print(str(time.ctime())+f" | EXCEPTION | lib.py: prepare_file_transfer(): {exception}")
         return False
     else:
         return True
@@ -105,8 +110,8 @@ def send(status, data):
             api_connection = requests.post(data['listenerUrl'] + "/app/process.php?r=api_get_results", json=data_to_decrypt, headers=headers)
             #print(api_connection.content)
         else:
-            print("An error occured when transfering the file!")
+            print(str(time.ctime())+" | ERROR | An error occured when transfering the file!")
 
         return True
     except Exception as exception:
-        print(f"EXCEPTION | lib.py: send(): {exception}")
+        print(str(time.ctime())+f" | EXCEPTION | lib.py: send(): {exception}")

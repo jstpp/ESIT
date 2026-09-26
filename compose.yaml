@@ -64,11 +64,6 @@ services:
       dockerfile: ./setup/worker-dockerfile
     volumes:
       - ./worker/:/worker/
-    cap_add:
-      - SYS_ADMIN
-      - SYS_CHROOT
-      - SETUID
-      - SETGID
     security_opt:
       - seccomp:unconfined
       - apparmor:unconfined

@@ -1,6 +1,6 @@
 import sys, os
 import subprocess
-import datetime, json, math
+import datetime, json, math, time
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import api.config.config as config
@@ -15,20 +15,20 @@ def run(submission):
         input_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../inout/" + str(submission['problem_id']) + "/in")
 
     except Exception as e:
-        print("A compiler exception occured - not enough arguments when calling script: ", str(e), " -> sys.argv length: ", len(sys.argv))
+        print(str(time.ctime())+" | A compiler exception occured - not enough arguments when calling script: ", str(e), " -> sys.argv length: ", len(sys.argv))
         return "fail"
 
 
     genfile = sys.stdout
     for turn in submission['tests']:
-        print(datetime.datetime.now(), " | Compilation of submission ", str(submission['submission_id']), " (test", turn['TEST_ID'], ")")
+        print(str(time.ctime()), "| Compilation of submission", str(submission['submission_id']), "(test", str(turn['TEST_ID']) + ")")
         try:
             genfile = sys.stdout
             logfile = open(output_dir + "/" + str(turn['TEST_ID']) + ".log","w")
             debugfilecompilation = open(misc_dir + "/debug-compilation-" + str(turn['TEST_ID']) + ".log","w")
             debugfilerun = open(misc_dir + "/debug-run-" + str(turn['TEST_ID']) + ".log","w")
         except Exception as e:
-            print("A compiler exception occured - compilation error for test " + str(turn['TEST_ID']))
+            print(str(time.ctime())+" | A compiler exception occured - compilation error for test " + str(turn['TEST_ID']))
             return "fail"
 
         try:
