@@ -54,7 +54,7 @@ To enable the portal and all related features, enable the "portal" system plugin
 Check the ESIT custom configuration options [here](setup/README.md).
 
 > [!tip]
-> When running docker installation remember to check if your custom config matches the credentials in [compose.yaml](compose.yaml).
+> When running docker installation remember to check if your custom config matches the credentials in [.env file](setup/.env.example).
 
 ## Translation
 Feel free to add translations. Currently supported languages: 🇺🇸 `English`, 🇵🇱 `Polish`.

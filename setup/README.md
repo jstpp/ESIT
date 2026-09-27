@@ -1,21 +1,16 @@
 # Installation example & config details
-Create user `esit-user` and add it to docker group:
-```bash
-adduser esit-user && usermod -aG docker esit-user
-```
-
-...and download repository:
+Download the repository:
 ```bash
 git clone https://github.com/jstpp/esit.git && cd esit
 ```
-then:
+You can customize the [config file](/include/app/core.php). You should consider this when running it in production, otherwise, you can ignore it.
+
+Start [installation script](/setup/install.sh):
 ```bash
-docker compose up
+source ./setup/install.sh
 ```
 
-The installation may take some time - be prepared for it.
-
-After the end of the installation, service should be available on `localhost:80` unless You don't change it in proper files.
+The service should be available on `localhost:80` unless you change it. The first registered user becomes an admin.
 
 ## Files in `/setup` directory
 ### Configuration files
