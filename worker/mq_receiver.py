@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import compilers.python, compilers.cpp
+import compilers.python, compilers.cpp, compilers.java
 import tests.run as tests
 import api.lib
 import pika, sys, os, json, time
@@ -97,6 +97,9 @@ def main(
                 elif (submission["submission_lang"]=="cpp"):
                     print(str(time.ctime())+' | Executing C++ script.')
                     api.lib.send(compilers.cpp.run(submission), submission)
+                elif (submission["submission_lang"]=="java"):
+                    print(str(time.ctime())+' | Executing JAVA script.')
+                    api.lib.send(compilers.java.run(submission), submission)
 
             except Exception:
                 channel.basic_nack(

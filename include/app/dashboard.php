@@ -196,7 +196,7 @@
 			<h3 class="window_title"><i class="fa fa-flask"></i>&nbsp;&nbsp;<?php echo(__("My last solutions")); ?></h3>
 			<div id="results">
 				<?php
-					$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, CONTENT.title AS title, CONTENT.type AS type, CONTENT.maxpoints AS max_pts, CONTENT.CONTENT_ID AS problem_id, CONTENT.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 4');
+					$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, CONTENT.title AS title, CONTENT.type AS type, CONTENT.maxpoints AS max_pts, CONTENT.CONTENT_ID AS problem_id, CONTENT.result_publish_time AS result_publish_time, SUBMISSIONS.submission_lang AS lang FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 4');
 					$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
 
 					$isfound = 0;
@@ -259,7 +259,23 @@
 
 						echo('<a href="index.php?p='.$resultdest.'&sid='.$row['id'].'" class="dashboard_results_block" style="background-image: '.$gradient.';">
 							<div style="display: flex; flex-direction: column; flex: 1;">
-								<h2 style="margin: 0 0 0.5vmax 0;">'.htmlentities($row['title']).'</h2>
+							<h2 style="margin: 0 0 0.5vmax 0;">');
+							switch($row['lang'])
+							{
+								case "cpp":
+									echo('<i class="fa-brands fa-cuttlefish"></i>');
+									break;
+								case "py":
+									echo('<i class="fa-brands fa-python"></i>');
+									break;
+								case "java":
+									echo('<i class="fa-brands fa-java"></i>');
+									break;
+								default:
+									break;
+							}
+							echo('
+								&nbsp;'.htmlentities($row['title']).'</h2>
 								<small style="font-size: 0.7vmax; background-color: '.$problem['color'].'; width: 8vmax; text-align: center; padding: 0.4vmax; border-radius: 1vmax;"><i class="'.$problem['icon'].'"></i>&nbsp;&nbsp;'.$problem['full_name'].'</small>
 							</div>');
 						

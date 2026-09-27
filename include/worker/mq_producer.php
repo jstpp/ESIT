@@ -106,7 +106,21 @@
             }
         } else {
             if(!$pid) kick();
-            $submission_lang = ($_POST['lang']=="cpp") ? "cpp" : "py";
+            switch ($_POST['lang'])
+            {
+                case "cpp":
+                    $submission_lang = "cpp";
+                    break;
+                case "py":
+                    $submission_lang = "py";
+                    break;
+                case "java":
+                    $submission_lang = "java";
+                    break;
+                default:
+                    $submission_lang = "py";
+                    break;
+            }
             $uid = $_SESSION['AUTH_ID'];
             $sendtext = $_POST['sendtext'];
         }

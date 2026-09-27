@@ -13,7 +13,7 @@
 ## Purpose
 ESIT is a platform for organizing contests, exams and other similar forms related to Computer Science.
 > [!important]
-> Take into consideration, that this is still an unstable project. You are using this software at your own risk. 
+> The project is significantly more reliable than before, but keep in mind that you are using this software at your own risk. 
 
 ## Installation
 
@@ -32,7 +32,7 @@ The service should be available on `localhost:80` unless you change it. The firs
 
 ## Technical details
 ### Evaluation of algorithmic solutions
-ESIT uses [nsjail](https://github.com/google/nsjail) to isolate algorithmic solutions and uses default mechanisms of compilers or OS to measure the parameters of compilation. Currently, it supports **Python** (3.13) and **C++** (C++20).
+ESIT uses [nsjail](https://github.com/google/nsjail) to isolate algorithmic solutions and uses default mechanisms of compilers or OS to measure the parameters of compilation. Currently, it supports **Python** (3.13), **C++** (C++20) and **Java** (OpenJDK 25).
 
 ![Screenshot of algorythmic submission interface](public/img/screenshots/screenshot-2.png)
 

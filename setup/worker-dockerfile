@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y \
     libtool \
     make \
     pkg-config \
-    protobuf-compiler
+    protobuf-compiler \
+    openjdk-25-jdk
 
 RUN mkdir /worker/inout
 RUN mkdir /worker/sandboxing && cd /worker/sandboxing && git clone https://github.com/google/nsjail.git
