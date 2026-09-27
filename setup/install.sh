@@ -13,6 +13,7 @@ rm -Rf "$SCRIPT_DIR/../include/portal"
 git clone https://github.com/jstpp/ESITDefaultTemplate.git "$SCRIPT_DIR/../public/portal"
 chmod -R 0777 "$SCRIPT_DIR/../public/portal"
 cp -r "$SCRIPT_DIR/../public/portal/img/"* "$SCRIPT_DIR/../public/img/"
+cp -n "$SCRIPT_DIR/../setup/.env.example" "$SCRIPT_DIR/../.env"
 
 # Create missing directories
 chmod -R 0777 "$SCRIPT_DIR/../public/img"

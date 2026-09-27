@@ -25,12 +25,11 @@ COPY ./public/portal/elements /www/esit/public/include/elements
 COPY ./public/include /www/esit/public/include
 COPY ./public/app /www/esit/public/app
 COPY ./public/login /www/esit/public/login
+COPY ./setup/composer_setup.sh /www/esit/public/app/modules/composer/composer_setup.sh
 RUN chown -R esit-user:esit-group /www/esit/*
 
 WORKDIR /www/esit/public/app/modules/composer/
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
+RUN source ./composer_setup.sh
 RUN php composer.phar install
 
 WORKDIR /
