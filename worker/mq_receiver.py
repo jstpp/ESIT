@@ -107,7 +107,7 @@ def main(
                     requeue=False,
                 )
                 api.lib.send("fail", submission)
-                print(str(time.ctime())+f' | Submission {submission['submission_id']} returned to the queue due to exception.')
+                print(str(time.ctime())+f' | Submission {submission["submission_id"]} couldn\'t be evaluated. Sent to DLQ.')
             else:
                 channel.basic_ack(
                     delivery_tag=method.delivery_tag,

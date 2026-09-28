@@ -67,6 +67,7 @@ def run(submission):
             sys.stdout = logfile
             print(quest2.stdout)
             turn['result'] = quest2.stdout 
+            turn['returncode'] = quest2.returncode
                 
             sys.stdout = genfile
             logfile.close()

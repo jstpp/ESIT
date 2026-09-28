@@ -62,6 +62,7 @@ def unit_tests(quiet = False):
             if not quiet:
                 print(str(time.ctime())+ " | " + f"  ├── Running: {clrs.PINK}" + f.path + f"{clrs.ENDC}")
             try:
+                run_test(f.path, env)
                 if not quiet:
                     print(str(time.ctime())+ " | " + f"  ├── Status:  {clrs.GREEN}OK{clrs.ENDC}")
                 ok += 1
@@ -77,7 +78,7 @@ def unit_tests(quiet = False):
 
 def is_ok(quiet = False):
     if not quiet:
-        print("\n" + str(time.ctime())+ " | " + f"{clrs.BOLD}███████████████████████  RUNNING TESTS  █████████████████████████{clrs.ENDC}\n")
+        print("\n" + str(time.ctime())+ " | " + f"███████████████████████  RUNNING TESTS  █████████████████████████\n")
 
     ok,warn,err = 0,0,0
 
@@ -92,7 +93,7 @@ def is_ok(quiet = False):
     err = unit_tests_result[2] + security_tests_result[2]
 
     if not quiet:
-        print("\n" + str(time.ctime())+ " | " + f"{clrs.BOLD}███████████████████  {clrs.GREEN}OK: {ok}  {clrs.YELLOW}WARN: {warn}  {clrs.RED}ERR: {err}{clrs.ENDC}  ████████████████████{clrs.ENDC}\n")
+        print("\n" + str(time.ctime())+ " | " + f"███████████████████  {clrs.GREEN}OK: {ok}  {clrs.YELLOW}WARN: {warn}  {clrs.RED}ERR: {err}{clrs.ENDC}  ████████████████████{clrs.ENDC}\n")
 
     if(err>0):
         return False

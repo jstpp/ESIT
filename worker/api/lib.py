@@ -20,7 +20,7 @@ def encrypt(data, key):
 def decrypt(data, key):
     try:
         cipher = AES.new((key[:16].encode('utf-8')), AES.MODE_GCM, data[1])
-        result = cipher.decrypt(data[0]).decode('utf-8')
+        result = cipher.decrypt_and_verify(data[0], data[2]).decode('utf-8')
         return result
     except Exception as exception:
         print(str(time.ctime())+f" | EXCEPTION | lib.py: decrypt(): {exception}")
@@ -58,7 +58,7 @@ def ask_for_inout(data):
 
         headers={"Content-Type": "application/json; charset=utf-8"}
 
-        api_connection = requests.post(data['listenerUrl'] + "/app/process.php?r=ask_for_inout", json=data_to_send, headers=headers)
+        api_connection = requests.post(data['listenerUrl'] + "/app/process.php?r=ask_for_inout", json=data_to_send, headers=headers, timeout=(5, 30))
         #print("API response:", api_connection.content)
         decode_and_extract_zip(api_connection.content, str(os.path.dirname(os.path.realpath(__file__))) + "/../inout/" + str(data['problem_id']))
 
@@ -107,7 +107,7 @@ def send(status, data):
             data_to_decrypt['content'] = base64.b64encode(encrypted[0]).decode('utf-8')
             data_to_decrypt['nonce'] = base64.b64encode(encrypted[1]).decode('utf-8')
             data_to_decrypt['tag'] = base64.b64encode(encrypted[2]).decode('utf-8')
-            api_connection = requests.post(data['listenerUrl'] + "/app/process.php?r=api_get_results", json=data_to_decrypt, headers=headers)
+            api_connection = requests.post(data['listenerUrl'] + "/app/process.php?r=api_get_results", json=data_to_decrypt, headers=headers, timeout=(5, 30))
             #print(api_connection.content)
         else:
             print(str(time.ctime())+" | ERROR | An error occured when transfering the file!")

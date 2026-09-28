@@ -5,12 +5,16 @@ import datetime, math, time
     
 def run(submission):
     try:
-        root_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../solutions/" + str(submission['submission_id']))
+        if submission['submission_type']!='testing':
+            root_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../solutions/" + str(submission['submission_id']))
+            input_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../inout/" + str(submission['problem_id']) + "/in")
+        else:
+            root_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../tests/tmp/0")
+            input_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../tests/tmp/0-inout/in")
         code_file = root_dir + "/code/" + submission['submission_id'] + ".py"
         output_dir = root_dir + "/output"
         time_dir = root_dir + "/time"
         misc_dir = root_dir + "/misc"
-        input_dir = os.path.abspath(str(os.path.dirname(os.path.realpath(__file__))) + "/../inout/" + str(submission['problem_id']) + "/in")
         
     except Exception as e:
         print(str(time.ctime())+" | A compiler exception occured - " + str(e))
@@ -48,6 +52,7 @@ def run(submission):
             sys.stdout = logfile
             print(quest.stdout)
             turn['result'] = quest.stdout
+            turn['returncode'] = quest.returncode
             sys.stdout = genfile
             logfile.close()
                 
