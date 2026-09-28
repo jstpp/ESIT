@@ -3,10 +3,7 @@
 ESIT uses [nsjail](https://github.com/google/nsjail) to isolate algorythmic solutions and uses default mechanisms of compilers or OS to measure the parameters of compilation. Currently, it supports **python** (3.13), **C++** (C++20) and **Java** (OpenJDK 25).
 
 ## Manual start
-To start the worker without running entire [compose.yaml](../compose.yaml) You should prepare proper environment by running worker's [dockerfile](../setup/worker-dockerfile). Take into consideration, that worker's container uses privileged mode to enable containerization (nsjail sandboxes). 
-> [!tip] 
->
-> When privileged mode of docker container is not enabled, worker will probably return `255` error code. It's probably related with docker's seccomp policy.
+To start the worker without running entire [compose.yaml](../compose.yaml) You should prepare proper environment by running worker's [dockerfile](../setup/worker-dockerfile).  
 
 When proper environment is ready (make sure, that IP of your worker is on the proper list - You can add IPs in GUI) You can start worker using:
 ```bash
