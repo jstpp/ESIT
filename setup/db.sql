@@ -175,6 +175,7 @@ CREATE TABLE `RESULTS` (
   `time` text NOT NULL DEFAULT ('0'),
   `memory` text DEFAULT NULL,
   `comment` text NOT NULL,
+  `returncode` int(11) NOT NULL DEFAULT -1,
   `anws_correct` int(11) NOT NULL DEFAULT 0,
   `anws_wrong` int(11) NOT NULL DEFAULT 0,
   `anws_resource` int(11) NOT NULL DEFAULT 0,

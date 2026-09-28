@@ -131,8 +131,8 @@
             $anws_syserror += ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'] != 0) ? $sm['anws_syserror']/($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'])*$sm['weight'] : 0;
 
             if(!isset($sm['comment'])) $sm['comment'] = "OK";
-            $db_query = $pdo->prepare('INSERT INTO RESULTS (submission_id, test_id, content, time, memory, comment, anws_correct, anws_wrong, anws_resource, anws_syserror) VALUES (:sid, :tid, :content, :time, :memory, :comment, :ac, :aw, :ar, :ae)');
-            $db_query->execute(['sid' => $submission['submission_id'], 'tid' => $sm['TEST_ID'], 'content' => $sm['result'], 'time' => $sm['exec_time'], 'memory' => $sm['memory'] ?? null, 'comment' => $sm['comment'], 'ac' => $sm['anws_correct'], 'aw' => $sm['anws_wrong'], 'ar' => $sm['anws_resource'], 'ae' => $sm['anws_syserror']]);
+            $db_query = $pdo->prepare('INSERT INTO RESULTS (submission_id, test_id, content, time, memory, comment, returncode, anws_correct, anws_wrong, anws_resource, anws_syserror) VALUES (:sid, :tid, :content, :time, :memory, :comment, :returncode, :ac, :aw, :ar, :ae)');
+            $db_query->execute(['sid' => $submission['submission_id'], 'tid' => $sm['TEST_ID'], 'content' => $sm['result'], 'time' => $sm['exec_time'], 'memory' => $sm['memory'] ?? null, 'comment' => $sm['comment'], 'returncode' => $sm['returncode'], 'ac' => $sm['anws_correct'], 'aw' => $sm['anws_wrong'], 'ar' => $sm['anws_resource'], 'ae' => $sm['anws_syserror']]);
         }
 
         $percentage = ($anws_correct+$anws_wrong+$anws_resource+$anws_syserror!=0) ? $anws_correct/($anws_correct+$anws_wrong+$anws_resource+$anws_syserror) : 0;

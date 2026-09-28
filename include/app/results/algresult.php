@@ -219,7 +219,9 @@
 				echo('<tr>
 				<td><b>'.__("Test").' '.$r['test_id'].'</b></td>
 				<td><b><i class="fas fa-clock"></i>&nbsp;&nbsp;'.(float)$r['time'].'/'.$r['max_time'].'s</b></td>');
-				echo('<td style="background-color: '.$rcolor.'; color: #313136;">'.$r['comment'].'</td>
+				echo('<td style="background-color: '.$rcolor.'; color: #313136;">'.$r['comment']);
+				if(has_permission('main.display.all_results')) echo(' ('.$r['returncode'].')');
+				echo('</td>
 				<td style="background-image: linear-gradient(to left,'.$rcolor.' 0%,transparent 50%);">'.round($r['anws_correct']/($r['anws_correct']+$r['anws_wrong']+$r['anws_resource']+$r['anws_syserror'])*100, 2).'%</td>
 				</tr>');
 			}
