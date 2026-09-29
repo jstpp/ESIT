@@ -6,6 +6,8 @@
 	]);
 	session_start();
 
+	$worker_network_private_key = $_ENV['NETWORK_PRIVATE_KEY'];
+
 	###############################################
 	#               customization				  #
 	###############################################
@@ -27,9 +29,6 @@
 	$mail_name = "ESIT Mailing Module"; #Name of the sender
 	$mail_smtp_debug = 0; #Mail debugging
 	$mail_smtp_auth = true;
-
-	# network and APIs
-	$worker_network_private_key = "write_something_complicated_here!"; #Change it to provide higher level of data safety during transfer via API
 
 	# default variables
 	$default_variables = array(

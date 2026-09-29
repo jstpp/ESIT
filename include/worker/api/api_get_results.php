@@ -29,7 +29,7 @@
 
         foreach($submission['tests'] as $sm)
         {
-            if ($submission['status']=="fail") {
+            if ($submission['status']=="fail" || $sm['returncode']==255) {
                 $sm['result'] = "<-systemerror->";
                 $sm['anws_correct'] = 0;
                 $sm['anws_wrong'] = 0;

@@ -179,12 +179,22 @@ def send(status, data):
                 timeout=(5, 30),
             )
             # print(api_connection.content)
+            try:
+                api_connection.raise_for_status()
+            except Exception:
+                print(
+                    str(time.ctime())
+                    + " | ERROR | An error occured when transfering the file!"
+                )
+                return False
+            else:
+                return True
         else:
             print(
                 str(time.ctime())
                 + " | ERROR | An error occured when transfering the file!"
             )
+            return False
 
-        return True
     except Exception as exception:
         print(str(time.ctime()) + f" | EXCEPTION | lib.py: send(): {exception}")

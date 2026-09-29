@@ -16,6 +16,7 @@
 				font-size: 1vw;
 				font-family: 'Montserrat';
 				color: #dae2e6;
+				overflow: hidden;
 			}
 
 			@keyframes entrance {
@@ -147,11 +148,18 @@
 				display: flex;
 			}
 
+			canvas {
+				transform-origin: 0 0;
+				width: 100%;
+				height: 100%;
+			}
+
 		</style>
 	</head>
 	<body>
-		<center style="position: fixed; width: 100%; height: 99vh;">
+		<center class="bg" style="position: fixed; width: 100%; height: 99vh;">
 			<div class="window" id="default_login_window">
+				<br />
 				<form method="POST" action="process.php?s=auth">
 					<h2><?php echo(__("Log in")); ?></h2>
 					<br />
@@ -197,6 +205,7 @@
 					<br style="clear: both;"/>
 				</form>
 				<p><?php echo(__("Don't have an account yet?")); ?> <a class="simple_href" href="<?php echo(boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php'); ?>"><?php echo(__("Create an account")); ?></a>.</p>
+				<br />
 			</div>
 			<div class="window" id="password_recovery_window_mail" style="display: none;">
 				<form method="POST" action="process.php?s=passrecovery_mail">
@@ -318,5 +327,6 @@
 				}
 			}
 		</script>
+		<script src="/include/js/animated-background.js"></script>
 	</body>
 </html>

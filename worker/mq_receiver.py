@@ -164,7 +164,7 @@ def main(EnforcedTesting=True, EnforcedLandlock=True):
                     print(str(time.ctime()) + " | Executing JAVA script.")
                     api.lib.send(compilers.java.run(submission), submission)
 
-            except Exception:
+            except Exception as e:
                 channel.basic_nack(
                     delivery_tag=method.delivery_tag,
                     requeue=False,
@@ -172,7 +172,7 @@ def main(EnforcedTesting=True, EnforcedLandlock=True):
                 api.lib.send("fail", submission)
                 print(
                     str(time.ctime())
-                    + f' | Submission {submission["submission_id"]} couldn\'t be evaluated. Sent to DLQ.'
+                    + f' | Submission {submission["submission_id"]} couldn\'t be evaluated. Sent to DLQ: {e}'
                 )
             else:
                 channel.basic_ack(

@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine
+FROM php:8-fpm-alpine@sha256:fa01fb1645cd0fc566a5f146b099adace33b906571f972f71f2182a7c12d1cd7
 
 ARG UID
 ARG GID

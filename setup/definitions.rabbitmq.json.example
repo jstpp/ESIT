@@ -8,7 +8,7 @@
         "name": "esit_user",
         "password_hash": "dfrWOajIM5i4a/f1RhtL6DA1lFPSJ82X4CbdOP3NRQCWLNXt",
         "hashing_algorithm": "rabbit_password_hashing_sha256",
-        "tags": "administrator"
+        "tags": ""
       }
     ],
     "vhosts": [
@@ -20,9 +20,9 @@
       {
         "user": "esit_user",
         "vhost": "/",
-        "configure": ".*",
-        "write": ".*",
-        "read": ".*"
+        "configure": "(esit|amq).*",
+        "write": "(esit|amq).*",
+        "read": "(esit|amq).*"
       }
     ],
     "topic_permissions": [

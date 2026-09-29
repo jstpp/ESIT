@@ -24,6 +24,7 @@ services:
       args:
       - UID=${UID:-1001}
       - GID=${GID:-1001}
+    env_file: .env
     volumes:
       - ./include/:/www/esit/include
       - ./locale/:/www/esit/locale
@@ -45,7 +46,7 @@ services:
       retries: 10
 
   rabbitmq:
-    image: rabbitmq:4.1-alpine
+    image: rabbitmq:4.3-alpine@sha256:c9eb1a8a97cd1067e5645888d31c4947ecb553eda4e8a0159937bc08d06f7182
     env_file: .env
     volumes:
       - ./setup/rabbitmq-enabled-plugins.example:/etc/rabbitmq/enabled_plugins
@@ -55,6 +56,7 @@ services:
   worker:
     build:
       dockerfile: ./setup/worker-dockerfile
+    env_file: .env
     volumes:
       - ./worker/:/worker/
     security_opt:
