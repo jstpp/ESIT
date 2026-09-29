@@ -4,7 +4,9 @@
     <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="CodeFactor" />
     <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/jstpp/esit?style=for-the-badge">
     <a href="https://www.codefactor.io/repository/github/jstpp/esit"><img src="https://www.codefactor.io/repository/github/jstpp/esit/badge?style=for-the-badge" alt="CodeFactor" /></a>
+    <a href="https://securityscorecards.dev/viewer/?uri=github.com/jstpp/ESIT"><img src="https://img.shields.io/ossf-scorecard/github.com/jstpp/ESIT?label=openssf+scorecard&style=for-the-badge" alt="CodeFactor" /></a>
 </p>
+
 
 `ESIT` is a simple online judge with additional features. Measure execution time and limit memory inside nsjail-based sandbox environments. Divide your content into sets of exercises and show your results with scoreboards. Extend and personalize platform features with community plugins from GitHub.
 
