@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-18 13:35+0200\n"
-"PO-Revision-Date: 2026-09-09 18:23+0200\n"
+"POT-Creation-Date: 2026-09-29 18:47+0200\n"
+"PO-Revision-Date: 2026-09-29 18:51+0200\n"
 "Last-Translator: jstpp <jstpp_github@proton.me>\n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -20,212 +20,197 @@ msgstr ""
 
 #: ../public/app/index.php:55
 msgid "App"
-msgstr ""
+msgstr "App"
 
-#: ../public/login/register.php:234 ../include/app/portal.php:174
+#: ../public/login/register.php:257 ../include/app/portal.php:174
 #: ../include/app/admin.php:261
 msgid "Name"
 msgstr "Name"
 
-#: ../public/login/register.php:238 ../include/app/admin.php:262
+#: ../public/login/register.php:261 ../include/app/admin.php:262
 msgid "Surname"
 msgstr "Surname"
 
-#: ../public/login/register.php:242 ../include/app/settings.php:96
+#: ../public/login/register.php:265 ../include/app/settings.php:96
 #: ../include/app/admin.php:263
 msgid "Organization"
 msgstr "Organization"
 
-#: ../public/login/register.php:246 ../include/app/channel.php:486
+#: ../public/login/register.php:269 ../include/app/channel.php:516
 #: ../include/app/settings.php:95 ../include/app/admin.php:260
 #: ../include/app/admin.php:487 ../include/app/admin.php:488
 msgid "Username"
 msgstr "Username"
 
-#: ../public/login/register.php:250 ../public/login/index.php:229
+#: ../public/login/register.php:273 ../public/login/index.php:238
 #: ../include/app/settings.php:97 ../include/app/admin.php:277
 msgid "E-mail address"
 msgstr "E-mail address"
 
-#: ../public/login/register.php:254 ../public/login/index.php:192
+#: ../public/login/register.php:277 ../public/login/index.php:200
 #: ../include/app/admin.php:278 ../include/app/admin.php:489
 #: ../include/app/admin.php:490
 msgid "Password"
 msgstr "Password"
 
-#: ../public/login/register.php:258
-#, fuzzy
+#: ../public/login/register.php:281
 msgid "Repeat password"
-msgstr "Repeat new password"
+msgstr "Repeat password"
 
-#: ../public/login/register.php:261 ../public/login/register.php:270
+#: ../public/login/register.php:284 ../public/login/register.php:293
 msgid "Register"
-msgstr ""
+msgstr "Register"
 
-#: ../public/login/register.php:272 ../include/app/add_problem.php:492
+#: ../public/login/register.php:295 ../include/app/add_problem.php:492
 msgid "Input validation"
 msgstr "Input validation"
 
-#: ../public/login/register.php:273
-#, fuzzy
+#: ../public/login/register.php:296
 msgid "Your username"
-msgstr "Username"
+msgstr "Your username"
 
-#: ../public/login/register.php:274
+#: ../public/login/register.php:297
 msgid "...must be at least 6 characters long"
-msgstr ""
+msgstr "...must be at least 6 characters long"
 
-#: ../public/login/register.php:275 ../public/login/register.php:287
+#: ../public/login/register.php:298 ../public/login/register.php:310
 msgid "...must be unique"
-msgstr ""
+msgstr "...must be unique"
 
-#: ../public/login/register.php:276
+#: ../public/login/register.php:299
 msgid "...cannot contain special characters other than _ or -"
-msgstr ""
+msgstr "...cannot contain special characters other than _ or -"
 
-#: ../public/login/register.php:278
-#, fuzzy
+#: ../public/login/register.php:301
 msgid "Your password"
-msgstr "New password"
+msgstr "Your password"
 
-#: ../public/login/register.php:279
+#: ../public/login/register.php:302
 msgid "...must be at least 8 characters long"
-msgstr ""
+msgstr "...must be at least 8 characters long"
 
-#: ../public/login/register.php:280
+#: ../public/login/register.php:303
 msgid "...must contain at least 1 special character"
-msgstr ""
+msgstr "...must contain at least 1 special character"
 
-#: ../public/login/register.php:281
+#: ../public/login/register.php:304
 msgid "...must contain at least 1 uppercase letter"
-msgstr ""
+msgstr "...must contain at least 1 uppercase letter"
 
-#: ../public/login/register.php:282
+#: ../public/login/register.php:305
 msgid "...must contain at least 1 digit"
-msgstr ""
+msgstr "...must contain at least 1 digit"
 
-#: ../public/login/register.php:283
+#: ../public/login/register.php:306
 msgid "...must match the password entered in the second field"
-msgstr ""
+msgstr "...must match the password entered in the second field"
 
-#: ../public/login/register.php:285
-#, fuzzy
+#: ../public/login/register.php:308
 msgid "Your email address"
-msgstr "E-mail address"
+msgstr "Your email address"
 
-#: ../public/login/register.php:286
+#: ../public/login/register.php:309
 msgid "...must have a valid format"
-msgstr ""
+msgstr "...must have a valid format"
 
-#: ../public/login/register.php:289
+#: ../public/login/register.php:312
 msgid "Name of the organization you belong to"
-msgstr ""
+msgstr "Name of the organization you belong to"
 
-#: ../public/login/register.php:290
+#: ../public/login/register.php:313
 msgid "...must be provided by you"
-msgstr ""
+msgstr "...must be provided by you"
 
-#: ../public/login/index.php:156 ../public/login/index.php:196
+#: ../public/login/index.php:164 ../public/login/index.php:204
 msgid "Log in"
 msgstr "Log in"
 
-#: ../public/login/index.php:164
+#: ../public/login/index.php:172
 msgid "Login unsuccessful"
 msgstr "Login unsuccessful"
 
-#: ../public/login/index.php:164 ../public/login/index.php:215
-#: ../public/login/index.php:270
+#: ../public/login/index.php:172 ../public/login/index.php:224
+#: ../public/login/index.php:279
 msgid "Try again"
 msgstr "Try again"
 
-#: ../public/login/index.php:170
+#: ../public/login/index.php:178
 msgid "Logged out successfully"
 msgstr "Logged out successfully"
 
-#: ../public/login/index.php:170
+#: ../public/login/index.php:178
 msgid "Return to the main site"
 msgstr "Return to the main site"
 
-#: ../public/login/index.php:176
+#: ../public/login/index.php:184
 msgid "Registration successful"
 msgstr "Registration successful"
 
-#: ../public/login/index.php:176 ../public/login/index.php:182
+#: ../public/login/index.php:184 ../public/login/index.php:190
 msgid "You can log in now"
 msgstr "You can log in now"
 
-#: ../public/login/index.php:182
+#: ../public/login/index.php:190
 msgid "Your password has been changed successfully"
 msgstr "Your password has been changed successfully"
 
-#: ../public/login/index.php:189
-#, fuzzy
+#: ../public/login/index.php:197
 msgid "Username or e-mail address"
-msgstr "E-mail address"
+msgstr "Username or e-mail address"
 
-#: ../public/login/index.php:194
+#: ../public/login/index.php:202
 msgid "Forgot your password?"
 msgstr "Forgot your password?"
 
-#: ../public/login/index.php:199
+#: ../public/login/index.php:207
 msgid "Don't have an account yet?"
 msgstr "Don't have an account yet?"
 
-#: ../public/login/index.php:199
+#: ../public/login/index.php:207
 msgid "Create an account"
 msgstr "Create an account"
 
-#: ../public/login/index.php:203 ../public/login/index.php:241
+#: ../public/login/index.php:212 ../public/login/index.php:250
 msgid "Password recovery"
 msgstr "Password recovery"
 
-#: ../public/login/index.php:215
+#: ../public/login/index.php:224
 msgid "We couldn't send You recovery mail"
 msgstr "We couldn't send You recovery mail"
 
-#: ../public/login/index.php:221
+#: ../public/login/index.php:230
 msgid "Email sent successfully! Please check your email (including SPAM)."
 msgstr "Email sent successfully! Please check your email (including SPAM)."
 
-#: ../public/login/index.php:233
+#: ../public/login/index.php:242
 msgid "Send link"
 msgstr "Send link"
 
-#: ../public/login/index.php:234 ../include/app/add_problem.php:488
+#: ../public/login/index.php:243 ../include/app/add_problem.php:488
 #: ../include/app/portal/modifypost.php:119
 #: ../include/app/portal/addpost.php:107
 msgid "Cancel"
 msgstr "Cancel"
 
-#: ../public/login/index.php:258
+#: ../public/login/index.php:267
 msgid "Access denied"
 msgstr "Access denied"
 
-#: ../public/login/index.php:270
+#: ../public/login/index.php:279
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
-#: ../public/login/index.php:278 ../include/app/settings.php:106
+#: ../public/login/index.php:287 ../include/app/settings.php:106
 msgid "New password"
 msgstr "New password"
 
-#: ../public/login/index.php:281 ../include/app/settings.php:107
+#: ../public/login/index.php:290 ../include/app/settings.php:107
 msgid "Repeat new password"
 msgstr "Repeat new password"
 
-#: ../public/login/index.php:285
+#: ../public/login/index.php:294
 msgid "Change password"
 msgstr "Change password"
-
-#: ../include/app/creatorcenter.php:32
-msgid "Forms waiting for evaluation"
-msgstr "Forms waiting for evaluation"
-
-#: ../include/app/creatorcenter.php:56 ../include/app/channels.php:174
-#: ../include/app/mysolutions.php:147 ../include/app/dashboard.php:286
-#: ../include/app/dashboard.php:316
-msgid "There's nothing here yet!"
-msgstr "There's nothing here yet!"
 
 #: ../include/app/channels.php:78
 msgid "Content center"
@@ -276,39 +261,43 @@ msgid "Click to enter the channel"
 msgstr "Click to enter the channel"
 
 #: ../include/app/channels.php:160 ../include/app/portal.php:176
-#: ../include/app/channel.php:595 ../include/app/content.php:26
+#: ../include/app/channel.php:625 ../include/app/content.php:51
 msgid "Author"
 msgstr "Author"
 
+#: ../include/app/channels.php:174 ../include/app/mysolutions.php:147
+#: ../include/app/creatorcenter.php:158 ../include/app/creatorcenter.php:190
+#: ../include/app/dashboard.php:302 ../include/app/dashboard.php:332
+msgid "There's nothing here yet!"
+msgstr "There's nothing here yet!"
+
 #: ../include/app/config/init_roles.php:7
 msgid "superadministrator"
-msgstr ""
+msgstr "superadministrator"
 
 #: ../include/app/config/init_roles.php:17
 msgid "undefined"
-msgstr ""
+msgstr "undefined"
 
 #: ../include/app/config/init_roles.php:29
-#, fuzzy
 msgid "user"
-msgstr "for user"
+msgstr "user"
 
-#: ../include/app/config/init_roles.php:53
+#: ../include/app/config/init_roles.php:56
 msgid "administrator"
-msgstr ""
+msgstr "administrator"
 
-#: ../include/app/config/init_roles.php:63
+#: ../include/app/config/init_roles.php:66
 msgid "moderator"
-msgstr ""
+msgstr "moderator"
 
-#: ../include/app/config/init_roles.php:77
+#: ../include/app/config/init_roles.php:80
 msgid "portal_editor"
-msgstr ""
+msgstr "portal_editor"
 
-#: ../include/app/config/init_roles.php:88
-#, fuzzy
+#: ../include/app/config/init_roles.php:91
 msgid "content_creator"
-msgstr "Content center"
+msgstr "content_creator"
 
 #: ../include/app/logs.php:89 ../include/app/logs.php:92
 msgid "Events log"
@@ -409,7 +398,7 @@ msgid "Available output formats"
 msgstr "Available output formats"
 
 #: ../include/app/add_problem.php:190 ../include/app/add_problem.php:219
-#: ../include/app/results/algresult.php:177
+#: ../include/app/results/algresult.php:220
 msgid "Test"
 msgstr "Test"
 
@@ -483,35 +472,35 @@ msgstr "Fill all required textboxes."
 msgid "My solutions"
 msgstr "My solutions"
 
-#: ../include/app/mysolutions.php:71 ../include/app/dashboard.php:210
-#: ../include/app/results/algresult.php:41
+#: ../include/app/mysolutions.php:71 ../include/app/creatorcenter.php:79
+#: ../include/app/dashboard.php:210 ../include/app/results/algresult.php:41
 #: ../include/app/results/testresult.php:55
 #: ../include/app/results/formresult.php:47
 msgid "Result unavailable"
 msgstr "Result unavailable"
 
-#: ../include/app/mysolutions.php:77 ../include/app/dashboard.php:216
-#: ../include/app/results/algresult.php:22
+#: ../include/app/mysolutions.php:77 ../include/app/creatorcenter.php:85
+#: ../include/app/dashboard.php:216 ../include/app/results/algresult.php:22
 #: ../include/app/results/testresult.php:36
 #: ../include/app/results/formresult.php:28
 msgid "Incorrect"
 msgstr "Incorrect"
 
-#: ../include/app/mysolutions.php:82 ../include/app/dashboard.php:221
-#: ../include/app/results/algresult.php:27
+#: ../include/app/mysolutions.php:82 ../include/app/creatorcenter.php:90
+#: ../include/app/dashboard.php:221 ../include/app/results/algresult.php:27
 #: ../include/app/results/testresult.php:41
 #: ../include/app/results/formresult.php:33
 msgid "Fully correct"
 msgstr "Fully correct"
 
-#: ../include/app/mysolutions.php:87 ../include/app/dashboard.php:226
-#: ../include/app/results/testresult.php:46
+#: ../include/app/mysolutions.php:87 ../include/app/creatorcenter.php:95
+#: ../include/app/dashboard.php:226 ../include/app/results/testresult.php:46
 #: ../include/app/results/formresult.php:38
 msgid "In queue..."
 msgstr "In queue..."
 
-#: ../include/app/mysolutions.php:91 ../include/app/dashboard.php:230
-#: ../include/app/results/algresult.php:36
+#: ../include/app/mysolutions.php:91 ../include/app/creatorcenter.php:99
+#: ../include/app/dashboard.php:230 ../include/app/results/algresult.php:36
 #: ../include/app/results/testresult.php:50
 #: ../include/app/results/formresult.php:42
 msgid "Partially correct"
@@ -665,7 +654,7 @@ msgstr "Add document"
 msgid "Problems for warm-up"
 msgstr "Problems for warm-up"
 
-#: ../include/app/portal.php:388 ../include/app/channel.php:588
+#: ../include/app/portal.php:388 ../include/app/channel.php:618
 msgid "Archive"
 msgstr "Archive"
 
@@ -685,7 +674,7 @@ msgstr "Current session"
 msgid "Save problems"
 msgstr "Save problems"
 
-#: ../include/app/portal.php:407 ../include/app/channel.php:420
+#: ../include/app/portal.php:407 ../include/app/channel.php:450
 msgid "Add problem"
 msgstr "Add problem"
 
@@ -722,82 +711,90 @@ msgstr "Edit FAQ"
 msgid "Edit contact page"
 msgstr "Edit contact page"
 
-#: ../include/app/channel.php:257
+#: ../include/app/channel.php:264
+msgid "Unfollow"
+msgstr "Unfollow"
+
+#: ../include/app/channel.php:264
+msgid "Follow"
+msgstr "Follow"
+
+#: ../include/app/channel.php:280
 msgid "New block"
 msgstr "New block"
 
-#: ../include/app/channel.php:257
+#: ../include/app/channel.php:280
 msgid "problemset"
 msgstr "problemset"
 
-#: ../include/app/channel.php:260 ../include/app/channel.php:316
+#: ../include/app/channel.php:283 ../include/app/channel.php:339
 msgid "Block title"
 msgstr "Block title"
 
-#: ../include/app/channel.php:264 ../include/app/channel.php:320
+#: ../include/app/channel.php:287 ../include/app/channel.php:343
 msgid "Availability depends on completion"
 msgstr "Availability depends on completion"
 
-#: ../include/app/channel.php:266 ../include/app/channel.php:322
+#: ../include/app/channel.php:289 ../include/app/channel.php:345
 msgid "Nothing"
 msgstr "Nothing"
 
-#: ../include/app/channel.php:279 ../include/app/channel.php:340
+#: ../include/app/channel.php:302 ../include/app/channel.php:363
 msgid "Publish time"
 msgstr "Publish time"
 
-#: ../include/app/channel.php:284 ../include/app/channel.php:293
+#: ../include/app/channel.php:307 ../include/app/channel.php:316
 msgid "Add block"
 msgstr "Add block"
 
-#: ../include/app/channel.php:292
+#: ../include/app/channel.php:315
 msgid "Available for You"
 msgstr "Available for You"
 
-#: ../include/app/channel.php:345 ../include/app/admin.php:283
+#: ../include/app/channel.php:368 ../include/app/admin.php:283
 msgid "Save changes"
 msgstr "Save changes"
 
-#: ../include/app/channel.php:409
+#: ../include/app/channel.php:439
 msgid "Requires completion"
 msgstr "Requires completion"
 
-#: ../include/app/channel.php:412
+#: ../include/app/channel.php:442
 msgid "Started"
 msgstr "Started"
 
-#: ../include/app/channel.php:414
+#: ../include/app/channel.php:444
 msgid "Completed"
 msgstr "Completed"
 
-#: ../include/app/channel.php:421
+#: ../include/app/channel.php:451
 msgid "Settings"
 msgstr "Settings"
 
-#: ../include/app/channel.php:472
+#: ../include/app/channel.php:502
 msgid "Error during layout saving"
 msgstr "Error during layout saving"
 
-#: ../include/app/channel.php:476
+#: ../include/app/channel.php:506
 msgid "Connection error"
 msgstr "Connection error"
 
-#: ../include/app/channel.php:482
+#: ../include/app/channel.php:512
 msgid "Results"
 msgstr "Results"
 
-#: ../include/app/channel.php:487 ../include/app/results/algresult.php:116
+#: ../include/app/channel.php:517 ../include/app/results/algresult.php:156
 #: ../include/app/results/testresult.php:117
 #: ../include/app/results/ctfresult.php:72
 #: ../include/app/results/formresult.php:120
 msgid "Total"
 msgstr "Total"
 
-#: ../include/app/channel.php:581
+#: ../include/app/channel.php:611
 msgid "Information"
 msgstr "Information"
 
-#: ../include/app/channel.php:588
+#: ../include/app/channel.php:618
 msgid "Unarchive"
 msgstr "Unarchive"
 
@@ -812,6 +809,14 @@ msgstr "Solutions amount"
 #: ../include/app/profiles/profile.php:57
 msgid "Total points"
 msgstr "Total points"
+
+#: ../include/app/creatorcenter.php:61
+msgid "Reevaluation requests"
+msgstr "Reevaluation requests"
+
+#: ../include/app/creatorcenter.php:166
+msgid "Forms waiting for evaluation"
+msgstr "Forms waiting for evaluation"
 
 #: ../include/app/menus/vertical.php:80
 msgid "Dashboard"
@@ -847,8 +852,8 @@ msgid "Discover"
 msgstr "Discover"
 
 #: ../include/app/menus/vertical.php:102
-msgid "Creators' center"
-msgstr "Creators' center"
+msgid "Creator center"
+msgstr "Creator center"
 
 #: ../include/app/menus/horizontal.php:34
 msgid "Log out"
@@ -887,11 +892,11 @@ msgstr "Number of points in the last 30 days"
 msgid "My last solutions"
 msgstr "My last solutions"
 
-#: ../include/app/dashboard.php:294
+#: ../include/app/dashboard.php:310
 msgid "News"
 msgstr "News"
 
-#: ../include/app/dashboard.php:326
+#: ../include/app/dashboard.php:342
 msgid "You might also like"
 msgstr "You might also like"
 
@@ -899,31 +904,39 @@ msgstr "You might also like"
 msgid "In queue"
 msgstr "In queue"
 
-#: ../include/app/results/algresult.php:89
+#: ../include/app/results/algresult.php:117
+msgid "Request reevaluation"
+msgstr "Request reevaluation"
+
+#: ../include/app/results/algresult.php:123
+msgid "Reevaluate"
+msgstr "Reevaluate"
+
+#: ../include/app/results/algresult.php:129
 msgid "Evaluation report"
 msgstr "Evaluation report"
 
-#: ../include/app/results/algresult.php:112
+#: ../include/app/results/algresult.php:152
 #: ../include/app/results/testresult.php:113
 #: ../include/app/results/formresult.php:116
 msgid "Status"
 msgstr "Status"
 
-#: ../include/app/results/algresult.php:113
+#: ../include/app/results/algresult.php:153
 #: ../include/app/results/testresult.php:114
 #: ../include/app/results/ctfresult.php:69
 #: ../include/app/results/formresult.php:117
 msgid "Submission timestamp"
 msgstr "Submission timestamp"
 
-#: ../include/app/results/algresult.php:114
+#: ../include/app/results/algresult.php:154
 #: ../include/app/results/testresult.php:115
 #: ../include/app/results/ctfresult.php:70
 #: ../include/app/results/formresult.php:118
 msgid "Verification timestamp"
 msgstr "Verification timestamp"
 
-#: ../include/app/results/algresult.php:118
+#: ../include/app/results/algresult.php:158
 #: ../include/app/results/testresult.php:119
 #: ../include/app/results/ctfresult.php:74
 #: ../include/app/results/formresult.php:122
@@ -934,25 +947,29 @@ msgstr ""
 "Your solution is waiting to be reviewed or its result has been temporarily "
 "hidden. The results will be available soon."
 
-#: ../include/app/results/algresult.php:131
+#: ../include/app/results/algresult.php:171
 #: ../include/app/results/testresult.php:132
 msgid "Correct anwsers"
 msgstr "Correct anwsers"
 
-#: ../include/app/results/algresult.php:131
+#: ../include/app/results/algresult.php:171
 msgid "Limit exceeded"
 msgstr "Limit exceeded"
 
-#: ../include/app/results/algresult.php:131
+#: ../include/app/results/algresult.php:171
 #: ../include/app/results/testresult.php:132
 msgid "Incorrect anwsers"
 msgstr "Incorrect anwsers"
 
-#: ../include/app/results/algresult.php:158
+#: ../include/app/results/algresult.php:171
+msgid "System errors"
+msgstr "System errors"
+
+#: ../include/app/results/algresult.php:198
 msgid "Detailed results"
 msgstr "Detailed results"
 
-#: ../include/app/results/algresult.php:189
+#: ../include/app/results/algresult.php:234
 msgid "Your code"
 msgstr "Your code"
 
@@ -989,35 +1006,35 @@ msgstr "Incorrect [%]"
 msgid "Your anwser"
 msgstr "Your anwser"
 
-#: ../include/app/core.php:448
+#: ../include/app/core.php:447
 msgid "Algorithmic task"
 msgstr "Algorithmic task"
 
-#: ../include/app/core.php:449
+#: ../include/app/core.php:448
 msgid "Capture The Flag"
 msgstr "Capture The Flag"
 
-#: ../include/app/core.php:450
+#: ../include/app/core.php:449
 msgid "Single choice"
 msgstr "Single choice "
 
-#: ../include/app/core.php:451
+#: ../include/app/core.php:450
 msgid "Multiple choice"
 msgstr "Multiple choice"
 
-#: ../include/app/core.php:452
+#: ../include/app/core.php:451
 msgid "Open-ended"
 msgstr "Open-ended"
 
-#: ../include/app/core.php:453
+#: ../include/app/core.php:452
 msgid "Video"
-msgstr ""
+msgstr "Video"
+
+#: ../include/app/core.php:453
+msgid "Article"
+msgstr "Article"
 
 #: ../include/app/core.php:454
-msgid "Article"
-msgstr ""
-
-#: ../include/app/core.php:455
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -1105,6 +1122,14 @@ msgstr "Event logs"
 msgid "Display all"
 msgstr "Display all"
 
+#: ../include/app/content.php:46
+msgid "Unstar"
+msgstr "Unstar"
+
+#: ../include/app/content.php:46
+msgid "Star"
+msgstr "Star"
+
 #: ../include/app/admin.php:252
 msgid "Configuration panel"
 msgstr "Configuration panel"
@@ -1159,7 +1184,7 @@ msgstr "Plugins"
 
 #: ../include/app/admin.php:360 ../include/app/admin.php:551
 msgid "Roles"
-msgstr ""
+msgstr "Roles"
 
 #: ../include/app/admin.php:361 ../include/app/admin.php:575
 msgid "Users"
@@ -1186,9 +1211,8 @@ msgid "Current system time:"
 msgstr "Current system time:"
 
 #: ../include/app/admin.php:392
-#, fuzzy
 msgid "Default language"
-msgstr "Default template"
+msgstr "Default language"
 
 #: ../include/app/admin.php:396
 msgid "Workers"
@@ -1256,7 +1280,7 @@ msgstr "Plugin loading unsuccessful"
 
 #: ../include/app/admin.php:526
 msgid "Plugin inactive"
-msgstr ""
+msgstr "Plugin inactive"
 
 #: ../include/app/admin.php:536
 msgid "Press"
@@ -1275,19 +1299,14 @@ msgid "Save community plugins"
 msgstr "Save community plugins"
 
 #: ../include/app/admin.php:553
-#, fuzzy
 msgid "In this section you can modify groups or add a new one."
-msgstr ""
-"In this section you can modify user permissions and grant additional "
-"permissions."
+msgstr "In this section you can modify groups or add a new one."
 
 #: ../include/app/admin.php:577
-#, fuzzy
 msgid ""
 "In this section you can modify users' data and grant additional permissions."
 msgstr ""
-"In this section you can modify user permissions and grant additional "
-"permissions."
+"In this section you can modify users' data and grant additional permissions."
 
 #: ../include/app/admin.php:579
 msgid "Add user"
