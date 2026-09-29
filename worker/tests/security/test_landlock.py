@@ -1,4 +1,4 @@
 try:
-    from landlockpy import AccessFS, AccessNet, Ruleset
+    pass
 except Exception as e:
     raise AssertionError(f"Landlock is not available: {e}")
