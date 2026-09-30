@@ -1,0 +1,25 @@
+{
+  "defaultAction": "SCMP_ACT_ALLOW",
+  "syscalls": [
+    {
+      "action": "SCMP_ACT_ERRNO",
+      "names": [
+        "bpf",
+        "delete_module",
+        "finit_module",
+        "init_module",
+        "kexec_file_load",
+        "kexec_load",
+        "perf_event_open",
+        "ptrace",
+        "process_vm_readv",
+        "process_vm_writev",
+        "reboot",
+        "setns",
+        "swapon",
+        "swapoff",
+        "userfaultfd"
+      ]
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import time
 import pika
 
 import api.lib
+import api.config.config as config
 import compilers.cpp
 import compilers.java
 import compilers.python
@@ -17,7 +18,7 @@ import tests.run as tests
 def connect_to_queue():
     try:
         credentials = pika.PlainCredentials(
-            "esit_user", "123456"
+            config.rabbitmq_user, config.rabbitmq_password
         )  # Make some changes here
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(

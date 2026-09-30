@@ -37,14 +37,14 @@ mkdir "$SCRIPT_DIR/../include/worker/alg"
 mkdir "$SCRIPT_DIR/../include/worker/ctf"
 mkdir "$SCRIPT_DIR/../include/worker/solutions"
 
-chmod -R 0777 "$SCRIPT_DIR/../public/img"
-chmod -R 0777 "$SCRIPT_DIR/../public/include/resources"
+chmod -R 0750 "$SCRIPT_DIR/../public/img"
+chmod -R 0750 "$SCRIPT_DIR/../public/include/resources"
 chmod -R 0755 "$SCRIPT_DIR/../public/include/js"
-chmod -R 0777 "$SCRIPT_DIR/../public/img/plugins/"
-chmod -R 0777 "$SCRIPT_DIR/../include/plugins/"
-chmod -R 0777 "$SCRIPT_DIR/../include/worker/alg"
-chmod -R 0777 "$SCRIPT_DIR/../include/worker/ctf"
-chmod -R 0777 "$SCRIPT_DIR/../include/worker/solutions"
+chmod -R 0750 "$SCRIPT_DIR/../public/img/plugins/"
+chmod -R 0775 "$SCRIPT_DIR/../include/plugins/"
+chmod -R 0750 "$SCRIPT_DIR/../include/worker/alg"
+chmod -R 0750 "$SCRIPT_DIR/../include/worker/ctf"
+chmod -R 0750 "$SCRIPT_DIR/../include/worker/solutions"
 
 # Run docker
-docker compose -f "$SCRIPT_DIR/../compose.yaml" up --force-recreate --build
+H_UID=$(id -u) H_GID=$(id -g) docker compose -f "$SCRIPT_DIR/../compose.yaml" up --force-recreate --build

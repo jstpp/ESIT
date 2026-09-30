@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN mkdir /worker/inout
 RUN mkdir /worker/sandboxing && cd /worker/sandboxing && git clone https://github.com/google/nsjail.git
-RUN cd /worker/sandboxing/nsjail && make
+RUN cd /worker/sandboxing/nsjail && git checkout f100fd9 && make
 
 FROM build AS run
 

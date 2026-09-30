@@ -22,8 +22,8 @@
 	# broker connection
 	$rabbit_mq_host = "rabbitmq"; #Broker's host
     $rabbit_mq_port = 5672; #Broker's access port
-    $rabbit_mq_user = "esit_user"; #Broker's access username
-    $rabbit_mq_password = "123456"; #Broker's access password
+    $rabbit_mq_user = $_ENV['RABBITMQ_DEFAULT_USER']; #Broker's access username
+    $rabbit_mq_password = $_ENV['RABBITMQ_DEFAULT_PASS']; #Broker's access password
 
 	# mailing settings
 	$mail_name = "ESIT Mailing Module"; #Name of the sender
@@ -37,7 +37,7 @@
 		'general_url' => 'http://web',
 		'general_timezone' => 'Europe/Warsaw',
 		'general_default_language' => 'en_US.UTF-8',
-		'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1"]',
+		'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1", "172.18.0.2", "172.18.0.3", "172.18.0.4", "172.18.0.5"]',
 		'general_trusted_proxies' => '["127.0.0.1", "::1"]',
 		'plugin_custom_error_broker_url' => 'http://localhost',
 		'plugin_mailing_module_host' => 'localhost',
