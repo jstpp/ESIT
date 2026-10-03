@@ -37,17 +37,41 @@ def decrypt(data, key):
         return False
 
 
-def decode_and_extract_zip(b64string, output_dir):
+def decode_and_extract_zip(
+    b64string, 
+    output_dir,
+    max_files=10000,
+    max_uncompressed_size=512 * 1024 * 1024,
+    max_zip_size=128 * 1024 * 1024
+):
     try:
-        zip_bytes = base64.b64decode(b64string)
+        zip_bytes = base64.b64decode(b64string, validate=True)
         zip_stream = io.BytesIO(zip_bytes)
         target_dir = os.path.abspath(output_dir)
 
+        if len(zip_bytes) > max_zip_size:
+            return False
+
         with zipfile.ZipFile(zip_stream, "r") as zip_ref:
-            for member in zip_ref.infolist():
+            members = zip_ref.infolist()
+            if len(members) > max_files:
+                return False
+
+            total_size = 0
+
+            for member in members:
+                size = member.file_size
+                if size < 0:
+                    return False
+                if size > max_uncompressed_size - total_size:
+                    return False
+                total_size += size
+
                 target_path = os.path.abspath(os.path.join(target_dir, member.filename))
                 if os.path.commonpath([target_dir, target_path]) != target_dir:
                     raise Exception(f"ZipSlip: {member.filename}")
+
+            for member in members:
                 zip_ref.extract(member, target_dir)
     except Exception as exception:
         print(

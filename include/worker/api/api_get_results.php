@@ -13,13 +13,14 @@
 
         $submission = json_decode(openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, $options=0, base64_decode($data['nonce']), $tag), true);
         
+        
         $binaryData = base64_decode($submission['submission_file']);
         file_put_contents(__DIR__."/../solutions/".$submission['submission_id']."/".$submission['submission_id']."_result.zip", $binaryData);
-
+        
         $zip = new ZipArchive;
-        if ($zip->open(__DIR__."/../solutions/".$submission['submission_id']."/".$submission['submission_id']."_result.zip") === TRUE) {
-            $zip->extractTo(__DIR__."/../solutions/".$submission['submission_id']."/");
-            $zip->close();
+        if(!extract_zip(__DIR__."/../solutions/".$submission['submission_id']."/".$submission['submission_id']."_result.zip", __DIR__."/../solutions/".$submission['submission_id']."/"))
+        {
+            unlink(__DIR__."/../solutions/".$submission['submission_id']."/".$submission['submission_id']."_result.zip");
         }
 
         $anws_correct = 0;

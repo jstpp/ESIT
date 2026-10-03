@@ -14,9 +14,9 @@
 
 	# database connection
 	$db_host = "mysql"; #MySQL host
-    $db_username = "esit_db"; #MySQL username
-    $db_password = "esit_db"; #MySQL password
-    $db_database = "esit_db"; #MySQL db name
+    $db_username = $_ENV['MYSQL_USER']; #MySQL username
+    $db_password = $_ENV['MYSQL_PASSWORD']; #MySQL password
+    $db_database = $_ENV['MYSQL_DATABASE']; #MySQL db name
     $db_charset = "utf8"; #MySQL charset
 
 	# broker connection
@@ -351,8 +351,18 @@
 		return rmdir($dir);
 	}
 
-	function extract_zip($path, $dest): bool
+	function extract_zip(
+		$path, 
+		$dest, 
+		$max_files = 10000, 
+		$max_uncompressed_size = 1024 * 1024 * 512,
+		$max_zip_size = 1024 * 1024 * 128
+	): bool
 	{
+
+		$file_size = filesize($path);
+		if ($file_size === false || $file_size > $max_zip_size) return False;
+		
 		$zip = new ZipArchive();
 		if($zip->open($path) !== True) return False;
 
@@ -363,15 +373,41 @@
 			return False;
 		}
 
+        if ($zip->numFiles > $max_files) {
+			$zip->close();
+            return false;
+        }
+
+		$total_size = 0;
+
 		for ($i = 0; $i<$zip->numFiles; $i++) 
 		{
+			$stat = $zip->statIndex($i);
 			$filename = $zip->getNameIndex($i);
+			
+			if ($stat === false || $filename === false) {
+				$zip->close();
+				return false;
+			}
+
 			if (strpos($filename, '../') !== False || strpos($filename, '..\\') !== False) {
 				$zip->close();
 				return False;
 			}
 
 			if (strpos($filename, '/') === 0 || strpos($filename, '\\') === 0) {
+				$zip->close();
+				return False;
+			}
+
+			$size = (int)($stat['size'] ?? 0);
+            if ($size < 0) {
+				$zip->close();
+				return False;
+			}
+            
+            $total_size += $size;
+            if ($total_size > $max_uncompressed_size) {
 				$zip->close();
 				return False;
 			}
