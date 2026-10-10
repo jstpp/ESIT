@@ -30,7 +30,9 @@
 		'addpost'       => ['permission' => 'main.display.portal.addpost', 'path' => 'portal/addpost.php'],
 		'modifypost'    => ['permission' => 'main.display.portal.modifypost', 'path' => 'portal/modifypost.php'],
 		'addproblem'    => ['permission' => 'main.display.channels.addproblem', 'path' => 'add_problem.php'],
+		'addcontent'    => ['permission' => 'main.display.channels.addcontent', 'path' => 'add_content.php'],
 		'check_the_form'=> ['permission' => 'main.display.channels.check_the_form', 'path' => 'check_the_form.php'],
+		'video'			=> ['permission' => 'main.display.video', 'path' => 'content/content_video.php'],
 	];
 
 	$current_p = $_GET['p'] ?? 'dashboard';

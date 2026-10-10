@@ -27,65 +27,91 @@
         die("Resource not found.");
     }
 
-    if($_GET['mode']=="pdffile")
-    {        
-        if(isset($problem_data['type']) && ($problem_data['type']==1 || $problem_data['type']==5))
-        {
-            header("Content-type: application/pdf");   
-            $root_path = __DIR__.'/../../../include/worker/alg/'.$cid."/pdf/";
-            if(file_exists($root_path.$cid.".pdf"))
-            {
-                header("Content-Length: ".filesize($root_path.$cid.".pdf"));
-                readfile($root_path.$cid.".pdf");
-                die;
-            } else {
-                http_response_code(404);
-                die("Resource not found.");
-            }
-        } else {
-            http_response_code(404);
-            die("Resource not found.");
-        }
-    } else if($_GET['mode']=="ctffile")
+    switch($_GET['mode'])
     {
-        if(isset($problem_data['type']) && $problem_data['type']==2)
-        {
-            $root_path = __DIR__.'/../../../include/worker/ctf/'.$cid."/";
-            if (!is_dir($root_path)) {
-                http_response_code(404);
-                die("Resource not found.");
-            }
-
-            $files = array_diff(scandir($root_path), ['.', '..']);
-            if(empty($files))
+        case "pdffile":    
+            if(isset($problem_data['type']) && ($problem_data['type']==1 || $problem_data['type']==5))
             {
-                http_response_code(404);
-                die("Resource not found.");
-            }
-            $file = array_values($files)[0];
-
-            if (strpos(realpath($root_path.$file)."/", realpath($root_path)."/") !== 0) {
-                http_response_code(404);
-                die("Resource not found. Try harder:(");
-            }
-
-            if(file_exists($root_path.$file))
-            {
-                header("Content-type: application/octet-stream");
-                header("Content-Length: ".filesize($root_path.$file));
-                header('Content-Disposition: attachment; filename="'.rawurlencode($file).'"');
-                readfile($root_path.$file);
-                die;
+                header("Content-type: application/pdf");   
+                $root_path = __DIR__.'/../../../include/worker/alg/'.$cid."/pdf/";
+                if(file_exists($root_path.$cid.".pdf"))
+                {
+                    header("Content-Length: ".filesize($root_path.$cid.".pdf"));
+                    readfile($root_path.$cid.".pdf");
+                    die;
+                } else {
+                    http_response_code(404);
+                    die("Resource not found.");
+                }
             } else {
                 http_response_code(404);
                 die("Resource not found.");
             }
-        } else {
+            break;
+
+        case "ctffile":
+            if(isset($problem_data['type']) && $problem_data['type']==2)
+            {
+                $root_path = __DIR__.'/../../../include/worker/ctf/'.$cid."/";
+                if (!is_dir($root_path)) {
+                    http_response_code(404);
+                    die("Resource not found.");
+                }
+
+                $files = array_diff(scandir($root_path), ['.', '..']);
+                if(empty($files))
+                {
+                    http_response_code(404);
+                    die("Resource not found.");
+                }
+                $file = array_values($files)[0];
+
+                if (strpos(realpath($root_path.$file)."/", realpath($root_path)."/") !== 0) {
+                    http_response_code(404);
+                    die("Resource not found. Try harder:(");
+                }
+
+                if(file_exists($root_path.$file))
+                {
+                    header("Content-type: application/octet-stream");
+                    header("Content-Length: ".filesize($root_path.$file));
+                    header('Content-Disposition: attachment; filename="'.rawurlencode($file).'"');
+                    readfile($root_path.$file);
+                    die;
+                } else {
+                    http_response_code(404);
+                    die("Resource not found.");
+                }
+            } else {
+                http_response_code(404);
+                die("Resource not found.");
+            }
+            break;
+
+        case "video":
+            if(isset($problem_data['type']) && $problem_data['type']==6)
+            {
+                header("Content-type: video/mp4");   
+                $root_path = __DIR__.'/../../../include/storage/video/'.$cid."/";
+                if(file_exists($root_path.$cid.".mp4"))
+                {
+                    header("Content-Length: ".filesize($root_path.$cid.".mp4"));
+                    readfile($root_path.$cid.".mp4");
+                    die;
+                } else {
+                    http_response_code(404);
+                    die("Resource not found.");
+                }
+            } else {
+                http_response_code(404);
+                die("Resource not found.");
+            }
+            break;
+
+        default:
             http_response_code(404);
             die("Resource not found.");
-        }
-    } else {
-        http_response_code(404);
-        die("Resource not found.");
+            break;
+        
     }
 ?>

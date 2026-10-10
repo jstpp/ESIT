@@ -12,6 +12,7 @@
 		'ask_for_inout'	  	  		=> ['mode' => 'worker-api', 'permission' => 'main.ask_for_inout', 'path' => 'worker/api/api_ask_for_inout.php'],
 		'registration_is_unique'	=> ['mode' => 'public', 'permission' => 'main.registration_is_unique', 'path' => '../public/include/registration_is_unique.php'],
 		'add_problem'				=> ['mode' => 'interactive', 'permission' => 'main.channels.add_problem', 'path' => 'app/problems/add_problem_script.php'],
+		'add_content'				=> ['mode' => 'interactive', 'permission' => 'main.channels.add_content', 'path' => 'app/content/add_content_script.php'],
 		'verify_ctf'				=> ['mode' => 'interactive', 'permission' => 'main.verify_ctf', 'path' => 'app/problems/verify_ctf_script.php'],
 		'verify_test'				=> ['mode' => 'interactive', 'permission' => 'main.verify_test', 'path' => 'app/problems/verify_test_anwsers.php'],
 		'save_form'					=> ['mode' => 'interactive', 'permission' => 'main.save_form', 'path' => 'app/problems/save_form_script.php'],

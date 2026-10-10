@@ -6,7 +6,7 @@ events {
 }
 
 http {
-        client_max_body_size 100M;
+        client_max_body_size 1G;
         sendfile on;
         tcp_nopush on;
         types_hash_max_size 2048;

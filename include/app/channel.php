@@ -393,43 +393,63 @@
 											case 5:
 												$contenttype = content_type_identification('opn');
 												break;
+											case 6:
+												$contenttype = content_type_identification('vid');
+												break;
+											default:
+												$contenttype = content_type_identification('unk');
+												break;
 										}
-
-										$cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid AND mode=1');
-										$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
-										$ctx = $cdb_query->fetch();
-
-										$cdb_query = $pdo->prepare('SELECT MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
-										$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
-										$ctx['maxscore'] = $cdb_query->fetch()['maxscore'];
-
-										if((int)$ctx['maxscore']!=-1)
+										if ($row['type']<=5)
 										{
-											$maxscore = $ctx['maxscore'];
+											$cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid AND mode=1');
+											$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
+											$ctx = $cdb_query->fetch();
+
+											$cdb_query = $pdo->prepare('SELECT MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
+											$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
+											$ctx['maxscore'] = $cdb_query->fetch()['maxscore'];
+
+											if((int)$ctx['maxscore']!=-1)
+											{
+												$maxscore = $ctx['maxscore'];
+											} else {
+												$maxscore = 0;
+											}
+											echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['CONTENT_ID'].'" style="color: inherit;">
+												<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
+												<div class="channel_content_block_title">
+													<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
+													<div class="channel_content_block_element_details">
+														<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'; right: 0;">
+															'.($row['maxattempts']-$ctx['attempts']).' prób
+														</div>
+														<div class="channel_content_block_stars" style="background-color: '.$contenttype['color'].'">
+															<i class="far fa-star"></i>&nbsp;'.max(count_content_stars($row['CONTENT_ID']),0).'
+														</div>');
+											if(strtotime($row['result_publish_time'])<strtotime("now"))
+											{
+												echo('<div class="channel_content_block_progress">
+													<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
+												</div>');
+											}
+											echo('</div>
+												</div>
+											</a>');
+											array_push($set_results[$set['SET_ID']], round($maxscore/$row['maxpoints']*100, 0));
 										} else {
-											$maxscore = 0;
+											echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['CONTENT_ID'].'" style="color: inherit;">
+												<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
+												<div class="channel_content_block_title">
+													<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
+													<div class="channel_content_block_element_details">
+														<div class="channel_content_block_stars" style="background-color: '.$contenttype['color'].'">
+															<i class="far fa-star"></i>&nbsp;'.max(count_content_stars($row['CONTENT_ID']),0).'
+														</div>');
+											echo('</div>
+												</div>
+											</a>');
 										}
-										echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['CONTENT_ID'].'" style="color: inherit;">
-											<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
-											<div class="channel_content_block_title">
-												<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
-												<div class="channel_content_block_element_details">
-													<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'; right: 0;">
-														'.($row['maxattempts']-$ctx['attempts']).' prób
-													</div>
-													<div class="channel_content_block_stars" style="background-color: '.$contenttype['color'].'">
-														<i class="far fa-star"></i>&nbsp;'.max(count_content_stars($row['CONTENT_ID']),0).'
-													</div>');
-										if(strtotime($row['result_publish_time'])<strtotime("now"))
-										{
-											echo('<div class="channel_content_block_progress">
-												<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
-											</div>');
-										}
-										echo('</div>
-											</div>
-										</a>');
-										array_push($set_results[$set['SET_ID']], round($maxscore/$row['maxpoints']*100, 0));
 									}
 								} else {
 									echo('<h1 style="text-align: center; margin-bottom: -1vmax;"><i class=\'fas fa-lock\'></i></h1>');
@@ -448,6 +468,7 @@
 								{
 									echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
 										<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;'.__("Add problem").'</a>
+										<a href="?p=addcontent&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;'.__("Add content").'</a>
 										<a class="forminput" onClick="document.getElementById(\'update_block_dialog_'.$object['id'].'\').style.display = \'flex\';"><i class=\'fas fa-wrench\'></i>&nbsp;&nbsp;'.__("Settings").'</a><br /><br /></div>');
 								}
 								echo('

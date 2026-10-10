@@ -11,6 +11,7 @@
 /public/img/problemsets/header/*
 /public/img/plugins/*
 /include/plugins/*
+/include/storage/*
 /setup/npm/node_modules/
 /setup/npm/*.js
 *~

@@ -2,12 +2,14 @@ FROM node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18
 
 WORKDIR /build
 
-COPY ./setup/npm/* ./
+COPY ./setup/npm/package.json ./setup/npm/package-lock.json ./
 COPY ./setup/npm/setup/ ./setup/
 
+RUN npm install
 RUN npm ci
 RUN npm run build-chartjs
 RUN npm run build-sortablejs
+RUN npm run build-videojs
 
 FROM nginx:1-alpine@sha256:df221db836e1754089190208cee7eeda94f233197056426eda74a43ab1abeac2
 
@@ -32,6 +34,7 @@ COPY --from=npm /build/node_modules/ace-builds /www/esit/public/include/js/ace-b
 COPY --from=npm /build/node_modules/mathjax /www/esit/public/include/js/mathjax
 COPY --from=npm /build/node_modules/sortablejs /www/esit/public/include/js/sortablejs
 COPY --from=npm /build/node_modules/chart.js /www/esit/public/include/js/chart.js
+COPY --from=npm /build/node_modules/video.js /www/esit/public/include/js/video.js
 RUN chmod -R 0777 /www/esit/public/include/js/*
 
 RUN chown -R esit-user:esit-group /www/esit/public/*

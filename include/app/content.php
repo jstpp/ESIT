@@ -67,6 +67,9 @@
 	} else if($problemtype==5)
 	{
 		include(__DIR__.'/../../include/app/problemtypes/formquest.php');
+	} else if($problemtype==6)
+	{
+		include(__DIR__.'/../../include/app/content/content_video.php');
 	} else {
 		kick();
 	}

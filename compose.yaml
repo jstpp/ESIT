@@ -31,6 +31,7 @@ services:
       - ./public/img:/www/esit/public/img
       - ./public/login:/www/esit/public/login
       - ./public/include/resources:/www/esit/public/include/resources
+      - ./setup/php.ini:/usr/local/etc/php/conf.d/esit-php.ini
     depends_on:
       - rabbitmq
 

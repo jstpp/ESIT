@@ -36,6 +36,8 @@ mkdir "$SCRIPT_DIR/../include/plugins/"
 mkdir "$SCRIPT_DIR/../include/worker/alg"
 mkdir "$SCRIPT_DIR/../include/worker/ctf"
 mkdir "$SCRIPT_DIR/../include/worker/solutions"
+mkdir "$SCRIPT_DIR/../include/storage"
+mkdir "$SCRIPT_DIR/../include/storage/video"
 
 chmod -R 0750 "$SCRIPT_DIR/../public/img"
 chmod -R 0750 "$SCRIPT_DIR/../public/include/resources"
@@ -45,6 +47,7 @@ chmod -R 0775 "$SCRIPT_DIR/../include/plugins/"
 chmod -R 0750 "$SCRIPT_DIR/../include/worker/alg"
 chmod -R 0750 "$SCRIPT_DIR/../include/worker/ctf"
 chmod -R 0750 "$SCRIPT_DIR/../include/worker/solutions"
+chmod -R 0750 "$SCRIPT_DIR/../include/storage/video"
 
 # Run docker
 H_UID=$(id -u) H_GID=$(id -g) docker compose -f "$SCRIPT_DIR/../compose.yaml" up --force-recreate --build
