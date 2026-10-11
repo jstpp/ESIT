@@ -52,25 +52,31 @@
 </center>
 
 <?php 
-	if($problemtype==1)
+	switch($problemtype)
 	{
-		include(__DIR__.'/../../include/app/problemtypes/algquest.php');
-	} else if($problemtype==2)
-	{
-		include(__DIR__.'/../../include/app/problemtypes/ctfquest.php');
-	} else if($problemtype==3)
-	{
-		include(__DIR__.'/../../include/app/problemtypes/classicquest.php');
-	} else if($problemtype==4)
-	{
-		include(__DIR__.'/../../include/app/problemtypes/multiplechoicequest.php');
-	} else if($problemtype==5)
-	{
-		include(__DIR__.'/../../include/app/problemtypes/formquest.php');
-	} else if($problemtype==6)
-	{
-		include(__DIR__.'/../../include/app/content/content_video.php');
-	} else {
-		kick();
+		case 1:
+			include(__DIR__.'/../../include/app/problemtypes/algquest.php');
+			break;
+		case 2:
+			include(__DIR__.'/../../include/app/problemtypes/ctfquest.php');
+			break;
+		case 3:
+			include(__DIR__.'/../../include/app/problemtypes/classicquest.php');
+			break;
+		case 4:
+			include(__DIR__.'/../../include/app/problemtypes/multiplechoicequest.php');
+			break;
+		case 5:
+			include(__DIR__.'/../../include/app/problemtypes/formquest.php');
+			break;
+		case 6:
+			include(__DIR__.'/../../include/app/content/content_video.php');
+			break;
+		case 7:
+			include(__DIR__.'/../../include/app/content/content_article.php');
+			break;
+		default:
+			kick();
+			break;
 	}
 ?>

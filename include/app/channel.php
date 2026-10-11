@@ -396,6 +396,9 @@
 											case 6:
 												$contenttype = content_type_identification('vid');
 												break;
+											case 7:
+												$contenttype = content_type_identification('art');
+												break;
 											default:
 												$contenttype = content_type_identification('unk');
 												break;

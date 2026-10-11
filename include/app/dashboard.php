@@ -309,7 +309,7 @@
 		<div class="window" style="flex: 1;">
 			<h3 class="window_title"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;<?php echo(__("News")); ?></h3>
 			<?php
-				$db_query = $pdo->prepare('SELECT * FROM ARTICLES ORDER BY id DESC LIMIT 3');
+				$db_query = $pdo->prepare('SELECT * FROM ARTICLES WHERE contentset_pos=0 ORDER BY id DESC LIMIT 3');
 				$db_query->execute();
 
 				$news_count=0;

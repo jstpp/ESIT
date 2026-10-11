@@ -131,6 +131,10 @@
 				<h3><?php print(content_type_identification('vid')['full_name']); ?></h3><br />
 				<i class="<?php print(content_type_identification('vid')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
 			</div>
+			<div class="content_type_select_flexbox_option" onClick="validate_data(); typeSelect(7);" style="background-color: <?php print(content_type_identification('art')['color']); ?>;">
+				<h3><?php print(content_type_identification('art')['full_name']); ?></h3><br />
+				<i class="<?php print(content_type_identification('art')['icon']); ?>" style="color: rgba(0, 0, 0, 0.2);"></i>
+			</div>
 		</div>
 	</div>
 </div>
@@ -156,10 +160,39 @@
 			<p style="margin-left: 2.5%; width: 40%;"><?php echo(__("Publishing time")); ?>:&emsp;<input type="datetime-local" onChange="validate_data();" class="forminput" name="publish_time" /></p>
 			<br />
 		</div>
-		<div class="window" id="vid_video">
+		<div class="window" id="vid_video" style="display: none;">
 			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Video")); ?></h2>
 			<input type="file" style="margin-left: 2.5%;" name="vid_file" accept=".mp4"/>
 			<p style="margin-left: 2.5%;"><?php echo(__("The file should be in .mp4 format")); ?>.</p>
+			<br />
+		</div>
+		<div class="window" id="art_article" style="display: none;">
+			<script src="/include/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+			<script>
+				tinymce.init({
+					selector: 'textarea#content_area',
+					images_upload_url: 'process.php?r=getimg',
+					relative_urls : false,
+					remove_script_host : false,
+					convert_urls : true,
+					xss_sanitization: true,
+					plugins: 'preview directionality visualblocks visualchars fullscreen link codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount charmap quickbars emoticons',
+					menubar: 'file edit view insert format tools table tc help',
+					toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | charmap emoticons | preview | insertfile media pageembed template link anchor codesample | showcomments addcomment',
+					height: 500,
+					base_url: '/include/js/tinymce',
+					license_key: 'gpl',
+					promotion: false,
+					skin: '<?php echo (isset($settings) && $settings->dark_mode == 0) ? 'oxide' : 'oxide-dark' ?>'
+				});
+			</script>
+			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Article")); ?></h2>
+			<p style="text-align: center;"><i><?php echo(__("It is recommended not to set a specific font in the text - the default font for the app will then be visible in the post.")); ?></p></i>
+			<div style="width: 95%; margin-left: 2.5%;">
+				<textarea id="content_area" required>
+				</textarea>
+				<input type="hidden" name="art_content_hidden" id="art_content_hidden" value="none">
+			</div>
 			<br />
 		</div>
 	</form>
@@ -178,6 +211,7 @@
 					{
 						if(e>0)
 						{
+							document.getElementById('art_content_hidden').value = tinymce.activeEditor.getContent(); 
 							document.getElementById('button_1').style.display = 'block';
 						} else {
 							document.getElementById('button_1').style.display = 'none';
@@ -213,6 +247,11 @@
 			{
 				document.getElementById('content_type').value = 6;
 				document.getElementById('vid_video').style.display = 'block';
+			}
+			else if(parseInt(x)===7)
+			{
+				document.getElementById('content_type').value = 7;
+				document.getElementById('art_article').style.display = 'block';
 			} else {
 				return -1;
 			}

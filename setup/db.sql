@@ -31,6 +31,7 @@ CREATE TABLE `ALG_TEST_LIST` (
 
 CREATE TABLE `ARTICLES` (
   `id` int(11) NOT NULL,
+  `contentset_pos` int(11) NOT NULL DEFAULT 0,
   `title` text NOT NULL,
   `author` text NOT NULL,
   `time` datetime NOT NULL DEFAULT current_timestamp(),

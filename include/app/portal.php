@@ -124,7 +124,7 @@
 	</p>
 	<br />
 	<?php
-        $db_query = $pdo->prepare('SELECT * FROM ARTICLES ORDER BY id DESC');
+        $db_query = $pdo->prepare('SELECT * FROM ARTICLES WHERE contentset_pos=0 ORDER BY id DESC');
         $db_query->execute();
 
         while($row = $db_query->fetch())

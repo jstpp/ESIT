@@ -50,7 +50,7 @@
 
     $sid = filter_var($_GET['sid'] ?? null, FILTER_VALIDATE_INT);
     if(!has_permission('main.channels.add_problem') || !$sid) kick();
-    if(!isset($_POST['content_type'], $_FILES['vid_file']) || $_POST['content_type']<=5 || $_POST['content_type']>6) kick();
+    if(!isset($_POST['content_type']) || $_POST['content_type']<=5 || $_POST['content_type']>7) kick();
     
     try
     {
@@ -80,40 +80,65 @@
 
     if(!$content_id) redirect("index.php?p=channels&error");
     
-    try
+    switch($_POST['content_type'])
     {
-        if(!process_content_create_root($content_id)) throw new Exception("process_content_create_root() failed");
-        if(!process_content_check($_FILES['vid_file'], 'mp4')) throw new Exception("process_content_check() failed");
-        $saved_file_path = process_content_save($_FILES['vid_file'], 'mp4', $content_id);
-    } catch (Throwable $t){
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
-        }
-        if (file_exists(delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/"))) 
-        {
-            delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/");
-        }
-        extended_exception_handler($t);
-        redirect("index.php?p=channels&error");
-    }
+        case 6:
+            if(!isset($_FILES['vid_file'])) kick();
+            try
+            {
+                if(!process_content_create_root($content_id)) throw new Exception("process_content_create_root() failed");
+                if(!process_content_check($_FILES['vid_file'], 'mp4')) throw new Exception("process_content_check() failed");
+                $saved_file_path = process_content_save($_FILES['vid_file'], 'mp4', $content_id);
+            } catch (Throwable $t){
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                if (file_exists(delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/"))) 
+                {
+                    delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/");
+                }
+                extended_exception_handler($t);
+                redirect("index.php?p=channels&error");
+            }
 
-    try {
-        $db_query = $pdo->prepare('UPDATE CONTENT SET comment=:comment WHERE CONTENT_ID=:cid');
-        $db_query->execute([
-            'comment' => $saved_file_path, 
-            'cid' => $content_id
-        ]);
-        $pdo->commit();
-    } catch (Throwable $t){
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
-        }
-        if (file_exists(delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/"))) 
-        {
-            delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/");
-        }
-        extended_exception_handler($t);
-        redirect("index.php?p=channels&error");
+            try {
+                $db_query = $pdo->prepare('UPDATE CONTENT SET comment=:comment WHERE CONTENT_ID=:cid');
+                $db_query->execute([
+                    'comment' => $saved_file_path, 
+                    'cid' => $content_id
+                ]);
+                $pdo->commit();
+            } catch (Throwable $t){
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                if (file_exists(delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/"))) 
+                {
+                    delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/");
+                }
+                extended_exception_handler($t);
+                redirect("index.php?p=channels&error");
+            }
+            break;
+        case 7:
+            if(!isset($_POST['art_content_hidden'])) kick();
+            try {
+                $db_query = $pdo->prepare('INSERT INTO ARTICLES (contentset_pos, title, author, content, image_path) VALUES (:cid, :ptitle, :pauthor, :pcontent, :pimg)');
+                $db_query->execute(['cid' => $content_id, 'ptitle' => trim($_POST['content_title']), 'pauthor' => $_SESSION['AUTH_USERNAME'], 'pcontent' => $_POST['art_content_hidden'], 'pimg' => load_img_input()]);
+                $pdo->commit();
+                insert_flash_message('success', 'Sukces!', 'Artykuł został pomyślnie dodany.');
+                
+            } catch (Throwable $t){
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                extended_exception_handler($t);
+                redirect("index.php?p=channels&error");
+            }
+            break;
+        default:
+            redirect("index.php?p=channels&error");
+            break;
     }
 
     redirect('index.php?p=content&id='.filter_var($content_id, FILTER_VALIDATE_INT));
