@@ -1,9 +1,9 @@
 <?php
     if(!is_logged_in() || !has_permission('main.channels.modify_problemset')) kick();
-    if(!isset($_GET['sid'], $_POST['update_block_form_name'], $_POST['update_block_form_condition'], $_POST['update_block_form_publish_time'])) redirect("index.php?p=channels&error");
+    if(!isset($_GET['sid'], $_POST['update_block_form_name'], $_POST['update_block_form_condition'], $_POST['update_block_form_publish_time'])) redirect("index.php?p=search&error");
     
     $sid = filter_var($_GET['sid'] ?? null, FILTER_VALIDATE_INT);
-    if ($sid===False || $sid <= 0) redirect("index.php?p=channels&error");
+    if ($sid===False || $sid <= 0) redirect("index.php?p=search&error");
 
     try {
         switch($_POST['update_block_form_condition'][0] ?? '')
@@ -20,7 +20,7 @@
         }
 
         $title = trim($_POST['update_block_form_name']);
-        if(empty($title)) redirect("index.php?p=channels&error");
+        if(empty($title)) redirect("index.php?p=search&error");
 
         $db_query = $pdo->prepare('SELECT channel_id FROM PROBLEMSETS WHERE SET_ID=:sid');
         $db_query->execute(['sid'=>$sid]);
@@ -37,6 +37,6 @@
         redirect("index.php?p=channel&id=".$cid);
     } catch (Throwable $t) {
         extended_exception_handler($t);
-        redirect("index.php?p=channels&error");
+        redirect("index.php?p=search&error");
     }
 ?>

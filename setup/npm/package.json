@@ -1,7 +1,7 @@
 {
-  "name": "js",
+  "name": "ESIT JS",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "build-videojs": "esbuild setup/installvideo.js --bundle --minify --outfile=node_modules/video.js/video.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "jstpp",
   "license": "ISC",
   "dependencies": {
     "ace-builds": "^1.44.0",

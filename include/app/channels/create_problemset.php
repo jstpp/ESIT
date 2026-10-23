@@ -1,9 +1,9 @@
 <?php
     if(!is_logged_in() || !has_permission('main.channels.create_problemset')) kick();
-    if(!isset($_GET['cid'], $_POST['new_block_form_name'], $_POST['new_block_form_condition'], $_POST['new_block_form_publish_time'])) redirect("index.php?p=channels&error");
+    if(!isset($_GET['cid'], $_POST['new_block_form_name'], $_POST['new_block_form_condition'], $_POST['new_block_form_publish_time'])) redirect("index.php?p=search&error");
     
     $cid = filter_var($_GET['cid'] ?? null, FILTER_VALIDATE_INT);
-    if ($cid===False || $cid<=0) redirect("index.php?p=channels&error");
+    if ($cid===False || $cid<=0) redirect("index.php?p=search&error");
     
     try {
         switch($_POST['new_block_form_condition'][0] ?? '')
@@ -20,7 +20,7 @@
         }
 
         $title = trim($_POST['new_block_form_name']);
-        if (empty($title)) redirect("index.php?p=channels&error");
+        if (empty($title)) redirect("index.php?p=search&error");
 
         $db_query = $pdo->prepare('INSERT INTO PROBLEMSETS (title, author_id, channel_id, depends_on, publish_time) VALUES (:title, :author, :channel, :depends_on, :publish_time)');
         $db_query->execute([
@@ -43,6 +43,6 @@
         redirect("index.php?p=channel&id=".$cid);
 
     } catch (Throwable $t) {
-        redirect("index.php?p=channels&error");
+        redirect("index.php?p=search&error");
     }
 ?>

@@ -36,7 +36,8 @@
 		'follow_channel'			=> ['mode' => 'interactive', 'permission' => 'main.social.follow_channel', 'path' => 'app/channels/follow_channel.php', 'required' => ['id']],
 		'star_content'				=> ['mode' => 'interactive', 'permission' => 'main.social.star_content', 'path' => 'app/problems/star_content.php', 'required' => ['id']],
 		'problem_recheck'   		=> ['mode' => 'interactive', 'permission' => 'main.solutions.exec.recheck', 'path' => 'worker/mq_producer.php', 'required' => ['sid']],
-		'request_recheck'   		=> ['mode' => 'interactive', 'permission' => 'main.solutions.request_recheck', 'path' => 'app/problems/request_reevaluation.php', 'required' => ['sid']]
+		'request_recheck'   		=> ['mode' => 'interactive', 'permission' => 'main.solutions.request_recheck', 'path' => 'app/problems/request_reevaluation.php', 'required' => ['sid']],
+		'search'					=> ['mode' => 'non-interactive', 'permission' => 'main.channels.search', 'path' => 'app/content/search.php', 'required' => ['key']]
 	];
 
 	$current_r = $_GET['r'] ?? 'none';

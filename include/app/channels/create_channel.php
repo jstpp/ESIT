@@ -1,6 +1,6 @@
 <?php
     if(!is_logged_in() || !has_permission('main.channels.create_channel')) kick();
-    if(!isset($_POST['setname'], $_POST['description'], $_POST['publish_time'])) redirect("index.php?p=channels&error");
+    if(!isset($_POST['setname'], $_POST['description'], $_POST['publish_time'])) redirect("index.php?p=search&error");
 
     $isarchived = (isset($_POST['isactive']) && $_POST['isactive'] === '1') ? 0 : 1;
     
@@ -11,7 +11,7 @@
     }
 
     $title = trim($_POST['setname']);
-    if(empty($title)) redirect("index.php?p=channels&error");
+    if(empty($title)) redirect("index.php?p=search&error");
     
     try {
         $db_query = $pdo->prepare('INSERT INTO CHANNELS (title, author_id, description, publish_time, isarchived, img_path) VALUES (:title, :aid, :desc, :publishtime, :isarchived, :img_path)');
@@ -25,8 +25,8 @@
         ]);
     } catch (Throwable $t) {
         extended_exception_handler($t);
-        redirect("index.php?p=channels&error");
+        redirect("index.php?p=search&error");
     }
 
-    redirect("index.php?p=channels");
+    redirect("index.php?p=search");
 ?>

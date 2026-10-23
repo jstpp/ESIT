@@ -134,11 +134,11 @@
             $problem_id = $pdo->lastInsertId();
         } catch (Throwable $t){
             extended_exception_handler($t);
-            redirect("index.php?p=channels&error");
+            redirect("index.php?p=search&error");
         }
     }
     
-    if(!isset($problem_id)) redirect("index.php?p=channels&error");
+    if(!isset($problem_id)) redirect("index.php?p=search&error");
 
     try {
         if((int)$_POST['problem_type']==1)
@@ -226,7 +226,7 @@
         }
     } catch (Throwable $t){
         extended_exception_handler($t);
-        redirect("index.php?p=channels&error");
+        redirect("index.php?p=search&error");
     }
 
     try {
@@ -235,7 +235,7 @@
 
     } catch (Throwable $t){
         extended_exception_handler($t);
-        redirect("index.php?p=channels&error");
+        redirect("index.php?p=search&error");
     }
 
     redirect('index.php?p=content&id='.filter_var($problem_id, FILTER_VALIDATE_INT));

@@ -15,7 +15,7 @@
     } catch (Throwable $t) {
         if($pdo->inTransaction()) $pdo->rollback();
         extended_exception_handler($t);
-        redirect("index.php?p=channels&error");
+        redirect("index.php?p=search&error");
     }
     redirect("/app/index.php?p=channel&id=".$id);
 ?>

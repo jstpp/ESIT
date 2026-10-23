@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 18:47+0200\n"
+"POT-Creation-Date: 2026-10-16 11:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../public/app/index.php:55
+#: ../public/app/index.php:57
 msgid "App"
 msgstr ""
 
@@ -35,7 +35,7 @@ msgstr ""
 msgid "Organization"
 msgstr ""
 
-#: ../public/login/register.php:269 ../include/app/channel.php:516
+#: ../public/login/register.php:269 ../include/app/channel.php:540
 #: ../include/app/settings.php:95 ../include/app/admin.php:260
 #: ../include/app/admin.php:487 ../include/app/admin.php:488
 msgid "Username"
@@ -60,7 +60,8 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: ../public/login/register.php:295 ../include/app/add_problem.php:492
+#: ../public/login/register.php:295 ../include/app/add_content.php:206
+#: ../include/app/add_problem.php:492
 msgid "Input validation"
 msgstr ""
 
@@ -185,8 +186,8 @@ msgstr ""
 msgid "Send link"
 msgstr ""
 
-#: ../public/login/index.php:243 ../include/app/add_problem.php:488
-#: ../include/app/portal/modifypost.php:119
+#: ../public/login/index.php:243 ../include/app/add_content.php:202
+#: ../include/app/add_problem.php:488 ../include/app/portal/modifypost.php:119
 #: ../include/app/portal/addpost.php:107
 msgid "Cancel"
 msgstr ""
@@ -211,62 +212,62 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
-#: ../include/app/channels.php:78
+#: ../include/app/search.php:78
 msgid "Content center"
 msgstr ""
 
-#: ../include/app/channels.php:79 ../include/app/channels.php:89
+#: ../include/app/search.php:79 ../include/app/search.php:89
 msgid "Add new channel"
 msgstr ""
 
-#: ../include/app/channels.php:92
+#: ../include/app/search.php:92
 msgid "Channel name"
 msgstr ""
 
-#: ../include/app/channels.php:94
+#: ../include/app/search.php:94
 msgid "Channel description"
 msgstr ""
 
-#: ../include/app/channels.php:97
+#: ../include/app/search.php:97
 msgid "Channel publish time"
 msgstr ""
 
-#: ../include/app/channels.php:101 ../include/app/portal/addpost.php:97
+#: ../include/app/search.php:101 ../include/app/portal/addpost.php:97
 msgid "Thumbnail"
 msgstr ""
 
-#: ../include/app/channels.php:106
+#: ../include/app/search.php:106
 msgid "Is active?"
 msgstr ""
 
-#: ../include/app/channels.php:109
+#: ../include/app/search.php:109
 msgid "Add channel"
 msgstr ""
 
-#: ../include/app/channels.php:112
+#: ../include/app/search.php:112
 msgid "Data validation"
 msgstr ""
 
-#: ../include/app/channels.php:113
+#: ../include/app/search.php:113
 msgid "Fill all required textboxes"
 msgstr ""
 
-#: ../include/app/channels.php:157
+#: ../include/app/search.php:157
 msgid "Archived"
 msgstr ""
 
-#: ../include/app/channels.php:158
+#: ../include/app/search.php:158
 msgid "Click to enter the channel"
 msgstr ""
 
-#: ../include/app/channels.php:160 ../include/app/portal.php:176
-#: ../include/app/channel.php:625 ../include/app/content.php:51
+#: ../include/app/search.php:160 ../include/app/portal.php:176
+#: ../include/app/channel.php:649 ../include/app/content.php:51
 msgid "Author"
 msgstr ""
 
-#: ../include/app/channels.php:174 ../include/app/mysolutions.php:147
+#: ../include/app/search.php:174 ../include/app/mysolutions.php:147
 #: ../include/app/creatorcenter.php:158 ../include/app/creatorcenter.php:190
-#: ../include/app/dashboard.php:302 ../include/app/dashboard.php:332
+#: ../include/app/dashboard.php:397 ../include/app/dashboard.php:427
 msgid "There's nothing here yet!"
 msgstr ""
 
@@ -307,6 +308,65 @@ msgstr ""
 msgid "Yay! There is no issues at the moment!"
 msgstr ""
 
+#: ../include/app/add_content.php:128
+msgid "Choose content type"
+msgstr ""
+
+#: ../include/app/add_content.php:143
+msgid "New content"
+msgstr ""
+
+#: ../include/app/add_content.php:143 ../include/app/add_problem.php:155
+msgid "in"
+msgstr ""
+
+#: ../include/app/add_content.php:149 ../include/app/add_problem.php:161
+#: ../include/app/settings.php:93
+msgid "Basic information"
+msgstr ""
+
+#: ../include/app/add_content.php:150
+msgid "Content title"
+msgstr ""
+
+#: ../include/app/add_content.php:155 ../include/app/add_problem.php:169
+msgid "Public"
+msgstr ""
+
+#: ../include/app/add_content.php:156 ../include/app/add_problem.php:170
+msgid "Hidden/archived"
+msgstr ""
+
+#: ../include/app/add_content.php:160
+msgid "Publishing time"
+msgstr ""
+
+#: ../include/app/add_content.php:164 ../include/app/core.php:488
+msgid "Video"
+msgstr ""
+
+#: ../include/app/add_content.php:166
+msgid "The file should be in .mp4 format"
+msgstr ""
+
+#: ../include/app/add_content.php:189 ../include/app/core.php:489
+msgid "Article"
+msgstr ""
+
+#: ../include/app/add_content.php:190
+msgid ""
+"It is recommended not to set a specific font in the text - the default font "
+"for the app will then be visible in the post."
+msgstr ""
+
+#: ../include/app/add_content.php:201
+msgid "Add new content"
+msgstr ""
+
+#: ../include/app/add_content.php:207 ../include/app/add_problem.php:493
+msgid "Fill all required textboxes."
+msgstr ""
+
 #: ../include/app/check_the_form.php:44
 msgid "Currently evaluating user's solution"
 msgstr ""
@@ -340,14 +400,6 @@ msgstr ""
 msgid "New problem"
 msgstr ""
 
-#: ../include/app/add_problem.php:155
-msgid "in"
-msgstr ""
-
-#: ../include/app/add_problem.php:161 ../include/app/settings.php:93
-msgid "Basic information"
-msgstr ""
-
 #: ../include/app/add_problem.php:162
 msgid "Problem title"
 msgstr ""
@@ -360,14 +412,6 @@ msgstr ""
 msgid "Max. attempts"
 msgstr ""
 
-#: ../include/app/add_problem.php:169
-msgid "Public"
-msgstr ""
-
-#: ../include/app/add_problem.php:170
-msgid "Hidden/archived"
-msgstr ""
-
 #: ../include/app/add_problem.php:174
 msgid "Problem publishing time"
 msgstr ""
@@ -377,6 +421,7 @@ msgid "Results publishing time"
 msgstr ""
 
 #: ../include/app/add_problem.php:179 ../include/app/menus/vertical.php:93
+#: ../include/app/dashboard.php:187
 msgid "Content"
 msgstr ""
 
@@ -462,44 +507,40 @@ msgstr ""
 msgid "Add new problem"
 msgstr ""
 
-#: ../include/app/add_problem.php:493
-msgid "Fill all required textboxes."
-msgstr ""
-
 #: ../include/app/mysolutions.php:51 ../include/app/mysolutions.php:57
 #: ../include/app/menus/vertical.php:95
 msgid "My solutions"
 msgstr ""
 
 #: ../include/app/mysolutions.php:71 ../include/app/creatorcenter.php:79
-#: ../include/app/dashboard.php:210 ../include/app/results/algresult.php:41
+#: ../include/app/dashboard.php:305 ../include/app/results/algresult.php:41
 #: ../include/app/results/testresult.php:55
 #: ../include/app/results/formresult.php:47
 msgid "Result unavailable"
 msgstr ""
 
 #: ../include/app/mysolutions.php:77 ../include/app/creatorcenter.php:85
-#: ../include/app/dashboard.php:216 ../include/app/results/algresult.php:22
+#: ../include/app/dashboard.php:311 ../include/app/results/algresult.php:22
 #: ../include/app/results/testresult.php:36
 #: ../include/app/results/formresult.php:28
 msgid "Incorrect"
 msgstr ""
 
 #: ../include/app/mysolutions.php:82 ../include/app/creatorcenter.php:90
-#: ../include/app/dashboard.php:221 ../include/app/results/algresult.php:27
+#: ../include/app/dashboard.php:316 ../include/app/results/algresult.php:27
 #: ../include/app/results/testresult.php:41
 #: ../include/app/results/formresult.php:33
 msgid "Fully correct"
 msgstr ""
 
 #: ../include/app/mysolutions.php:87 ../include/app/creatorcenter.php:95
-#: ../include/app/dashboard.php:226 ../include/app/results/testresult.php:46
+#: ../include/app/dashboard.php:321 ../include/app/results/testresult.php:46
 #: ../include/app/results/formresult.php:38
 msgid "In queue..."
 msgstr ""
 
 #: ../include/app/mysolutions.php:91 ../include/app/creatorcenter.php:99
-#: ../include/app/dashboard.php:230 ../include/app/results/algresult.php:36
+#: ../include/app/dashboard.php:325 ../include/app/results/algresult.php:36
 #: ../include/app/results/testresult.php:50
 #: ../include/app/results/formresult.php:42
 msgid "Partially correct"
@@ -651,7 +692,7 @@ msgstr ""
 msgid "Problems for warm-up"
 msgstr ""
 
-#: ../include/app/portal.php:388 ../include/app/channel.php:618
+#: ../include/app/portal.php:388 ../include/app/channel.php:642
 msgid "Archive"
 msgstr ""
 
@@ -671,7 +712,7 @@ msgstr ""
 msgid "Save problems"
 msgstr ""
 
-#: ../include/app/portal.php:407 ../include/app/channel.php:450
+#: ../include/app/portal.php:407 ../include/app/channel.php:473
 msgid "Add problem"
 msgstr ""
 
@@ -752,46 +793,50 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: ../include/app/channel.php:439
+#: ../include/app/channel.php:462
 msgid "Requires completion"
 msgstr ""
 
-#: ../include/app/channel.php:442
+#: ../include/app/channel.php:465
 msgid "Started"
 msgstr ""
 
-#: ../include/app/channel.php:444
+#: ../include/app/channel.php:467
 msgid "Completed"
 msgstr ""
 
-#: ../include/app/channel.php:451
+#: ../include/app/channel.php:474
+msgid "Add content"
+msgstr ""
+
+#: ../include/app/channel.php:475
 msgid "Settings"
 msgstr ""
 
-#: ../include/app/channel.php:502
+#: ../include/app/channel.php:526
 msgid "Error during layout saving"
 msgstr ""
 
-#: ../include/app/channel.php:506
+#: ../include/app/channel.php:530
 msgid "Connection error"
 msgstr ""
 
-#: ../include/app/channel.php:512
+#: ../include/app/channel.php:536
 msgid "Results"
 msgstr ""
 
-#: ../include/app/channel.php:517 ../include/app/results/algresult.php:156
+#: ../include/app/channel.php:541 ../include/app/results/algresult.php:156
 #: ../include/app/results/testresult.php:117
 #: ../include/app/results/ctfresult.php:72
 #: ../include/app/results/formresult.php:120
 msgid "Total"
 msgstr ""
 
-#: ../include/app/channel.php:611
+#: ../include/app/channel.php:635
 msgid "Information"
 msgstr ""
 
-#: ../include/app/channel.php:618
+#: ../include/app/channel.php:642
 msgid "Unarchive"
 msgstr ""
 
@@ -869,31 +914,47 @@ msgstr ""
 msgid "for user"
 msgstr ""
 
-#: ../include/app/dashboard.php:116
+#: ../include/app/dashboard.php:177
 msgid "Hello"
 msgstr ""
 
-#: ../include/app/dashboard.php:121
+#: ../include/app/dashboard.php:181
+msgid "What are you looking for?"
+msgstr ""
+
+#: ../include/app/dashboard.php:182
+msgid "Search"
+msgstr ""
+
+#: ../include/app/dashboard.php:185
+msgid "Channels"
+msgstr ""
+
+#: ../include/app/dashboard.php:186
+msgid "Contentsets"
+msgstr ""
+
+#: ../include/app/dashboard.php:216
 msgid "My progress"
 msgstr ""
 
-#: ../include/app/dashboard.php:134
+#: ../include/app/dashboard.php:229
 msgid "Average correctness"
 msgstr ""
 
-#: ../include/app/dashboard.php:139
+#: ../include/app/dashboard.php:234
 msgid "Number of points in the last 30 days"
 msgstr ""
 
-#: ../include/app/dashboard.php:196
+#: ../include/app/dashboard.php:291
 msgid "My last solutions"
 msgstr ""
 
-#: ../include/app/dashboard.php:310
+#: ../include/app/dashboard.php:405
 msgid "News"
 msgstr ""
 
-#: ../include/app/dashboard.php:342
+#: ../include/app/dashboard.php:437
 msgid "You might also like"
 msgstr ""
 
@@ -1001,35 +1062,27 @@ msgstr ""
 msgid "Your anwser"
 msgstr ""
 
-#: ../include/app/core.php:447
+#: ../include/app/core.php:483
 msgid "Algorithmic task"
 msgstr ""
 
-#: ../include/app/core.php:448
+#: ../include/app/core.php:484
 msgid "Capture The Flag"
 msgstr ""
 
-#: ../include/app/core.php:449
+#: ../include/app/core.php:485
 msgid "Single choice"
 msgstr ""
 
-#: ../include/app/core.php:450
+#: ../include/app/core.php:486
 msgid "Multiple choice"
 msgstr ""
 
-#: ../include/app/core.php:451
+#: ../include/app/core.php:487
 msgid "Open-ended"
 msgstr ""
 
-#: ../include/app/core.php:452
-msgid "Video"
-msgstr ""
-
-#: ../include/app/core.php:453
-msgid "Article"
-msgstr ""
-
-#: ../include/app/core.php:454
+#: ../include/app/core.php:490
 msgid "Unknown"
 msgstr ""
 

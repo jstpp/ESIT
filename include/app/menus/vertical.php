@@ -91,7 +91,7 @@
 		include_plugins_for("vertical_menu_administration");
 	?>
 	<p class="category_title"><?php echo(__("Content")); ?></p>
-	<a href="?p=channels" id="contentsets"><i class='fas fa-pencil-ruler'></i>&emsp;<?php echo(__("Discover")); ?></a>
+	<a href="?p=search" id="search"><i class='fas fa-search'></i>&emsp;<?php echo(__("Discover")); ?></a>
 	<a href="?p=mysolutions" id="mysolutions"><i class='fas fa-paper-plane'></i>&emsp;<?php echo(__("My solutions")); ?></a>
 	<?php
 		include_plugins_for("vertical_menu_problemsets");

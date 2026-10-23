@@ -229,19 +229,16 @@
 
 	function check_session_timeout(): void
 	{
-		if (isset($_SESSION['SESSION_TIMEOUT']))
+		if (!isset($_SESSION['SESSION_TIMEOUT'])) force_to_login();
+		if ($_SESSION['SESSION_TIMEOUT'] < time())
 		{
-			if ($_SESSION['SESSION_TIMEOUT'] < time())
-			{
-				session_destroy();
-				force_to_login();
-				die;
-			} else {
-				$_SESSION['SESSION_TIMEOUT'] = time() + 14400;
-			}
-		} else {
+			session_destroy();
 			force_to_login();
+			die;
+		} else {
+			$_SESSION['SESSION_TIMEOUT'] = time() + 14400;
 		}
+
 	}
 
 	function net_check_if_trusted(): bool

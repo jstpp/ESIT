@@ -2,7 +2,7 @@ FROM node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18
 
 WORKDIR /build
 
-COPY ./setup/npm/package.json ./setup/npm/package-lock.json ./
+COPY ./setup/npm/package.json ./
 COPY ./setup/npm/setup/ ./setup/
 
 RUN npm install

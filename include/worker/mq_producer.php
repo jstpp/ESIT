@@ -126,7 +126,7 @@
         }
     } catch (Throwable $t) {
         extended_exception_handler($t);
-        redirect("/app/index.php?p=channels&error");
+        redirect("/app/index.php?p=search&error");
     }
 
     $submission_type = "normal";
@@ -182,7 +182,7 @@
         }
     } catch (Throwable $t) {
         extended_exception_handler($t);
-        redirect("/app/index.php?p=channels&error");
+        redirect("/app/index.php?p=search&error");
     }
 
     redirect("index.php?p=algresult&sid=".$submission_id);

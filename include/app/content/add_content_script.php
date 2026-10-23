@@ -75,10 +75,10 @@
             $pdo->rollBack();
         }
         extended_exception_handler($t);
-        redirect("index.php?p=channels&error");
+        redirect("index.php?p=search&error");
     }
 
-    if(!$content_id) redirect("index.php?p=channels&error");
+    if(!$content_id) redirect("index.php?p=search&error");
     
     switch($_POST['content_type'])
     {
@@ -98,7 +98,7 @@
                     delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/");
                 }
                 extended_exception_handler($t);
-                redirect("index.php?p=channels&error");
+                redirect("index.php?p=search&error");
             }
 
             try {
@@ -117,7 +117,7 @@
                     delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/");
                 }
                 extended_exception_handler($t);
-                redirect("index.php?p=channels&error");
+                redirect("index.php?p=search&error");
             }
             break;
         case 7:
@@ -133,11 +133,11 @@
                     $pdo->rollBack();
                 }
                 extended_exception_handler($t);
-                redirect("index.php?p=channels&error");
+                redirect("index.php?p=search&error");
             }
             break;
         default:
-            redirect("index.php?p=channels&error");
+            redirect("index.php?p=search&error");
             break;
     }
 
