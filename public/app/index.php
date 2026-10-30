@@ -1,5 +1,6 @@
 <?php
 	include(__DIR__.'/../../include/app/core.php');
+	if(boolval(get_misc_value('plugin_debugging'))) $start_time = hrtime(true);
 
 	if(!is_logged_in()) force_to_login();
 	check_session_timeout();
@@ -43,8 +44,8 @@
 
 	if (!has_permission($page_config['permission'])) kick();
 
-	if (isset($script_config['required'])) {
-        foreach ($script_config['required'] as $req) {
+	if (isset($page_config['required'])) {
+        foreach ($page_config['required'] as $req) {
             if (!isset($_GET[$req]) && !isset($_POST[$req])) kick();
         }
     }
@@ -187,6 +188,20 @@
 					}
 				</script>
 			<?php endif; ?>
+
+			<?php
+				if(boolval(get_misc_value('plugin_debugging')))
+				{
+					$time = (hrtime(true)-$start_time)/1e9;
+					$ip = get_real_client_ip();
+					log_insert(
+						'debug',
+						$ip,
+						"Displayed <code>{$current_p}</code> in {$time} seconds.",
+						"{$ip} displayed {$current_p} in {$time} seconds."
+					);
+				}
+			?>
 		</div>
 	</body>
 </html>

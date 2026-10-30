@@ -80,8 +80,32 @@
     .diag_warning .circle, .diag_exception .circle {
         background: orange;
     }
+    .diag_debug .circle, .diag_debug .circle {
+        background: gray;
+    }
     .diag_info .circle {
         background: var(--highlight-color);
+    }
+
+    #pages_switch {
+        float: right;
+        margin-right: 5%;
+        margin-bottom: 1vmax;
+        display: flex;
+        gap: 0.3vmax;
+    }
+
+    #pages_switch a {
+        background-color: var(--container-hover-bg);
+        color: var(--text);
+        padding: 0.5vmax 1vmax;
+        transition: 0.3s;
+    }
+
+    #pages_switch a:hover, #pages_switch .selected {
+        background-color: var(--text);
+        color: var(--container-hover-bg);
+        padding: 0.5vmax 1vmax;
     }
 </style>
 
@@ -90,14 +114,30 @@
 </center>
 <div class="window">
 	<h2 class="window_title"><?php echo(__("Events log")); ?></h2>
+    <div id="pages_switch">
+        <?php
+            $page_id = filter_var($_GET['page'] ?? null, FILTER_VALIDATE_INT);
+            $page_id = ($page_id && $page_id>0) ? $page_id : 1;
+            $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM LOGS WHERE category="fatal" OR category="error" OR category="exception" OR category="debug"');
+            $db_query->execute();
+            $records_count = $db_query->fetch()['count'];
+
+            for($i = 1; $i < ceil($records_count/20); $i++) 
+            {
+                echo('<a href="?p=logs&page='.$i.'"');
+                if($i==$page_id) echo('class="selected"');
+                echo('>'.$i.'</a>');
+            }
+        ?>
+    </div>
+
 	<?php
-        $db_query = $pdo->prepare('SELECT * FROM LOGS WHERE category="fatal" OR category="error" OR category="exception" ORDER BY time DESC ');
-        $db_query->execute();
+        $db_query = $pdo->prepare('SELECT * FROM LOGS WHERE category="fatal" OR category="error" OR category="exception" OR category="debug" ORDER BY time DESC LIMIT 20 OFFSET :offset');
+        $db_query->execute(['offset' => (($page_id - 1) * 20)]);
 
         $count = 0;
         while($row = $db_query->fetch())
         {
-            $count++;
             echo('<div class="diagnostics_feedback diag_'.htmlentities($row['category']).'">
                 <div style="display: flex; flex-direction: row; width: 100%; align-items: center;">
                     <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.$row['content'].'</p>
@@ -108,7 +148,7 @@
                 </code>
             </div>');
         }
-        if($count==0)
+        if($records_count==0)
         {
             echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
                 <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.__("Yay! There is no issues at the moment!").'</p>

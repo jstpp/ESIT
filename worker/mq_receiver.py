@@ -19,12 +19,12 @@ def connect_to_queue():
     try:
         credentials = pika.PlainCredentials(
             config.rabbitmq_user, config.rabbitmq_password
-        )  # Make some changes here
+        )
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(
-                host="rabbitmq", port="5672", credentials=credentials
+                host="rabbitmq", port="5672", credentials=credentials  # Can be customized
             )
-        )  # and here!
+        )
         channel = connection.channel()
         print(str(time.ctime()) + " | Successfully connected to the queue.")
     except Exception as e:

@@ -128,13 +128,12 @@ def prepare(data):
             str(time.ctime())
             + f' | Unpacking user\'s submission to problem {data["problem_id"]} received from {data["listenerUrl"]}...'
         )
-        decode_and_extract_zip(
+        return decode_and_extract_zip(
             data["submission_file"],
             str(os.path.dirname(os.path.realpath(__file__)))
             + "/../solutions/"
             + str(data["submission_id"]),
         )
-        return True
     except Exception as exception:
         print(str(time.ctime()) + f" | EXCEPTION | lib.py: prepare(): {exception}")
         return False

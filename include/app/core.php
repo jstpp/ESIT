@@ -452,6 +452,23 @@
 		return $target_root_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
 	}
 
+	function log_insert(string $category, string $ip, string $content, string $details): bool
+    {
+        try {
+            global $pdo;
+
+            $db_query = $pdo->prepare('INSERT INTO LOGS (category, ip, content, details) VALUES (:category, :ip, :content, :details)');
+            $db_query->execute(['category' => $category, 
+                                'ip' => $ip, 
+                                'content' => $content, 
+                                'details' => $details]);
+
+            return True;
+        } catch (Throwable) {
+            return False;
+        }
+    }
+
 	function parse_flash_messages(): void
 	{
 		if(isset($_SESSION['flash_messages']) && count($_SESSION['flash_messages'])>0)

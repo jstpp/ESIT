@@ -1,5 +1,6 @@
 <?php
 	include(__DIR__.'/../../include/app/core.php');
+	if(boolval(get_misc_value('plugin_debugging'))) $start_time = hrtime(true);
 
 	$allowed_scripts = [
 		'register' 		      		=> ['mode' => 'register', 'permission' => 'main.register', 'path' => 'app/user_management/register_new_user.php'],
@@ -90,4 +91,16 @@
     }
 
 	include(__DIR__.'/../../include/'.$script_config['path']);
+
+	if(boolval(get_misc_value('plugin_debugging')))
+	{
+		$time = (hrtime(true)-$start_time)/1e9;
+		$ip = get_real_client_ip();
+		log_insert(
+			'debug',
+			$ip,
+			"Executed <code>{$current_r}</code> in {$time} seconds.",
+			"{$ip} executed {$current_r} in {$time} seconds."
+		);
+	}
 ?>
