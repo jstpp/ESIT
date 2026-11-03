@@ -8,6 +8,7 @@
 		<h2 style="text-align: center;">'.__("Add new channel").'</h2>
 		<br />
 		<form method="POST" id="new_channel_form" action="process.php?r=create_channel" enctype="multipart/form-data">
+			<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
 			<input name="channel_setname" class="forminput_2" type="text" placeholder="'.__("Channel name").'*" onChange="validate_data_f();" required/>
 			<br />
 			<textarea name="channel_description" class="forminput_2" placeholder="'.__("Channel description").'*" onChange="validate_data_f();" required></textarea>

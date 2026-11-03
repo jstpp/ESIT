@@ -89,6 +89,7 @@
 	<h2 class="window_title"><?php echo(__("Security")); ?></h2>
 	<h3 style="margin-left: 5%;"><?php echo(__("Password change")); ?></h3>
 	<form id="change_password_form" method="POST" action="process.php?r=change_password" style="margin-left: 5%;">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<input type="password" class="forminput" name="password_old" placeholder="<?php echo(__("Old password")); ?>" required/>
 		<input type="password" class="forminput" name="password_new1" placeholder="<?php echo(__("New password")); ?>" required/>
 		<input type="password" class="forminput" name="password_new2" placeholder="<?php echo(__("Repeat new password")); ?>" required/>
@@ -99,6 +100,7 @@
 <div class="window">
 	<h2 class="window_title"><?php echo(__("Appearance")); ?></h2>
 	<form id="appearance_form" method="POST" action="process.php?r=settings_appearance" style="margin-left: 5%;">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<label for="app_dark_theme"><?php echo(__("Dark mode")); ?>:&emsp;</label>
 		<select id="app_dark_theme" name="app_dark_theme" class="forminput">
 			<option value="1" <?php if(!isset($settings->{'dark_mode'}) or isset($settings->{'dark_mode'}) and $settings->{'dark_mode'}=="1") { echo('selected'); } ?>><?php echo(__("On")); ?></option>

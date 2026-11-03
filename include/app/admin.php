@@ -76,7 +76,9 @@
 
 		background-color:rgb(255, 0, 0);
 		color: white;
-		border-radius: 5px;
+		border-radius: 0.5vmax;
+		font: inherit;
+		border: none;
 		cursor: pointer;
 		transition: 0.2s;
 		text-decoration: none;
@@ -237,6 +239,7 @@
 		<h2 style="text-align: center;"><?php echo(__("Add new user")); ?></h2>
 		<br />
 		<form method="POST" id="user_form">
+			<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 			<input name="username" class="forminput_2" type="text" placeholder="<?php echo(__("Username")); ?>" />
 			<input name="name" class="forminput_2" type="text" placeholder="<?php echo(__("Name")); ?>" />
 			<input name="surname" class="forminput_2" type="text" placeholder="<?php echo(__("Surname")); ?>" />
@@ -261,7 +264,10 @@
 		<br />
 		<a class="button" id="button_1" onClick="document.getElementById('user_form').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;<?php echo(__("Add new user")); ?></a>
 		<a class="button" id="button_2" onClick="document.getElementById('user_form').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-edit"></i>&nbsp;<?php echo(__("Save changes")); ?></a>
-		<a class="button_red" id="button_3" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-remove"></i>&nbsp;<?php echo(__("Delete user")); ?></a>
+		<form method="POST" id="remove_user_form" action="">
+			<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+			<input type="submit" class="button_red" id="button_3" style="margin-right: 1%; margin-bottom: 1%;" value="<?php echo(__("Delete user")); ?>">
+		</form>
 		<br style="clear: both;"/>
 	</div>
 </div>
@@ -317,7 +323,10 @@
 								${repo.description || '<?php echo(__("No description")); ?>'}
 							</p>
 							<a href="${repo.html_url}" target="_blank" class="download_button"><i class="fa fa-external-link"></i></a>
-							<a href="process.php?r=download_plugin&repo=` + repo.full_name + `&branch=` + repo.default_branch + `" class="download_button"><i class="fa fa-download"></i></a>
+							<form method="POST" id="download_plugin_form_` + repo.full_name + `" action="process.php?r=download_plugin&repo=` + repo.full_name + `&branch=` + repo.default_branch + `">
+								<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+								<a class="download_button" onClick="getElementById('download_plugin_form_` + repo.full_name + `').submit();"><i class="fa fa-download"></i></a>
+							</form>
 						`;
 						resultsDiv.appendChild(repoDiv);
 					});
@@ -343,6 +352,7 @@
 <div class="window" id="initial_parameters">
 	<h2 class="window_title"><?php echo(__("Initial parameters")); ?></h2>
 	<form method="POST" action="process.php?r=modify_config&category=general">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<?php
 			if(boolval(get_misc_value('plugin_portal'))) 
 			{
@@ -431,6 +441,7 @@
 <div class="window" id="plugins">
 	<h2 class="window_title"><?php echo(__("System plugins")); ?></h2>
 	<form method="POST" action="process.php?r=modify_config&category=plugin">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<div class="dark-box">
 			<label class="switch-checkbox">
 				<input type="checkbox" name="plugin_portal" value="1" id="plugin_portal" <?php echo(boolval(get_misc_value('plugin_portal')) ? 'checked' : ''); ?>>
@@ -486,6 +497,7 @@
 	<br />
 	<h2 class="window_title"><?php echo(__("Community plugins")); ?></h2>
 	<form method="POST" action="process.php?r=modify_config&category=community_plugin">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<?php
 			$plugins = array_slice(scandir("../../include/plugins/"),2);
 			
@@ -589,7 +601,7 @@
 			document.querySelector('#user_dialog input[name="surname"]').value = document.querySelector('#user_'+userid+' #surname').innerHTML;
 			document.querySelector('#user_dialog input[name="org"]').value = document.querySelector('#user_'+userid+' #org').innerHTML;
 			document.querySelector('#user_dialog input[name="mail"]').value = document.querySelector('#user_'+userid+' #mail').innerHTML;
-			document.querySelector('#user_dialog #button_3').href = 'process.php?r=remove_user&uid='+userid;
+			document.getElementById('remove_user_form').action = 'process.php?r=remove_user&uid='+userid;
 
 			document.querySelector('#user_dialog input[name="password"]').style.display = 'none';
 

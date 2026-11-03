@@ -67,7 +67,8 @@
 
 		background-color:rgb(255, 0, 0);
 		color: white;
-		border-radius: 5px;
+		border-radius: 0.5vmax;
+		border: none;
 		cursor: pointer;
 		transition: 0.2s;
 	}
@@ -143,7 +144,10 @@
 					<td>'.htmlentities($article_time).'</td>
 				</tr>
 			</table>
-			<a class="deletebutton" href="process.php?r=deletepost&id='.htmlentities($article_id).'">'.__("Delete").'</a>
+			<form method="POST" action="process.php?r=deletepost&id='.htmlentities($article_id).'">
+				<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
+				<input type="submit" class="deletebutton" value="'.__("Delete").'">
+			</form>
 			<a class="button" href="?p=modifypost&id='.htmlentities($article_id).'">'.__("Modify").'</a>
 			<a class="button" href="../content.php?id='.htmlentities($article_id).'">'.__("Read").'</a>
 			<br style="clear: both;"/>
@@ -156,6 +160,7 @@
 <div class="window">
 	<h2 class="window_title"><?php echo(__("General settings")); ?></h2>&emsp;
 	<form id="misc_general_form" method="POST" action="process.php?r=modify_resources&mode=general">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<div class="window_card" style="display: flex; align-items: center;"> 
 			<i class="fa fa-keyboard" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="g_title" placeholder="<?php echo(__("Website title")); ?>" value="<?php echo(get_misc_value('general_title')); ?>" />
 		</div>
@@ -204,6 +209,7 @@
 <div class="window">
 	<h2 class="window_title"><?php echo(__("Events timeline")); ?></h2>
 	<form id="resources_terms_form" method="POST" action="process.php?r=modify_resources&mode=terms" enctype="multipart/form-data">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<?php
 			$db_query = $pdo->prepare('SELECT * FROM TERMS;');
 			$db_query->execute();
@@ -294,6 +300,7 @@
 		}
 	?>
 	<form id="misc_social_media_form" method="POST" action="process.php?r=modify_resources&mode=socialmedia">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<div class="window_card" style="display: flex; align-items: center;"> 
 			<i class="fa-brands fa-youtube" style="font-size: 2vw;"></i>&emsp;<input class="forminput" style="width: 80%" type="text" name="yt_href" placeholder="<?php echo(__("Link to")); ?> YoutTube" value="<?php if(isset($socialmedia_yt)) echo($socialmedia_yt['misc_value']); ?>" />
 		</div>
@@ -327,6 +334,7 @@
 		<h3><?php echo(__("Queue")); ?>:</h3>
 	</div>
 	<form id="resources_docs_form" method="POST" action="process.php?r=modify_resources&mode=docs" enctype="multipart/form-data">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<div class="window_card window_card_document" id="document_1">
 			<input class="forminput" type="text" name="document_name_1" placeholder="<?php echo(__("Document title")); ?>" />&emsp;
 			<input type="file" name="document_file_1"/>
@@ -397,6 +405,7 @@
 	<h3><?php echo(__("Queue")); ?>:</h3>
 	</div>
 	<form id="resources_quests_form" method="POST" action="process.php?r=modify_resources&mode=quests" enctype="multipart/form-data">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<div class="window_card window_card_quest" id="quest_1">
 			<input class="forminput" type="text" name="quest_name_1" placeholder="<?php echo(__("Problem name")); ?>" />&emsp;
 			<input type="file" name="quest_file_1"/>
@@ -463,6 +472,7 @@
 		<h3><?php echo(__("Queue")); ?>:</h3>
 	</div>
 	<form id="resources_logo_form" method="POST" action="process.php?r=modify_resources&mode=logo" enctype="multipart/form-data">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<div class="window_card window_card_logo" id="logo_1">
 			<input class="forminput" type="text" name="logo_name_1" placeholder="<?php echo(__("Title")); ?>" />&emsp;
 			<input class="forminput" type="text" name="logo_href_1" placeholder="<?php echo(__("URL")); ?>" />&emsp;
@@ -513,6 +523,7 @@
 	</script>
 </div>
 <form id="modify_content_form" method="POST" action="process.php?r=modify_content">
+	<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 	<textarea id="editor_send_content" name="editor_send_content" style="display: none;" readonly></textarea>
 </form>
 <div class="window">

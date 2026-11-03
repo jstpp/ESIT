@@ -145,6 +145,7 @@
 	<br />
 	<br />
 	<form method="POST" action="process.php?r=add_content&sid=<?php echo(htmlentities($setid)); ?>" enctype="multipart/form-data" id="newcontentform">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<div class="window" id="main_info">
 			<h2 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Basic information")); ?></h2>
 			<input type="text" name="content_title" onChange="validate_data();" placeholder="<?php echo(__("Content title")); ?>" class="forminput" style="margin-left: 2.5%; width: 91.75%;" required />

@@ -1,5 +1,5 @@
 <?php
-    if(!is_logged_in() || !has_permission('main.channels.archive_channel'))) kick();
+    if(!is_logged_in() || !has_permission('main.channels.archive_channel')) kick();
     if(!isset($_GET['cid']) || filter_var($_GET['cid'], FILTER_VALIDATE_INT)<=0) redirect("index.php?p=search&error");
 
     try

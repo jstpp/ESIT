@@ -58,6 +58,7 @@
 <div class="window">
 	<h3 class="window_title"><?php echo(__("Grade")); ?></h3>
 	<form id="rate_form" method="POST" action="process.php?r=check_form&id=<?php echo($row['SUBMISSION_ID']); ?>">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<input type="number" class="forminput" id="pts" name="form_pts" style="margin-left: 5%;" min="0" max="<?php echo($row['maxpoints']); ?>"/>&emsp;/&emsp;<?php echo($row['maxpoints']); ?>
 		<br />
 		<h3 class="window_title"><?php echo(__("Optional comment")); ?></h3>

@@ -280,6 +280,7 @@
 		<h2 style="text-align: center;">'.__("New block").' ('.__("problemset").')</h2>
 		<br />
 		<form method="POST" action="process.php?r=create_problemset&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" id="new_block_form">
+			<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
 			<input name="new_block_form_name" id="new_block_form_name" class="forminput_2" type="text" placeholder="'.__("Block title").'" required/>
 			<br />
 			<br />
@@ -336,6 +337,7 @@
 										<h2 style="text-align: center;">'.htmlentities($set['title']).'</h2>
 										<br />
 										<form method="POST" action="process.php?r=modify_problemset&sid='.$set['SET_ID'].'" id="update_block_form_'.$set['SET_ID'].'">
+											<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
 											<input name="update_block_form_name" id="update_block_form_name" class="forminput_2" type="text" placeholder="'.__("Block title").'" value="'.htmlentities($set['title']).'" required/>
 											<br />
 											<br />
@@ -517,6 +519,7 @@
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
+						'X-CSRF-Token': '<?php echo($_SESSION['CSRF_TOKEN']); ?>'
 					},
 					body: JSON.stringify(layoutData)
 				})
@@ -639,7 +642,10 @@
 			if(has_permission('main.channels.archive_channel'))
 			{
 				echo('
-				<a class="button" href="process.php?r=archive_channel&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" style="float: left; margin-left: 2.5%;"><i class=\'fas fa-archive\'></i>&nbsp;&nbsp;'.($chisarchived==1 ? __("Unarchive") : __("Archive")).'</a>
+				<form method="POST" action="process.php?r=archive_channel&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'">
+					<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
+					<input type="submit" class="button" style="border: none; font: inherit; float: left; margin-left: 2.5%;" value="'.($chisarchived==1 ? __("Unarchive") : __("Archive")).'">
+				</form>
 				<br style="clear: both;"/>');
 			}
 		?>

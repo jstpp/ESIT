@@ -5,7 +5,7 @@ WORKDIR /build
 COPY ./setup/npm/package.json ./
 COPY ./setup/npm/setup/ ./setup/
 
-RUN npm install
+RUN npm install --save-exact
 RUN npm ci
 RUN npm run build-chartjs
 RUN npm run build-sortablejs

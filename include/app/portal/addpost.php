@@ -90,6 +90,7 @@
 </center>
 <div class="window">
 	<form id="new_post" method="POST" action="process.php?r=addpost" enctype="multipart/form-data">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<center>
 			<br />
 			<label for="fname"><?php echo(__("Title")); ?>:</label>

@@ -460,7 +460,7 @@
 
 			if (
 				getimagesize($img["tmp_name"]) == false 
-				|| ($img["size"] > 20000000)
+				|| ($img["size"] > 20000000 || filesize($img["tmp_name"]) > 20000000)
 				|| !array_key_exists($mime_type, $allowed_types)
 			) 
 			{
@@ -673,7 +673,7 @@
 	function regenerate_csrf_token(): bool
 	{
 		try {
-			if(empty($_SESSION['CSRF_TOKEN'])) $_SESSION['CSRF_TOKEN'] = bin2hex(random_bytes(32));
+			$_SESSION['CSRF_TOKEN'] = bin2hex(random_bytes(32));
 		} catch (Throwable $t)
 		{
 			extended_exception_handler($t);
