@@ -40,17 +40,17 @@
 
     $content = json_decode(openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, $options=0, base64_decode($data['nonce']), $tag), true);
     
-    if(isset($content['worker_addr']))
+    if(!isset($content['worker_addr']))
     {
-        if(is_dir(__DIR__.'/../alg/'.$content['problem_id']."/"))
-        {
-            echo(base64_encode(file_get_contents(zip_inout($content['problem_id']))));
-        } else {
-            echo('Problem ('.$content["problem_id"].') inout not found. '.__DIR__.'/../alg/'.$content['problem_id']." doesn't exist");
-            die;
-        }
+        header("HTTP/1.0 403 Forbidden");
+        die;
+    }
+    
+    if(is_dir(__DIR__.'/../alg/'.$content['problem_id']."/"))
+    {
+        echo(base64_encode(file_get_contents(zip_inout($content['problem_id']))));
     } else {
-        header("HTTP/1.0 404 Not Found");
+        echo('Problem ('.$content["problem_id"].') inout not found. '.__DIR__.'/../alg/'.$content['problem_id']." doesn't exist");
         die;
     }
 ?>

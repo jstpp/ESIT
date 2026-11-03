@@ -7,8 +7,10 @@ To start the worker without running entire [compose.yaml](../compose.yaml) You s
 
 When proper environment is ready (make sure, that IP of your worker is on the proper list - You can add IPs in GUI) You can start worker using:
 ```bash
-python3 /worker/mq_receiver.py
+python3 /worker/mq_receiver.py 1
 ```
+The last argument is a number of workers that will be started. Each worker is able to process only one job at once so consider adjusting workers' number to Your needs.
+
 That's it.
 
 ## Worker's logs and config file

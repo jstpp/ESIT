@@ -135,7 +135,7 @@
 				background-color: var(--container-bg);
 
 				box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg);
-				border-radius: 1vw;
+				border-radius: 0.5vw;
 			}
 
 			.window .window_title {
@@ -147,6 +147,7 @@
 				text-decoration: none;
 				color: var(--highlight-color);
 			}
+
 			.button {
 				padding: 1vw 1vw;
 				float: right;
@@ -155,12 +156,71 @@
 
 				background-color: var(--highlight-color);
 				color: white !important;
-				border-radius: 5px;
+				border-radius: 0.5vmax;
 				cursor: pointer;
 				transition: 0.2s;
 			}
+
 			.window .button:hover {
 				background-color:rgb(0, 121, 173);
+			}
+
+			.dark-box {
+				background-color: var(--container-hover-bg);
+				padding: 1vmax;
+				border-radius: 0.5vmax;
+				width: auto;
+				margin-top: 0.5vmax;
+				margin-left: 5%;
+				margin-right: 5%;
+			}
+			
+			.forminput_2 {
+				background: transparent;
+				outline: none;
+				border: none;
+				border-bottom: 0.3vmin solid rgb(204, 204, 204);
+				font: inherit;
+				width: 98%;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 2vmin;
+				padding: 1% 1%;
+			}
+
+			.forminput, .dark-box input[type="text"], .dark-box input[type="password"]
+			{
+				background-color: var(--container-hover-bg-textbox);
+				outline: none;
+				border: none;
+				color: var(--text);
+				font: inherit;
+				padding: 0.5vmax;
+				margin-top: 0.5vmax;
+				border-radius: 0.5vmax;
+				/*margin-right: 5%;*/
+			}
+
+			.data-invalid {
+				color: rgb(184, 1, 0);
+				margin-left: 1vmax;
+			}
+
+			.data-invalid:before {
+				position: relative;
+				left: -1vmax;
+				content: "✖";
+			}
+
+			.data-valid {
+				color: rgb(5, 149, 0);
+				margin-left: 1vmax;
+			}
+
+			.data-valid:before {
+				position: relative;
+				left: -1vmax;
+				content: "✔";
 			}
 
 		</style>
@@ -177,6 +237,7 @@
 		<div id="page_content">
 			<?php
 				include(__DIR__.'/../../include/app/profiles/profile.php');
+				include(__DIR__.'/../../include/app/channels/add_channel_panel.php');
 				include(__DIR__.'/../../include/app/'.$page_config['path']);
 			?>
 			<?php if (isset($page_config['menu_id'])): ?>

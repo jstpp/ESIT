@@ -71,19 +71,6 @@
 	.org_user a:hover {
 		background-color: #6ed4ff;
 	}
-	.window .forminput, .window .forminput_a {
-		border: 0; 
-		padding: 1vw 1.5vw; 
-		color: var(--text); 
-		background-color: var(--container-hover-bg-textbox); 
-		font-family: inherit;
-		transition: 0.4s;
-		outline: none;
-	}
-	.window .forminput_a:hover {
-		background-color: var(--container-hover-bg); 
-		cursor: pointer;
-	}
 </style>
 <script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <center>
@@ -105,10 +92,9 @@
 		<input type="password" class="forminput" name="password_old" placeholder="<?php echo(__("Old password")); ?>" required/>
 		<input type="password" class="forminput" name="password_new1" placeholder="<?php echo(__("New password")); ?>" required/>
 		<input type="password" class="forminput" name="password_new2" placeholder="<?php echo(__("Repeat new password")); ?>" required/>
-		<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('change_password_form').submit();"><?php echo(__("Change the password")); ?></a>
+		<a class="button" style="margin-left: 5%;" onClick="document.getElementById('change_password_form').submit();"><?php echo(__("Change the password")); ?></a>
 	</form>
-	<br />
-	<br />
+	<br style="clear: both;"/>
 </div>
 <div class="window">
 	<h2 class="window_title"><?php echo(__("Appearance")); ?></h2>
@@ -176,10 +162,8 @@
 	</script>
 	<br />
 	<br />
-	<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('appearance_form').submit();"><?php echo(__("Save appearance settings")); ?></a>
-	<br />
-	<br />
-	<br />
+	<a class="button" style="margin-left: 5%;" onClick="document.getElementById('appearance_form').submit();"><?php echo(__("Save appearance settings")); ?></a>
+	<br style="clear: both;"/>
 </div>
 <?php
 	include_plugins_for("users_settings_personalization");

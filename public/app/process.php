@@ -73,6 +73,7 @@
 			break;
 		case 'register':
 			if(is_logged_in()) kick();
+			if(!has_permission($script_config['permission'])) kick();
 			break;
 		case 'worker-api':
 			if(!net_check_if_trusted()) kick();

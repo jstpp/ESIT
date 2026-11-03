@@ -144,7 +144,7 @@
 
 			if($isfound==0)
 			{
-				echo("<center>".__("There's nothing here yet!")."!</center>");
+				echo("<center>".__("There's nothing here yet!")."</center>");
 			}
 		?>
 	</div>

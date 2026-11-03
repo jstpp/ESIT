@@ -17,21 +17,29 @@
         foreach($correct_anwsers as $q)
         {
             if(!trim($q)) continue;
+
             $count++;
             $pts = 1;
 
-            foreach(str_split($q) as $x)
+            $correct = str_split(trim($q));
+            $submitted = [];
+
+            foreach(['a', 'b', 'c', 'd'] as $x)
             {
-                if(isset($_POST[$count."_".$x]) and $_POST[$count."_".$x]==$x)
+                if(isset($_POST[$count."_".$x]))
                 {
-                    unset($_POST[$count."_".$x]);
-                } else if (isset($_POST[$count]) and $_POST[$count]==$x)
-                {
-                    unset($_POST[$count]);
-                } else {
-                    $pts = 0;
+                    $submitted[] = $x;
                 }
             }
+
+            sort($correct);
+            sort($submitted);
+
+            if($correct !== $submitted)
+            {
+                $pts = 0;
+            }
+
             $a_ok += $pts;
         }
 

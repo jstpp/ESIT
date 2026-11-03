@@ -13,7 +13,7 @@
         $role_priority = ($role_priority_fetch = $db_query->fetch()) ? $role_priority_fetch['priority'] : null;
         if (!$role_priority || $role_priority<$_SESSION['AUTH_ROLE']['priority'] || $role_priority<1) redirect("index.php?p=admin&error#users");
 
-        $user_id = filter_var($_GET['uid'], FILTER_VALIDATE_INT) ?? null;
+        $user_id = $_GET['uid'] ?? null;
         if(!$user_id) kick();
 
         $pdo->beginTransaction();

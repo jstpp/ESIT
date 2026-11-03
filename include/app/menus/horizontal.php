@@ -11,12 +11,14 @@
 		background-color: var(--horizontal-menu-bg);
 	}
 	#horizontal_menu a {
-		margin: 0;
-		padding: 0.8vw 1.2vw;
+		margin-top: 0.4vw;
+		margin-right: 0.2vw;
+		padding: 0.4vw 1.2vw;
 
 		display: block;
 		float: right;
 		text-decoration: none;
+		border-radius: 0.5vmax;
 
 		color: var(--horizontal-menu-text);
 		text-align: center;
@@ -25,13 +27,11 @@
 		user-select: none;
 	}
 	#horizontal_menu a:hover {
-		margin: 0;
-
 		background-color: var(--vertical-menu-bg);
 	}
 </style>
 <div id="horizontal_menu">
-	<a href="../login/process.php?s=logout"><i class='fas fa-door-open'></i>&emsp;<?php echo(__("Log out")); ?></a>
+	<a href="../login/process.php?s=logout" style="margin-right: 0.75vw;"><i class='fas fa-door-open'></i>&emsp;<?php echo(__("Log out")); ?></a>
 	<a onClick="document.getElementById('notifications_menu').style.display = 'block';"><i class='fa fa-bell'></i>&emsp;<?php echo(__("Notifications")); ?></a>
 	<?php
 		if(boolval(get_misc_value('plugin_portal')))

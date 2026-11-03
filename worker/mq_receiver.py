@@ -4,6 +4,10 @@ import json
 import os
 import sys
 import time
+import threading
+
+import logging
+from logging.handlers import RotatingFileHandler
 
 import pika
 
@@ -14,8 +18,38 @@ import compilers.java
 import compilers.python
 import tests.run as tests
 
+def setup_logging(log_directory, worker_id):
+    os.makedirs(log_directory, exist_ok=True)
+    log_file = os.path.join(log_directory, f"worker_{worker_id}.log")
 
-def connect_to_queue():
+    formatter = logging.Formatter(
+        fmt=f"%(asctime)s [%(levelname)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+    file_handler = RotatingFileHandler(
+        log_file,
+        maxBytes=10 * 1024 * 1024,
+        backupCount=5,
+        encoding="utf-8",
+    )
+
+    console_handler = logging.StreamHandler(sys.stderr)
+
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[file_handler, console_handler],
+        force=True,
+    )
+
+    logging.captureWarnings(True)
+    return logging.getLogger("esit.worker")
+
+
+def connect_to_queue(logger, t):
     try:
         credentials = pika.PlainCredentials(
             config.rabbitmq_user, config.rabbitmq_password
@@ -26,92 +60,80 @@ def connect_to_queue():
             )
         )
         channel = connection.channel()
-        print(str(time.ctime()) + " | Successfully connected to the queue.")
-    except Exception as e:
-        print(
-            str(time.ctime())
-            + f" | Can't connect to the database: {e}. Trying to reconnect..."
+        logger.info(
+            "Successfully connected to the queue."
         )
-        time.sleep(10)
-        channel = connect_to_queue()
+    except Exception as e:
+        t *= 2
+        logger.error(
+            f"Can't connect to the database: {e}. Trying to reconnect in {t} seconds."
+        )
+        time.sleep(t)
+        channel = connect_to_queue(logger, t)
 
     return channel
 
 
-def prepare_inout(submission):
+def prepare_inout(logger, submission):
     try:
-        print(
-            str(time.ctime())
-            + f' | Preparing inout for submission {submission["submission_id"]}...'
-        )
+        logger.info(f'Preparing inout for submission {submission["submission_id"]}...')
         if os.path.isdir(
             os.path.dirname(os.path.realpath(__file__))
             + "/inout/"
             + str(submission["problem_id"])
         ):
-            print(
-                str(time.ctime())
-                + f' | Inout set for submission {submission["submission_id"]} has been found in ',
-                os.path.dirname(os.path.realpath(__file__))
+            logger.info(
+                f'Inout set for submission {submission["submission_id"]} has been found in {os.path.dirname(os.path.realpath(__file__))
                 + "/inout/"
-                + str(submission["problem_id"]),
+                + str(submission["problem_id"])}'
             )
             return True
         else:
-            print(
-                str(time.ctime())
-                + f' | Inout set for submission {submission["submission_id"]} not found. Asking main server to fill the gap...'
-            )
+            logger.info(f"Inout set for submission {submission["submission_id"]} not found. Asking main server to fill the gap...")
             if api.lib.ask_for_inout(submission):
                 return True
             else:
-                print(
-                    str(time.ctime())
-                    + f' | Inout set for submission {submission["submission_id"]} not found. **Filling the gap failed!**'
-                )
+                logger.error(f"Inout set for submission {submission["submission_id"]} not found. **Filling the gap failed!**")
                 return False
     except Exception as exception:
         raise Exception(f"mq_receiver.py: prepare_inout(): {exception}")
 
 
-def main(EnforcedTesting=True, EnforcedLandlock=True):
+def main(
+    EnforcedTesting=True,
+    QuietTesting=True,  
+    EnforcedLandlock=True,
+    worker_id=1
+):
     try:
-        global logfile
-        logfile = open(
-            os.path.dirname(os.path.realpath(__file__)) + "/logs/worker.log",
-            "a",
-            buffering=1,
+        logger = setup_logging(
+            os.path.join(os.path.dirname(os.path.realpath(__file__)), "logs"),
+            worker_id
         )
-        sys.stdout = logfile
 
-        print(str(time.ctime()) + " | Worker initialization...")
-        print(str(time.ctime()) + " | Testing current configuration...")
-        if not tests.is_ok(quiet=True):
+        logger.info("Worker initialization...")
+        logger.info("Testing current configuration...")
+
+        if not tests.is_ok(QuietTesting):
             if EnforcedTesting:
-                print(
-                    str(time.ctime())
-                    + " | Testing detected errors. Worker initialization has been canceled. To start the worker, fix all errors first."
+                logger.critical(
+                    "Testing detected errors. Worker initialization has been canceled. To start the worker, fix all errors first."
                 )
                 sys.exit(1)
             else:
-                print(
-                    str(time.ctime())
-                    + " | Testing detected errors. Worker initialization should be canceled but EnforcedTesting is set to `false`. Ignored."
+                logger.warning(
+                    "Testing detected errors. Worker initialization should be canceled but EnforcedTesting is set to `false`. Ignored."
                 )
         else:
-            print(str(time.ctime()) + " | Testing finished. No errors found.")
+            logger.info("Testing finished. No errors found.")
 
-        print(
-            str(time.ctime())
-            + " | Logging directory: "
-            + str(os.path.abspath(os.getcwd()))
-            + "/logs/worker.log"
-        )
+        logger.info(f"Logging directory: worker_{worker_id}.log")
+
     except Exception as exception:
         raise Exception(f"mq_receiver.py: main(): {exception}")
 
     try:
-        channel = connect_to_queue()
+        channel = connect_to_queue(logger, 2)
         try:
             from landlockpy import AccessFS, AccessNet, Ruleset
 
@@ -122,47 +144,43 @@ def main(EnforcedTesting=True, EnforcedLandlock=True):
                 rs.allow_port(80, AccessNet.CONNECT_TCP)
                 rs.allow_port(443, AccessNet.CONNECT_TCP)
                 rs.restrict()
-            print(
-                str(time.ctime()) + " | Landlock restrictions initialized successfully."
-            )
+            logger.info("Landlock restrictions initialized successfully.")
         except Exception as e:
             if EnforcedLandlock:
-                print(
-                    str(time.ctime())
-                    + f" | Landlock initialization failed. Worker initialization has been canceled: {e}"
+                logger.critical(
+                    "Landlock initialization failed. Worker initialization has been canceled."
                 )
                 sys.exit(1)
             else:
-                print(
-                    str(time.ctime())
-                    + f" | Landlock initialization failed. It may decrease level of worker security: {e}"
+                logger.warning(
+                    "Landlock initialization failed. It may decrease level of worker security."
                 )
 
         def callback(ch, method, properties, body):
             try:
-                print(str(time.ctime()) + f" | Received {body}")
                 submission = json.loads(body)
+                logger.info(
+                    f"Received submission {submission["submission_id"]}",
+                )
 
-                if not (prepare_inout(submission)):
-                    print(
-                        str(time.ctime())
-                        + f' | An error occured when worker was preparing inout for submission {submission["submission_id"]}.'
+                if not (prepare_inout(logger, submission)):
+                    logger.error(
+                        f"An error occured when worker was preparing inout for submission {submission["submission_id"]}."
                     )
                     raise Exception(
                         "An error occured when worker was preparing inout for submission"
                     )
 
                 api.lib.prepare(submission)
-                logfile.flush()
 
                 if submission["submission_lang"] == "py":
-                    print(str(time.ctime()) + " | Executing PYTHON script.")
+                    logger.info("Executing PYTHON script.")
                     api.lib.send(compilers.python.run(submission), submission)
                 elif submission["submission_lang"] == "cpp":
-                    print(str(time.ctime()) + " | Executing C++ script.")
+                    logger.info("Executing C++ script.")
                     api.lib.send(compilers.cpp.run(submission), submission)
                 elif submission["submission_lang"] == "java":
-                    print(str(time.ctime()) + " | Executing JAVA script.")
+                    logger.info("Executing JAVA script.")
                     api.lib.send(compilers.java.run(submission), submission)
 
             except Exception as e:
@@ -171,10 +189,7 @@ def main(EnforcedTesting=True, EnforcedLandlock=True):
                     requeue=False,
                 )
                 api.lib.send("fail", submission)
-                print(
-                    str(time.ctime())
-                    + f' | Submission {submission["submission_id"]} couldn\'t be evaluated. Sent to DLQ: {e}'
-                )
+                logger.warning(f"Submission {submission["submission_id"]} couldn\'t be evaluated. Sent to DLQ")
             else:
                 channel.basic_ack(
                     delivery_tag=method.delivery_tag,
@@ -184,19 +199,34 @@ def main(EnforcedTesting=True, EnforcedLandlock=True):
             queue="esit", on_message_callback=callback, auto_ack=False
         )
 
-        print(str(time.ctime()) + " | Waiting for messages. To exit press CTRL+C")
-        logfile.flush()
+        logger.info("Waiting for messages. To exit press CTRL+C")
         channel.start_consuming()
     except Exception as exception:
         raise Exception(f"mq_receiver.py: main(): {exception}")
 
 
 if __name__ == "__main__":
+    workers = []
     try:
-        main()
+        if len(sys.argv) != 2:
+            print(f"Usage: {sys.argv[0]} <number_of_workers>")
+            sys.exit(1)
+
+        for i in range(int(sys.argv[1])):
+            workers.append(
+                threading.Thread(
+                    target=main,
+                    kwargs={"worker_id": i + 1},
+                    name=f"worker-{i + 1}"
+                )
+            )
+            workers[i].start()
+
+        for worker in workers:
+            worker.join()
+
     except KeyboardInterrupt:
-        print(str(time.ctime()) + " | Interrupted.")
-        logfile.flush()
+        logging.getLogger("esit.worker").info("Interrupted.")
         try:
             sys.exit(0)
         except SystemExit:

@@ -106,6 +106,7 @@
         background-color: var(--text);
         color: var(--container-hover-bg);
         padding: 0.5vmax 1vmax;
+        border-radius: 0.5vmax;
     }
 </style>
 

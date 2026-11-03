@@ -8,13 +8,13 @@
         || !is_string($_POST['org']) 
         || !is_string($_POST['mail']) 
         || !is_string($_POST['name'])
-        || !is_string($_POST['surname'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
-        if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $_POST['username'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
-        if ($_POST['pass']!=$_POST['pass_repeat']) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
-        if (mb_strlen($_POST['pass'])<8 || mb_strlen($_POST['pass'])>50 || mb_strlen($_POST['username'])<6) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
-        if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
-        if (is_an_user($_POST['username']) || is_an_user($_POST['mail'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
-        if (empty(trim($_POST['name'])) || empty(trim($_POST['surname'])) || empty(trim($_POST['org']))) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        || !is_string($_POST['surname'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error1");
+        if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $_POST['username'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error2");
+        if ($_POST['pass']!=$_POST['pass_repeat']) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error3");
+        if (mb_strlen($_POST['pass'])<8 || mb_strlen($_POST['pass'])>50 || mb_strlen($_POST['username'])<6) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error4");
+        if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error5");
+        if (is_an_user($_POST['username']) || is_an_user($_POST['mail'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error6");
+        if (empty(trim($_POST['name'])) || empty(trim($_POST['surname'])) || empty(trim($_POST['org']))) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error7");
     }
      catch (Throwable $t) {
         extended_exception_handler($t);
@@ -29,8 +29,10 @@
 
         $is_first = ($db_query->fetch()['count']==0) ? True : False;
 
-        $db_query = $pdo->prepare('INSERT INTO USERS (username, password, mail, name, surname, organization) VALUES (:username, :password, :mail, :name, :surname, :org)');
+        $user_id = $pdo->query('SELECT UUID()')->fetchColumn();
+        $db_query = $pdo->prepare('INSERT INTO USERS (USER_ID, username, password, mail, name, surname, organization) VALUES (:uid, :username, :password, :mail, :name, :surname, :org)');
         $db_query->execute([
+            'uid' => $user_id,
             'username' => $_POST['username'], 
             'password' => password_hash($_POST['pass'], PASSWORD_ARGON2ID),
             'mail' => filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL), 
@@ -38,7 +40,6 @@
             'surname' => trim($_POST['surname']), 
             'org' => trim($_POST['org'])
         ]); 
-        $user_id = $pdo->lastInsertId();
 
         $db_query = $pdo->prepare('INSERT INTO AFFILIATION (user_id, role_id) VALUES (:uid, (SELECT DISTINCT ROLE_ID FROM ROLES WHERE role_name=:role_name))');
         $db_query->execute(['uid' => $user_id, 'role_name' => ($is_first) ? 'superadministrator' : 'user']);
@@ -53,7 +54,9 @@
         {
             extended_exception_handler($t2);
         }
+        echo($t);
+        die;
         extended_exception_handler($t);
-        redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error8");
     }
 ?>

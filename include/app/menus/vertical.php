@@ -23,6 +23,8 @@
 		cursor: pointer;
 		transition: 0.2s;
 		user-select: none;
+		border-radius: 0.5vmax;
+		margin: 0.2vmax 0.5vmax 0vmax 0.5vmax;
 	}
 	#vertical_menu a:hover {
 		background-color: var(--container-hover-bg);
@@ -78,7 +80,7 @@
 	<br />
 	<br />
 	<a href="?p=dashboard" id="dashboard"><i class='fas fa-compass'></i>&emsp;<?php echo(__("Dashboard")); ?></a>
-	<a href="?p=settings" id="settings"><i class='fas fa-address-card'></i>&emsp;<?php echo(__("Account settings")); ?></a>
+	<a href="?p=settings" id="settings"><i class='fas fa-cog'></i>&emsp;<?php echo(__("Account settings")); ?></a>
 	<?php
 		if (has_permission('main.display.admin.%') || has_permission('main.display.portal.settings')) echo('<p class="category_title">'.__("Management").'</p>');
 		if (has_permission('main.display.admin.configuration')) echo('<a href="?p=admin" id="admin"><i class=\'fas fa-tools\'></i>&emsp;'.__("Configuration").'</a>');
@@ -92,6 +94,9 @@
 	?>
 	<p class="category_title"><?php echo(__("Content")); ?></p>
 	<a href="?p=search" id="search"><i class='fas fa-search'></i>&emsp;<?php echo(__("Discover")); ?></a>
+	<?php
+		if(has_permission('main.channels.create_channel')) echo('<a onClick="document.getElementById(\'new_channel_pane\').style.display = \'flex\';"><i class=\'fas fa-plus\'></i>&emsp;'.__("Add new channel").'</a>');
+	?>
 	<a href="?p=mysolutions" id="mysolutions"><i class='fas fa-paper-plane'></i>&emsp;<?php echo(__("My solutions")); ?></a>
 	<?php
 		include_plugins_for("vertical_menu_problemsets");

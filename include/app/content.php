@@ -5,10 +5,10 @@
     while($row = $db_query->fetch())
     {
 		$isfound++;
-		$problemtitle = $row['title'];
+		$problemtitle = htmlentities($row['title']);
 		$problemid = $row['id'];
 		$publishtime = $row['publish_time'];
-		$problemauthor = $row['authorname']." ".$row['authorsurname'];
+		$problemauthor = htmlentities($row['authorname'])." ".htmlentities($row['authorsurname']);
 		$maxattempts = $row['maxattempts'];
 		$maxpoints = $row['maxpoints'];
 		$problemtype = $row['type'];

@@ -46,6 +46,7 @@
 		width: 88%;
 
 		background-color: var(--container-hover-bg);
+		border-radius: 0.5vmax;
 		transition: 0.2s;
 		cursor: default;
 		user-select: none;
@@ -98,27 +99,6 @@
 		margin-right: auto;
 		margin-top: 2vmin;
 		padding: 1% 1%;
-	}
-
-	.dark-box {
-		background-color: var(--container-hover-bg);
-		padding: 1vmax;
-		width: auto;
-		margin-top: 0.5vmax;
-		margin-left: 5%;
-		margin-right: 5%;
-	}
-	.dark-box input[type="text"], .dark-box input[type="password"]
-	{
-		background-color: var(--container-hover-bg-textbox);
-		outline: none;
-		border: none;
-		color: var(--text);
-		font: inherit;
-		padding: 0.5vmax;
-		margin-top: 0.5vmax;
-		width: 40%;
-		margin-right: 5%;
 	}
 
 	.tag {
@@ -202,7 +182,7 @@
 	}
 	#settings_menu a {
 		color: var(--highlight-color); 
-		text-decoration: none;
+		text-decoration: underline dotted var(--highlight-color);
 		transition: 0.3s;
 	}
 	#settings_menu a:hover {
@@ -588,8 +568,8 @@
 					<table style="border-spacing: 3vmin;">
 						<tr id="user_'.$row['USER_ID'].'">
 							<td>'.get_roles($row['USER_ID'])[0]['role_name'].'</td>
-							<td><b><span id="org" style="display: none; ">'.$row['organization'].'</span><span id="name">'.$row['name'].'</span> <span id="surname">'.$row['surname'].'</span> (<span id="username">'.$row['username'].'</span>)</b></td>
-							<td><span id="mail">'.$row['mail'].'</span></td>
+							<td><b><span id="org" style="display: none; ">'.htmlentities($row['organization']).'</span><span id="name">'.htmlentities($row['name']).'</span> <span id="surname">'.htmlentities($row['surname']).'</span> (<span id="username">'.htmlentities($row['username']).'</span>)</b></td>
+							<td><span id="mail">'.htmlentities($row['mail']).'</span></td>
 							<td style="text-align: right;">'.__("Last login").': <b>'.$row['lastlogin'].'</b></td>
 						</tr>
 					</table>');

@@ -15,8 +15,10 @@
         if (!$role_priority || $role_priority<$_SESSION['AUTH_ROLE']['priority'] || $role_priority<1) redirect("index.php?p=admin&error#users");
 
         $pdo->beginTransaction();
-        $db_query = $pdo->prepare('INSERT INTO USERS (username, password, mail, name, surname, organization) VALUES (:username, :password, :mail, :name, :surname, :org)');
+        $user_id = $pdo->query('SELECT UUID()')->fetchColumn();
+        $db_query = $pdo->prepare('INSERT INTO USERS (USER_ID, username, password, mail, name, surname, organization) VALUES (:uid, :username, :password, :mail, :name, :surname, :org)');
         $db_query->execute([
+            'uid' => $user_id,
             'username' => $_POST['username'], 
             'password' => password_hash($_POST['password'], PASSWORD_ARGON2ID),
             'mail' => filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL), 
@@ -25,7 +27,7 @@
             'org' => trim($_POST['org'])
         ]);
         $db_query = $pdo->prepare('INSERT INTO AFFILIATION (user_id, role_id) VALUES (:uid, :rid)');
-        $db_query->execute(['uid' => $pdo->lastInsertId(), 'rid' => $_POST['role']]);
+        $db_query->execute(['uid' => $user_id, 'rid' => $_POST['role']]);
 
         $pdo->commit();
     } catch (Throwable $t) {

@@ -50,15 +50,15 @@
 			$count++;
 			echo('<div class="window">
 				<p style="margin-left: 5%;">
-					<b>Pytanie '.$count.': '.$row['question'].'</b>&emsp; 1 pkt<br /><br />
+					<b>Pytanie '.$count.': '.htmlentities($row['question']).'</b>&emsp; 1 pkt<br /><br />
 					<input type="radio" class="choice_option" name="'.$count.'" id="'.$count.'_a" value="a" />
-					<label for="'.$count.'_a">'.$anwsers->{'a'}.'</label><br />
+					<label for="'.$count.'_a">'.htmlentities($anwsers->{'a'}).'</label><br />
 					<input type="radio" class="choice_option" name="'.$count.'" id="'.$count.'_b" value="b" />
-					<label for="'.$count.'_b">'.$anwsers->{'b'}.'</label><br />
+					<label for="'.$count.'_b">'.htmlentities($anwsers->{'b'}).'</label><br />
 					<input type="radio" class="choice_option" name="'.$count.'" id="'.$count.'_c" value="c" />
-					<label for="'.$count.'_c">'.$anwsers->{'c'}.'</label><br />
+					<label for="'.$count.'_c">'.htmlentities($anwsers->{'c'}).'</label><br />
 					<input type="radio" class="choice_option" name="'.$count.'" id="'.$count.'_d" value="d" />
-					<label for="'.$count.'_d">'.$anwsers->{'d'}.'</label><br />
+					<label for="'.$count.'_d">'.htmlentities($anwsers->{'d'}).'</label><br />
 				</p>
 			</div>');
 		}

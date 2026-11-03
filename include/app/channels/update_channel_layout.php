@@ -1,7 +1,7 @@
 <?php
     header('Content-Type: application/json');
 
-    if (!is_logged_in() || !has_permission('main.channels.update_chanel_layout')) {
+    if (!is_logged_in() || !has_permission('main.channels.update_channel_layout')) {
         header('HTTP/1.1 403 Forbidden');
 		die;
     }

@@ -10,4 +10,4 @@
 
 ## Reporting a Vulnerability
 
-If you believe you've identified a security issue with this repo, dont't open new public issue but report it to `jstpp_github@proton.me`.
+If you believe you've identified a security issue with this repo, don't open new public issue but report it to `jstpp_github@proton.me`.

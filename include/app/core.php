@@ -88,6 +88,7 @@
 			
 			return $lang;
 		} catch (Throwable $t) {
+			extended_exception_handler($t);
 			return get_misc_value("general_default_language");
 		}
 	}
@@ -284,7 +285,8 @@
 
 				try {
 					if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) include($plugin_path);
-				} catch (Throwable $e) {
+				} catch (Throwable $t) {
+					extended_exception_handler($t);
 					continue;
 				}
 			}
@@ -299,7 +301,8 @@
 				} else {
 					return False;
 				}
-			} catch (Throwable $e) {
+			} catch (Throwable $t) {
+				extended_exception_handler($t);
 				return False;
 			}
 		}
@@ -311,7 +314,8 @@
 		$dir = opendir($src);
 		try {
 			mkdir($dst, 0777, true);
-		} catch (Throwable $e) {
+		} catch (Throwable $t) {
+			extended_exception_handler($t);
 			closedir($dir);
 			return False;
 		}
@@ -327,7 +331,8 @@
 				}
 			}
 			closedir($dir);
-		} catch (Throwable $e) {
+		} catch (Throwable $t) {
+			extended_exception_handler($t);
 			closedir($dir);
 			return False;
 		}
@@ -425,28 +430,59 @@
 
 		$placeholder = "../img/placeholder.jpeg";
 
-		if(!isset($img) || !isset($target_root_dir) || !isset($img['tmp_name']) || $img['error'] !== UPLOAD_ERR_OK) return $placeholder;
+		if (
+			!isset($img) 
+			|| !isset($target_root_dir) 
+			|| !isset($img['tmp_name']) 
+			|| $img['error'] !== UPLOAD_ERR_OK
+		)
+		{
+			log_insert('debug', get_real_client_ip(), 'load_img_input(): File upload/read unsuccessful', 'load_img_input(): File upload/read unsuccessful');
+			return $placeholder;
+		}
 
 		$base_dir = realpath($target_root_dir);
-		if (!$base_dir || !is_dir($base_dir)) return $placeholder;
+		if (!$base_dir || !is_dir($base_dir))
+		{
+			log_insert('debug', get_real_client_ip(), 'load_img_input(): Base directory doesn\'t exist', 'load_img_input(): Base directory doesn\'t exist');
+			return $placeholder;
+		}
 
-		if(!isset($img, $target_root_dir)) return $placeholder;
+		if(!isset($img, $target_root_dir)) 
+		{
+			log_insert('debug', get_real_client_ip(), 'load_img_input(): Improper filename or path', 'load_img_input(): Improper filename or path');
+			return $placeholder;
+		}
 
 		try {
 			$finfo = new finfo(FILEINFO_MIME_TYPE);
 			$mime_type = $finfo->file($img["tmp_name"]);
 
-			if (getimagesize($img["tmp_name"]) == false) return $placeholder;
-			if ($img["size"] > 20000000) return $placeholder;
-			if (!array_key_exists($mime_type, $allowed_types)) return $placeholder;		
+			if (
+				getimagesize($img["tmp_name"]) == false 
+				|| ($img["size"] > 20000000)
+				|| !array_key_exists($mime_type, $allowed_types)
+			) 
+			{
+				log_insert('debug', get_real_client_ip(), 'load_img_input(): Improper file format', 'load_img_input(): Improper file format');
+				return $placeholder;
+			}	
 
 			$index = hash('sha256', (new DateTime())->format('Uv') . random_bytes(5));
 			$target_file = $base_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
 
-			if (file_exists($target_file)) return $placeholder;
-			if (strpos($target_file, $base_dir) !== 0) return $placeholder;
-			if (!move_uploaded_file($img["tmp_name"], $target_file)) return $placeholder;
-		} catch (Throwable $e) {
+			if (
+				file_exists($target_file)
+				|| strpos($target_file, $base_dir) !== 0
+				|| !move_uploaded_file($img["tmp_name"], $target_file)
+			) 
+			{
+				log_insert('debug', get_real_client_ip(), 'load_img_input(): File moving unsuccessful', 'load_img_input(): File moving unsuccessful');
+				return $placeholder;
+			}
+
+		} catch (Throwable $t) {
+			extended_exception_handler($t);
 			return $placeholder;
 		}
 		return $target_root_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
@@ -464,7 +500,8 @@
                                 'details' => $details]);
 
             return True;
-        } catch (Throwable) {
+        } catch (Throwable $t) {
+			extended_exception_handler($t);
             return False;
         }
     }
@@ -633,6 +670,18 @@
 		return ($count>0) ? True : False;
 	}
 
+	function regenerate_csrf_token(): bool
+	{
+		try {
+			if(empty($_SESSION['CSRF_TOKEN'])) $_SESSION['CSRF_TOKEN'] = bin2hex(random_bytes(32));
+		} catch (Throwable $t)
+		{
+			extended_exception_handler($t);
+			return False;
+		}
+		return True;
+	}
+
 
 	###############################################
 	#       just another extension point		  #
@@ -649,7 +698,8 @@
 
 	try {
 		date_default_timezone_set(get_misc_value('general_timezone'));
-	} catch (Exception $e) {
+	} catch (Exception $t) {
+		extended_exception_handler($t);
 		echo("Invalid timezone.");
 	}
 

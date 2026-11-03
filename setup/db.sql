@@ -16,7 +16,7 @@ SET time_zone = "+01:00";
 
 CREATE TABLE `ALG_TEST_LIST` (
   `TEST_ID` int(11) NOT NULL,
-  `test_author_id` int(11) NOT NULL,
+  `test_author_id` char(36) NOT NULL,
   `problem_id` int(11) NOT NULL,
   `max_time` double NOT NULL,
   `max_memory` int(11) NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `LOGS` (
 
 CREATE TABLE `NOTIFICATIONS` (
   `NOTIFICATION_ID` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` char(36) NOT NULL,
   `time` datetime NOT NULL DEFAULT current_timestamp(),
   `content` text NOT NULL,
   `type` text NOT NULL DEFAULT ('info'),
@@ -118,7 +118,7 @@ CREATE TABLE `PLUGINS` (
 CREATE TABLE `CONTENT` (
   `CONTENT_ID` int(11) NOT NULL,
   `title` text NOT NULL,
-  `author_id` int(11) NOT NULL,
+  `author_id` char(36) NOT NULL,
   `type` int(11) NOT NULL,
   `maxattempts` int(11) NOT NULL,
   `maxpoints` int(11) NOT NULL,
@@ -139,7 +139,7 @@ CREATE TABLE `CONTENT` (
 CREATE TABLE `CHANNELS` (
   `CHANNEL_ID` int(11) NOT NULL,
   `title` text NOT NULL,
-  `author_id` int(11) NOT NULL,
+  `author_id` char(36) NOT NULL,
   `description` text NOT NULL DEFAULT ('Kanał'),
   `img_path` text NOT NULL DEFAULT ('../img/placeholder.jpeg'),
   `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
@@ -156,7 +156,7 @@ CREATE TABLE `CHANNELS` (
 CREATE TABLE `PROBLEMSETS` (
   `SET_ID` int(11) NOT NULL,
   `title` text NOT NULL,
-  `author_id` int(11) NOT NULL,
+  `author_id` char(36) NOT NULL,
   `channel_id` int(11) NOT NULL,
   `depends_on` text NOT NULL DEFAULT ('{"type":"none", "id":"none"}'),
   `publish_time` datetime NOT NULL DEFAULT current_timestamp()
@@ -193,7 +193,7 @@ CREATE TABLE `SUBMISSIONS` (
   `SUBMISSION_ID` int(11) NOT NULL,
   `problem_id` int(11) NOT NULL,
   `problemset_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` char(36) NOT NULL,
   `submission_time` datetime NOT NULL DEFAULT current_timestamp(),
   `verification_time` datetime NOT NULL,
   `score` int(11) NOT NULL,
@@ -237,14 +237,14 @@ CREATE TABLE `TEST_QUESTIONS` (
 --
 
 CREATE TABLE `USERS` (
-  `USER_ID` int(11) NOT NULL,
-  `username` text NOT NULL,
+  `USER_ID` char(36) NOT NULL,
+  `username` varchar(255) NOT NULL,
   `password` text NOT NULL,
-  `mail` text NOT NULL,
+  `mail` varchar(320) NOT NULL,
   `joined` datetime NOT NULL DEFAULT current_timestamp(),
   `lastlogin` datetime NOT NULL DEFAULT current_timestamp(),
-  `name` text NOT NULL,
-  `surname` text NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `surname` varchar(320) NOT NULL,
   `organization` text NOT NULL,
   `settings` text NOT NULL DEFAULT ('{"code_editor_theme":"dracula.css","dark_mode":"1"}')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -272,7 +272,7 @@ CREATE TABLE `ROLES` (
 
 CREATE TABLE `AFFILIATION` (
   `AFFILIATION_ID` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` char(36) NOT NULL,
   `role_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -297,7 +297,7 @@ CREATE TABLE `PERMISSIONS` (
 CREATE TABLE `FOLLOWS` (
   `FOLLOW_ID` int(11) NOT NULL,
   `channel_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` char(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -309,7 +309,7 @@ CREATE TABLE `FOLLOWS` (
 CREATE TABLE `STARS` (
   `STAR_ID` int(11) NOT NULL,
   `content_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` char(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -320,7 +320,7 @@ CREATE TABLE `STARS` (
 
 CREATE TABLE `REEVALUATION_REQUESTS` (
   `REQUEST_ID` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` char(36) NOT NULL,
   `submission_id` int(11) NOT NULL,
   `comment` text NOT NULL DEFAULT ('Comment not defined.')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -480,7 +480,7 @@ ALTER TABLE `REEVALUATION_REQUESTS`
   ADD KEY `rer_submission_id` (`submission_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT & UUIDs for dumped tables
 --
 
 --
@@ -568,10 +568,10 @@ ALTER TABLE `TEST_QUESTIONS`
   MODIFY `QUESTION_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `USERS`
+-- UUID for table `USERS`
 --
 ALTER TABLE `USERS`
-  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `USER_ID` char(36) NOT NULL DEFAULT (UUID());
 
 --
 -- AUTO_INCREMENT for table `ROLES`
@@ -612,6 +612,14 @@ ALTER TABLE `REEVALUATION_REQUESTS`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `USERS`
+--
+ALTER TABLE `USERS`
+  ADD CONSTRAINT `unique_username` UNIQUE (`username`),
+  ADD CONSTRAINT `unique_mail` UNIQUE (`mail`);
+COMMIT;
 
 --
 -- Constraints for table `ALG_TEST_LIST`

@@ -2,6 +2,7 @@
 **/worker/alg/*
 **/worker/ctf/*
 /worker/inout/*
+/worker/logs/*
 /worker/tests/tmp/*
 /public/include/resources/*
 /include/portal/

@@ -1,7 +1,7 @@
 <?php
     if(!is_logged_in() || !has_permission('main.user_management.remove_user')) kick();
 
-    $uid = filter_var($_GET['uid'], FILTER_VALIDATE_INT);
+    $uid = $_GET['uid'] ?? null;
     if($uid===False || $uid===null) kick();
     if(get_roles($uid)[0]['priority']<$_SESSION['AUTH_ROLE']['priority']) kick();
 

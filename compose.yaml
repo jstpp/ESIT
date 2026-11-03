@@ -63,8 +63,8 @@ services:
     security_opt:
       - seccomp:./setup/seccomp.json
       - apparmor:unconfined  # Required for nsjail to manage its own sandboxing without host-level AppArmor configuration.
-                             # Docker's AppArmor profile interferes with nsjail sandboxing (we don't want --privileged here).
-    command: python3 /worker/mq_receiver.py
+                             # Docker's AppArmor profile usually interferes with nsjail sandboxing (we don't want --privileged here).
+    command: python3 /worker/mq_receiver.py 1
     depends_on:
       mysql:
         condition: service_healthy

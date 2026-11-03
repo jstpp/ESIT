@@ -1,16 +1,16 @@
 <?php
     if(!is_logged_in() || !has_permission('main.channels.create_channel')) kick();
-    if(!isset($_POST['setname'], $_POST['description'], $_POST['publish_time'])) redirect("index.php?p=search&error");
+    if(!isset($_POST['channel_setname'], $_POST['channel_description'], $_POST['channel_publish_time'])) redirect("index.php?p=search&error");
 
-    $isarchived = (isset($_POST['isactive']) && $_POST['isactive'] === '1') ? 0 : 1;
+    $isarchived = (isset($_POST['channel_isactive']) && $_POST['channel_isactive'] === '1') ? 0 : 1;
     
-    if(isset($_FILES["set_img"]) && $_FILES["set_img"]["error"] === UPLOAD_ERR_OK) {
-        $image = load_img_input($_FILES["set_img"], "../img/problemsets/header");
+    if(isset($_FILES["channel_set_img"]) && $_FILES["channel_set_img"]["error"] === UPLOAD_ERR_OK) {
+        $image = load_img_input($_FILES["channel_set_img"], "../img/problemsets/header");
     } else {
         $image = load_img_input();
     }
 
-    $title = trim($_POST['setname']);
+    $title = trim($_POST['channel_setname']);
     if(empty($title)) redirect("index.php?p=search&error");
     
     try {
@@ -18,8 +18,8 @@
         $db_query->execute([
             'title' => $title, 
             'aid' => $_SESSION['AUTH_ID'],
-            'desc'=> trim($_POST['description']),
-            'publishtime' => $_POST['publish_time'],
+            'desc'=> trim($_POST['channel_description']),
+            'publishtime' => $_POST['channel_publish_time'],
             'img_path' => $image,
             'isarchived' => $isarchived
         ]);
