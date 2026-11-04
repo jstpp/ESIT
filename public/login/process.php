@@ -26,6 +26,9 @@
 			die;
 		}
 		include(__DIR__.'/../../include/login/passrecovery_pass.php');
+	} else {
+		header('HTTP/1.1 404 Not Found');
+		die;
 	}
 ?>
 <style>

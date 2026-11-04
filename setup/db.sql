@@ -328,6 +328,20 @@ CREATE TABLE `REEVALUATION_REQUESTS` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `PASSWORD_RECOVERY`
+--
+
+CREATE TABLE `PASSWORD_RECOVERY` (
+  `REQUEST_ID` int(11) NOT NULL,
+  `token` varchar(255) NOT NULL, 
+  `mail` varchar(255) NOT NULL, 
+  `request_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `expiration_time` datetime NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL 12 HOUR)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Indexes for table dumps
 --
 
@@ -480,6 +494,12 @@ ALTER TABLE `REEVALUATION_REQUESTS`
   ADD KEY `rer_submission_id` (`submission_id`);
 
 --
+-- Indexes for table `PASSWORD_RECOVERY`
+--
+ALTER TABLE `PASSWORD_RECOVERY`
+  ADD PRIMARY KEY (`REQUEST_ID`);
+
+--
 -- AUTO_INCREMENT & UUIDs for dumped tables
 --
 
@@ -607,6 +627,12 @@ ALTER TABLE `STARS`
 -- AUTO_INCREMENT for table `REEVALUATION_REQUESTS`
 --
 ALTER TABLE `REEVALUATION_REQUESTS`
+  MODIFY `REQUEST_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `PASSWORD_RECOVERY`
+--
+ALTER TABLE `PASSWORD_RECOVERY`
   MODIFY `REQUEST_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --

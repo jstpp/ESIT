@@ -682,6 +682,61 @@
 		return True;
 	}
 
+	function generate_recovery_token($mail): string
+	{
+		global $pdo;
+
+		try {
+			if(strlen(trim($mail))<2) throw new Exception("Password recovery: incorrect mail format.");
+		} catch (Throwable $t)
+		{
+			extended_exception_handler($t);
+			return "";
+		}
+
+		$token = password_hash($mail.bin2hex(random_bytes(32)), PASSWORD_ARGON2ID);
+
+		try {
+			$db_query = $pdo->prepare('INSERT INTO PASSWORD_RECOVERY (token, mail) VALUES (:token, :mail)');
+			$db_query->execute(['token' => $token, 'mail' => $mail]);
+		} catch (Throwable $t)
+		{
+			extended_exception_handler($t);
+			return "";
+		}
+
+		return $token;
+	}
+
+	function verify_recovery_token($mail, $token): bool
+	{
+		global $pdo;
+
+		try {
+			if(strlen(trim($mail))<2) throw new Exception("Password recovery: incorrect mail format.");
+		} catch (Throwable $t)
+		{
+			extended_exception_handler($t);
+			return False;
+		}
+
+		try {
+			$db_query = $pdo->prepare('SELECT * FROM PASSWORD_RECOVERY WHERE token=:token AND mail=:mail AND expiration_time > CURRENT_TIMESTAMP()');
+			$db_query->execute(['token' => $token, 'mail' => $mail]);
+			if($row = $db_query->fetch()) {
+				$db_query = $pdo->prepare('DELETE FROM PASSWORD_RECOVERY WHERE token=:token AND mail=:mail AND expiration_time > CURRENT_TIMESTAMP()');
+				$db_query->execute(['token' => $token, 'mail' => $mail]);
+				return True;
+			}
+		} catch (Throwable $t)
+		{
+			extended_exception_handler($t);
+			return False;
+		}
+
+		return False;
+	}
+
 
 	###############################################
 	#       just another extension point		  #

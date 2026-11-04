@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 11:28+0200\n"
+"POT-Creation-Date: 2026-11-04 18:30+0100\n"
 "PO-Revision-Date: 2026-09-29 18:51+0200\n"
 "Last-Translator: jstpp <jstpp_github@proton.me>\n"
 "Language-Team: \n"
@@ -18,38 +18,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: ../public/app/index.php:57
+#: ../public/app/index.php:58
 msgid "App"
 msgstr "App"
 
-#: ../public/login/register.php:257 ../include/app/portal.php:174
-#: ../include/app/admin.php:261
+#: ../public/login/register.php:257 ../include/app/portal.php:179
+#: ../include/app/admin.php:244
 msgid "Name"
 msgstr "Name"
 
-#: ../public/login/register.php:261 ../include/app/admin.php:262
+#: ../public/login/register.php:261 ../include/app/admin.php:245
 msgid "Surname"
 msgstr "Surname"
 
-#: ../public/login/register.php:265 ../include/app/settings.php:96
-#: ../include/app/admin.php:263
+#: ../public/login/register.php:265 ../include/app/settings.php:83
+#: ../include/app/admin.php:246
 msgid "Organization"
 msgstr "Organization"
 
-#: ../public/login/register.php:269 ../include/app/channel.php:540
-#: ../include/app/settings.php:95 ../include/app/admin.php:260
-#: ../include/app/admin.php:487 ../include/app/admin.php:488
+#: ../public/login/register.php:269 ../include/app/channel.php:543
+#: ../include/app/settings.php:82 ../include/app/admin.php:243
+#: ../include/app/admin.php:478 ../include/app/admin.php:479
 msgid "Username"
 msgstr "Username"
 
 #: ../public/login/register.php:273 ../public/login/index.php:238
-#: ../include/app/settings.php:97 ../include/app/admin.php:277
+#: ../include/app/settings.php:84 ../include/app/admin.php:260
 msgid "E-mail address"
 msgstr "E-mail address"
 
 #: ../public/login/register.php:277 ../public/login/index.php:200
-#: ../include/app/admin.php:278 ../include/app/admin.php:489
-#: ../include/app/admin.php:490
+#: ../include/app/admin.php:261 ../include/app/admin.php:480
+#: ../include/app/admin.php:481
 msgid "Password"
 msgstr "Password"
 
@@ -61,8 +61,8 @@ msgstr "Repeat password"
 msgid "Register"
 msgstr "Register"
 
-#: ../public/login/register.php:295 ../include/app/add_content.php:206
-#: ../include/app/add_problem.php:492
+#: ../public/login/register.php:295 ../include/app/add_content.php:207
+#: ../include/app/add_problem.php:493
 msgid "Input validation"
 msgstr "Input validation"
 
@@ -187,9 +187,9 @@ msgstr "Email sent successfully! Please check your email (including SPAM)."
 msgid "Send link"
 msgstr "Send link"
 
-#: ../public/login/index.php:243 ../include/app/add_content.php:202
-#: ../include/app/add_problem.php:488 ../include/app/portal/modifypost.php:119
-#: ../include/app/portal/addpost.php:107
+#: ../public/login/index.php:243 ../include/app/add_content.php:203
+#: ../include/app/add_problem.php:489 ../include/app/portal/modifypost.php:120
+#: ../include/app/portal/addpost.php:108
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -201,76 +201,17 @@ msgstr "Access denied"
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
-#: ../public/login/index.php:287 ../include/app/settings.php:106
+#: ../public/login/index.php:287 ../include/app/settings.php:94
 msgid "New password"
 msgstr "New password"
 
-#: ../public/login/index.php:290 ../include/app/settings.php:107
+#: ../public/login/index.php:290 ../include/app/settings.php:95
 msgid "Repeat new password"
 msgstr "Repeat new password"
 
 #: ../public/login/index.php:294
 msgid "Change password"
 msgstr "Change password"
-
-#: ../include/app/search.php:78
-msgid "Content center"
-msgstr "Content center"
-
-#: ../include/app/search.php:79 ../include/app/search.php:89
-msgid "Add new channel"
-msgstr "Add new channel"
-
-#: ../include/app/search.php:92
-msgid "Channel name"
-msgstr "Channel name"
-
-#: ../include/app/search.php:94
-msgid "Channel description"
-msgstr "Channel description"
-
-#: ../include/app/search.php:97
-msgid "Channel publish time"
-msgstr "Channel publish time"
-
-#: ../include/app/search.php:101 ../include/app/portal/addpost.php:97
-msgid "Thumbnail"
-msgstr "Thumbnail"
-
-#: ../include/app/search.php:106
-msgid "Is active?"
-msgstr "Is active?"
-
-#: ../include/app/search.php:109
-msgid "Add channel"
-msgstr "Add channel"
-
-#: ../include/app/search.php:112
-msgid "Data validation"
-msgstr "Data validation"
-
-#: ../include/app/search.php:113
-msgid "Fill all required textboxes"
-msgstr "Fill all required textboxes"
-
-#: ../include/app/search.php:157
-msgid "Archived"
-msgstr "Archived"
-
-#: ../include/app/search.php:158
-msgid "Click to enter the channel"
-msgstr "Click to enter the channel"
-
-#: ../include/app/search.php:160 ../include/app/portal.php:176
-#: ../include/app/channel.php:649 ../include/app/content.php:51
-msgid "Author"
-msgstr "Author"
-
-#: ../include/app/search.php:174 ../include/app/mysolutions.php:147
-#: ../include/app/creatorcenter.php:158 ../include/app/creatorcenter.php:190
-#: ../include/app/dashboard.php:397 ../include/app/dashboard.php:427
-msgid "There's nothing here yet!"
-msgstr "There's nothing here yet!"
 
 #: ../include/app/config/init_roles.php:7
 msgid "superadministrator"
@@ -300,14 +241,52 @@ msgstr "portal_editor"
 msgid "content_creator"
 msgstr "content_creator"
 
-#: ../include/app/logs.php:89 ../include/app/logs.php:92
+#: ../include/app/logs.php:114 ../include/app/logs.php:117
 msgid "Events log"
 msgstr "Events log"
 
-#: ../include/app/logs.php:114 ../include/app/diagnostics.php:200
+#: ../include/app/logs.php:155 ../include/app/diagnostics.php:200
 #: ../include/app/diagnostics.php:227
 msgid "Yay! There is no issues at the moment!"
 msgstr "Yay! There is no issues at the moment!"
+
+#: ../include/app/channels/add_channel_panel.php:8
+#: ../include/app/menus/vertical.php:98
+msgid "Add new channel"
+msgstr "Add new channel"
+
+#: ../include/app/channels/add_channel_panel.php:12
+msgid "Channel name"
+msgstr "Channel name"
+
+#: ../include/app/channels/add_channel_panel.php:14
+msgid "Channel description"
+msgstr "Channel description"
+
+#: ../include/app/channels/add_channel_panel.php:17
+msgid "Channel publish time"
+msgstr "Channel publish time"
+
+#: ../include/app/channels/add_channel_panel.php:21
+#: ../include/app/portal/addpost.php:98
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
+#: ../include/app/channels/add_channel_panel.php:26
+msgid "Is active?"
+msgstr "Is active?"
+
+#: ../include/app/channels/add_channel_panel.php:29
+msgid "Add channel"
+msgstr "Add channel"
+
+#: ../include/app/channels/add_channel_panel.php:32
+msgid "Data validation"
+msgstr "Data validation"
+
+#: ../include/app/channels/add_channel_panel.php:33
+msgid "Fill all required textboxes"
+msgstr "Fill all required textboxes"
 
 #: ../include/app/add_content.php:128
 #, fuzzy
@@ -323,42 +302,42 @@ msgstr "Content"
 msgid "in"
 msgstr "in"
 
-#: ../include/app/add_content.php:149 ../include/app/add_problem.php:161
-#: ../include/app/settings.php:93
+#: ../include/app/add_content.php:150 ../include/app/add_problem.php:162
+#: ../include/app/settings.php:80
 msgid "Basic information"
 msgstr "Basic information"
 
-#: ../include/app/add_content.php:150
+#: ../include/app/add_content.php:151
 #, fuzzy
 msgid "Content title"
 msgstr "Document title"
 
-#: ../include/app/add_content.php:155 ../include/app/add_problem.php:169
+#: ../include/app/add_content.php:156 ../include/app/add_problem.php:170
 msgid "Public"
 msgstr "Public"
 
-#: ../include/app/add_content.php:156 ../include/app/add_problem.php:170
+#: ../include/app/add_content.php:157 ../include/app/add_problem.php:171
 msgid "Hidden/archived"
 msgstr "Hidden/archived"
 
-#: ../include/app/add_content.php:160
+#: ../include/app/add_content.php:161
 #, fuzzy
 msgid "Publishing time"
 msgstr "Publish time"
 
-#: ../include/app/add_content.php:164 ../include/app/core.php:488
+#: ../include/app/add_content.php:165 ../include/app/core.php:539
 msgid "Video"
 msgstr "Video"
 
-#: ../include/app/add_content.php:166
+#: ../include/app/add_content.php:167
 msgid "The file should be in .mp4 format"
 msgstr ""
 
-#: ../include/app/add_content.php:189 ../include/app/core.php:489
+#: ../include/app/add_content.php:190 ../include/app/core.php:540
 msgid "Article"
 msgstr "Article"
 
-#: ../include/app/add_content.php:190
+#: ../include/app/add_content.php:191
 #, fuzzy
 msgid ""
 "It is recommended not to set a specific font in the text - the default font "
@@ -367,12 +346,12 @@ msgstr ""
 "It is recommended not to set a specific font in the text - the default font "
 "for the Portal will then be visible in the post."
 
-#: ../include/app/add_content.php:201
+#: ../include/app/add_content.php:202
 #, fuzzy
 msgid "Add new content"
 msgstr "Add new post"
 
-#: ../include/app/add_content.php:207 ../include/app/add_problem.php:493
+#: ../include/app/add_content.php:208 ../include/app/add_problem.php:494
 msgid "Fill all required textboxes."
 msgstr "Fill all required textboxes."
 
@@ -388,16 +367,16 @@ msgstr "Solution of user"
 msgid "Grade"
 msgstr "Grade"
 
-#: ../include/app/check_the_form.php:63
+#: ../include/app/check_the_form.php:64
 #: ../include/app/results/formresult.php:173
 msgid "Optional comment"
 msgstr "Optional comment"
 
-#: ../include/app/check_the_form.php:68
+#: ../include/app/check_the_form.php:69
 msgid "Submit your assessment"
 msgstr "Submit your assessment"
 
-#: ../include/app/check_the_form.php:74
+#: ../include/app/check_the_form.php:75
 msgid "Problem"
 msgstr "Problem"
 
@@ -409,164 +388,171 @@ msgstr "Choose problem type"
 msgid "New problem"
 msgstr "New problem"
 
-#: ../include/app/add_problem.php:162
+#: ../include/app/add_problem.php:163
 msgid "Problem title"
 msgstr "Problem name"
 
-#: ../include/app/add_problem.php:166
+#: ../include/app/add_problem.php:167
 msgid "Max. points"
 msgstr "Max. points"
 
-#: ../include/app/add_problem.php:167
+#: ../include/app/add_problem.php:168
 msgid "Max. attempts"
 msgstr "Max. attempts"
 
-#: ../include/app/add_problem.php:174
+#: ../include/app/add_problem.php:175
 msgid "Problem publishing time"
 msgstr "Problem publishing time"
 
-#: ../include/app/add_problem.php:175
+#: ../include/app/add_problem.php:176
 msgid "Results publishing time"
 msgstr "Results publishing time"
 
-#: ../include/app/add_problem.php:179 ../include/app/menus/vertical.php:93
-#: ../include/app/dashboard.php:187
+#: ../include/app/add_problem.php:180 ../include/app/menus/vertical.php:95
+#: ../include/app/dashboard.php:212 ../include/app/search.php:127
+#: ../include/app/search.php:229
 msgid "Content"
 msgstr "Content"
 
-#: ../include/app/add_problem.php:181
+#: ../include/app/add_problem.php:182
 msgid "The file containing the content of the task should be in PDF format"
 msgstr "The file containing the content of the task should be in PDF format"
 
-#: ../include/app/add_problem.php:185
+#: ../include/app/add_problem.php:186
 msgid "Test packages"
 msgstr "Test packages"
 
-#: ../include/app/add_problem.php:186
+#: ../include/app/add_problem.php:187
 msgid "Available input formats"
 msgstr "Available input formats"
 
-#: ../include/app/add_problem.php:186
+#: ../include/app/add_problem.php:187
 msgid "Available output formats"
 msgstr "Available output formats"
 
-#: ../include/app/add_problem.php:190 ../include/app/add_problem.php:219
+#: ../include/app/add_problem.php:191 ../include/app/add_problem.php:220
 #: ../include/app/results/algresult.php:220
 msgid "Test"
 msgstr "Test"
 
-#: ../include/app/add_problem.php:191
+#: ../include/app/add_problem.php:192
 msgid "Input"
 msgstr "Input"
 
-#: ../include/app/add_problem.php:193
+#: ../include/app/add_problem.php:194
 msgid "Output"
 msgstr "Output"
 
-#: ../include/app/add_problem.php:196
+#: ../include/app/add_problem.php:197
 msgid "Max. time"
 msgstr "Max. time"
 
-#: ../include/app/add_problem.php:199
+#: ../include/app/add_problem.php:200
 msgid "Max. memory"
 msgstr "Max. memory"
 
-#: ../include/app/add_problem.php:202
+#: ../include/app/add_problem.php:203
 msgid "Weight"
 msgstr "Weight"
 
-#: ../include/app/add_problem.php:255
+#: ../include/app/add_problem.php:256
 msgid "File"
 msgstr "File"
 
-#: ../include/app/add_problem.php:261
+#: ../include/app/add_problem.php:262
 msgid "Flag"
 msgstr "Flag"
 
-#: ../include/app/add_problem.php:262
+#: ../include/app/add_problem.php:263
 msgid "Correct flag"
 msgstr "Correct flag"
 
-#: ../include/app/add_problem.php:267 ../include/app/add_problem.php:349
+#: ../include/app/add_problem.php:268 ../include/app/add_problem.php:350
 msgid "Questions"
 msgstr "Questions"
 
-#: ../include/app/add_problem.php:270 ../include/app/add_problem.php:271
-#: ../include/app/add_problem.php:300 ../include/app/add_problem.php:352
-#: ../include/app/add_problem.php:353 ../include/app/add_problem.php:382
+#: ../include/app/add_problem.php:271 ../include/app/add_problem.php:272
+#: ../include/app/add_problem.php:301 ../include/app/add_problem.php:353
+#: ../include/app/add_problem.php:354 ../include/app/add_problem.php:383
 msgid "Question"
 msgstr "Question"
 
-#: ../include/app/add_problem.php:274 ../include/app/add_problem.php:275
-#: ../include/app/add_problem.php:276 ../include/app/add_problem.php:277
-#: ../include/app/add_problem.php:356 ../include/app/add_problem.php:357
-#: ../include/app/add_problem.php:358 ../include/app/add_problem.php:359
+#: ../include/app/add_problem.php:275 ../include/app/add_problem.php:276
+#: ../include/app/add_problem.php:277 ../include/app/add_problem.php:278
+#: ../include/app/add_problem.php:357 ../include/app/add_problem.php:358
+#: ../include/app/add_problem.php:359 ../include/app/add_problem.php:360
 msgid "Anwser"
 msgstr "Anwser"
 
-#: ../include/app/add_problem.php:280 ../include/app/add_problem.php:362
+#: ../include/app/add_problem.php:281 ../include/app/add_problem.php:363
 msgid "Correct anwser"
 msgstr "Correct anwser"
 
-#: ../include/app/add_problem.php:288 ../include/app/add_problem.php:370
+#: ../include/app/add_problem.php:289 ../include/app/add_problem.php:371
 msgid "Add new"
 msgstr "Add new"
 
-#: ../include/app/add_problem.php:487
+#: ../include/app/add_problem.php:488
 msgid "Add new problem"
 msgstr "Add new problem"
 
 #: ../include/app/mysolutions.php:51 ../include/app/mysolutions.php:57
-#: ../include/app/menus/vertical.php:95
+#: ../include/app/menus/vertical.php:100
 msgid "My solutions"
 msgstr "My solutions"
 
 #: ../include/app/mysolutions.php:71 ../include/app/creatorcenter.php:79
-#: ../include/app/dashboard.php:305 ../include/app/results/algresult.php:41
+#: ../include/app/dashboard.php:374 ../include/app/results/algresult.php:41
 #: ../include/app/results/testresult.php:55
 #: ../include/app/results/formresult.php:47
 msgid "Result unavailable"
 msgstr "Result unavailable"
 
 #: ../include/app/mysolutions.php:77 ../include/app/creatorcenter.php:85
-#: ../include/app/dashboard.php:311 ../include/app/results/algresult.php:22
+#: ../include/app/dashboard.php:380 ../include/app/results/algresult.php:22
 #: ../include/app/results/testresult.php:36
 #: ../include/app/results/formresult.php:28
 msgid "Incorrect"
 msgstr "Incorrect"
 
 #: ../include/app/mysolutions.php:82 ../include/app/creatorcenter.php:90
-#: ../include/app/dashboard.php:316 ../include/app/results/algresult.php:27
+#: ../include/app/dashboard.php:385 ../include/app/results/algresult.php:27
 #: ../include/app/results/testresult.php:41
 #: ../include/app/results/formresult.php:33
 msgid "Fully correct"
 msgstr "Fully correct"
 
 #: ../include/app/mysolutions.php:87 ../include/app/creatorcenter.php:95
-#: ../include/app/dashboard.php:321 ../include/app/results/testresult.php:46
+#: ../include/app/dashboard.php:390 ../include/app/results/testresult.php:46
 #: ../include/app/results/formresult.php:38
 msgid "In queue..."
 msgstr "In queue..."
 
 #: ../include/app/mysolutions.php:91 ../include/app/creatorcenter.php:99
-#: ../include/app/dashboard.php:325 ../include/app/results/algresult.php:36
+#: ../include/app/dashboard.php:394 ../include/app/results/algresult.php:36
 #: ../include/app/results/testresult.php:50
 #: ../include/app/results/formresult.php:42
 msgid "Partially correct"
 msgstr "Partially correct"
 
+#: ../include/app/mysolutions.php:147 ../include/app/creatorcenter.php:158
+#: ../include/app/creatorcenter.php:190 ../include/app/dashboard.php:466
+#: ../include/app/dashboard.php:496 ../include/app/search.php:269
+msgid "There's nothing here yet!"
+msgstr "There's nothing here yet!"
+
 #: ../include/app/portal/modifypost.php:89
 msgid "Modify post"
 msgstr "Modify post"
 
-#: ../include/app/portal/modifypost.php:109
-#: ../include/app/portal/addpost.php:95 ../include/app/portal.php:216
-#: ../include/app/portal.php:229 ../include/app/portal.php:467
-#: ../include/app/admin.php:372 ../include/app/admin.php:373
+#: ../include/app/portal/modifypost.php:110
+#: ../include/app/portal/addpost.php:96 ../include/app/portal.php:222
+#: ../include/app/portal.php:235 ../include/app/portal.php:477
+#: ../include/app/admin.php:362 ../include/app/admin.php:363
 msgid "Title"
 msgstr "Title"
 
-#: ../include/app/portal/modifypost.php:120
+#: ../include/app/portal/modifypost.php:121
 msgid "Save"
 msgstr "Save"
 
@@ -574,7 +560,7 @@ msgstr "Save"
 msgid "New post"
 msgstr "New post"
 
-#: ../include/app/portal/addpost.php:102
+#: ../include/app/portal/addpost.php:103
 msgid ""
 "It is recommended not to set a specific font in the text - the default font "
 "for the Portal will then be visible in the post."
@@ -582,181 +568,187 @@ msgstr ""
 "It is recommended not to set a specific font in the text - the default font "
 "for the Portal will then be visible in the post."
 
-#: ../include/app/portal/addpost.php:108
+#: ../include/app/portal/addpost.php:109
 msgid "Publish"
 msgstr "Publish"
 
-#: ../include/app/portal.php:118
+#: ../include/app/portal.php:119
 msgid "Portal settings"
 msgstr "Portal settings"
 
-#: ../include/app/portal.php:122
+#: ../include/app/portal.php:123
 msgid "Edit news"
 msgstr "Edit news"
 
-#: ../include/app/portal.php:123
+#: ../include/app/portal.php:124
 msgid "Add new post"
 msgstr "Add new post"
 
-#: ../include/app/portal.php:146 ../include/app/portal.php:393
-#: ../include/app/portal.php:459
+#: ../include/app/portal.php:149 ../include/app/portal.php:401
+#: ../include/app/portal.php:468
 msgid "Delete"
 msgstr "Delete"
 
-#: ../include/app/portal.php:147 ../include/app/admin.php:596
+#: ../include/app/portal.php:151 ../include/app/admin.php:588
 msgid "Modify"
 msgstr "Modify"
 
-#: ../include/app/portal.php:148
+#: ../include/app/portal.php:152
 msgid "Read"
 msgstr "Read"
 
-#: ../include/app/portal.php:157
+#: ../include/app/portal.php:161
 msgid "General settings"
 msgstr "General settings"
 
-#: ../include/app/portal.php:160
+#: ../include/app/portal.php:165
 msgid "Website title"
 msgstr "Website title"
 
-#: ../include/app/portal.php:167 ../include/app/portal.php:308
+#: ../include/app/portal.php:172 ../include/app/portal.php:315
 msgid "Save settings"
 msgstr "Save settings"
 
-#: ../include/app/portal.php:173
+#: ../include/app/portal.php:178
 msgid "Portal template"
 msgstr "Portal template"
 
-#: ../include/app/portal.php:174
+#: ../include/app/portal.php:179
 msgid "Default template"
 msgstr "Default template"
 
-#: ../include/app/portal.php:175
+#: ../include/app/portal.php:180
 msgid "Version"
 msgstr "Version"
 
-#: ../include/app/portal.php:205
+#: ../include/app/portal.php:181 ../include/app/channel.php:655
+#: ../include/app/search.php:214 ../include/app/search.php:236
+#: ../include/app/search.php:256 ../include/app/content.php:51
+msgid "Author"
+msgstr "Author"
+
+#: ../include/app/portal.php:210
 msgid "Events timeline"
 msgstr "Events timeline"
 
-#: ../include/app/portal.php:217 ../include/app/portal.php:230
+#: ../include/app/portal.php:223 ../include/app/portal.php:236
 msgid "Start"
 msgstr "Start"
 
-#: ../include/app/portal.php:218 ../include/app/portal.php:231
+#: ../include/app/portal.php:224 ../include/app/portal.php:237
 msgid "Finish"
 msgstr "Finish"
 
-#: ../include/app/portal.php:241
+#: ../include/app/portal.php:247
 msgid "Save timeline"
 msgstr "Save timeline"
 
-#: ../include/app/portal.php:242
+#: ../include/app/portal.php:248
 msgid "Add new element"
 msgstr "Add new element"
 
-#: ../include/app/portal.php:284
+#: ../include/app/portal.php:290
 msgid "\"Social\" media"
 msgstr "\"Social\" media"
 
-#: ../include/app/portal.php:298 ../include/app/portal.php:301
-#: ../include/app/portal.php:304
+#: ../include/app/portal.php:305 ../include/app/portal.php:308
+#: ../include/app/portal.php:311
 msgid "Link to"
 msgstr "Link to"
 
-#: ../include/app/portal.php:313
+#: ../include/app/portal.php:320
 msgid "Documents"
 msgstr "Documents"
 
-#: ../include/app/portal.php:315 ../include/app/portal.php:377
-#: ../include/app/portal.php:451
+#: ../include/app/portal.php:322 ../include/app/portal.php:385
+#: ../include/app/portal.php:460
 msgid "Published"
 msgstr "Published"
 
-#: ../include/app/portal.php:323 ../include/app/portal.php:393
-#: ../include/app/portal.php:459
+#: ../include/app/portal.php:330 ../include/app/portal.php:401
+#: ../include/app/portal.php:468
 msgid "Display"
 msgstr "Display"
 
-#: ../include/app/portal.php:323
+#: ../include/app/portal.php:330
 msgid "Remove"
 msgstr "Remove"
 
-#: ../include/app/portal.php:327 ../include/app/portal.php:397
-#: ../include/app/portal.php:463
+#: ../include/app/portal.php:334 ../include/app/portal.php:405
+#: ../include/app/portal.php:472
 msgid "Queue"
 msgstr "Queue"
 
-#: ../include/app/portal.php:331
+#: ../include/app/portal.php:339
 msgid "Document title"
 msgstr "Document title"
 
-#: ../include/app/portal.php:335
+#: ../include/app/portal.php:343
 msgid "Save documents"
 msgstr "Save documents"
 
-#: ../include/app/portal.php:336
+#: ../include/app/portal.php:344
 msgid "Add document"
 msgstr "Add document"
 
-#: ../include/app/portal.php:375
+#: ../include/app/portal.php:383
 msgid "Problems for warm-up"
 msgstr "Problems for warm-up"
 
-#: ../include/app/portal.php:388 ../include/app/channel.php:642
+#: ../include/app/portal.php:396 ../include/app/channel.php:647
 msgid "Archive"
 msgstr "Archive"
 
-#: ../include/app/portal.php:391
+#: ../include/app/portal.php:399
 msgid "Add to current session"
 msgstr "Add to current session"
 
-#: ../include/app/portal.php:401
+#: ../include/app/portal.php:410
 msgid "Problem name"
 msgstr "Problem name"
 
-#: ../include/app/portal.php:404
+#: ../include/app/portal.php:413
 msgid "Current session"
 msgstr "Current session"
 
-#: ../include/app/portal.php:406
+#: ../include/app/portal.php:415
 msgid "Save problems"
 msgstr "Save problems"
 
-#: ../include/app/portal.php:407 ../include/app/channel.php:473
+#: ../include/app/portal.php:416 ../include/app/channel.php:475
 msgid "Add problem"
 msgstr "Add problem"
 
-#: ../include/app/portal.php:449
+#: ../include/app/portal.php:458
 msgid "Partners"
 msgstr "Partners"
 
-#: ../include/app/portal.php:468
+#: ../include/app/portal.php:478
 msgid "URL"
 msgstr "URL"
 
-#: ../include/app/portal.php:472
+#: ../include/app/portal.php:482
 msgid "Save partners"
 msgstr "Save partners"
 
-#: ../include/app/portal.php:473
+#: ../include/app/portal.php:483
 msgid "Add new partner"
 msgstr "Add new partner"
 
-#: ../include/app/portal.php:519
+#: ../include/app/portal.php:530
 msgid "Edit main page"
 msgstr "Edit main page"
 
-#: ../include/app/portal.php:550 ../include/app/portal.php:585
-#: ../include/app/portal.php:620
+#: ../include/app/portal.php:561 ../include/app/portal.php:596
+#: ../include/app/portal.php:631
 msgid "Save all"
 msgstr "Save all"
 
-#: ../include/app/portal.php:555
+#: ../include/app/portal.php:566
 msgid "Edit FAQ"
 msgstr "Edit FAQ"
 
-#: ../include/app/portal.php:590
+#: ../include/app/portal.php:601
 msgid "Edit contact page"
 msgstr "Edit contact page"
 
@@ -776,79 +768,79 @@ msgstr "New block"
 msgid "problemset"
 msgstr "problemset"
 
-#: ../include/app/channel.php:283 ../include/app/channel.php:339
+#: ../include/app/channel.php:284 ../include/app/channel.php:341
 msgid "Block title"
 msgstr "Block title"
 
-#: ../include/app/channel.php:287 ../include/app/channel.php:343
+#: ../include/app/channel.php:288 ../include/app/channel.php:345
 msgid "Availability depends on completion"
 msgstr "Availability depends on completion"
 
-#: ../include/app/channel.php:289 ../include/app/channel.php:345
+#: ../include/app/channel.php:290 ../include/app/channel.php:347
 msgid "Nothing"
 msgstr "Nothing"
 
-#: ../include/app/channel.php:302 ../include/app/channel.php:363
+#: ../include/app/channel.php:303 ../include/app/channel.php:365
 msgid "Publish time"
 msgstr "Publish time"
 
-#: ../include/app/channel.php:307 ../include/app/channel.php:316
+#: ../include/app/channel.php:308 ../include/app/channel.php:317
 msgid "Add block"
 msgstr "Add block"
 
-#: ../include/app/channel.php:315
+#: ../include/app/channel.php:316
 msgid "Available for You"
 msgstr "Available for You"
 
-#: ../include/app/channel.php:368 ../include/app/admin.php:283
+#: ../include/app/channel.php:370 ../include/app/admin.php:266
 msgid "Save changes"
 msgstr "Save changes"
 
-#: ../include/app/channel.php:462
+#: ../include/app/channel.php:464
 msgid "Requires completion"
 msgstr "Requires completion"
 
-#: ../include/app/channel.php:465
+#: ../include/app/channel.php:467
 msgid "Started"
 msgstr "Started"
 
-#: ../include/app/channel.php:467
+#: ../include/app/channel.php:469
 msgid "Completed"
 msgstr "Completed"
 
-#: ../include/app/channel.php:474
+#: ../include/app/channel.php:476
 #, fuzzy
 msgid "Add content"
 msgstr "Add document"
 
-#: ../include/app/channel.php:475
+#: ../include/app/channel.php:477
 msgid "Settings"
 msgstr "Settings"
 
-#: ../include/app/channel.php:526
+#: ../include/app/channel.php:529
 msgid "Error during layout saving"
 msgstr "Error during layout saving"
 
-#: ../include/app/channel.php:530
+#: ../include/app/channel.php:533
 msgid "Connection error"
 msgstr "Connection error"
 
-#: ../include/app/channel.php:536
+#: ../include/app/channel.php:539
 msgid "Results"
 msgstr "Results"
 
-#: ../include/app/channel.php:541 ../include/app/results/algresult.php:156
+#: ../include/app/channel.php:544 ../include/app/results/algresult.php:156
 #: ../include/app/results/testresult.php:117
 #: ../include/app/results/ctfresult.php:72
 #: ../include/app/results/formresult.php:120
 msgid "Total"
 msgstr "Total"
 
-#: ../include/app/channel.php:635
+#: ../include/app/channel.php:638
 msgid "Information"
 msgstr "Information"
 
-#: ../include/app/channel.php:642
+#: ../include/app/channel.php:647
 msgid "Unarchive"
 msgstr "Unarchive"
 
@@ -872,40 +864,40 @@ msgstr "Reevaluation requests"
 msgid "Forms waiting for evaluation"
 msgstr "Forms waiting for evaluation"
 
-#: ../include/app/menus/vertical.php:80
+#: ../include/app/menus/vertical.php:82
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: ../include/app/menus/vertical.php:81 ../include/app/settings.php:90
+#: ../include/app/menus/vertical.php:83 ../include/app/settings.php:77
 msgid "Account settings"
 msgstr "Account settings"
 
-#: ../include/app/menus/vertical.php:83
+#: ../include/app/menus/vertical.php:85
 msgid "Management"
 msgstr "Management"
 
-#: ../include/app/menus/vertical.php:84 ../include/app/diagnostics.php:187
+#: ../include/app/menus/vertical.php:86 ../include/app/diagnostics.php:187
 msgid "Configuration"
 msgstr "Configuration"
 
-#: ../include/app/menus/vertical.php:87 ../include/app/admin.php:369
-#: ../include/app/admin.php:462
+#: ../include/app/menus/vertical.php:89 ../include/app/admin.php:359
+#: ../include/app/admin.php:453
 msgid "Portal management"
 msgstr "Portal management"
 
-#: ../include/app/menus/vertical.php:89
+#: ../include/app/menus/vertical.php:91
 msgid "Diagnostics"
 msgstr "Diagnostics"
 
-#: ../include/app/menus/vertical.php:90
+#: ../include/app/menus/vertical.php:92
 msgid "Logs"
 msgstr "Logs"
 
-#: ../include/app/menus/vertical.php:94
+#: ../include/app/menus/vertical.php:96
 msgid "Discover"
 msgstr "Discover"
 
-#: ../include/app/menus/vertical.php:102
+#: ../include/app/menus/vertical.php:107
 msgid "Creator center"
 msgstr "Creator center"
 
@@ -918,7 +910,7 @@ msgstr "Log out"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: ../include/app/menus/horizontal.php:39 ../include/app/admin.php:459
+#: ../include/app/menus/horizontal.php:39 ../include/app/admin.php:450
 msgid "Portal"
 msgstr "Portal"
 
@@ -926,51 +918,75 @@ msgstr "Portal"
 msgid "for user"
 msgstr "for user"
 
-#: ../include/app/dashboard.php:177
+#: ../include/app/dashboard.php:192 ../include/login/passrecovery_mail.php:19
 msgid "Hello"
 msgstr "Hello"
 
-#: ../include/app/dashboard.php:181
+#: ../include/app/dashboard.php:197 ../include/app/search.php:112
 msgid "What are you looking for?"
 msgstr ""
 
-#: ../include/app/dashboard.php:182
+#: ../include/app/dashboard.php:198 ../include/app/search.php:113
 msgid "Search"
 msgstr ""
 
-#: ../include/app/dashboard.php:185
+#: ../include/app/dashboard.php:202 ../include/app/search.php:117
+#: ../include/app/search.php:207
 #, fuzzy
 msgid "Channels"
 msgstr "Channel name"
 
-#: ../include/app/dashboard.php:186
+#: ../include/app/dashboard.php:207 ../include/app/search.php:122
+#: ../include/app/search.php:250
 #, fuzzy
 msgid "Contentsets"
 msgstr "Content"
 
-#: ../include/app/dashboard.php:216
+#: ../include/app/dashboard.php:285
 msgid "My progress"
 msgstr "My progress"
 
-#: ../include/app/dashboard.php:229
+#: ../include/app/dashboard.php:298
 msgid "Average correctness"
 msgstr "Average correctness"
 
-#: ../include/app/dashboard.php:234
+#: ../include/app/dashboard.php:303
 msgid "Number of points in the last 30 days"
 msgstr "Number of points in the last 30 days"
 
-#: ../include/app/dashboard.php:291
+#: ../include/app/dashboard.php:360
 msgid "My last solutions"
 msgstr "My last solutions"
 
-#: ../include/app/dashboard.php:405
+#: ../include/app/dashboard.php:474
 msgid "News"
 msgstr "News"
 
-#: ../include/app/dashboard.php:437
+#: ../include/app/dashboard.php:506
 msgid "You might also like"
 msgstr "You might also like"
+
+#: ../include/app/search.php:108
+msgid "Content center"
+msgstr "Content center"
+
+#: ../include/app/search.php:197
+#, fuzzy
+msgid "Displaying results for"
+msgstr "Evaluation results"
+
+#: ../include/app/search.php:211 ../include/app/search.php:233
+msgid "Archived"
+msgstr "Archived"
+
+#: ../include/app/search.php:212 ../include/app/search.php:254
+msgid "Click to enter the channel"
+msgstr "Click to enter the channel"
+
+#: ../include/app/search.php:234
+#, fuzzy
+msgid "Click to see the content"
+msgstr "Click to enter the channel"
 
 #: ../include/app/results/algresult.php:32
 msgid "In queue"
@@ -1078,67 +1094,67 @@ msgstr "Incorrect [%]"
 msgid "Your anwser"
 msgstr "Your anwser"
 
-#: ../include/app/core.php:483
+#: ../include/app/core.php:534
 msgid "Algorithmic task"
 msgstr "Algorithmic task"
 
-#: ../include/app/core.php:484
+#: ../include/app/core.php:535
 msgid "Capture The Flag"
 msgstr "Capture The Flag"
 
-#: ../include/app/core.php:485
+#: ../include/app/core.php:536
 msgid "Single choice"
 msgstr "Single choice "
 
-#: ../include/app/core.php:486
+#: ../include/app/core.php:537
 msgid "Multiple choice"
 msgstr "Multiple choice"
 
-#: ../include/app/core.php:487
+#: ../include/app/core.php:538
 msgid "Open-ended"
 msgstr "Open-ended"
 
-#: ../include/app/core.php:490
+#: ../include/app/core.php:541
 msgid "Unknown"
 msgstr "Unknown"
 
-#: ../include/app/settings.php:102
+#: ../include/app/settings.php:89
 msgid "Security"
 msgstr "Security"
 
-#: ../include/app/settings.php:103
+#: ../include/app/settings.php:90
 msgid "Password change"
 msgstr "Password change"
 
-#: ../include/app/settings.php:105
+#: ../include/app/settings.php:93
 msgid "Old password"
 msgstr "Old password"
 
-#: ../include/app/settings.php:108
+#: ../include/app/settings.php:96
 msgid "Change the password"
 msgstr "Change the password"
 
-#: ../include/app/settings.php:114
+#: ../include/app/settings.php:101
 msgid "Appearance"
 msgstr "Appearance"
 
-#: ../include/app/settings.php:116
+#: ../include/app/settings.php:104
 msgid "Dark mode"
 msgstr "Dark mode"
 
-#: ../include/app/settings.php:118
+#: ../include/app/settings.php:106
 msgid "On"
 msgstr "On"
 
-#: ../include/app/settings.php:119
+#: ../include/app/settings.php:107
 msgid "Off"
 msgstr "Off"
 
-#: ../include/app/settings.php:123
+#: ../include/app/settings.php:111
 msgid "Code editor theme"
 msgstr "Code editor theme"
 
-#: ../include/app/settings.php:179
+#: ../include/app/settings.php:167
 msgid "Save appearance settings"
 msgstr "Save appearance settings"
 
@@ -1194,191 +1210,200 @@ msgstr "Unstar"
 msgid "Star"
 msgstr "Star"
 
-#: ../include/app/admin.php:252
+#: ../include/app/admin.php:234
 msgid "Configuration panel"
 msgstr "Configuration panel"
 
-#: ../include/app/admin.php:257 ../include/app/admin.php:282
+#: ../include/app/admin.php:239 ../include/app/admin.php:265
 msgid "Add new user"
 msgstr "Add new user"
 
-#: ../include/app/admin.php:284
+#: ../include/app/admin.php:269
 msgid "Delete user"
 msgstr "Delete user"
 
-#: ../include/app/admin.php:291
+#: ../include/app/admin.php:277
 msgid "Search for the plugin on GitHub"
 msgstr "Search for the plugin on GitHub"
 
-#: ../include/app/admin.php:294
+#: ../include/app/admin.php:280
 msgid "Plugin search displays repositories tagged with"
 msgstr "Plugin search displays repositories tagged with"
 
-#: ../include/app/admin.php:304
+#: ../include/app/admin.php:290
 msgid "User's repos"
 msgstr "User's repos"
 
-#: ../include/app/admin.php:313
+#: ../include/app/admin.php:299
 msgid "Repositories search"
 msgstr "Repositories search"
 
-#: ../include/app/admin.php:326
+#: ../include/app/admin.php:312
 msgid "Popular repos"
 msgstr "Popular repos"
 
-#: ../include/app/admin.php:337
+#: ../include/app/admin.php:323
 msgid "No description"
 msgstr "No description"
 
-#: ../include/app/admin.php:346
+#: ../include/app/admin.php:335
 msgid "No results"
 msgstr "No results"
 
-#: ../include/app/admin.php:357
+#: ../include/app/admin.php:346
 msgid "Navigation"
 msgstr "Navigation"
 
-#: ../include/app/admin.php:358 ../include/app/admin.php:364
+#: ../include/app/admin.php:347 ../include/app/admin.php:353
 msgid "Initial parameters"
 msgstr "Initial parameters"
 
-#: ../include/app/admin.php:359
+#: ../include/app/admin.php:348
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ../include/app/admin.php:360 ../include/app/admin.php:551
+#: ../include/app/admin.php:349 ../include/app/admin.php:543
 msgid "Roles"
 msgstr "Roles"
 
-#: ../include/app/admin.php:361 ../include/app/admin.php:575
+#: ../include/app/admin.php:350 ../include/app/admin.php:567
 msgid "Users"
 msgstr "Users"
 
-#: ../include/app/admin.php:369
+#: ../include/app/admin.php:359
 msgid "\"Portal\" module is active: title & MOTD can be changed in"
 msgstr "\"Portal\" module is active: title & MOTD can be changed in"
 
-#: ../include/app/admin.php:382 ../include/app/admin.php:383
+#: ../include/app/admin.php:372 ../include/app/admin.php:373
 msgid "Default URL address"
 msgstr "Default URL address"
 
-#: ../include/app/admin.php:384
+#: ../include/app/admin.php:374
 msgid "The address through which you connect to the app is:"
 msgstr "The address through which you connect to the app is:"
 
-#: ../include/app/admin.php:387
+#: ../include/app/admin.php:377
 msgid "Default timezone"
 msgstr "Default timezone"
 
-#: ../include/app/admin.php:389
+#: ../include/app/admin.php:379
 msgid "Current system time:"
 msgstr "Current system time:"
 
-#: ../include/app/admin.php:392
+#: ../include/app/admin.php:382
 msgid "Default language"
 msgstr "Default language"
 
-#: ../include/app/admin.php:396
+#: ../include/app/admin.php:386
 msgid "Workers"
 msgstr "Workers"
 
-#: ../include/app/admin.php:401
+#: ../include/app/admin.php:391
 msgid "Allow only local traffic"
 msgstr "Allow only local traffic"
 
-#: ../include/app/admin.php:444
+#: ../include/app/admin.php:434
 msgid "Save configuration"
 msgstr "Save configuration"
 
-#: ../include/app/admin.php:452
+#: ../include/app/admin.php:442
 msgid "System plugins"
 msgstr "System plugins"
 
-#: ../include/app/admin.php:462
+#: ../include/app/admin.php:453
 msgid "Settings for this plugin can be found in"
 msgstr "Settings for this plugin can be found in"
 
-#: ../include/app/admin.php:470
+#: ../include/app/admin.php:461
 msgid "Custom error page"
 msgstr "Custom error page"
 
-#: ../include/app/admin.php:472 ../include/app/admin.php:473
+#: ../include/app/admin.php:463 ../include/app/admin.php:464
 msgid "URL address"
 msgstr "URL address"
 
-#: ../include/app/admin.php:481
+#: ../include/app/admin.php:472
 msgid "Mailing"
 msgstr "Mailing"
 
-#: ../include/app/admin.php:483 ../include/app/admin.php:484
+#: ../include/app/admin.php:474 ../include/app/admin.php:475
 msgid "Mail server address"
 msgstr "Mail server address"
 
-#: ../include/app/admin.php:485 ../include/app/admin.php:486
+#: ../include/app/admin.php:476 ../include/app/admin.php:477
 msgid "Mail server port"
 msgstr "Mail server port"
 
-#: ../include/app/admin.php:491 ../include/app/admin.php:492
+#: ../include/app/admin.php:482 ../include/app/admin.php:483
 msgid "Access protocole"
 msgstr "Access protocole"
 
-#: ../include/app/admin.php:491
+#: ../include/app/admin.php:482
 msgid "etc."
 msgstr "etc."
 
-#: ../include/app/admin.php:500
+#: ../include/app/admin.php:491
 msgid "Advanced debugging"
 msgstr "Advanced debugging"
 
-#: ../include/app/admin.php:507
+#: ../include/app/admin.php:498
 msgid "Community plugins"
 msgstr "Community plugins"
 
-#: ../include/app/admin.php:519
+#: ../include/app/admin.php:511
 msgid "Community plugin"
 msgstr "Community plugin"
 
-#: ../include/app/admin.php:523
+#: ../include/app/admin.php:515
 msgid "Plugin loading unsuccessful"
 msgstr "Plugin loading unsuccessful"
 
-#: ../include/app/admin.php:526
+#: ../include/app/admin.php:518
 msgid "Plugin inactive"
 msgstr "Plugin inactive"
 
-#: ../include/app/admin.php:536
+#: ../include/app/admin.php:528
 msgid "Press"
 msgstr "Press"
 
-#: ../include/app/admin.php:536 ../include/app/admin.php:543
+#: ../include/app/admin.php:528 ../include/app/admin.php:535
 msgid "Find plugins"
 msgstr "Find plugins"
 
-#: ../include/app/admin.php:536
+#: ../include/app/admin.php:528
 msgid "to explore new plugins"
 msgstr "to explore new plugins"
 
-#: ../include/app/admin.php:542
+#: ../include/app/admin.php:534
 msgid "Save community plugins"
 msgstr "Save community plugins"
 
-#: ../include/app/admin.php:553
+#: ../include/app/admin.php:545
 msgid "In this section you can modify groups or add a new one."
 msgstr "In this section you can modify groups or add a new one."
 
-#: ../include/app/admin.php:577
+#: ../include/app/admin.php:569
 msgid ""
 "In this section you can modify users' data and grant additional permissions."
 msgstr ""
 "In this section you can modify users' data and grant additional permissions."
 
-#: ../include/app/admin.php:579
+#: ../include/app/admin.php:571
 msgid "Add user"
 msgstr "Add user"
 
-#: ../include/app/admin.php:593
+#: ../include/app/admin.php:585
 msgid "Last login"
 msgstr "Last login"
+
+#: ../include/login/passrecovery_mail.php:19
+msgid "It's me - your activation link"
+msgstr ""
+
+#: ../include/login/passrecovery_mail.php:38
+#, fuzzy
+msgid "Recover your password"
+msgstr "Forgot your password?"
 
 #~ msgid "Priority"
 #~ msgstr "Priority"

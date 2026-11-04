@@ -1,5 +1,4 @@
 <?php
-    include('../../include/app/core.php');
     require_once('../app/modules/composer/vendor/autoload.php');
     
     use PHPMailer\PHPMailer\PHPMailer;
@@ -15,9 +14,9 @@
 
         if(isset($users_data['name']))
         {
-            $recovery_token = hash('sha3-256', $users_data['password']);
+            $recovery_token = generate_recovery_token($users_data['mail']);
             $recovery_link = get_misc_value('general_url')."/login/index.php?passrecoverypass&mail=".$users_data['mail']."&token=".$recovery_token;
-            $recovery_msg = "Dzień dobry ".$users_data['name']."!<br />To ja - twój link do odzyskiwania hasła:
+            $recovery_msg = __("Hello")." ".$users_data['name']."!<br />".__("It's me - your activation link").":
             <br /><a href='".$recovery_link."'>".$recovery_link."</a>";
             
             $mail = new PHPMailer();
@@ -36,7 +35,7 @@
             $mail->Password = get_misc_value('plugin_mailing_module_password');
             $mail->setFrom(get_misc_value('plugin_mailing_module_username'), $mail_name);
             $mail->AddAddress(filter_var($_POST['recovery_pass_mail'], FILTER_SANITIZE_EMAIL));
-            $mail->Subject = "Odzyskaj swoje hasło";
+            $mail->Subject = __("Recover your password");
             $mail->Body = $recovery_msg;
 
             try {
