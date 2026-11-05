@@ -20,6 +20,7 @@ The service should be available on `localhost:80` unless you change it. The firs
 | File | Container | Description |
 | --- | --- | --- |
 | `install.sh` | `N/A` | script for initial instance setup & installing all required dependencies |
+| `generate_env.sh` | `N/A` | (requires openssl) generates .env file with random credentials (you can modify `install.sh` to copy `.env.example` instead) |
 | `composer_setup.sh` | `php-fpm` | script for safe PHP composer installation |
 
 ### Configuration files

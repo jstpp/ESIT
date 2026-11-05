@@ -17,7 +17,7 @@
     $db_username = $_ENV['MYSQL_USER']; #MySQL username
     $db_password = $_ENV['MYSQL_PASSWORD']; #MySQL password
     $db_database = $_ENV['MYSQL_DATABASE']; #MySQL db name
-    $db_charset = "utf8"; #MySQL charset
+    $db_charset = "utf8mb4"; #MySQL charset
 
 	# broker connection
 	$rabbit_mq_host = "rabbitmq"; #Broker's host

@@ -1,7 +1,10 @@
+#!/usr/bin/env bash
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+$SCRIPT_DIR/generate_env.sh "$SCRIPT_DIR"
 
 find "$SCRIPT_DIR/../setup"   -type d -exec chmod 0755 {} +
-find "$SCRIPT_DIR/../setup"   -type f -exec chmod 0644 {} +
+find "$SCRIPT_DIR/../setup"   -type f -exec chmod 0744 {} +
 
 find "$SCRIPT_DIR/../include" -type d -exec chmod 0755 {} +
 find "$SCRIPT_DIR/../include" -type f -exec chmod 0644 {} +
@@ -21,7 +24,6 @@ rm -Rf "$SCRIPT_DIR/../include/portal"
 git clone https://github.com/jstpp/ESITDefaultTemplate.git "$SCRIPT_DIR/../public/portal"
 chmod -R 0777 "$SCRIPT_DIR/../public/portal"
 cp -r "$SCRIPT_DIR/../public/portal/img/"* "$SCRIPT_DIR/../public/img/"
-cp -n "$SCRIPT_DIR/../setup/.env.example" "$SCRIPT_DIR/../.env"
 
 # Create missing directories
 mkdir "$SCRIPT_DIR/../public/img/articles/"

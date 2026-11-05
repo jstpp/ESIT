@@ -93,7 +93,7 @@
                 if ($pdo->inTransaction()) {
                     $pdo->rollBack();
                 }
-                if (file_exists(delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/"))) 
+                if (file_exists(__DIR__.'/../../../include/storage/video/'.$content_id."/")) 
                 {
                     delete_directory(__DIR__.'/../../../include/storage/video/'.$content_id."/");
                 }

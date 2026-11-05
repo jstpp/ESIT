@@ -74,7 +74,7 @@
 			if($maxattempts-$count>1)
 			{
 				$howmanytimes = "Rozwiązanie do tego zadania możesz wysłać jeszcze <b>".($maxattempts-$count)." razy</b>.";
-			} else if ($maxattempts-$count==0)
+			} else if ($maxattempts-$count==1)
 			{
 				$howmanytimes = "Rozwiązanie do tego zadania możesz wysłać jeszcze <b>1 raz</b>.";
 			} else {

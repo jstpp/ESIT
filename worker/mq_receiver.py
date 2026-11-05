@@ -65,6 +65,10 @@ def connect_to_queue(logger, t):
         )
     except Exception as e:
         t *= 2
+        if (t>32):
+            logger.critical(
+                "Can't connect to the database. Stopping worker..."
+            )
         logger.error(
             f"Can't connect to the database: {e}. Trying to reconnect in {t} seconds."
         )
