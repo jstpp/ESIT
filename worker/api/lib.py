@@ -18,7 +18,7 @@ logger = logging.getLogger("esit.worker")
 def encrypt(data, key):
     try:
         result = []
-        encoded_key = key.encode('utf-8')
+        encoded_key = bytes.fromhex(key)
         assert(len(encoded_key)==16), f"Incorrect network key. Current length: {len(encoded_key)}"
         cipher = AES.new((encoded_key), AES.MODE_GCM)
         ciphertext, tag = cipher.encrypt_and_digest(data.encode("utf-8"))
@@ -33,7 +33,7 @@ def encrypt(data, key):
 
 def decrypt(data, key):
     try:
-        encoded_key = key.encode('utf-8')
+        encoded_key = bytes.fromhex(key)
         assert(len(encoded_key)==16), f"Incorrect network key. Current length: {len(encoded_key)}"
         cipher = AES.new((encoded_key), AES.MODE_GCM, data[1])
         result = cipher.decrypt_and_verify(data[0], data[2]).decode("utf-8")
@@ -142,7 +142,7 @@ def ask_for_inout(data):
 def prepare(data):
     try:
         logger.info(
-            f' | Unpacking user\'s submission to problem {data["problem_id"]} received from {data["listenerUrl"]}...'
+            f'Unpacking user\'s submission to problem {data["problem_id"]} received from {data["listenerUrl"]}...'
         )
         return decode_and_extract_zip(
             data["submission_file"],

@@ -6,7 +6,7 @@
 	]);
 	session_start();
 
-	$worker_network_private_key = $_ENV['NETWORK_PRIVATE_KEY'];
+	$worker_network_private_key = hex2bin($_ENV['NETWORK_PRIVATE_KEY']);
 
 	###############################################
 	#               customization				  #

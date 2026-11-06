@@ -175,7 +175,7 @@ def main(
 
                     if not isinstance(submission, dict):
                         raise Exception("Submission must be a JSON object")
-                    assert submission["submission_id"] > 0
+                    assert int(submission["submission_id"]) > 0
 
                 except Exception as e:
                     logger.warning(f"Received invalid submission: {e}")
