@@ -7,7 +7,7 @@ set -euo pipefail
 MYSQL_ROOT_PASSWORD=$(openssl rand -hex 32)
 MYSQL_PASSWORD=$(openssl rand -hex 32)
 RABBITMQ_DEFAULT_PASS=$(openssl rand -hex 32)
-NETWORK_PRIVATE_KEY=$(openssl rand -hex 64)
+NETWORK_PRIVATE_KEY=$(openssl rand -hex 16)
 RABBITMQ_DEFAULT_USER="esit_user"
 
 

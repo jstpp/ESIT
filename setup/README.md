@@ -34,7 +34,7 @@ The service should be available on `localhost:80` unless you change it. The firs
 | `definitions.rabbitmq.json.example` | `rabbitmq` | rabbitmq definitions for setup |
 | `rabbitmq-enabled-plugins.example` | `rabbitmq` | plugins enabled for broker |
 | `rabbitmq.config.example` | `rabbitmq` | default broker configuration |
-| `.env.example` | `all containers` | default environment variables including credentials |
+| `.env.example` | `all containers` | optional default environment file |
 
 ### Miscellaneous
 | File | Container | Description |
@@ -78,7 +78,7 @@ You may find useful to modify [core](/include/app/core.php) and [.env file](/set
 ### Worker config
 | Variable | Type | Description |
 | --- | --- | --- |
-| `$worker_network_private_key`| string | Key used for API encryption |
+| `$worker_network_private_key`| string | Key used for API encryption (required length: 16 (ASCII only)) |
 
 ### Mailing config
 | Variable | Type | Description |

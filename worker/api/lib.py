@@ -6,34 +6,40 @@ import shutil
 import socket
 import time
 import zipfile
+import logging
 
 import requests
 from Crypto.Cipher import AES
 
 import api.config.config as apiconfig
 
+logger = logging.getLogger("esit.worker")
 
 def encrypt(data, key):
     try:
         result = []
-        cipher = AES.new((key[:16].encode("utf-8")), AES.MODE_GCM)
+        encoded_key = key.encode('utf-8')
+        assert(len(encoded_key)==16), f"Incorrect network key. Current length: {len(encoded_key)}"
+        cipher = AES.new((encoded_key), AES.MODE_GCM)
         ciphertext, tag = cipher.encrypt_and_digest(data.encode("utf-8"))
         result.append(ciphertext)
         result.append(cipher.nonce)
         result.append(tag)
         return result
     except Exception as exception:
-        print(str(time.ctime()) + f" | EXCEPTION | lib.py: encrypt(): {exception}")
+        logging.exception(f"lib.py: encrypt(): {exception}")
         return False
 
 
 def decrypt(data, key):
     try:
-        cipher = AES.new((key[:16].encode("utf-8")), AES.MODE_GCM, data[1])
+        encoded_key = key.encode('utf-8')
+        assert(len(encoded_key)==16), f"Incorrect network key. Current length: {len(encoded_key)}"
+        cipher = AES.new((encoded_key), AES.MODE_GCM, data[1])
         result = cipher.decrypt_and_verify(data[0], data[2]).decode("utf-8")
         return result
     except Exception as exception:
-        print(str(time.ctime()) + f" | EXCEPTION | lib.py: decrypt(): {exception}")
+        logging.exception(f"lib.py: decrypt(): {exception}")
         return False
 
 
@@ -74,9 +80,8 @@ def decode_and_extract_zip(
             for member in members:
                 zip_ref.extract(member, target_dir)
     except Exception as exception:
-        print(
-            str(time.ctime())
-            + f" | EXCEPTION | lib.py: decode_and_extract_zip(): {exception}"
+        logger.exception(
+            f"lib.py: decode_and_extract_zip(): {exception}"
         )
         return False
     else:
@@ -88,9 +93,8 @@ def ask_for_inout(data):
         data["worker_name"] = socket.gethostname()
         data["worker_addr"] = socket.gethostbyname(socket.gethostname())
 
-        print(
-            str(time.ctime())
-            + f' | Asked {data["listenerUrl"]} for inout of problem {data["problem_id"]}...'
+        logger.info(
+            f'Asked {data["listenerUrl"]} for inout of problem {data["problem_id"]}...'
         )
         encrypted = encrypt(json.dumps(data), apiconfig.network_private_key)
         data_to_send = json.loads('{"content":"", "nonce":""}')
@@ -106,27 +110,39 @@ def ask_for_inout(data):
             headers=headers,
             timeout=(5, 30),
         )
-        # print("API response:", api_connection.content)
-        decode_and_extract_zip(
+
+        if (api_connection.status_code==403):
+            logger.info(
+                "Request is forbidden. Consider adding worker to the whitelist in web application GUI."
+            )
+            return False
+
+        try:
+            api_connection.raise_for_status()
+        except Exception:
+            logger.error(
+                "An error occured when asking for inout!"
+            )
+            return False
+
+        return decode_and_extract_zip(
             api_connection.content,
             str(os.path.dirname(os.path.realpath(__file__)))
             + "/../inout/"
             + str(data["problem_id"]),
         )
 
-        return True
     except Exception as exception:
-        print(
-            str(time.ctime()) + f" | EXCEPTION | lib.py: ask_for_inout(): {exception}"
+        logger.exception(
+            f"lib.py: ask_for_inout(): {exception}"
         )
         return False
 
 
 def prepare(data):
     try:
-        print(
-            str(time.ctime())
-            + f' | Unpacking user\'s submission to problem {data["problem_id"]} received from {data["listenerUrl"]}...'
+        logger.info(
+            f' | Unpacking user\'s submission to problem {data["problem_id"]} received from {data["listenerUrl"]}...'
         )
         return decode_and_extract_zip(
             data["submission_file"],
@@ -135,7 +151,7 @@ def prepare(data):
             + str(data["submission_id"]),
         )
     except Exception as exception:
-        print(str(time.ctime()) + f" | EXCEPTION | lib.py: prepare(): {exception}")
+        logger.exception(f"lib.py: prepare(): {exception}")
         return False
 
 
@@ -154,8 +170,8 @@ def prepare_base64(data):
             encoded_zip = base64.b64encode(zip_bytes).decode("utf-8")
         return encoded_zip
     except Exception as exception:
-        print(
-            str(time.ctime()) + f" | EXCEPTION | lib.py: prepare_base64(): {exception}"
+        logger.exception(
+            f"lib.py: prepare_base64(): {exception}"
         )
         return False
 
@@ -174,9 +190,8 @@ def prepare_file_transfer(dir_id):
             + str(dir_id),
         )
     except Exception as exception:
-        print(
-            str(time.ctime())
-            + f" | EXCEPTION | lib.py: prepare_file_transfer(): {exception}"
+        logger.exception(
+            f"lib.py: prepare_file_transfer(): {exception}"
         )
         return False
     else:
@@ -192,6 +207,7 @@ def send(status, data):
             data["submission_file"] = prepare_base64(data)
             data["status"] = status
             encrypted = encrypt(json.dumps(data), apiconfig.network_private_key)
+            assert encrypted, "Encryption failed"
             data_to_decrypt["content"] = base64.b64encode(encrypted[0]).decode("utf-8")
             data_to_decrypt["nonce"] = base64.b64encode(encrypted[1]).decode("utf-8")
             data_to_decrypt["tag"] = base64.b64encode(encrypted[2]).decode("utf-8")
@@ -201,23 +217,22 @@ def send(status, data):
                 headers=headers,
                 timeout=(5, 30),
             )
-            # print(api_connection.content)
+
             try:
                 api_connection.raise_for_status()
             except Exception:
-                print(
-                    str(time.ctime())
-                    + " | ERROR | An error occured when transfering the file!"
+                logger.error(
+                    "An error occured when transfering the file!"
                 )
                 return False
             else:
                 return True
         else:
-            print(
-                str(time.ctime())
-                + " | ERROR | An error occured when transfering the file!"
+            logger.error(
+                "An error occured when transfering the file!"
             )
             return False
 
     except Exception as exception:
-        print(str(time.ctime()) + f" | EXCEPTION | lib.py: send(): {exception}")
+        logger.exception(f"lib.py: send(): {exception}")
+        return False

@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-$SCRIPT_DIR/generate_env.sh "$SCRIPT_DIR"
+
+if [ ! -f "$SCRIPT_DIR/../.env" ]; then
+    "$SCRIPT_DIR/generate_env.sh" "$SCRIPT_DIR"
+else
+    echo ".env already exists. Keeping existing credentials."
+fi
 
 find "$SCRIPT_DIR/../setup"   -type d -exec chmod 0755 {} +
 find "$SCRIPT_DIR/../setup"   -type f -exec chmod 0744 {} +

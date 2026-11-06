@@ -16,7 +16,7 @@
 		$problemstars = $row['stars'];
 	}
 
-	if($isfound!=1 or (strtotime($publishtime)>strtotime("now") and !has_permission('main.display.all_resources')) or (!check_problemset_availability($problemset, $pdo) and !has_permission('main.display.all_resources'))) 
+	if($isfound!=1 or (strtotime($publishtime)>strtotime("now") and !has_permission('main.display.all_resources')) or (!(check_problemset_availability($problemset, $pdo)['isavailable']) and !has_permission('main.display.all_resources'))) 
 	{ 
 		kick();
 	}

@@ -56,7 +56,11 @@ def connect_to_queue(logger, t):
         )
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(
-                host="rabbitmq", port="5672", credentials=credentials  # Can be customized
+                host="rabbitmq", 
+                port="5672", 
+                credentials=credentials,
+                heartbeat=60,
+                socket_timeout=10
             )
         )
         channel = connection.channel()
@@ -65,17 +69,20 @@ def connect_to_queue(logger, t):
         )
     except Exception as e:
         t *= 2
-        if (t>32):
-            logger.critical(
-                "Can't connect to the database. Stopping worker..."
-            )
-        logger.error(
-            f"Can't connect to the database: {e}. Trying to reconnect in {t} seconds."
-        )
-        time.sleep(t)
-        channel = connect_to_queue(logger, t)
 
-    return channel
+        if t > 32:
+            logger.critical("Can't connect to RabbitMQ. Stopping worker...")
+            sys.exit(1)
+
+        logger.error(
+            f"Can't connect to RabbitMQ: {e}. "
+            f"Trying to reconnect in {t} seconds."
+        )
+
+        time.sleep(t)
+        return connect_to_queue(logger, t)
+
+    return connection, channel
 
 
 def prepare_inout(logger, submission):
@@ -105,7 +112,7 @@ def prepare_inout(logger, submission):
 
 def main(
     EnforcedTesting=True,
-    QuietTesting=True,  
+    QuietTesting=False,  
     EnforcedLandlock=True,
     worker_id=1
 ):
@@ -137,7 +144,7 @@ def main(
         raise Exception(f"mq_receiver.py: main(): {exception}")
 
     try:
-        channel = connect_to_queue(logger, 2)
+        connection, channel = connect_to_queue(logger, 2)
         try:
             from landlockpy import AccessFS, AccessNet, Ruleset
 
@@ -162,43 +169,65 @@ def main(
 
         def callback(ch, method, properties, body):
             try:
-                submission = json.loads(body)
+                submission = None
+                try:
+                    submission = json.loads(body)
+
+                    if not isinstance(submission, dict):
+                        raise Exception("Submission must be a JSON object")
+                    assert submission["submission_id"] > 0
+
+                except Exception as e:
+                    logger.warning(f"Received invalid submission: {e}")
+                    ch.basic_nack(
+                        delivery_tag=method.delivery_tag,
+                        requeue=False,
+                    )
+                    return
+
                 logger.info(
                     f"Received submission {submission["submission_id"]}",
                 )
 
                 if not (prepare_inout(logger, submission)):
                     logger.error(
-                        f"An error occured when worker was preparing inout for submission {submission["submission_id"]}."
+                        f"An error occured when worker was preparing inout for submission {submission.get("submission_id", 'unknown')}."
                     )
                     raise Exception(
                         "An error occured when worker was preparing inout for submission"
                     )
 
-                api.lib.prepare(submission)
+                assert api.lib.prepare(submission), "Failed to prepare submission."
 
                 if submission["submission_lang"] == "py":
                     logger.info("Executing PYTHON script.")
-                    api.lib.send(compilers.python.run(submission), submission)
+                    assert api.lib.send(compilers.python.run(submission), submission), "API usage failed"
                 elif submission["submission_lang"] == "cpp":
                     logger.info("Executing C++ script.")
-                    api.lib.send(compilers.cpp.run(submission), submission)
+                    assert api.lib.send(compilers.cpp.run(submission), submission), "API usage failed"
                 elif submission["submission_lang"] == "java":
                     logger.info("Executing JAVA script.")
-                    api.lib.send(compilers.java.run(submission), submission)
+                    assert api.lib.send(compilers.java.run(submission), submission), "API usage failed"
+                else:
+                    raise Exception(f"Unsupported language: {submission.get("submission_lang", 'unknown')}")
 
             except Exception as e:
-                channel.basic_nack(
-                    delivery_tag=method.delivery_tag,
-                    requeue=False,
-                )
-                api.lib.send("fail", submission)
-                logger.warning(f"Submission {submission["submission_id"]} couldn\'t be evaluated. Sent to DLQ")
+                if (submission and isinstance(submission, dict) 
+                and submission.get("submission_id", 'unknown') != 'unknown' 
+                and api.lib.send("fail", submission)):
+                    ch.basic_ack(delivery_tag=method.delivery_tag)
+                else:
+                    ch.basic_nack(
+                        delivery_tag=method.delivery_tag,
+                        requeue=False,
+                    )
+                logger.warning(f"Submission {submission.get("submission_id", 'unknown')} couldn\'t be evaluated. Sent to DLQ")
             else:
-                channel.basic_ack(
+                ch.basic_ack(
                     delivery_tag=method.delivery_tag,
                 )
 
+        channel.basic_qos(prefetch_count=1)
         channel.basic_consume(
             queue="esit", on_message_callback=callback, auto_ack=False
         )
