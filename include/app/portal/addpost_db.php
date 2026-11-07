@@ -15,7 +15,7 @@
 		$db_query = $pdo->prepare('INSERT INTO ARTICLES (title, author, content, image_path) VALUES (:ptitle, :pauthor, :pcontent, :pimage)');
 		$db_query->execute(['ptitle' => $_POST['fname'], 'pauthor' => $_SESSION['AUTH_USERNAME'], 'pcontent' => $farea_content, 'pimage' => $uploaded_image_path]);
 
-		insert_flash_message('success', 'Sukces!', 'Artykuł został pomyślnie dodany.');
+		insert_flash_message('success', __('Success').'!', __('Your article has been added successfully').'!');
 		redirect("index.php?p=portal");
 	} catch (Throwable $t) {
 		extended_exception_handler($t);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 18:30+0100\n"
+"POT-Creation-Date: 2026-11-07 13:07+0100\n"
 "PO-Revision-Date: 2026-09-29 18:51+0200\n"
 "Last-Translator: jstpp <jstpp_github@proton.me>\n"
 "Language-Team: \n"
@@ -213,6 +213,32 @@ msgstr "Repeat new password"
 msgid "Change password"
 msgstr "Change password"
 
+#: ../include/worker/api/api_get_results.php:121
+msgid "Your solution for problem"
+msgstr ""
+
+#: ../include/worker/api/api_get_results.php:121
+#, fuzzy
+msgid "has been evaluated"
+msgstr "Reevaluate"
+
+#: ../include/worker/api/api_get_results.php:121
+#: ../include/app/mysolutions.php:51 ../include/app/mysolutions.php:57
+#: ../include/app/menus/vertical.php:100
+msgid "My solutions"
+msgstr "My solutions"
+
+#: ../include/app/content/add_content_script.php:129
+#: ../include/app/portal/addpost_db.php:18
+msgid "Success"
+msgstr ""
+
+#: ../include/app/content/add_content_script.php:129
+#: ../include/app/portal/addpost_db.php:18
+#, fuzzy
+msgid "Your article has been added successfully"
+msgstr "Your password has been changed successfully"
+
 #: ../include/app/config/init_roles.php:7
 msgid "superadministrator"
 msgstr "superadministrator"
@@ -355,6 +381,84 @@ msgstr "Add new post"
 msgid "Fill all required textboxes."
 msgstr "Fill all required textboxes."
 
+#: ../include/app/problemtypes/ctfquest.php:44
+#: ../include/app/problemtypes/algquest.php:43
+#: ../include/app/problemtypes/formquest.php:76
+msgid "You can submit your solution "
+msgstr ""
+
+#: ../include/app/problemtypes/ctfquest.php:44
+#: ../include/app/problemtypes/algquest.php:43
+#: ../include/app/problemtypes/formquest.php:76
+msgid "times"
+msgstr ""
+
+#: ../include/app/problemtypes/ctfquest.php:47
+#: ../include/app/problemtypes/algquest.php:46
+#: ../include/app/problemtypes/formquest.php:79
+msgid "You can submit your solution <b>once only</b>."
+msgstr ""
+
+#: ../include/app/problemtypes/ctfquest.php:49
+#: ../include/app/problemtypes/algquest.php:48
+#: ../include/app/problemtypes/formquest.php:81
+msgid "You can't submit new solutions."
+msgstr ""
+
+#: ../include/app/problemtypes/ctfquest.php:65
+#: ../include/app/problemtypes/algquest.php:79
+#: ../include/app/problemtypes/formquest.php:90
+#, fuzzy
+msgid "Your solution"
+msgstr "My solutions"
+
+#: ../include/app/problemtypes/ctfquest.php:70
+#: ../include/app/problemtypes/classicquest.php:70
+#: ../include/app/problemtypes/multiplechoicequest.php:70
+#: ../include/app/problemtypes/formquest.php:96
+#, fuzzy
+msgid "Submit your solution"
+msgstr "Submit your assessment"
+
+#: ../include/app/problemtypes/algquest.php:28
+#: ../include/app/problemtypes/formquest.php:59
+#, fuzzy
+msgid "Problem content"
+msgstr "Problem name"
+
+#: ../include/app/problemtypes/algquest.php:31
+#: ../include/app/problemtypes/formquest.php:62
+#, fuzzy
+msgid "You can open this problem"
+msgstr "You can log in now"
+
+#: ../include/app/problemtypes/algquest.php:31
+#: ../include/app/problemtypes/formquest.php:62
+msgid "here"
+msgstr ""
+
+#: ../include/app/problemtypes/algquest.php:63
+#: ../include/app/add_problem.php:191 ../include/app/add_problem.php:220
+#: ../include/app/results/algresult.php:220
+msgid "Test"
+msgstr "Test"
+
+#: ../include/app/problemtypes/algquest.php:86
+#, fuzzy
+msgid "Submit your anwser"
+msgstr "Submit your assessment"
+
+#: ../include/app/problemtypes/classicquest.php:69
+#: ../include/app/problemtypes/multiplechoicequest.php:69
+msgid "That's all"
+msgstr ""
+
+#: ../include/app/problemtypes/formquest.php:85
+msgid ""
+"Your solution is evaluated by other people. Results will be available after "
+"some time."
+msgstr ""
+
 #: ../include/app/check_the_form.php:44
 msgid "Currently evaluating user's solution"
 msgstr "Currently evaluating user's solution"
@@ -430,11 +534,6 @@ msgstr "Available input formats"
 msgid "Available output formats"
 msgstr "Available output formats"
 
-#: ../include/app/add_problem.php:191 ../include/app/add_problem.php:220
-#: ../include/app/results/algresult.php:220
-msgid "Test"
-msgstr "Test"
-
 #: ../include/app/add_problem.php:192
 msgid "Input"
 msgstr "Input"
@@ -495,11 +594,6 @@ msgstr "Add new"
 #: ../include/app/add_problem.php:488
 msgid "Add new problem"
 msgstr "Add new problem"
-
-#: ../include/app/mysolutions.php:51 ../include/app/mysolutions.php:57
-#: ../include/app/menus/vertical.php:100
-msgid "My solutions"
-msgstr "My solutions"
 
 #: ../include/app/mysolutions.php:71 ../include/app/creatorcenter.php:79
 #: ../include/app/dashboard.php:374 ../include/app/results/algresult.php:41
@@ -622,8 +716,9 @@ msgid "Version"
 msgstr "Version"
 
 #: ../include/app/portal.php:181 ../include/app/channel.php:655
-#: ../include/app/search.php:214 ../include/app/search.php:236
-#: ../include/app/search.php:256 ../include/app/content.php:51
+#: ../include/app/creatorcenter.php:178 ../include/app/search.php:214
+#: ../include/app/search.php:236 ../include/app/search.php:256
+#: ../include/app/content.php:51
 msgid "Author"
 msgstr "Author"
 
@@ -860,9 +955,25 @@ msgstr "Total points"
 msgid "Reevaluation requests"
 msgstr "Reevaluation requests"
 
+#: ../include/app/creatorcenter.php:132
+msgid "Submitted by:"
+msgstr ""
+
 #: ../include/app/creatorcenter.php:166
 msgid "Forms waiting for evaluation"
 msgstr "Forms waiting for evaluation"
+
+#: ../include/app/creatorcenter.php:176
+msgid "Click, to start evaluating"
+msgstr ""
+
+#: ../include/app/creatorcenter.php:179
+msgid "This solution has avg. "
+msgstr ""
+
+#: ../include/app/creatorcenter.php:179
+msgid "characters"
+msgstr ""
 
 #: ../include/app/menus/vertical.php:82
 msgid "Dashboard"
@@ -954,6 +1065,16 @@ msgstr "Average correctness"
 msgid "Number of points in the last 30 days"
 msgstr "Number of points in the last 30 days"
 
+#: ../include/app/dashboard.php:312 ../include/app/results/algresult.php:171
+#: ../include/app/results/testresult.php:132
+msgid "Correct anwsers"
+msgstr "Correct anwsers"
+
+#: ../include/app/dashboard.php:312 ../include/app/results/algresult.php:171
+#: ../include/app/results/testresult.php:132
+msgid "Incorrect anwsers"
+msgstr "Incorrect anwsers"
+
 #: ../include/app/dashboard.php:360
 msgid "My last solutions"
 msgstr "My last solutions"
@@ -1036,18 +1157,8 @@ msgstr ""
 "hidden. The results will be available soon."
 
 #: ../include/app/results/algresult.php:171
-#: ../include/app/results/testresult.php:132
-msgid "Correct anwsers"
-msgstr "Correct anwsers"
-
-#: ../include/app/results/algresult.php:171
 msgid "Limit exceeded"
 msgstr "Limit exceeded"
-
-#: ../include/app/results/algresult.php:171
-#: ../include/app/results/testresult.php:132
-msgid "Incorrect anwsers"
-msgstr "Incorrect anwsers"
 
 #: ../include/app/results/algresult.php:171
 msgid "System errors"
@@ -1117,6 +1228,15 @@ msgstr "Open-ended"
 #: ../include/app/core.php:541
 msgid "Unknown"
 msgstr "Unknown"
+
+#: ../include/app/core.php:781
+msgid "Oops..."
+msgstr ""
+
+#: ../include/app/core.php:781
+#, fuzzy
+msgid "Something went wrong. Try again."
+msgstr "Something went wrong"
 
 #: ../include/app/settings.php:89
 msgid "Security"
@@ -1210,6 +1330,16 @@ msgstr "Unstar"
 msgid "Star"
 msgstr "Star"
 
+#: ../include/app/settings/change_password.php:6
+#, fuzzy
+msgid "Password change unsuccessful."
+msgstr "Your password has been changed successfully"
+
+#: ../include/app/settings/change_password.php:25
+#, fuzzy
+msgid "Your password has been changed."
+msgstr "Your password has been changed successfully"
+
 #: ../include/app/admin.php:234
 msgid "Configuration panel"
 msgstr "Configuration panel"
@@ -1229,6 +1359,10 @@ msgstr "Search for the plugin on GitHub"
 #: ../include/app/admin.php:280
 msgid "Plugin search displays repositories tagged with"
 msgstr "Plugin search displays repositories tagged with"
+
+#: ../include/app/admin.php:285
+msgid "Repository title or key word"
+msgstr ""
 
 #: ../include/app/admin.php:290
 msgid "User's repos"
@@ -1282,7 +1416,7 @@ msgstr "Default URL address"
 msgid "The address through which you connect to the app is:"
 msgstr "The address through which you connect to the app is:"
 
-#: ../include/app/admin.php:377
+#: ../include/app/admin.php:377 ../include/app/admin.php:378
 msgid "Default timezone"
 msgstr "Default timezone"
 
@@ -1290,7 +1424,7 @@ msgstr "Default timezone"
 msgid "Current system time:"
 msgstr "Current system time:"
 
-#: ../include/app/admin.php:382
+#: ../include/app/admin.php:382 ../include/app/admin.php:383
 msgid "Default language"
 msgstr "Default language"
 
@@ -1395,6 +1529,11 @@ msgstr "Add user"
 #: ../include/app/admin.php:585
 msgid "Last login"
 msgstr "Last login"
+
+#: ../include/app/admin.php:617
+#, fuzzy
+msgid "New user"
+msgstr "Add new user"
 
 #: ../include/login/passrecovery_mail.php:19
 msgid "It's me - your activation link"

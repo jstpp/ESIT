@@ -778,7 +778,7 @@
 
 	if(isset($_GET['error'])) 
 	{
-		insert_flash_message('warning', "Ups...", "Coś poszło nie tak. Spróbuj ponownie.");
+		insert_flash_message('warning', __("Oops..."), __("Something went wrong. Try again."));
 		parse_flash_messages();
 	}
 

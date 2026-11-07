@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 18:30+0100\n"
-"PO-Revision-Date: 2026-11-04 18:32+0100\n"
+"POT-Creation-Date: 2026-11-07 13:07+0100\n"
+"PO-Revision-Date: 2026-11-07 13:12+0100\n"
 "Last-Translator: jstpp <jstpp_github@proton.me>\n"
 "Language-Team: \n"
 "Language: pl_PL\n"
@@ -214,6 +214,30 @@ msgstr "Powtórz nowe hasło"
 msgid "Change password"
 msgstr "Zmień hasło"
 
+#: ../include/worker/api/api_get_results.php:121
+msgid "Your solution for problem"
+msgstr "Twoje rozwiązanie zadania"
+
+#: ../include/worker/api/api_get_results.php:121
+msgid "has been evaluated"
+msgstr "zostało sprawdzone"
+
+#: ../include/worker/api/api_get_results.php:121
+#: ../include/app/mysolutions.php:51 ../include/app/mysolutions.php:57
+#: ../include/app/menus/vertical.php:100
+msgid "My solutions"
+msgstr "Moje rozwiązania"
+
+#: ../include/app/content/add_content_script.php:129
+#: ../include/app/portal/addpost_db.php:18
+msgid "Success"
+msgstr "Sukces"
+
+#: ../include/app/content/add_content_script.php:129
+#: ../include/app/portal/addpost_db.php:18
+msgid "Your article has been added successfully"
+msgstr "Twój artykuł został pomyślnie dodany"
+
 #: ../include/app/config/init_roles.php:7
 msgid "superadministrator"
 msgstr "Superadministrator"
@@ -350,6 +374,81 @@ msgstr "Dodaj nową treść"
 msgid "Fill all required textboxes."
 msgstr "Wypełnij wszystkie wymagane pola."
 
+#: ../include/app/problemtypes/ctfquest.php:44
+#: ../include/app/problemtypes/algquest.php:43
+#: ../include/app/problemtypes/formquest.php:76
+msgid "You can submit your solution "
+msgstr "Możesz przesłać swoje rozwiązanie "
+
+#: ../include/app/problemtypes/ctfquest.php:44
+#: ../include/app/problemtypes/algquest.php:43
+#: ../include/app/problemtypes/formquest.php:76
+msgid "times"
+msgstr "razy"
+
+#: ../include/app/problemtypes/ctfquest.php:47
+#: ../include/app/problemtypes/algquest.php:46
+#: ../include/app/problemtypes/formquest.php:79
+msgid "You can submit your solution <b>once only</b>."
+msgstr "Możesz przesłać swoje rozwiązanie <b>jeszcze 1 raz</b>."
+
+#: ../include/app/problemtypes/ctfquest.php:49
+#: ../include/app/problemtypes/algquest.php:48
+#: ../include/app/problemtypes/formquest.php:81
+msgid "You can't submit new solutions."
+msgstr "Nie możesz już przesłać rozwiązania."
+
+#: ../include/app/problemtypes/ctfquest.php:65
+#: ../include/app/problemtypes/algquest.php:79
+#: ../include/app/problemtypes/formquest.php:90
+msgid "Your solution"
+msgstr "Twoje rozwiązanie"
+
+#: ../include/app/problemtypes/ctfquest.php:70
+#: ../include/app/problemtypes/classicquest.php:70
+#: ../include/app/problemtypes/multiplechoicequest.php:70
+#: ../include/app/problemtypes/formquest.php:96
+msgid "Submit your solution"
+msgstr "Prześlij swoje rozwiązanie"
+
+#: ../include/app/problemtypes/algquest.php:28
+#: ../include/app/problemtypes/formquest.php:59
+msgid "Problem content"
+msgstr "Treść zadania"
+
+#: ../include/app/problemtypes/algquest.php:31
+#: ../include/app/problemtypes/formquest.php:62
+msgid "You can open this problem"
+msgstr "Możesz otworzyć treść zadania"
+
+#: ../include/app/problemtypes/algquest.php:31
+#: ../include/app/problemtypes/formquest.php:62
+msgid "here"
+msgstr "tutaj"
+
+#: ../include/app/problemtypes/algquest.php:63
+#: ../include/app/add_problem.php:191 ../include/app/add_problem.php:220
+#: ../include/app/results/algresult.php:220
+msgid "Test"
+msgstr "Test"
+
+#: ../include/app/problemtypes/algquest.php:86
+msgid "Submit your anwser"
+msgstr "Prześlij swoją odpowiedź"
+
+#: ../include/app/problemtypes/classicquest.php:69
+#: ../include/app/problemtypes/multiplechoicequest.php:69
+msgid "That's all"
+msgstr "To wszystko"
+
+#: ../include/app/problemtypes/formquest.php:85
+msgid ""
+"Your solution is evaluated by other people. Results will be available after "
+"some time."
+msgstr ""
+"Twoje rozwiązanie jest w trakcie oceniania przez drugiego człowieka. To może "
+"trochę potrwać."
+
 #: ../include/app/check_the_form.php:44
 msgid "Currently evaluating user's solution"
 msgstr "Ocenianie nadesłanego rozwiązania"
@@ -425,11 +524,6 @@ msgstr "Dostępne formaty wejścia"
 msgid "Available output formats"
 msgstr "Dostępne formaty wyjścia"
 
-#: ../include/app/add_problem.php:191 ../include/app/add_problem.php:220
-#: ../include/app/results/algresult.php:220
-msgid "Test"
-msgstr "Test"
-
 #: ../include/app/add_problem.php:192
 msgid "Input"
 msgstr "Wejście"
@@ -490,11 +584,6 @@ msgstr "Dodaj nowy"
 #: ../include/app/add_problem.php:488
 msgid "Add new problem"
 msgstr "Dodaj nowy problem"
-
-#: ../include/app/mysolutions.php:51 ../include/app/mysolutions.php:57
-#: ../include/app/menus/vertical.php:100
-msgid "My solutions"
-msgstr "Moje rozwiązania"
 
 #: ../include/app/mysolutions.php:71 ../include/app/creatorcenter.php:79
 #: ../include/app/dashboard.php:374 ../include/app/results/algresult.php:41
@@ -617,8 +706,9 @@ msgid "Version"
 msgstr "Wersja"
 
 #: ../include/app/portal.php:181 ../include/app/channel.php:655
-#: ../include/app/search.php:214 ../include/app/search.php:236
-#: ../include/app/search.php:256 ../include/app/content.php:51
+#: ../include/app/creatorcenter.php:178 ../include/app/search.php:214
+#: ../include/app/search.php:236 ../include/app/search.php:256
+#: ../include/app/content.php:51
 msgid "Author"
 msgstr "Autor"
 
@@ -854,9 +944,25 @@ msgstr "Punkty łącznie"
 msgid "Reevaluation requests"
 msgstr "Odwołania"
 
+#: ../include/app/creatorcenter.php:132
+msgid "Submitted by:"
+msgstr "Przesłane przez:"
+
 #: ../include/app/creatorcenter.php:166
 msgid "Forms waiting for evaluation"
 msgstr "Formularze oczekujące na ocenę"
+
+#: ../include/app/creatorcenter.php:176
+msgid "Click, to start evaluating"
+msgstr "Kliknij, by zacząć sprawdzać"
+
+#: ../include/app/creatorcenter.php:179
+msgid "This solution has avg. "
+msgstr "To rozwiązanie ma około"
+
+#: ../include/app/creatorcenter.php:179
+msgid "characters"
+msgstr "znaków"
 
 #: ../include/app/menus/vertical.php:82
 msgid "Dashboard"
@@ -946,6 +1052,16 @@ msgstr "Średnia poprawność"
 msgid "Number of points in the last 30 days"
 msgstr "Liczba punktów z ostatnich 30 dni"
 
+#: ../include/app/dashboard.php:312 ../include/app/results/algresult.php:171
+#: ../include/app/results/testresult.php:132
+msgid "Correct anwsers"
+msgstr "Poprawne odpowiedzi"
+
+#: ../include/app/dashboard.php:312 ../include/app/results/algresult.php:171
+#: ../include/app/results/testresult.php:132
+msgid "Incorrect anwsers"
+msgstr "Błędne odpowiedzi"
+
 #: ../include/app/dashboard.php:360
 msgid "My last solutions"
 msgstr "Moje ostatnie rozwiązania"
@@ -1026,18 +1142,8 @@ msgstr ""
 "ukryty. Wyniki będą wkrótce dostępne."
 
 #: ../include/app/results/algresult.php:171
-#: ../include/app/results/testresult.php:132
-msgid "Correct anwsers"
-msgstr "Poprawne odpowiedzi"
-
-#: ../include/app/results/algresult.php:171
 msgid "Limit exceeded"
 msgstr "Limit przekroczony"
-
-#: ../include/app/results/algresult.php:171
-#: ../include/app/results/testresult.php:132
-msgid "Incorrect anwsers"
-msgstr "Błędne odpowiedzi"
 
 #: ../include/app/results/algresult.php:171
 msgid "System errors"
@@ -1107,6 +1213,14 @@ msgstr "Zadanie otwarte"
 #: ../include/app/core.php:541
 msgid "Unknown"
 msgstr "Nieznane"
+
+#: ../include/app/core.php:781
+msgid "Oops..."
+msgstr "Ups..."
+
+#: ../include/app/core.php:781
+msgid "Something went wrong. Try again."
+msgstr "Coś poszło nie tak. Spróbuj ponownie."
 
 #: ../include/app/settings.php:89
 msgid "Security"
@@ -1200,6 +1314,14 @@ msgstr "Ogwiazdkuj"
 msgid "Star"
 msgstr "Gwiazdka"
 
+#: ../include/app/settings/change_password.php:6
+msgid "Password change unsuccessful."
+msgstr "Nie udało się zmienić hasła."
+
+#: ../include/app/settings/change_password.php:25
+msgid "Your password has been changed."
+msgstr "Twoje hasło zostało zmienione pomyślnie."
+
 #: ../include/app/admin.php:234
 msgid "Configuration panel"
 msgstr "Panel konfiguracyjny"
@@ -1219,6 +1341,10 @@ msgstr "Znajdź wtyczkę na GitHub"
 #: ../include/app/admin.php:280
 msgid "Plugin search displays repositories tagged with"
 msgstr "Wyszukiwarka pokazuje repozytoria z tagiem"
+
+#: ../include/app/admin.php:285
+msgid "Repository title or key word"
+msgstr "Nazwa repozytorium lub słowo kluczowe"
 
 #: ../include/app/admin.php:290
 msgid "User's repos"
@@ -1272,7 +1398,7 @@ msgstr "Domyślny adres URL"
 msgid "The address through which you connect to the app is:"
 msgstr "Adres przez który łączysz się z tą aplikacją to:"
 
-#: ../include/app/admin.php:377
+#: ../include/app/admin.php:377 ../include/app/admin.php:378
 msgid "Default timezone"
 msgstr "Domyślna strefa czasowa"
 
@@ -1280,7 +1406,7 @@ msgstr "Domyślna strefa czasowa"
 msgid "Current system time:"
 msgstr "Obecny czas:"
 
-#: ../include/app/admin.php:382
+#: ../include/app/admin.php:382 ../include/app/admin.php:383
 msgid "Default language"
 msgstr "Domyślny język"
 
@@ -1386,6 +1512,10 @@ msgstr "Dodaj użytkownika"
 #: ../include/app/admin.php:585
 msgid "Last login"
 msgstr "Ostatnie logowanie"
+
+#: ../include/app/admin.php:617
+msgid "New user"
+msgstr "Dodaj użytkownika"
 
 #: ../include/login/passrecovery_mail.php:19
 msgid "It's me - your activation link"

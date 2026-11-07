@@ -282,7 +282,7 @@
 		</center>
 		<br />
 		<div style="width: 90%; margin-left: 5%; background-color: var(--container-hover-bg-textbox); overflow: hidden; border-radius: 0.4vmax; display: flex; align-items: center; justify-content: right;">
-			<input type="text" id="github_searchbox" placeholder="Nazwa repozytorium lub słowo kluczowe" style="outline: none; width: 100%; background-color: transparent; color: var(--text); border: none; padding: 1vmax; font-size: 1.2vmax; font-family: inherit; float: left;"/>
+			<input type="text" id="github_searchbox" placeholder="<?php echo(__("Repository title or key word")); ?>" style="outline: none; width: 100%; background-color: transparent; color: var(--text); border: none; padding: 1vmax; font-size: 1.2vmax; font-family: inherit; float: left;"/>
 			<i class="fa fa-search" id="search_icon" onClick="githubSearch();" style="font-size: 1.2vmax; margin-right: 1.2vmax;"></i>
 		</div>
 		<div id="github_search_results" style="width: 90%; margin-left: 5%; display: none;">
@@ -375,12 +375,12 @@
 		</div>
 		<div class="dark-box">
 			<label for="general_timezone"><?php echo(__("Default timezone")); ?>:&emsp;</label>
-			<input type="text" id="general_timezone" name="general_timezone" placeholder="Domyślna strefa czasowa" value="<?php echo(get_misc_value('general_timezone')); ?>">
+			<input type="text" id="general_timezone" name="general_timezone" placeholder="<?php echo(__("Default timezone")); ?>" value="<?php echo(get_misc_value('general_timezone')); ?>">
 			<br /><small><?php echo(__("Current system time:")); ?> <b><?php echo(date("Y-m-d H:i:s")); ?></b> (<?php echo(date_default_timezone_get()); ?>).</small>
 		</div>
 		<div class="dark-box">
 			<label for="general_default_language"><?php echo(__("Default language")); ?>:&emsp;</label>
-			<input type="text" id="general_default_language" name="general_default_language" placeholder="Domyślna język aplikacji" value="<?php echo(get_misc_value('general_default_language')); ?>">
+			<input type="text" id="general_default_language" name="general_default_language" placeholder="<?php echo(__("Default language")); ?>" value="<?php echo(get_misc_value('general_default_language')); ?>">
 		</div>
 		<div class="dark-box">
 			<p><?php echo(__("Workers")); ?></p>
@@ -614,7 +614,7 @@
 		}
 		function add_user()
 		{
-			document.querySelector('#user_dialog h2').innerHTML = "Nowy użytkownik";
+			document.querySelector('#user_dialog h2').innerHTML = "<?php echo(__("New user")); ?>";
 			document.querySelector('#user_dialog input[name="username"]').value = "";
 			document.querySelector('#user_dialog input[name="name"]').value = "";
 			document.querySelector('#user_dialog input[name="surname"]').value = "";

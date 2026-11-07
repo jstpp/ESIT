@@ -69,6 +69,9 @@ Check the ESIT custom configuration options [here](setup/README.md).
 > [!tip]
 > When running docker installation remember to check if your custom config matches the credentials in [.env file](setup/.env.example).
 
+> [!tip]
+> It is recommended to use ESIT behind reverse proxy with HTTPS. You should setup it on your own (using software like [nginx](https://github.com/nginx/nginx)).
+
 ## Translation
 
 Feel free to add translations. Currently supported languages: 🇺🇸 `English`, 🇵🇱 `Polish`.

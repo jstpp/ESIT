@@ -3,7 +3,7 @@
     {
         if($_SERVER['REQUEST_METHOD'] === 'POST')
         {
-            $notification_content = "Niepomyślna próba zmiany hasła.";
+            $notification_content = __("Password change unsuccessful.");
             $db_query = $pdo->prepare('INSERT INTO NOTIFICATIONS (user_id, content, type) VALUES (:uid, :content, "warn")');
             $db_query->execute(['uid' => $_SESSION['AUTH_ID'], 'content' => $notification_content]);
         }
@@ -22,7 +22,7 @@
     $db_query = $pdo->prepare('UPDATE USERS SET password=:password WHERE USER_ID=:uid');
     $db_query->execute(['password' => password_hash($_POST['password_new1'], PASSWORD_ARGON2ID), 'uid' => $_SESSION['AUTH_ID']]);
 
-    $notification_content = "Twoje hasło zostało zmienione.";
+    $notification_content = __("Your password has been changed.");
     $db_query = $pdo->prepare('INSERT INTO NOTIFICATIONS (user_id, content, type) VALUES (:uid, :content, "success")');
     $db_query->execute(['uid' => $_SESSION['AUTH_ID'], 'content' => $notification_content]);
 

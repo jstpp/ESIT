@@ -309,7 +309,7 @@
 					dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_anwsers'), {
 						type: 'doughnut',
 						data: {
-						labels: ["Odpowiedzi prawidłowe", "Odpowiedzi błędne"],
+						labels: ["<?php echo(__("Correct anwsers")); ?>", "<?php echo(__("Incorrect anwsers")); ?>"],
 						datasets: [{
 							data: [<?php echo($avg_score); ?>, <?php echo(100-$avg_score); ?>],
 							backgroundColor: ['rgba(0, 179, 255, 1)', 'rgba(21, 33, 46, 1)']

@@ -172,10 +172,10 @@ CREATE TABLE `RESULTS` (
   `RESULT_ID` int(11) NOT NULL,
   `submission_id` int(11) NOT NULL,
   `test_id` int(11) NOT NULL,
-  `content` text NOT NULL,
+  `content` longtext NOT NULL,
   `time` text NOT NULL DEFAULT ('0'),
   `memory` text DEFAULT NULL,
-  `comment` text NOT NULL,
+  `comment` longtext NOT NULL,
   `returncode` int(11) NOT NULL DEFAULT -1,
   `anws_correct` int(11) NOT NULL DEFAULT 0,
   `anws_wrong` int(11) NOT NULL DEFAULT 0,
@@ -200,8 +200,8 @@ CREATE TABLE `SUBMISSIONS` (
   `score_percentage` int(11) NOT NULL,
   `submission_lang` text NOT NULL DEFAULT ('n/a'),
   `mode` int(11) NOT NULL DEFAULT 1,
-  `content` text NOT NULL DEFAULT ('-'),
-  `comment` text NOT NULL DEFAULT ('-')
+  `content` longtext NOT NULL DEFAULT ('-'),
+  `comment` longtext NOT NULL DEFAULT ('-')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

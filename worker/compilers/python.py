@@ -3,7 +3,9 @@ import os
 import subprocess
 import sys
 import time
+import logging
 
+logger = logging.getLogger("esit.worker")
 
 def run(submission):
     try:
@@ -33,17 +35,16 @@ def run(submission):
         misc_dir = root_dir + "/misc"
 
     except Exception as e:
-        print(str(time.ctime()) + " | A compiler exception occured - " + str(e))
+        logger.exception("A compiler exception occured - " + str(e))
         return "fail"
 
     genfile = sys.stdout
     for turn in submission["tests"]:
-        print(
-            str(time.ctime()),
-            "| Testing submission",
-            str(submission["submission_id"]),
-            "(test",
-            str(turn["TEST_ID"]) + ")",
+        logger.info(
+            "Testing submission " +
+            str(submission["submission_id"]) +
+            " (test " +
+            str(turn["TEST_ID"]) + ")"
         )
         try:
             genfile = sys.stdout
@@ -52,9 +53,7 @@ def run(submission):
                 misc_dir + "/debug-run-" + str(turn["TEST_ID"]) + ".log", "w"
             )
         except Exception:
-            print(
-                str(time.ctime())
-                + " | A compiler exception occured - error for test "
+            logger.exception("A compiler exception occured - error for test "
                 + str(turn["TEST_ID"])
             )
             return "fail"
@@ -103,7 +102,7 @@ def run(submission):
             logfile.close()
 
         except Exception as e:
-            print(e)
+            logger.exception(f"Exception: {e}")
             sys.stdout = genfile
             logfile.close()
 

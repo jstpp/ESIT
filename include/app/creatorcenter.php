@@ -129,7 +129,7 @@
 				echo('<a href="index.php?p='.$resultdest.'&sid='.$row['id'].'" class="solutions_results_block" style="background-image: '.$gradient.';">
 					<div style="display: flex; flex-direction: column; flex: 1;">
 						<h2 style="margin: 0 0 0.5vmax 0;">'.htmlentities($row['title']).'</h2>
-						<small style="margin-bottom: 0.5vmax;">Nadesłane przez: '.htmlentities($row['username']).'</small>
+						<small style="margin-bottom: 0.5vmax;">'.__("Submitted by:").' '.htmlentities($row['username']).'</small>
 						<small style="font-size: 0.7vmax; background-color: '.$problem['color'].'; width: 8vmax; text-align: center; padding: 0.4vmax; border-radius: 1vmax;"><i class="'.$problem['icon'].'"></i>&nbsp;&nbsp;'.$problem['full_name'].'</small>
 					</div>');
 				
@@ -173,10 +173,10 @@
 			while($row = $db_query->fetch())
 			{
 				echo('<div class="window" onClick="window.location.href = \'?p=check_the_form&sid='.$row['subid'].'\';" style="cursor: pointer;">
-				<h2 class="window_title">'.$row['title'].'</h2><i style="font-size: 0.6vw; color: gray; margin-left: 5%; margin-top: -0.5vw; display: block;">Kliknij, by zacząć sprawdzać</i>
+				<h2 class="window_title">'.$row['title'].'</h2><i style="font-size: 0.6vw; color: gray; margin-left: 5%; margin-top: -0.5vw; display: block;">'.__("Click, to start evaluating").'</i>
 				<p style="margin-left: 5%;">
-					<i class=\'fas fa-user\'></i>&nbsp;&nbsp;Autor: <b>'.$row['username'].'</b><br />
-					<i class=\'fas fa-file\'></i>&nbsp;&nbsp;Te rozwiązanie ma około '.strlen(strip_tags(preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '',$row['content']))).' znaków</b><br />
+					<i class=\'fas fa-user\'></i>&nbsp;&nbsp;'.__("Author").': <b>'.$row['username'].'</b><br />
+					<i class=\'fas fa-file\'></i>&nbsp;&nbsp;'.__("This solution has avg. ").' '.strlen(strip_tags(preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '',$row['content']))).' '.__("characters").'</b><br />
 				</p>
 				<br />
 				</div>');

@@ -37,7 +37,7 @@
                 $sm['anws_resource'] = 0;
                 $sm['anws_syserror'] = 1;
                 $sm['exec_time'] = 0;
-                $sm['comment'] = "Błąd systemu";
+                $sm['comment'] = "System error";
             } else {
                 $timefile = fopen(__DIR__."/../solutions/".$submission['submission_id']."/time/".$sm['TEST_ID'].".log",'r');
                 $checkfile = fopen(__DIR__."/../alg/".$submission['problem_id']."/out/".$sm['TEST_ID'].".out",'r');
@@ -46,31 +46,23 @@
                 if(!feof($timefile))
                 {
                     $sm['exec_time'] = fgets($timefile);
-                    array_push($time_data_array, $sm['exec_time']);
+                    if(!str_starts_with($sm['exec_time'], "C"))
+                    {
+                        array_push($time_data_array, $sm['exec_time']);
+                    }
                 }
                 fclose($timefile);
 
-                if(isset($sm['result']) and $sm['result']!="")
+                switch($sm['returncode'])
                 {
-                    $solution_array = preg_split('/\r\n|\r|\n/', $sm['result']);
-                } else {
-                    if (!preg_match('/status (\d+)/', $time_data_array[0], $matches)) {
+                    case 137:
+                        $sm['result'] = "<-resource->";
+                        break;
+                    case 1:
                         $sm['result'] = "<-error->";
-                    } else {
-                        switch((int)$matches[1])
-                        {
-                            case 1:
-                                $sm['result'] = "<-error->";
-                                break;
-                            case 137:
-                                $sm['result'] = "<-resource->";
-                                break;
-                            case 255:
-                                $sm['result'] = "<-error->";
-                                break;
-                        }
-                    }
-                    $solution_array = preg_split('/\r\n|\r|\n/', $sm['result']);
+                        break;
+                    default:
+                        $solution_array = preg_split('/\r\n|\r|\n/', $sm['result']);
                 }
 
                 $i = 0;
@@ -82,49 +74,37 @@
                 while(!feof($checkfile))
                 {
                     $correctanwser = fgets($checkfile);
-                    $anwser = ($i<=count($solution_array)-1) ? $solution_array[$i] : "";
                     if(feof($checkfile) && trim($correctanwser) === "") break;
 
-                    if(preg_replace('/\s+/', '', $correctanwser)==preg_replace('/\s+/', '',$anwser))
+                    switch($sm['returncode'])
                     {
-                        if((float)$sm['max_time']<(float)$sm['exec_time'])
-                        {
+                        case 255:
+                            $sm['comment'] = "System error";
+                            $sm['anws_syserror']++;
+                            break;
+                        case 137:
+                            $sm['comment'] = "Resource limit exceeded";
                             $sm['anws_resource']++;
-                            $sm['comment'] = "Przekroczono limit czasu";
-                        } else {
-                            $sm['anws_correct']++;
-                        }
-                    } else {
-                        if((float)$sm['max_time']<(float)$sm['exec_time'])
-                        {
-                            $sm['anws_resource']++;
-                            $sm['comment'] = "Przekroczono limit czasu";
-                        } else {
-                            if($sm['result']!="<-error->" 
-                            and $sm['result']!="<-resource->" 
-                            and $sm['result']!="<-systemerror->")
+                            break;
+                        case 1:
+                            $sm['comment'] = "Execution error";
+                            $sm['anws_wrong']++;
+                            break;
+                        default:
+                            $anwser = ($i<=count($solution_array)-1) ? $solution_array[$i] : "";
+                            if(trim($correctanwser)==trim($anwser))
                             {
-                                if(!isset($sm['comment'])) $sm['comment'] = "Otrzymano <code>".htmlentities(preg_replace('/\s+/', '',$anwser))."</code> a oczekiwano <code>".htmlentities(preg_replace('/\s+/', '', $correctanwser))."</code> (...)";
+                                $sm['anws_correct']++;
+                            } else {
+                                $sm['comment'] = "Received <code>".htmlentities(preg_replace('/\s+/', '',$anwser))."</code> when <code>".htmlentities(preg_replace('/\s+/', '', $correctanwser))."</code> was required";
                                 $sm['anws_wrong']++;
-                            } else if ($sm['result']=="<-error->")
-                            {
-                                $sm['comment'] = "Błąd kompilacji";
-                                $sm['anws_wrong']++;
-                            } else if ($sm['result']=="<-resource->")
-                            {
-                                $sm['comment'] = "Przekroczono limit pamięci";
-                                $sm['anws_resource']++;
-                            } else if ($sm['result']=="<-systemerror->")
-                            {
-                                $sm['comment'] = "Błąd systemu";
-                                $sm['anws_syserror']++;
                             }
-                        }
                     }
                     $i++;
                 }
                 fclose($checkfile);
             }
+        
 
             $anws_correct += ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'] != 0) ? $sm['anws_correct']/($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'])*$sm['weight'] : 0;
             $anws_resource += ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'] != 0) ? $sm['anws_resource']/($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'])*$sm['weight'] : 0;
@@ -138,7 +118,7 @@
 
         $percentage = ($anws_correct+$anws_wrong+$anws_resource+$anws_syserror!=0) ? $anws_correct/($anws_correct+$anws_wrong+$anws_resource+$anws_syserror) : 0;
 
-        $notification_content = "Twoje rozwiązanie do zadania #".$submission['problem_id']." zostało sprawdzone!<br/><a href='index.php?p=mysolutions'><i class='fa fa-eye'></i>&nbsp;Moje rozwiązania</a>";
+        $notification_content = __("Your solution for problem")." #".$submission['problem_id']." ".__("has been evaluated")."!<br/><a href='index.php?p=mysolutions'><i class='fa fa-eye'></i>&nbsp;".__("My solutions")."</a>";
 
         $db_query = $pdo->prepare('UPDATE SUBMISSIONS SET verification_time=CURRENT_TIMESTAMP, score=(:percentage1*(SELECT DISTINCT maxpoints FROM CONTENT WHERE CONTENT_ID=:pid)), score_percentage=(:percentage2*100) WHERE SUBMISSION_ID=:sid');
         $db_query->execute(['sid' => $submission['submission_id'], "percentage1" => $percentage, "percentage2" => $percentage, "pid" => $submission['problem_id']]);

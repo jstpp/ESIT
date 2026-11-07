@@ -56,10 +56,10 @@
 	}
 </style>
 <div class="window">
-	<h2 class="window_title">Treść zadania</h2>
+	<h2 class="window_title"><?php echo(__("Problem content")); ?></h2>
 	<iframe src="process.php?r=get_content&mode=pdf&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
 	<br />
-	<p style="color: white; text-align: center; width: 100%;">To zadanie możesz też otworzyć <a href="process.php?r=get_content&mode=pdf&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" target="_blank">&nbsp;<i class='fas fa-folder-open'></i>&nbsp;tutaj</a>&nbsp;</p>
+	<p style="color: white; text-align: center; width: 100%;"><?php echo(__("You can open this problem")); ?> <a href="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" target="_blank">&nbsp;<i class='fas fa-folder-open'></i>&nbsp;<?php echo(__("here")); ?></a>&nbsp;</p>
 	<br />
 	<br />
 </div>
@@ -73,27 +73,27 @@
 
 			if($maxattempts-$count>1)
 			{
-				$howmanytimes = "Rozwiązanie do tego zadania możesz wysłać jeszcze <b>".($maxattempts-$count)." razy</b>.";
+				$howmanytimes = __("You can submit your solution ")." <b>".($maxattempts-$count)." ".__("times")."</b>.";
 			} else if ($maxattempts-$count==1)
 			{
-				$howmanytimes = "Rozwiązanie do tego zadania możesz wysłać jeszcze <b>1 raz</b>.";
+				$howmanytimes = __("You can submit your solution <b>once only</b>.");
 			} else {
-				$howmanytimes = "Wykorzystałeś_aś już wszystkie próby!";
+				$howmanytimes = __("You can't submit new solutions.");
 			}
 		?>
 		<i class='fas fa-info-circle'></i>&emsp;<?php echo($howmanytimes); ?><br /><br />
-		<i class='fas fa-clock'></i>&emsp;Test sprawdzany przez komisję. Wyniki pojawią się dopiero po pewnym czasie.
+		<i class='fas fa-clock'></i>&emsp;<?php echo(__("Your solution is evaluated by other people. Results will be available after some time.")); ?>
 	</p>
 </div>
 <div class="window" id="mysolution">
 	<form id="my_anwser_form" method="POST" action="process.php?r=save_form&id=<?php echo($problemid); ?>">
-		<h2 style="margin-left: 5%;">Twoja odpowiedź</h2>
+		<h2 style="margin-left: 5%;"><?php echo(__("Your solution")); ?></h2>
 		<textarea id="content_area" required>
 		</textarea>
 		<input type="hidden" name="fareahidden" id="fareahidden" value="none">
 		<br />
 	</form>
-	<a class="forminput" style="font-weight: normal; float: right; margin-right: 5%;"onClick="document.getElementById('fareahidden').value = tinymce.activeEditor.getContent(); document.getElementById('my_anwser_form').submit();">Wyślij odpowiedź</a>
+	<a class="forminput" style="font-weight: normal; float: right; margin-right: 5%;"onClick="document.getElementById('fareahidden').value = tinymce.activeEditor.getContent(); document.getElementById('my_anwser_form').submit();"><?php echo(__("Submit your solution")); ?></a>
 	<br style="clear: both;"/>
 	<br />
 </div>

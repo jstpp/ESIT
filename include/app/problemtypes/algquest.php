@@ -25,27 +25,27 @@
 </style>
 
 <div class="window">
-	<h2 class="window_title">Treść zadania</h2>
+	<h2 class="window_title"><?php echo(__("Problem content")); ?></h2>
 	<iframe src="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
 	<br />
-	<p style="color: white; text-align: center; width: 100%;">To zadanie możesz też otworzyć <a href="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" target="_blank">&nbsp;<i class='fas fa-folder-open'></i>&nbsp;tutaj</a>&nbsp;</p>
+	<p style="color: white; text-align: center; width: 100%;"><?php echo(__("You can open this problem")); ?> <a href="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" target="_blank">&nbsp;<i class='fas fa-folder-open'></i>&nbsp;<?php echo(__("here")); ?></a>&nbsp;</p>
 	<br />
 	<br />
 </div>
 <?php
-	$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM SUBMISSIONS WHERE problem_id=:setid AND user_id=:uid AND mode=1');
-	$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'uid' => $_SESSION['AUTH_ID']]);
+	$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid AND mode=1');
+	$db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'uid' => $_SESSION['AUTH_ID']]);
 
 	$count = $db_query->fetch()['count'];
 
 	if($maxattempts-$count>1)
 	{
-		$howmanytimes = "Rozwiązanie do tego zadania możesz wysłać jeszcze <b>".($maxattempts-$count)." razy</b>.";
+		$howmanytimes = __("You can submit your solution ")." <b>".($maxattempts-$count)." ".__("times")."</b>.";
 	} else if ($maxattempts-$count==1)
 	{
-		$howmanytimes = "Rozwiązanie do tego zadania możesz wysłać jeszcze <b>1 raz</b>.";
+		$howmanytimes = __("You can submit your solution <b>once only</b>.");
 	} else {
-		$howmanytimes = "Wykorzystałeś_aś już wszystkie próby!";
+		$howmanytimes = __("You can't submit new solutions.");
 	}
 ?>
 <div class="window">
@@ -54,13 +54,13 @@
 		<b>Limity (wg pakietów testów):</b><br />
 		<table style="margin-left: 5%;" id="tests">
 			<?php
-				$db_query = $pdo->prepare('SELECT * FROM ALG_TEST_LIST WHERE problem_id=:setid');
-				$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+				$db_query = $pdo->prepare('SELECT * FROM ALG_TEST_LIST WHERE problem_id=:pid');
+				$db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 
 				while($test = $db_query->fetch())
 				{
 					echo('<tr>
-					<td>Pakiet '.$test['TEST_ID'].'</td>
+					<td>'.__("Test").' '.$test['TEST_ID'].'</td>
 					<td>'.$test['max_memory'].' MiB</td>
 					<td>'.$test['max_time'].' s</td>
 				</tr>');
@@ -76,14 +76,14 @@
 		<div class="window" id="mysolution">
 			<form method="POST" action="process.php?r=send_alg_solution&pid='.$problemid.'">
 				<script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
-				<h2 class="window_title">Twoje rozwiązanie</h2>
+				<h2 class="window_title">'.__("Your solution").'</h2>
 				<br />
 				<select class="forminput" name="lang" id="lang" onChange="lchange();" style="float: left; margin-left: 5%;">
 					<option value="cpp">C++ (g++ dla C++20)</option>
 					<option value="python">Python (Python 3.13)</option>
 					<option value="java">Java (openJDK 25)</option>
 				</select>
-				<input type="submit" value="Prześlij odpowiedź" class="forminput" style="float: right; margin-right: 5%;" onClick="document.getElementById(\'editor_code\').innerHTML = editor.getValue();"/>
+				<input type="submit" value="'.__("Submit your anwser").'" class="forminput" style="float: right; margin-right: 5%;" onClick="document.getElementById(\'editor_code\').innerHTML = editor.getValue();"/>
 				<br style="clear: both;"/>
 				<br />
 				<div id="sendtext" style="width: 90%; margin-left: 5%;">

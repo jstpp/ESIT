@@ -126,7 +126,7 @@
                 $db_query = $pdo->prepare('INSERT INTO ARTICLES (contentset_pos, title, author, content, image_path) VALUES (:cid, :ptitle, :pauthor, :pcontent, :pimg)');
                 $db_query->execute(['cid' => $content_id, 'ptitle' => trim($_POST['content_title']), 'pauthor' => $_SESSION['AUTH_USERNAME'], 'pcontent' => $_POST['art_content_hidden'], 'pimg' => load_img_input()]);
                 $pdo->commit();
-                insert_flash_message('success', 'Sukces!', 'Artykuł został pomyślnie dodany.');
+                insert_flash_message('success', __('Success').'!', __('Your article has been added successfully').'!');
                 
             } catch (Throwable $t){
                 if ($pdo->inTransaction()) {

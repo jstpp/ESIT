@@ -66,8 +66,8 @@
 	<div class="window">
 		<br />
 		<center>
-			<p>To wszystko!</p>
-			<input type="submit" value="Prześlij odpowiedź" class="forminput"/>
+			<p><?php echo(__("That's all")); ?>!</p>
+			<input type="submit" value="<?php echo(__("Submit your solution")); ?>" class="forminput"/>
 		</center>
 		<br />
 	</div>
