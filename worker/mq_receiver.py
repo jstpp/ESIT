@@ -56,8 +56,8 @@ def connect_to_queue(logger, t):
         )
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(
-                host="rabbitmq", 
-                port="5672", 
+                host=config.rabbitmq_host, 
+                port=config.rabbitmq_port, 
                 credentials=credentials,
                 heartbeat=60,
                 socket_timeout=10

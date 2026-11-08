@@ -13,10 +13,8 @@ The last argument is a number of workers that will be started. Each worker is ab
 
 That's it.
 
-## Worker's logs and config file
-There are some variables that can be adjusted in [worker's config file](api/config/config.py) (however changing [.env file](/setup/.env.example) is recommended instead) - **mainly - the network key, that is necessary to successfully connect to web instance**.
-
-Worker also stores simple logs in `logs/worker.log`.
+## Worker's logs
+Worker stores simple logs in `logs/` directory.
 
 ## Tests suite
 Worker is provided with tests suite by default and it automatically stops when any of the mentioned tests is failed. You can bypass this behavior by running `main()` of `mq_receiver.py` with `EnforcedTesting` set to `False` instead of `True`.

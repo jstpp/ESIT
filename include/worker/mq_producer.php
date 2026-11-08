@@ -89,6 +89,13 @@
     $sid = filter_var($_GET['sid'] ?? null, FILTER_VALIDATE_INT);
     $pid = filter_var($_GET['pid'] ?? null, FILTER_VALIDATE_INT);
     if((!isset($_POST['lang']) && !$sid) || !is_logged_in()) kick();
+
+    $db_query = $pdo->prepare('SELECT DISTINCT problemset FROM CONTENT WHERE CONTENT_ID=:pid');
+    $db_query->execute(['pid' => $pid]);
+    if(($row = $db_query->fetch()) && !(check_problemset_availability($row['problemset'], $pdo)['is_available']))
+    {
+        redirect("/app/index.php?p=search&error");
+    }
     
     try {
         if($sid && has_permission('main.solutions.exec.recheck'))
@@ -165,7 +172,7 @@
 
         $myObj->submission_id = $submission_id; 
         $myObj->submission_type = $submission_type;
-        $myObj->user_id = $_SESSION['AUTH_ID'];
+        $myObj->user_id = $uid;
         $myObj->problem_id = $pid; 
         $myObj->submission_lang = $submission_lang;
         $myObj->tests = $tests;

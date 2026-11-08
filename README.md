@@ -28,10 +28,10 @@ git clone https://github.com/jstpp/esit.git && cd esit
 
 You can customize the [config file](include/app/core.php). You should consider this when running it in production, otherwise, you can ignore it.
 
-Start [installation script](./setup/install.sh):
+Start [installation script](./setup/setup.sh):
 
 ```bash
-source ./setup/install.sh
+source ./setup/setup.sh --install
 ```
 
 The service should be available on `localhost:80` unless you change it. The first registered user becomes an admin.
@@ -65,9 +65,6 @@ To enable the portal and all related features, enable the "portal" system plugin
 ## Custom configuration
 
 Check the ESIT custom configuration options [here](setup/README.md).
-
-> [!tip]
-> When running docker installation remember to check if your custom config matches the credentials in [.env file](setup/.env.example).
 
 > [!tip]
 > It is recommended to use ESIT behind reverse proxy with HTTPS. You should setup it on your own (using software like [nginx](https://github.com/nginx/nginx)).

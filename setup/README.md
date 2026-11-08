@@ -5,9 +5,9 @@ git clone https://github.com/jstpp/esit.git && cd esit
 ```
 You can customize the [core](/include/app/core.php). You should consider this when running it in production, otherwise, you can ignore it.
 
-Start [installation script](/setup/install.sh):
+Start [installation script](/setup/setup.sh):
 ```bash
-source ./setup/install.sh
+source ./setup/setup.sh --install
 ```
 
 The service should be available on `localhost:80` unless you change it. The first registered user becomes an admin.
@@ -19,8 +19,8 @@ The service should be available on `localhost:80` unless you change it. The firs
 ### Setup scripts
 | File | Container | Description |
 | --- | --- | --- |
-| `install.sh` | `N/A` | script for initial instance setup & installing all required dependencies |
-| `generate_env.sh` | `N/A` | (requires openssl) generates .env file with random credentials (you can modify `install.sh` to copy `.env.example` instead) |
+| `setup.sh` | `N/A` | script for initial instance setup & installing all required dependencies |
+| `generate_env.sh` | `N/A` | (requires openssl) generates .env file with random credentials (you can modify `setup.sh` to copy `.env.example` instead) |
 | `composer_setup.sh` | `php-fpm` | script for safe PHP composer installation |
 
 ### Configuration files
