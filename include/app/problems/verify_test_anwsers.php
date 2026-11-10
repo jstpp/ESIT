@@ -9,12 +9,12 @@
 
         if(!$row) kick();
         if(trim((string)$row['comment']) === '') kick();
-        $correct_anwsers = preg_split("/\r\n|\n|\r/", (string)$row['comment']);
+        $correct_answers = preg_split("/\r\n|\n|\r/", (string)$row['comment']);
 
         $count = 0;
         $a_ok = 0;
 
-        foreach($correct_anwsers as $q)
+        foreach($correct_answers as $q)
         {
             if(!trim($q)) continue;
 

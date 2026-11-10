@@ -38,7 +38,7 @@
 
 
 </style>
-<form method="POST" id="send_anwsers" action="process.php?r=verify_test&id=<?php echo($_GET['id']); ?>">
+<form method="POST" id="send_answers" action="process.php?r=verify_test&id=<?php echo($_GET['id']); ?>">
 	<?php
 		$db_query = $pdo->prepare('SELECT * FROM TEST_QUESTIONS WHERE problem_id=:pid');
 		$db_query->execute(['pid' => $_GET['id']]);
@@ -46,19 +46,19 @@
 
 		while($row = $db_query->fetch())
 		{
-			$anwsers = json_decode($row['anwsers']);
+			$answers = json_decode($row['answers']);
 			$count++;
 			echo('<div class="window">
 				<p style="margin-left: 5%;">
 					<b>Pytanie '.$count.': '.htmlentities($row['question']).'</b>&emsp; 1 pkt<br /><br />
 					<input type="radio" class="choice_option" name="'.$count.'" id="'.$count.'_a" value="a" />
-					<label for="'.$count.'_a">'.htmlentities($anwsers->{'a'}).'</label><br />
+					<label for="'.$count.'_a">'.htmlentities($answers->{'a'}).'</label><br />
 					<input type="radio" class="choice_option" name="'.$count.'" id="'.$count.'_b" value="b" />
-					<label for="'.$count.'_b">'.htmlentities($anwsers->{'b'}).'</label><br />
+					<label for="'.$count.'_b">'.htmlentities($answers->{'b'}).'</label><br />
 					<input type="radio" class="choice_option" name="'.$count.'" id="'.$count.'_c" value="c" />
-					<label for="'.$count.'_c">'.htmlentities($anwsers->{'c'}).'</label><br />
+					<label for="'.$count.'_c">'.htmlentities($answers->{'c'}).'</label><br />
 					<input type="radio" class="choice_option" name="'.$count.'" id="'.$count.'_d" value="d" />
-					<label for="'.$count.'_d">'.htmlentities($anwsers->{'d'}).'</label><br />
+					<label for="'.$count.'_d">'.htmlentities($answers->{'d'}).'</label><br />
 				</p>
 			</div>');
 		}
@@ -67,6 +67,7 @@
 		<br />
 		<center>
 			<p><?php echo(__("That's all")); ?>!</p>
+			<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 			<input type="submit" value="<?php echo(__("Submit your solution")); ?>" class="forminput"/>
 		</center>
 		<br />

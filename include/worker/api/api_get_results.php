@@ -73,8 +73,8 @@
 
                 while(!feof($checkfile))
                 {
-                    $correctanwser = fgets($checkfile);
-                    if(feof($checkfile) && trim($correctanwser) === "") break;
+                    $correctanswer = fgets($checkfile);
+                    if(feof($checkfile) && trim($correctanswer) === "") break;
 
                     switch($sm['returncode'])
                     {
@@ -91,12 +91,12 @@
                             $sm['anws_wrong']++;
                             break;
                         default:
-                            $anwser = ($i<=count($solution_array)-1) ? $solution_array[$i] : "";
-                            if(trim($correctanwser)==trim($anwser))
+                            $answer = ($i<=count($solution_array)-1) ? $solution_array[$i] : "";
+                            if(trim($correctanswer)==trim($answer))
                             {
                                 $sm['anws_correct']++;
                             } else {
-                                $sm['comment'] = "Received <code>".htmlentities(preg_replace('/\s+/', '',$anwser))."</code> when <code>".htmlentities(preg_replace('/\s+/', '', $correctanwser))."</code> was required";
+                                $sm['comment'] = "Received <code>".htmlentities(preg_replace('/\s+/', '',$answer))."</code> when <code>".htmlentities(preg_replace('/\s+/', '', $correctanswer))."</code> was required";
                                 $sm['anws_wrong']++;
                             }
                     }

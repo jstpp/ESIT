@@ -75,6 +75,7 @@
 		echo('
 		<div class="window" id="mysolution">
 			<form method="POST" action="process.php?r=send_alg_solution&pid='.$problemid.'">
+				<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
 				<script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 				<h2 class="window_title">'.__("Your solution").'</h2>
 				<br />
@@ -83,7 +84,7 @@
 					<option value="python">Python (Python 3.13)</option>
 					<option value="java">Java (openJDK 25)</option>
 				</select>
-				<input type="submit" value="'.__("Submit your anwser").'" class="forminput" style="float: right; margin-right: 5%;" onClick="document.getElementById(\'editor_code\').innerHTML = editor.getValue();"/>
+				<input type="submit" value="'.__("Submit your answer").'" class="forminput" style="float: right; margin-right: 5%;" onClick="document.getElementById(\'editor_code\').innerHTML = editor.getValue();"/>
 				<br style="clear: both;"/>
 				<br />
 				<div id="sendtext" style="width: 90%; margin-left: 5%;">

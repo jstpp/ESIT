@@ -260,9 +260,12 @@
 </style>
 <script src="/include/js/sortablejs/Sortable.js" type="text/javascript"></script>
 <img id="set_header_img" src="<?php echo htmlspecialchars($chimgpath, ENT_QUOTES, 'UTF-8'); ?>" />
-<a href="process.php?r=follow_channel&id=<?php echo($_GET['id']); ?>" class="follow_box">
-	<i class="far fa-bell"></i>&nbsp;<?php echo((check_follow($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unfollow') : __('Follow')); ?>&nbsp;
-</a>
+<form id="channel_follow_form" method="POST" action="process.php?r=follow_channel&id=<?php echo($_GET['id']); ?>">
+	<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+	<a onClick="document.getElementById('channel_follow_form').submit();" class="follow_box">
+		<i class="far fa-bell"></i>&nbsp;<?php echo((check_follow($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unfollow') : __('Follow')); ?>&nbsp;
+	</a>
+</form>
 <br />
 <br />
 <center>
@@ -293,7 +296,7 @@
 		$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 
 		while($row = $db_query->fetch()) {
-			echo('<option value="S'.$row['SET_ID'].'">'.$row['title'].'</option>');
+			echo('<option value="S'.$row['SET_ID'].'">'.htmlentities($row['title']).'</option>');
 		}
 
 		echo('</select>
@@ -352,9 +355,9 @@
 										while($row = $db_query->fetch()) {
 											if($row['SET_ID']==$availability['condition_id'])
 											{
-												echo('<option value="S'.$row['SET_ID'].'" selected>'.$row['title'].'</option>');
+												echo('<option value="S'.$row['SET_ID'].'" selected>'.htmlentities($row['title']).'</option>');
 											} else {
-												echo('<option value="S'.$row['SET_ID'].'">'.$row['title'].'</option>');
+												echo('<option value="S'.$row['SET_ID'].'">'.htmlentities($row['title']).'</option>');
 											}
 										}
 
@@ -424,7 +427,7 @@
 											echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['CONTENT_ID'].'" style="color: inherit;">
 												<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
 												<div class="channel_content_block_title">
-													<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
+													<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.htmlentities($row['title']).'</b>
 													<div class="channel_content_block_element_details">
 														<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'; right: 0;">
 															'.($row['maxattempts']-$ctx['attempts']).' prób
@@ -446,7 +449,7 @@
 											echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['CONTENT_ID'].'" style="color: inherit;">
 												<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
 												<div class="channel_content_block_title">
-													<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.$row['title'].'</b>
+													<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.htmlentities($row['title']).'</b>
 													<div class="channel_content_block_element_details">
 														<div class="channel_content_block_stars" style="background-color: '.$contenttype['color'].'">
 															<i class="far fa-star"></i>&nbsp;'.max(count_content_stars($row['CONTENT_ID']),0).'

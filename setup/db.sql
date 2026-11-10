@@ -227,7 +227,7 @@ CREATE TABLE `TEST_QUESTIONS` (
   `QUESTION_ID` int(11) NOT NULL,
   `problem_id` int(11) NOT NULL,
   `question` text NOT NULL DEFAULT ('-'),
-  `anwsers` text NOT NULL
+  `answers` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

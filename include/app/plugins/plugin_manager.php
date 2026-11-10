@@ -48,7 +48,7 @@
             $dest_path = __DIR__.'/../../plugins/'.explode("/",$repo)[1];
 
             try {
-                if(!is_dir($dest_path)) mkdir($dest_path, 0777, true);
+                if(!is_dir($dest_path)) mkdir($dest_path, 0755, true);
 
                 $repo_content = file_get_contents($repo_url);
                 if(!empty($repo_content)) file_put_contents($dest_path."/".$branch.".zip", $repo_content);

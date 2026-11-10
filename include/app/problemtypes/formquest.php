@@ -86,14 +86,15 @@
 	</p>
 </div>
 <div class="window" id="mysolution">
-	<form id="my_anwser_form" method="POST" action="process.php?r=save_form&id=<?php echo($problemid); ?>">
+	<form id="my_answer_form" method="POST" action="process.php?r=save_form&id=<?php echo($problemid); ?>">
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<h2 style="margin-left: 5%;"><?php echo(__("Your solution")); ?></h2>
 		<textarea id="content_area" required>
 		</textarea>
 		<input type="hidden" name="fareahidden" id="fareahidden" value="none">
 		<br />
 	</form>
-	<a class="forminput" style="font-weight: normal; float: right; margin-right: 5%;"onClick="document.getElementById('fareahidden').value = tinymce.activeEditor.getContent(); document.getElementById('my_anwser_form').submit();"><?php echo(__("Submit your solution")); ?></a>
+	<a class="forminput" style="font-weight: normal; float: right; margin-right: 5%;"onClick="document.getElementById('fareahidden').value = tinymce.activeEditor.getContent(); document.getElementById('my_answer_form').submit();"><?php echo(__("Submit your solution")); ?></a>
 	<br style="clear: both;"/>
 	<br />
 </div>

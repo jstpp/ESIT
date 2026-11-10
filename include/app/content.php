@@ -42,9 +42,12 @@
 	}
 </style>
 
-<a href="process.php?r=star_content&id=<?php echo($problemid); ?>" class="star_box">
-	<i class="far fa-star"></i>&nbsp;<?php echo((check_star($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unstar') : __('Star')); ?>&nbsp;
-</a>
+<form id="content_star_form" method="POST" action="process.php?r=star_content&id=<?php echo($problemid); ?>">
+	<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+	<a onClick="document.getElementById('content_star_form').submit();" class="star_box">
+		<i class="far fa-star"></i>&nbsp;<?php echo((check_star($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unstar') : __('Star')); ?>&nbsp;
+	</a>
+</form>
 
 <center>
 	<h1><?php echo($problemtitle); ?></h1>

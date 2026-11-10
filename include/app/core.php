@@ -105,7 +105,7 @@
 	#              general toolbox				  #
 	###############################################
 
-	function get_misc_value($key): string
+	function get_misc_value(string $key): string
 	{
 		global $pdo;
 		$config_array = array();
@@ -121,7 +121,7 @@
 
 	function force_to_login(): void
 	{
-		header("Location: /login", true, 302);
+		if (!headers_sent()) header("Location: /login", true, 302);
 		echo('<meta http-equiv="refresh" content="0; url=/login" />');
 		die;
 	}
@@ -138,7 +138,7 @@
 		redirect($error_link);
 	}
 
-	function redirect($dest): void
+	function redirect(string $dest): void
 	{
 		if (!headers_sent()) {
 			header("Location: ".$dest, true, 302);
@@ -148,7 +148,11 @@
 		die;
 	}
 
-	function display_message($type, $header, $message): void
+	function display_message(
+		string $type, 
+		string $header, 
+		string $message
+	): void
 	{
 		if(!isset($type) || !isset($header) || !isset($message)) kick();
 		$type = htmlspecialchars($type, ENT_QUOTES, 'UTF-8');
@@ -181,7 +185,7 @@
 		</div>');
 	}
 
-	function is_an_user($key): bool
+	function is_an_user(string $key): bool
 	{
 		global $pdo;
 
@@ -210,7 +214,10 @@
 		return (count($result)>0) ? $result : [];
 	}
 
-	function has_permission($permission_name, $user_id = 0): bool
+	function has_permission(
+		string $permission_name, 
+		$user_id = 0
+	): bool
 	{
 		global $pdo;
 
@@ -263,7 +270,10 @@
 		return $remote_addr;
 	}
 
-	function include_plugins_for($element, $plugin = null): bool
+	function include_plugins_for(
+		string $element, 
+		string $plugin = null
+	): bool
 	{
 		if(!isset($element)) return False;
 
@@ -309,11 +319,14 @@
 		return True;
 	}
 
-	function copy_directory($src, $dst): bool 
+	function copy_directory(
+		string $src, 
+		string $dst
+	): bool 
 	{
 		$dir = opendir($src);
 		try {
-			mkdir($dst, 0777, true);
+			mkdir($dst, 0755, true);
 		} catch (Throwable $t) {
 			extended_exception_handler($t);
 			closedir($dir);
@@ -339,7 +352,7 @@
 		return True;
 	}
 
-	function delete_directory($dir): bool
+	function delete_directory(string $dir): bool
 	{
 		if (!is_dir($dir)) return False;
 
@@ -354,11 +367,11 @@
 	}
 
 	function extract_zip(
-		$path, 
-		$dest, 
-		$max_files = 10000, 
-		$max_uncompressed_size = 1024 * 1024 * 512,
-		$max_zip_size = 1024 * 1024 * 128
+		string $path, 
+		string $dest, 
+		int $max_files = 10000, 
+		int $max_uncompressed_size = 1024 * 1024 * 512,
+		int $max_zip_size = 1024 * 1024 * 128
 	): bool
 	{
 
@@ -420,7 +433,10 @@
 		return $success;
 	}
 
-	function load_img_input($img = null, $target_root_dir = null): string
+	function load_img_input(
+		array $img = null, 
+		string $target_root_dir = null
+	): string
 	{
 		$allowed_types = [
 							'image/jpeg' => 'jpg',
@@ -488,7 +504,12 @@
 		return $target_root_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
 	}
 
-	function log_insert(string $category, string $ip, string $content, string $details): bool
+	function log_insert(
+		string $category, 
+		string $ip, 
+		string $content, 
+		string $details
+	): bool
     {
         try {
             global $pdo;
@@ -518,7 +539,11 @@
 		}
 	}
 
-	function insert_flash_message($type, $header, $content = null): void
+	function insert_flash_message(
+		string $type, 
+		string $header, 
+		string $content = null
+	): void
 	{
 		if (!isset($_SESSION['flash_messages']) || !is_array($_SESSION['flash_messages'])) $_SESSION['flash_messages'] = [];
 
@@ -529,7 +554,7 @@
 		];
 	}
 
-	function content_type_identification($type): array {
+	function content_type_identification(string $type): array {
 		$problem_types = [
 			'alg'     => ['full_name' => __('Algorithmic task'), 'icon' => 'fas fa-file-code', 'color' => 'rgba(0, 121, 250, 1)'],
 			'ctf'     => ['full_name' => __('Capture The Flag'), 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
@@ -544,7 +569,9 @@
 		return $problem_types[$type] ?? [];
 	}
 
-	function check_problemset_availability($set_id, $pdo): array
+	function check_problemset_availability(
+		int $set_id, 
+		$pdo): array
 	{
 		$status = array('is_available' => 'false', 'condition_title' => 'Unknown', 'condition_id' => -1);
 		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID = :sid');
@@ -601,14 +628,16 @@
 		return $status;
 	}
 
-	function api_rate_limit_tick($limit, $timeRange): bool
+	function api_rate_limit_tick(
+		int $limit, 
+		int $time_range): bool
 	{
 		$now = time();
 		$_SESSION['api_rate_limit_tick'] ??= [];
 
 		$_SESSION['api_rate_limit_tick'] = array_filter(
 			$_SESSION['api_rate_limit_tick'],
-			fn(int $timestamp) => $now - $timestamp <= $timeRange
+			fn(int $timestamp) => $now - $timestamp <= $time_range
 		);
 
 		$_SESSION['api_rate_limit_tick'][] = $now;
@@ -626,7 +655,7 @@
 		return $user ?? [];
 	}
 
-	function count_channel_followers($channel_id): int
+	function count_channel_followers(int $channel_id): int
 	{
 		global $pdo;
 
@@ -637,7 +666,7 @@
 		return $count ?? 0;
 	}
 
-	function count_content_stars($content_id): int
+	function count_content_stars(int $content_id): int
 	{
 		global $pdo;
 
@@ -648,7 +677,9 @@
 		return $count ?? 0;
 	}
 
-	function check_star($content_id, $user_id): bool
+	function check_star(
+		int $content_id, 
+		$user_id): bool
 	{
 		global $pdo;
 
@@ -659,7 +690,10 @@
 		return ($count>0) ? True : False;
 	}
 
-	function check_follow($channel_id, $user_id): bool
+	function check_follow(
+		int $channel_id, 
+		$user_id
+	): bool
 	{
 		global $pdo;
 
@@ -682,7 +716,7 @@
 		return True;
 	}
 
-	function generate_recovery_token($mail): string
+	function generate_recovery_token(string $mail): string
 	{
 		global $pdo;
 
@@ -708,7 +742,10 @@
 		return $token;
 	}
 
-	function verify_recovery_token($mail, $token): bool
+	function verify_recovery_token(
+		string $mail, 
+		string $token
+	): bool
 	{
 		global $pdo;
 

@@ -45,8 +45,8 @@
 	$db_query = $pdo->prepare('SELECT * FROM RESULTS INNER JOIN ALG_TEST_LIST ON RESULTS.test_id=ALG_TEST_LIST.TEST_ID WHERE submission_id=:sid');
 	$db_query->execute(['sid' => $_GET['sid']]);
 
-	$anws_correct = 0; #Correct anwsers
-	$anws_wrong = 0; #Wrong anwsers
+	$anws_correct = 0; #Correct answers
+	$anws_wrong = 0; #Wrong answers
 	$anws_resource = 0; #Out of time or out of memory
 	$anws_syserror = 0; #System errors
 
@@ -113,15 +113,19 @@
 	<?php 
 		if(has_permission('main.solutions.request_recheck'))
 		{
-			echo('<a href="process.php?r=request_recheck&sid='.$_GET['sid'].'" class="reevaluation_request_box">
+			echo('<form id="recheck_form" method="POST" action="process.php?r=request_recheck&sid='.$_GET['sid'].'">
+				<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
+				<a onClick="document.getElementById(\'recheck_form\').submit();" class="reevaluation_request_box">
 				<i class="fa fa-bullhorn"></i>&nbsp;'.__("Request reevaluation").'&nbsp;
-			</a>');
+			</a></form>');
 		}
 		if(has_permission('main.solutions.exec.recheck'))
 		{
-			echo('<a href="process.php?r=problem_recheck&sid='.$_GET['sid'].'&mode=recheck" class="reevaluation_request_box">
+			echo('<form id="request_recheck_form" method="POST" action="process.php?r=problem_recheck&sid='.$_GET['sid'].'&mode=recheck">
+				<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
+				<a onClick="document.getElementById(\'request_recheck_form\').submit();" class="reevaluation_request_box">
 				<i class="fa fa-bug"></i>&nbsp;'.__("Reevaluate").'&nbsp;
-			</a>');
+			</a></form>');
 		}
 	?>
 </div>
@@ -168,7 +172,7 @@
 		  new Chart(ctx, {
 			type: 'doughnut',
 			data: {
-			  labels: ["<?php echo(__("Correct anwsers")); ?>", "<?php echo(__("Limit exceeded")); ?>", "<?php echo(__("Incorrect anwsers")); ?>", "<?php echo(__("System errors")); ?>"],
+			  labels: ["<?php echo(__("Correct answers")); ?>", "<?php echo(__("Limit exceeded")); ?>", "<?php echo(__("Incorrect answers")); ?>", "<?php echo(__("System errors")); ?>"],
 			  datasets: [{
 				data: [<?php echo($anws_correct); ?>, <?php echo($anws_resource); ?>, <?php echo($anws_wrong); ?>, <?php echo($anws_syserror); ?>],
 				backgroundColor: ['#00d10a', '#ffc117', '#ff3d6e', '#ff00f7'],

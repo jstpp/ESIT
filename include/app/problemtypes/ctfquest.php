@@ -65,6 +65,7 @@
 	<h2 style="margin-left: 5%;"><?php echo(__("Your solution")); ?></h2>
 	<form id="ctf_form" method="POST" action="process.php?r=verify_ctf&id=<?php echo($problemid); ?>">
 		<input type="text" name="ctf_flag" id="ctf_flag" class="forminput" style="margin-left: 5%; width: 85%;" placeholder="$_{TWOJA_FLAGA}_$"/>
+		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
 		<br />
 		<br />
 		<a class="forminput_a" onClick="document.getElementById('ctf_form').submit();" style="font-weight: normal; float: right; margin-right: 6.75%;"><?php echo(__("Submit your solution")); ?></a>

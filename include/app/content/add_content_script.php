@@ -2,7 +2,7 @@
     function process_content_create_root($cid)
 	{
         try {
-            mkdir(__DIR__.'/../../../include/storage/video/'.(int)$cid, 0777, true);
+            mkdir(__DIR__.'/../../../include/storage/video/'.(int)$cid, 0755, true);
         } catch (Throwable $t) {
             extended_exception_handler($t);
             return False;

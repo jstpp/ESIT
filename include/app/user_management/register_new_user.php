@@ -8,25 +8,49 @@
         || !is_string($_POST['org']) 
         || !is_string($_POST['mail']) 
         || !is_string($_POST['name'])
-        || !is_string($_POST['surname'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error1");
-        if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $_POST['username'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error2");
-        if ($_POST['pass']!=$_POST['pass_repeat']) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error3");
-        if (mb_strlen($_POST['pass'])<8 || mb_strlen($_POST['pass'])>50 || mb_strlen($_POST['username'])<6) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error4");
-        if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error5");
-        if (is_an_user($_POST['username']) || is_an_user($_POST['mail'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error6");
-        if (empty(trim($_POST['name'])) || empty(trim($_POST['surname'])) || empty(trim($_POST['org']))) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error7");
+        || !is_string($_POST['surname'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $_POST['username'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if ($_POST['pass']!=$_POST['pass_repeat']) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (mb_strlen($_POST['pass'])<8 || mb_strlen($_POST['pass'])>50 || mb_strlen($_POST['username'])<6) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (is_an_user($_POST['username']) || is_an_user($_POST['mail'])) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
+        if (empty(trim($_POST['name'])) || empty(trim($_POST['surname'])) || empty(trim($_POST['org']))) redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
     }
      catch (Throwable $t) {
         extended_exception_handler($t);
         kick();
     }
 
+    $lock_acquired = False;
+
     try {
+        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS');
+        $db_query->execute();
+        $is_first = ($db_query->fetch()['count']==0) ? True : False;
+
+        if($is_first)
+        {
+            $lock_name = 'esit_first_user_registration';
+            $lock_query = $pdo->prepare(
+                'SELECT GET_LOCK(:lock_name, 10)'
+            );
+            $lock_query->execute([
+                'lock_name' => $lock_name
+            ]);
+
+            $lock_acquired = ((int)$lock_query->fetchColumn() !== 1) ? False : True;
+
+            if (!$lock_acquired) {
+                throw new Exception(
+                    'Nie udało się uzyskać blokady rejestracji.'
+                );
+            }
+        }
+
         $pdo->beginTransaction();
 
         $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS');
         $db_query->execute();
-
         $is_first = ($db_query->fetch()['count']==0) ? True : False;
 
         $user_id = $pdo->query('SELECT UUID()')->fetchColumn();
@@ -46,17 +70,21 @@
 
         $pdo->commit();
 
+        if ($lock_acquired) {
+            $pdo->query("SELECT RELEASE_LOCK('esit_first_user_registration')");
+            $lock_acquired = False;
+        }
+
         redirect("../login/?response=registered");
     } catch (Throwable $t) {
         try {
             if ($pdo->inTransaction()) $pdo->rollBack();
+            if ($lock_acquired) $pdo->query("SELECT RELEASE_LOCK('esit_first_user_registration')");
         } catch (Throwable $t2)
         {
             extended_exception_handler($t2);
         }
-        echo($t);
-        die;
         extended_exception_handler($t);
-        redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error8");
+        redirect((boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php')."?error");
     }
 ?>

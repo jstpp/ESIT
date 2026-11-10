@@ -35,6 +35,6 @@ COPY --from=npm /build/node_modules/mathjax /www/esit/public/include/js/mathjax
 COPY --from=npm /build/node_modules/sortablejs /www/esit/public/include/js/sortablejs
 COPY --from=npm /build/node_modules/chart.js /www/esit/public/include/js/chart.js
 COPY --from=npm /build/node_modules/video.js /www/esit/public/include/js/video.js
-RUN chmod -R 0777 /www/esit/public/include/js/*
+RUN chmod -R 0755 /www/esit/public/include/js/*
 
 RUN chown -R esit-user:esit-group /www/esit/public/*

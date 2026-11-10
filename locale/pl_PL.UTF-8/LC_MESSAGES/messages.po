@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 13:07+0100\n"
+"POT-Creation-Date: 2026-11-10 22:19+0100\n"
 "PO-Revision-Date: 2026-11-07 13:12+0100\n"
 "Last-Translator: jstpp <jstpp_github@proton.me>\n"
 "Language-Team: \n"
@@ -36,7 +36,7 @@ msgstr "Nazwisko"
 msgid "Organization"
 msgstr "Organizacja"
 
-#: ../public/login/register.php:269 ../include/app/channel.php:543
+#: ../public/login/register.php:269 ../include/app/channel.php:546
 #: ../include/app/settings.php:82 ../include/app/admin.php:243
 #: ../include/app/admin.php:478 ../include/app/admin.php:479
 msgid "Username"
@@ -346,7 +346,7 @@ msgstr "Ukryty/zarchiwizowany"
 msgid "Publishing time"
 msgstr "Czas publikacji"
 
-#: ../include/app/add_content.php:165 ../include/app/core.php:539
+#: ../include/app/add_content.php:165 ../include/app/core.php:564
 msgid "Video"
 msgstr "Film"
 
@@ -354,7 +354,7 @@ msgstr "Film"
 msgid "The file should be in .mp4 format"
 msgstr "Plik powinien być w formacie .mp4"
 
-#: ../include/app/add_content.php:190 ../include/app/core.php:540
+#: ../include/app/add_content.php:190 ../include/app/core.php:565
 msgid "Article"
 msgstr "Artykuł"
 
@@ -399,15 +399,15 @@ msgid "You can't submit new solutions."
 msgstr "Nie możesz już przesłać rozwiązania."
 
 #: ../include/app/problemtypes/ctfquest.php:65
-#: ../include/app/problemtypes/algquest.php:79
-#: ../include/app/problemtypes/formquest.php:90
+#: ../include/app/problemtypes/algquest.php:80
+#: ../include/app/problemtypes/formquest.php:91
 msgid "Your solution"
 msgstr "Twoje rozwiązanie"
 
-#: ../include/app/problemtypes/ctfquest.php:70
-#: ../include/app/problemtypes/classicquest.php:70
-#: ../include/app/problemtypes/multiplechoicequest.php:70
-#: ../include/app/problemtypes/formquest.php:96
+#: ../include/app/problemtypes/ctfquest.php:71
+#: ../include/app/problemtypes/classicquest.php:71
+#: ../include/app/problemtypes/multiplechoicequest.php:71
+#: ../include/app/problemtypes/formquest.php:97
 msgid "Submit your solution"
 msgstr "Prześlij swoje rozwiązanie"
 
@@ -428,12 +428,12 @@ msgstr "tutaj"
 
 #: ../include/app/problemtypes/algquest.php:63
 #: ../include/app/add_problem.php:191 ../include/app/add_problem.php:220
-#: ../include/app/results/algresult.php:220
+#: ../include/app/results/algresult.php:224
 msgid "Test"
 msgstr "Test"
 
-#: ../include/app/problemtypes/algquest.php:86
-msgid "Submit your anwser"
+#: ../include/app/problemtypes/algquest.php:87
+msgid "Submit your answer"
 msgstr "Prześlij swoją odpowiedź"
 
 #: ../include/app/problemtypes/classicquest.php:69
@@ -570,11 +570,11 @@ msgstr "Pytanie"
 #: ../include/app/add_problem.php:277 ../include/app/add_problem.php:278
 #: ../include/app/add_problem.php:357 ../include/app/add_problem.php:358
 #: ../include/app/add_problem.php:359 ../include/app/add_problem.php:360
-msgid "Anwser"
+msgid "Answer"
 msgstr "Odpowiedź"
 
 #: ../include/app/add_problem.php:281 ../include/app/add_problem.php:363
-msgid "Correct anwser"
+msgid "Correct answer"
 msgstr "Poprawna odpowiedź"
 
 #: ../include/app/add_problem.php:289 ../include/app/add_problem.php:371
@@ -705,10 +705,10 @@ msgstr "Domyślny szablon"
 msgid "Version"
 msgstr "Wersja"
 
-#: ../include/app/portal.php:181 ../include/app/channel.php:655
+#: ../include/app/portal.php:181 ../include/app/channel.php:658
 #: ../include/app/creatorcenter.php:178 ../include/app/search.php:214
 #: ../include/app/search.php:236 ../include/app/search.php:256
-#: ../include/app/content.php:51
+#: ../include/app/content.php:54
 msgid "Author"
 msgstr "Autor"
 
@@ -780,7 +780,7 @@ msgstr "Dodaj dokument"
 msgid "Problems for warm-up"
 msgstr "Przykładowe zadania"
 
-#: ../include/app/portal.php:396 ../include/app/channel.php:647
+#: ../include/app/portal.php:396 ../include/app/channel.php:650
 msgid "Archive"
 msgstr "Zarchiwizuj"
 
@@ -800,7 +800,7 @@ msgstr "Obecna edycja/sesja"
 msgid "Save problems"
 msgstr "Zapisz zadania"
 
-#: ../include/app/portal.php:416 ../include/app/channel.php:475
+#: ../include/app/portal.php:416 ../include/app/channel.php:478
 msgid "Add problem"
 msgstr "Dodaj zadanie"
 
@@ -837,94 +837,94 @@ msgstr "Edytuj FAQ"
 msgid "Edit contact page"
 msgstr "Edytuj stronę kontaktową"
 
-#: ../include/app/channel.php:264
+#: ../include/app/channel.php:266
 msgid "Unfollow"
 msgstr "Przestań obserwować"
 
-#: ../include/app/channel.php:264
+#: ../include/app/channel.php:266
 msgid "Follow"
 msgstr "Obserwuj"
 
-#: ../include/app/channel.php:280
+#: ../include/app/channel.php:283
 msgid "New block"
 msgstr "Nowy blok"
 
-#: ../include/app/channel.php:280
+#: ../include/app/channel.php:283
 msgid "problemset"
 msgstr "zbiór zadań"
 
-#: ../include/app/channel.php:284 ../include/app/channel.php:341
+#: ../include/app/channel.php:287 ../include/app/channel.php:344
 msgid "Block title"
 msgstr "Nazwa bloku"
 
-#: ../include/app/channel.php:288 ../include/app/channel.php:345
+#: ../include/app/channel.php:291 ../include/app/channel.php:348
 msgid "Availability depends on completion"
 msgstr "Dostępność zależy od ukończenia"
 
-#: ../include/app/channel.php:290 ../include/app/channel.php:347
+#: ../include/app/channel.php:293 ../include/app/channel.php:350
 msgid "Nothing"
 msgstr "Niczego/Nic"
 
-#: ../include/app/channel.php:303 ../include/app/channel.php:365
+#: ../include/app/channel.php:306 ../include/app/channel.php:368
 msgid "Publish time"
 msgstr "Czas publikacji"
 
-#: ../include/app/channel.php:308 ../include/app/channel.php:317
+#: ../include/app/channel.php:311 ../include/app/channel.php:320
 msgid "Add block"
 msgstr "Dodaj blok"
 
-#: ../include/app/channel.php:316
+#: ../include/app/channel.php:319
 msgid "Available for You"
 msgstr "Dostępne dla Ciebie"
 
-#: ../include/app/channel.php:370 ../include/app/admin.php:266
+#: ../include/app/channel.php:373 ../include/app/admin.php:266
 msgid "Save changes"
 msgstr "Zapisz zmiany"
 
-#: ../include/app/channel.php:464
+#: ../include/app/channel.php:467
 msgid "Requires completion"
 msgstr "Wymaga ukończenia"
 
-#: ../include/app/channel.php:467
+#: ../include/app/channel.php:470
 msgid "Started"
 msgstr "Rozpoczęto"
 
-#: ../include/app/channel.php:469
+#: ../include/app/channel.php:472
 msgid "Completed"
 msgstr "Ukończono"
 
-#: ../include/app/channel.php:476
+#: ../include/app/channel.php:479
 msgid "Add content"
 msgstr "Dodaj treść"
 
-#: ../include/app/channel.php:477
+#: ../include/app/channel.php:480
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: ../include/app/channel.php:529
+#: ../include/app/channel.php:532
 msgid "Error during layout saving"
 msgstr "Wystąpił błąd podczas zapisywania układu"
 
-#: ../include/app/channel.php:533
+#: ../include/app/channel.php:536
 msgid "Connection error"
 msgstr "Błąd połączenia"
 
-#: ../include/app/channel.php:539
+#: ../include/app/channel.php:542
 msgid "Results"
 msgstr "Wyniki"
 
-#: ../include/app/channel.php:544 ../include/app/results/algresult.php:156
+#: ../include/app/channel.php:547 ../include/app/results/algresult.php:160
 #: ../include/app/results/testresult.php:117
 #: ../include/app/results/ctfresult.php:72
 #: ../include/app/results/formresult.php:120
 msgid "Total"
 msgstr "Łącznie"
 
-#: ../include/app/channel.php:638
+#: ../include/app/channel.php:641
 msgid "Information"
 msgstr "Informacje"
 
-#: ../include/app/channel.php:647
+#: ../include/app/channel.php:650
 msgid "Unarchive"
 msgstr "Odarchiwizuj"
 
@@ -1052,14 +1052,14 @@ msgstr "Średnia poprawność"
 msgid "Number of points in the last 30 days"
 msgstr "Liczba punktów z ostatnich 30 dni"
 
-#: ../include/app/dashboard.php:312 ../include/app/results/algresult.php:171
+#: ../include/app/dashboard.php:312 ../include/app/results/algresult.php:175
 #: ../include/app/results/testresult.php:132
-msgid "Correct anwsers"
+msgid "Correct answers"
 msgstr "Poprawne odpowiedzi"
 
-#: ../include/app/dashboard.php:312 ../include/app/results/algresult.php:171
+#: ../include/app/dashboard.php:312 ../include/app/results/algresult.php:175
 #: ../include/app/results/testresult.php:132
-msgid "Incorrect anwsers"
+msgid "Incorrect answers"
 msgstr "Błędne odpowiedzi"
 
 #: ../include/app/dashboard.php:360
@@ -1098,39 +1098,39 @@ msgstr "Naciśnij, by zobaczyć zawartość"
 msgid "In queue"
 msgstr "W kolejce"
 
-#: ../include/app/results/algresult.php:117
+#: ../include/app/results/algresult.php:119
 msgid "Request reevaluation"
 msgstr "Odwołaj się"
 
-#: ../include/app/results/algresult.php:123
+#: ../include/app/results/algresult.php:127
 msgid "Reevaluate"
 msgstr "Sprawdź ponownie"
 
-#: ../include/app/results/algresult.php:129
+#: ../include/app/results/algresult.php:133
 msgid "Evaluation report"
 msgstr "Raport ze sprawdzania"
 
-#: ../include/app/results/algresult.php:152
+#: ../include/app/results/algresult.php:156
 #: ../include/app/results/testresult.php:113
 #: ../include/app/results/formresult.php:116
 msgid "Status"
 msgstr "Status"
 
-#: ../include/app/results/algresult.php:153
+#: ../include/app/results/algresult.php:157
 #: ../include/app/results/testresult.php:114
 #: ../include/app/results/ctfresult.php:69
 #: ../include/app/results/formresult.php:117
 msgid "Submission timestamp"
 msgstr "Data wysłania rozwiązania"
 
-#: ../include/app/results/algresult.php:154
+#: ../include/app/results/algresult.php:158
 #: ../include/app/results/testresult.php:115
 #: ../include/app/results/ctfresult.php:70
 #: ../include/app/results/formresult.php:118
 msgid "Verification timestamp"
 msgstr "Data sprawdzenia"
 
-#: ../include/app/results/algresult.php:158
+#: ../include/app/results/algresult.php:162
 #: ../include/app/results/testresult.php:119
 #: ../include/app/results/ctfresult.php:74
 #: ../include/app/results/formresult.php:122
@@ -1141,19 +1141,19 @@ msgstr ""
 "Twoje rozwiązanie oczekuje na sprawdzenie lub jego wynik został tymczasowo "
 "ukryty. Wyniki będą wkrótce dostępne."
 
-#: ../include/app/results/algresult.php:171
+#: ../include/app/results/algresult.php:175
 msgid "Limit exceeded"
 msgstr "Limit przekroczony"
 
-#: ../include/app/results/algresult.php:171
+#: ../include/app/results/algresult.php:175
 msgid "System errors"
 msgstr "Błędy systemowe"
 
-#: ../include/app/results/algresult.php:198
+#: ../include/app/results/algresult.php:202
 msgid "Detailed results"
 msgstr "Wyniki szczegółowe"
 
-#: ../include/app/results/algresult.php:234
+#: ../include/app/results/algresult.php:238
 msgid "Your code"
 msgstr "Twój kod"
 
@@ -1187,38 +1187,38 @@ msgid "Incorrect [%]"
 msgstr "Niepoprawne [%]"
 
 #: ../include/app/results/formresult.php:162
-msgid "Your anwser"
+msgid "Your answer"
 msgstr "Twoja odpowiedź"
 
-#: ../include/app/core.php:534
+#: ../include/app/core.php:559
 msgid "Algorithmic task"
 msgstr "Zadanie algorytmiczne"
 
-#: ../include/app/core.php:535
+#: ../include/app/core.php:560
 msgid "Capture The Flag"
 msgstr "Capture The Flag"
 
-#: ../include/app/core.php:536
+#: ../include/app/core.php:561
 msgid "Single choice"
 msgstr "Jednokrotny wybór"
 
-#: ../include/app/core.php:537
+#: ../include/app/core.php:562
 msgid "Multiple choice"
 msgstr "Wielokrotny wybór"
 
-#: ../include/app/core.php:538
+#: ../include/app/core.php:563
 msgid "Open-ended"
 msgstr "Zadanie otwarte"
 
-#: ../include/app/core.php:541
+#: ../include/app/core.php:566
 msgid "Unknown"
 msgstr "Nieznane"
 
-#: ../include/app/core.php:781
+#: ../include/app/core.php:818
 msgid "Oops..."
 msgstr "Ups..."
 
-#: ../include/app/core.php:781
+#: ../include/app/core.php:818
 msgid "Something went wrong. Try again."
 msgstr "Coś poszło nie tak. Spróbuj ponownie."
 
@@ -1306,11 +1306,11 @@ msgstr "Dziennik zdarzeń"
 msgid "Display all"
 msgstr "Wyświetl wszystkie"
 
-#: ../include/app/content.php:46
+#: ../include/app/content.php:48
 msgid "Unstar"
 msgstr "Ogwiazdkuj"
 
-#: ../include/app/content.php:46
+#: ../include/app/content.php:48
 msgid "Star"
 msgstr "Gwiazdka"
 

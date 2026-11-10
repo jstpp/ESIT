@@ -290,7 +290,7 @@
 			<div style="display: flex; gap: 3vmax;">
 				<div style="height: 13vmax; width: 10vmax; padding: 1vmax; margin-left: 5%; display: flex; flex-direction: column; align-items: center; text-align: center;">
 					<div style="position: relative; width: 10vmax; height: 10vmax;">
-						<canvas id="dashboard_progress_correct_anwsers"></canvas>
+						<canvas id="dashboard_progress_correct_answers"></canvas>
 						<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 2vmax;">
 							<?php echo($avg_score); ?>%
 						</div>
@@ -306,10 +306,10 @@
 			<br />
 			<script>
 				document.addEventListener('DOMContentLoaded', () => {
-					dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_anwsers'), {
+					dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_answers'), {
 						type: 'doughnut',
 						data: {
-						labels: ["<?php echo(__("Correct anwsers")); ?>", "<?php echo(__("Incorrect anwsers")); ?>"],
+						labels: ["<?php echo(__("Correct answers")); ?>", "<?php echo(__("Incorrect answers")); ?>"],
 						datasets: [{
 							data: [<?php echo($avg_score); ?>, <?php echo(100-$avg_score); ?>],
 							backgroundColor: ['rgba(0, 179, 255, 1)', 'rgba(21, 33, 46, 1)']

@@ -159,7 +159,7 @@
 	<br />
 </div>
 <div class="window">
-	<h3 class="window_title"><?php echo(__("Your anwser")); ?></h3>
+	<h3 class="window_title"><?php echo(__("Your answer")); ?></h3>
 	<br />
 	<div style="user-select: text; margin-left: 5%; width: 88%; padding: 1% 1%; background-color: #dae2e6; color: #2a2c2e;">
 		<?php

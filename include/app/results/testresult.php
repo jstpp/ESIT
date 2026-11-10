@@ -129,7 +129,7 @@
 		  new Chart(ctx, {
 			type: 'doughnut',
 			data: {
-			  labels: ["<?php echo(__("Correct anwsers")); ?>", "<?php echo(__("Incorrect anwsers")); ?>"],
+			  labels: ["<?php echo(__("Correct answers")); ?>", "<?php echo(__("Incorrect answers")); ?>"],
 			  datasets: [{
 				data: [<?php echo((int)$percentage); ?>, <?php echo(100-(int)$percentage); ?>],
 				backgroundColor: ['#00d10a', '#ff3d6e'],

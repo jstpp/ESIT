@@ -1,57 +1,61 @@
 <?php
-    function process_check_img($file)
-	{
+    function validate_uploaded_file(
+        array $file,
+        array $allowed_types,
+        int $max_size = 200000000
+    ): bool {
         try {
-            $FileType = strtolower(pathinfo(basename($file["name"]),PATHINFO_EXTENSION));
-            $check = filesize($file["tmp_name"]);
+            if (!isset($file['error'], $file['tmp_name'], $file['name']) || $file['error'] !== UPLOAD_ERR_OK) return False;
+            if (!is_uploaded_file($file['tmp_name'])) return False;
 
-            $uploadOk = ($check !== False) ? 1 : 0;
-            if ($file["size"] > 200000000) $uploadOk = 0;
-            if (!in_array(strtolower($FileType), array("gif", "jpg", "png", "webp", "jpeg"))) $uploadOk = 0;
+            $actual_size = filesize($file['tmp_name']);
+            if ($actual_size === false || $actual_size <= 0 || $actual_size > $max_size) return False;
+            if (!isset($file['size']) || (int)$file['size'] !== $actual_size) return False;
+            
+            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (!isset($allowed_types[$extension])) return False;
 
-            return ($uploadOk == 0) ? False : True;
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime = $finfo->file($file['tmp_name']);
+            if ($mime === false || !in_array($mime, $allowed_types[$extension], true)) return False;
+        
+            return True;
         } catch (Throwable $t) {
             extended_exception_handler($t);
-		    return False;
+            return False;
         }
-	}
+    }
 
-    function process_check($file, $mode)
+    function process_resource(
+        array $file, 
+        array $allowed_types,
+        int $rid, 
+        string $org_link
+    ): string
 	{
         try {
-            $FileType = strtolower(pathinfo(basename($file["name"]),PATHINFO_EXTENSION));
-            $check = filesize($file["tmp_name"]);
-
-            $uploadOk = ($check !== False) ? 1 : 0;
-            if ($file["size"] > 200000000) $uploadOk = 0;
-            if ($FileType != $mode ) $uploadOk = 0;
-
-            return ($uploadOk == 0) ? False : True;
-        } catch (Throwable $t) {
-            extended_exception_handler($t);
-		    return False;
-        }
-	}
-
-    function process_resource($file, $mode, $rid, $org_link)
-	{
-        try {
+            if (!validate_uploaded_file($file, $allowed_types)) throw new Exception("Invalid file");
+            if ($rid<=0) throw new Exception("Invalid resource ID");
             if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) return "";
-            mkdir("../include/resources/".$rid."/", 0777, true);
+
+            $directory = "../include/resources/".$rid."/";
+            if (!is_dir($directory) && !mkdir($directory, 0755, true)) {
+                throw new Exception("Cannot create resource directory");
+            }
+            if (!is_writable($directory)) {
+                throw new Exception("Resource directory is not writable");
+            }
 
             $target_file = "../include/resources/".$rid."/".basename($file["name"]);
-            $FileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-            $target_file = "../include/resources/".$rid."/".$rid.".".$FileType;
-            $check = filesize($file["tmp_name"]);
+            $file_type = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+            $target_file = "../include/resources/".$rid."/".$rid.".".$file_type;
 
             $uploadOk = (file_exists($target_file)) ? 0 : 1;
-            if ($file["size"] > 200000000) $uploadOk = 0;
-            if ($FileType != $mode ) $uploadOk = 0;
 
             if ($uploadOk == 0) return "";
             if (!move_uploaded_file($file["tmp_name"], $target_file)) return "";
 
-            $target_file = $org_link."/include/resources/".$rid."/".$rid.".".$FileType;
+            $target_file = $org_link."/include/resources/".$rid."/".$rid.".".$file_type;
             return $target_file;
         } catch (Throwable $t) {
             extended_exception_handler($t);
@@ -63,6 +67,18 @@
     if(!isset($_GET['mode']) || !is_logged_in() || !has_permission('main.portal.modify_resources')) kick();
     $org_link = get_misc_value("general_url");
     
+    $pdf_types = [
+        'pdf' => ['application/pdf']
+    ];
+
+    $image_types = [
+        'gif'  => ['image/gif'],
+        'jpg'  => ['image/jpeg'],
+        'jpeg' => ['image/jpeg'],
+        'png'  => ['image/png'],
+        'webp' => ['image/webp']
+    ];
+
     try {
         if($_GET['mode']=="quests")
         {
@@ -70,12 +86,20 @@
             $pdo->beginTransaction();
             while(isset($_FILES['quest_file_'.$i]) and isset($_POST['quest_name_'.$i]))
             {
-                if(!process_check($_FILES['quest_file_'.$i], "pdf")) break;
+                if(!validate_uploaded_file($_FILES['quest_file_'.$i], $pdf_types))
+                {
+                    $i++;
+                    continue;
+                }
                 $db_query = $pdo->prepare('INSERT INTO PORTAL_RESOURCES (resource_type, resource_name, resource_path) VALUES ("quests", :rname, :rpath)');
                 $db_query->execute(['rname' => $_POST['quest_name_'.$i], 'rpath' => '-']);
                 $resource_id = $pdo->lastInsertId();
-                $resource_path = process_resource($_FILES['quest_file_'.$i], "pdf", $resource_id, get_misc_value('general_url'));
-                if(strlen($resource_path)<2) throw new Exception("Invalid resource path");
+                $resource_path = process_resource($_FILES['quest_file_'.$i], $pdf_types, $resource_id, get_misc_value('general_url'));
+                if(strlen($resource_path)<2)
+                {
+                    $i++;
+                    continue;
+                }
                 $is_actual = (isset($_POST['is_actual_'.$i])) ? 1 : 0;
                 $db_query = $pdo->prepare('UPDATE PORTAL_RESOURCES SET resource_path=:rpath, is_actual=:ia WHERE RESOURCE_ID=:rid');
                 $db_query->execute(['rid' => $resource_id, 'rpath' => $resource_path, 'ia' => $is_actual]);
@@ -87,12 +111,20 @@
             $pdo->beginTransaction();
             while(isset($_FILES['document_file_'.$i]) and isset($_POST['document_name_'.$i]))
             {
-                if(!process_check($_FILES['document_file_'.$i], "pdf")) break;
+                if(!validate_uploaded_file($_FILES['document_file_'.$i], $pdf_types))
+                {
+                    $i++;
+                    continue;
+                }
                 $db_query = $pdo->prepare('INSERT INTO PORTAL_RESOURCES (resource_type, resource_name, resource_path) VALUES ("documents", :rname, :rpath)');
                 $db_query->execute(['rname' => $_POST['document_name_'.$i], 'rpath' => '-']);
                 $resource_id = $pdo->lastInsertId();
-                $resource_path = process_resource($_FILES['document_file_'.$i], "pdf", $resource_id, $org_link);
-                if(strlen($resource_path)<2) throw new Exception("Invalid resource path");
+                $resource_path = process_resource($_FILES['document_file_'.$i], $pdf_types, $resource_id, $org_link);
+                if(strlen($resource_path)<2)
+                {
+                    $i++;
+                    continue;
+                }
 
                 $db_query = $pdo->prepare('UPDATE PORTAL_RESOURCES SET resource_path=:rpath WHERE RESOURCE_ID=:rid');
                 $db_query->execute(['rpath' => $resource_path, 'rid' => $resource_id]);
@@ -104,11 +136,15 @@
             $pdo->beginTransaction();
             while(isset($_FILES['logo_file_'.$i]) and isset($_POST['logo_name_'.$i]) and isset($_POST['logo_href_'.$i]))
             {
-                if(!process_check_img($_FILES['logo_file_'.$i])) break;
+                if(!validate_uploaded_file($_FILES['logo_file_'.$i], $image_types))
+                {
+                    $i++;
+                    continue;
+                }
                 $db_query = $pdo->prepare('INSERT INTO PORTAL_RESOURCES (resource_type, resource_name, resource_path, resource_comment) VALUES ("logo", :rname, :rpath, :rcomment)');
                 $db_query->execute(['rname' => $_POST['logo_name_'.$i], 'rpath' => '-', 'rcomment' => $_POST['logo_href_'.$i]]);
                 $resource_id = $pdo->lastInsertId();
-                $resource_path = process_resource($_FILES['logo_file_'.$i], strtolower(pathinfo(basename($_FILES['logo_file_'.$i]['name']),PATHINFO_EXTENSION)), $resource_id, get_misc_value('general_url'));
+                $resource_path = process_resource($_FILES['logo_file_'.$i], $image_types, $resource_id, get_misc_value('general_url'));
 
                 $db_query = $pdo->prepare('UPDATE PORTAL_RESOURCES SET resource_path=:rpath WHERE RESOURCE_ID=:rid');
                 $db_query->execute(['rpath' => $resource_path, 'rid' => $resource_id]);

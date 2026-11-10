@@ -11,17 +11,17 @@
             if (file_exists(__DIR__."/solutions/".$submission_id)) return False;
             if (!isset($_POST['sendtext']) && !isset($_GET['sid'])) return False;
 
-            mkdir(__DIR__."/solutions/".$submission_id, 0777, True);
-            mkdir(__DIR__."/solutions/".$submission_id."/code", 0777, True);
-            mkdir(__DIR__."/solutions/".$submission_id."/misc", 0777, True);
-            mkdir(__DIR__."/solutions/".$submission_id."/time", 0777, True);
-            mkdir(__DIR__."/solutions/".$submission_id."/output", 0777, True);
+            mkdir(__DIR__."/solutions/".$submission_id, 0755, True);
+            mkdir(__DIR__."/solutions/".$submission_id."/code", 0755, True);
+            mkdir(__DIR__."/solutions/".$submission_id."/misc", 0755, True);
+            mkdir(__DIR__."/solutions/".$submission_id."/time", 0755, True);
+            mkdir(__DIR__."/solutions/".$submission_id."/output", 0755, True);
 
-            chmod(__DIR__."/solutions/".$submission_id, 0777);
-            chmod(__DIR__."/solutions/".$submission_id."/code", 0777);
-            chmod(__DIR__."/solutions/".$submission_id."/misc", 0777);
-            chmod(__DIR__."/solutions/".$submission_id."/time", 0777);
-            chmod(__DIR__."/solutions/".$submission_id."/output", 0777);
+            chmod(__DIR__."/solutions/".$submission_id, 0755);
+            chmod(__DIR__."/solutions/".$submission_id."/code", 0755);
+            chmod(__DIR__."/solutions/".$submission_id."/misc", 0755);
+            chmod(__DIR__."/solutions/".$submission_id."/time", 0755);
+            chmod(__DIR__."/solutions/".$submission_id."/output", 0755);
 
             $codefile = fopen(__DIR__."/solutions/".$submission_id."/code/".$submission_id.".".$submission_lang, "w");
             fwrite($codefile, $content);

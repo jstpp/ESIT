@@ -272,13 +272,13 @@
 					<input type="text" placeholder="<?php echo(__("Question")); ?>" class="forminput" style="width: 96%;" name="s_question_1" id="s_question_1"/>
 					<br />
 					<hr />
-					<input type="text" placeholder="<?php echo(__("Anwser")); ?> a" class="forminput" style="width: 21%;" name="q_a_1" id="q_a_1"/>
-					<input type="text" placeholder="<?php echo(__("Anwser")); ?> b" class="forminput" style="width: 21%;" name="q_b_1" id="q_b_1"/>
-					<input type="text" placeholder="<?php echo(__("Anwser")); ?> c" class="forminput" style="width: 21%;" name="q_c_1" id="q_c_1"/>
-					<input type="text" placeholder="<?php echo(__("Anwser")); ?> d" class="forminput" style="width: 21%;" name="q_d_1" id="q_d_1"/>
+					<input type="text" placeholder="<?php echo(__("Answer")); ?> a" class="forminput" style="width: 21%;" name="q_a_1" id="q_a_1"/>
+					<input type="text" placeholder="<?php echo(__("Answer")); ?> b" class="forminput" style="width: 21%;" name="q_b_1" id="q_b_1"/>
+					<input type="text" placeholder="<?php echo(__("Answer")); ?> c" class="forminput" style="width: 21%;" name="q_c_1" id="q_c_1"/>
+					<input type="text" placeholder="<?php echo(__("Answer")); ?> d" class="forminput" style="width: 21%;" name="q_d_1" id="q_d_1"/>
 					<br />
 					<hr />
-					<p><?php echo(__("Correct anwser")); ?>:&emsp;
+					<p><?php echo(__("Correct answer")); ?>:&emsp;
 					<input type="radio" value="a" name="correct_1" id="correct_1"/>a
 					<input type="radio" value="b" name="correct_1" id="correct_1"/>b
 					<input type="radio" value="c" name="correct_1" id="correct_1"/>c
@@ -306,25 +306,25 @@
 					const correct_input_c = new_tab.querySelector("input[name^='correct_'][value='c']");
 					const correct_input_d = new_tab.querySelector("input[name^='correct_'][value='d']");
 
-					const anwser_a_input = new_tab.querySelector("input[name^='q_a_']");
-					const anwser_b_input = new_tab.querySelector("input[name^='q_b_']");
-					const anwser_c_input = new_tab.querySelector("input[name^='q_c_']");
-					const anwser_d_input = new_tab.querySelector("input[name^='q_d_']");
+					const answer_a_input = new_tab.querySelector("input[name^='q_a_']");
+					const answer_b_input = new_tab.querySelector("input[name^='q_b_']");
+					const answer_c_input = new_tab.querySelector("input[name^='q_c_']");
+					const answer_d_input = new_tab.querySelector("input[name^='q_d_']");
 
 					question.name = "s_question_" + (sets_q_count + 1);
 					question.id = "s_question_" + (sets_q_count + 1);
 
-					anwser_a_input.name = "q_a_" + (sets_q_count + 1);
-					anwser_a_input.id = "q_a_" + (sets_q_count + 1);
+					answer_a_input.name = "q_a_" + (sets_q_count + 1);
+					answer_a_input.id = "q_a_" + (sets_q_count + 1);
 
-					anwser_b_input.name = "q_b_" + (sets_q_count + 1);
-					anwser_b_input.id = "q_b_" + (sets_q_count + 1);
+					answer_b_input.name = "q_b_" + (sets_q_count + 1);
+					answer_b_input.id = "q_b_" + (sets_q_count + 1);
 					
-					anwser_c_input.name = "q_c_" + (sets_q_count + 1);
-					anwser_c_input.id = "q_c_" + (sets_q_count + 1);
+					answer_c_input.name = "q_c_" + (sets_q_count + 1);
+					answer_c_input.id = "q_c_" + (sets_q_count + 1);
 
-					anwser_d_input.name = "q_d_" + (sets_q_count + 1);
-					anwser_d_input.id = "q_d_" + (sets_q_count + 1);
+					answer_d_input.name = "q_d_" + (sets_q_count + 1);
+					answer_d_input.id = "q_d_" + (sets_q_count + 1);
 
 					correct_input_a.name = "correct_" + (sets_q_count + 1);
 					correct_input_a.id = "correct_" + (sets_q_count + 1);
@@ -354,13 +354,13 @@
 					<input type="text" placeholder="<?php echo(__("Question")); ?>" class="forminput" style="width: 96%;" name="m_question_1" id="m_question_1"/>
 					<br />
 					<hr />
-					<input type="text" placeholder="<?php echo(__("Anwser")); ?> a" class="forminput" style="width: 21%;" name="qm_a_1" id="qm_a_1"/>
-					<input type="text" placeholder="<?php echo(__("Anwser")); ?> b" class="forminput" style="width: 21%;" name="qm_b_1" id="qm_b_1"/>
-					<input type="text" placeholder="<?php echo(__("Anwser")); ?> c" class="forminput" style="width: 21%;" name="qm_c_1" id="qm_c_1"/>
-					<input type="text" placeholder="<?php echo(__("Anwser")); ?> d" class="forminput" style="width: 21%;" name="qm_d_1" id="qm_d_1"/>
+					<input type="text" placeholder="<?php echo(__("Answer")); ?> a" class="forminput" style="width: 21%;" name="qm_a_1" id="qm_a_1"/>
+					<input type="text" placeholder="<?php echo(__("Answer")); ?> b" class="forminput" style="width: 21%;" name="qm_b_1" id="qm_b_1"/>
+					<input type="text" placeholder="<?php echo(__("Answer")); ?> c" class="forminput" style="width: 21%;" name="qm_c_1" id="qm_c_1"/>
+					<input type="text" placeholder="<?php echo(__("Answer")); ?> d" class="forminput" style="width: 21%;" name="qm_d_1" id="qm_d_1"/>
 					<br />
 					<hr />
-					<p><?php echo(__("Correct anwser")); ?>:&emsp;
+					<p><?php echo(__("Correct answer")); ?>:&emsp;
 					<input type="checkbox" value="a" name="correct_a_1" id="correct_a_1"/>a
 					<input type="checkbox" value="b" name="correct_b_1" id="correct_b_1"/>b
 					<input type="checkbox" value="c" name="correct_c_1" id="correct_c_1"/>c
@@ -388,25 +388,25 @@
 					const correct_input_c = new_tab.querySelector("input[name^='correct_c_']");
 					const correct_input_d = new_tab.querySelector("input[name^='correct_d_']");
 
-					const anwser_a_input = new_tab.querySelector("input[name^='qm_a_']");
-					const anwser_b_input = new_tab.querySelector("input[name^='qm_b_']");
-					const anwser_c_input = new_tab.querySelector("input[name^='qm_c_']");
-					const anwser_d_input = new_tab.querySelector("input[name^='qm_d_']");
+					const answer_a_input = new_tab.querySelector("input[name^='qm_a_']");
+					const answer_b_input = new_tab.querySelector("input[name^='qm_b_']");
+					const answer_c_input = new_tab.querySelector("input[name^='qm_c_']");
+					const answer_d_input = new_tab.querySelector("input[name^='qm_d_']");
 
 					question.name = "m_question_" + (sets_qm_count + 1);
 					question.id = "m_question_" + (sets_qm_count + 1);
 
-					anwser_a_input.name = "qm_a_" + (sets_qm_count + 1);
-					anwser_a_input.id = "qm_a_" + (sets_qm_count + 1);
+					answer_a_input.name = "qm_a_" + (sets_qm_count + 1);
+					answer_a_input.id = "qm_a_" + (sets_qm_count + 1);
 
-					anwser_b_input.name = "qm_b_" + (sets_qm_count + 1);
-					anwser_b_input.id = "qm_b_" + (sets_qm_count + 1);
+					answer_b_input.name = "qm_b_" + (sets_qm_count + 1);
+					answer_b_input.id = "qm_b_" + (sets_qm_count + 1);
 					
-					anwser_c_input.name = "qm_c_" + (sets_qm_count + 1);
-					anwser_c_input.id = "qm_c_" + (sets_qm_count + 1);
+					answer_c_input.name = "qm_c_" + (sets_qm_count + 1);
+					answer_c_input.id = "qm_c_" + (sets_qm_count + 1);
 
-					anwser_d_input.name = "qm_d_" + (sets_qm_count + 1);
-					anwser_d_input.id = "qm_d_" + (sets_qm_count + 1);
+					answer_d_input.name = "qm_d_" + (sets_qm_count + 1);
+					answer_d_input.id = "qm_d_" + (sets_qm_count + 1);
 
 					correct_input_a.name = "correct_a_" + (sets_qm_count + 1);
 					correct_input_a.id = "correct_a_" + (sets_qm_count + 1);
