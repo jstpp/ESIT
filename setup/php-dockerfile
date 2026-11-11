@@ -20,7 +20,7 @@ RUN chown -R esit-user:esit-group /www/esit/public/*
 COPY ./public/portal/sites /www/esit/public
 COPY ./public/portal/css /www/esit/public/include/css
 COPY ./public/portal/include /www/esit/public/include
-COPY ./public/portal/elements /www/esit/public/include/elements
+#COPY ./public/portal/elements /www/esit/public/include/elements
 #COPY ./public/img /www/esit/public/img
 COPY ./public/include /www/esit/public/include
 COPY ./public/app /www/esit/public/app
@@ -31,5 +31,6 @@ RUN chown -R esit-user:esit-group /www/esit/*
 WORKDIR /www/esit/public/app/modules/composer/
 RUN source ./composer_setup.sh
 RUN php composer.phar install
+RUN chmod 0777 /www/esit/public/app/modules/composer/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
 
 WORKDIR /

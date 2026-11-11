@@ -13,7 +13,7 @@
 		$farea_content = $purifier->purify($_POST['fareahidden']);
 
 		$db_query = $pdo->prepare('INSERT INTO ARTICLES (title, author, content, image_path) VALUES (:ptitle, :pauthor, :pcontent, :pimage)');
-		$db_query->execute(['ptitle' => $_POST['fname'], 'pauthor' => $_SESSION['AUTH_USERNAME'], 'pcontent' => $farea_content, 'pimage' => $uploaded_image_path]);
+		$db_query->execute(['ptitle' => htmlentities($_POST['fname']), 'pauthor' => $_SESSION['AUTH_USERNAME'], 'pcontent' => $farea_content, 'pimage' => $uploaded_image_path]);
 
 		insert_flash_message('success', __('Success').'!', __('Your article has been added successfully').'!');
 		redirect("index.php?p=portal");

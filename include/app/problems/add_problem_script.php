@@ -146,7 +146,7 @@
 	}
 
     $sid = filter_var($_GET['sid'] ?? null, FILTER_VALIDATE_INT);
-    if(!has_permission('main.channels.add_problem') || !$sid || $sid<=0) kick();
+    if(!has_permission('main.channels.add_content') || !$sid || $sid<=0) kick();
 
     $db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:setid AND author_id=:aid');
 	$db_query->execute(['setid' => $sid, 'aid' => $_SESSION['AUTH_ID']]);

@@ -32,5 +32,36 @@ RUN cd /worker/sandboxing/nsjail && git checkout f100fd9 && make
 
 FROM build AS run
 
+ARG WORKER_UID=10001
+ARG WORKER_GID=10001
+
+RUN groupadd --gid "${WORKER_GID}" esit-worker \
+    && useradd \
+        --uid "${WORKER_UID}" \
+        --gid "${WORKER_GID}" \
+        --home-dir /home/esit-worker \
+        --create-home \
+        --shell /usr/sbin/nologin \
+        esit-worker
+
 RUN rm -rf /var/lib/apt/lists/*
 COPY --from=build /worker/sandboxing/nsjail /bin
+COPY --chown=root:root ./worker/ /worker/
+
+RUN mkdir -p \
+        /worker/inout \
+        /worker/solutions \
+        /worker/logs \
+        /worker/tests/tmp \
+    && chown -R "${WORKER_UID}:${WORKER_GID}" \
+        /worker/inout \
+        /worker/solutions \
+        /worker/logs \
+        /worker/tests/tmp \
+    && chmod 0750 \
+        /worker/inout \
+        /worker/solutions \
+        /worker/logs \
+        /worker/tests/tmp
+
+USER ${WORKER_UID}:${WORKER_GID}

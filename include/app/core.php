@@ -272,7 +272,7 @@
 
 	function include_plugins_for(
 		string $element, 
-		string $plugin = null
+		?string $plugin = null
 	): bool
 	{
 		if(!isset($element)) return False;
@@ -434,8 +434,8 @@
 	}
 
 	function load_img_input(
-		array $img = null, 
-		string $target_root_dir = null
+		?array $img = null, 
+		?string $target_root_dir = null
 	): string
 	{
 		$allowed_types = [
@@ -446,9 +446,10 @@
 
 		$placeholder = "../img/placeholder.jpeg";
 
+		if (!isset($img)) return $placeholder;
+
 		if (
-			!isset($img) 
-			|| !isset($target_root_dir) 
+			!isset($target_root_dir) 
 			|| !isset($img['tmp_name']) 
 			|| $img['error'] !== UPLOAD_ERR_OK
 		)
@@ -542,7 +543,7 @@
 	function insert_flash_message(
 		string $type, 
 		string $header, 
-		string $content = null
+		?string $content = null
 	): void
 	{
 		if (!isset($_SESSION['flash_messages']) || !is_array($_SESSION['flash_messages'])) $_SESSION['flash_messages'] = [];
@@ -571,7 +572,8 @@
 
 	function check_problemset_availability(
 		int $set_id, 
-		$pdo): array
+		$pdo
+	): array
 	{
 		$status = array('is_available' => 'false', 'condition_title' => 'Unknown', 'condition_id' => -1);
 		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID = :sid');

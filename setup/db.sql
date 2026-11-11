@@ -684,7 +684,8 @@ ALTER TABLE `PROBLEMSETS`
 -- Constraints for table `RESULTS`
 --
 ALTER TABLE `RESULTS`
-  ADD CONSTRAINT `result_submission_id` FOREIGN KEY (`submission_id`) REFERENCES `SUBMISSIONS` (`SUBMISSION_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `result_submission_id` FOREIGN KEY (`submission_id`) REFERENCES `SUBMISSIONS` (`SUBMISSION_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `unique_tests` UNIQUE (`submission_id`, `test_id`);
 
 --
 -- Constraints for table `SUBMISSIONS`

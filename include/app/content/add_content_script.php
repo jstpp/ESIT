@@ -1,4 +1,8 @@
 <?php
+    require_once('modules/composer/vendor/autoload.php');
+    $purifier_config = HTMLPurifier_Config::createDefault();
+	$purifier = new HTMLPurifier($purifier_config);
+
     function process_content_create_root($cid)
 	{
         try {
@@ -124,7 +128,7 @@
             if(!isset($_POST['art_content_hidden'])) kick();
             try {
                 $db_query = $pdo->prepare('INSERT INTO ARTICLES (contentset_pos, title, author, content, image_path) VALUES (:cid, :ptitle, :pauthor, :pcontent, :pimg)');
-                $db_query->execute(['cid' => $content_id, 'ptitle' => trim($_POST['content_title']), 'pauthor' => $_SESSION['AUTH_USERNAME'], 'pcontent' => $_POST['art_content_hidden'], 'pimg' => load_img_input()]);
+                $db_query->execute(['cid' => $content_id, 'ptitle' => htmlentities(trim($_POST['content_title'])), 'pauthor' => $_SESSION['AUTH_USERNAME'], 'pcontent' =>  $purifier->purify($_POST['art_content_hidden']), 'pimg' => load_img_input()]);
                 $pdo->commit();
                 insert_flash_message('success', __('Success').'!', __('Your article has been added successfully').'!');
                 

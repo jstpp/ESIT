@@ -1,4 +1,7 @@
 <style>
+	a {
+		cursor: pointer;
+	}
 	.set_link {
 		padding: 1vw 1vw;
 		width: 90%;
@@ -327,7 +330,20 @@
 
 				while($row = $db_query->fetch())
 				{
-					echo('<p><i class="fa fa-file-pdf"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Remove").'</a></p>');
+					echo('
+					<div style="display: flex; gap: 1vmax;">
+						<i class="fa fa-file-pdf"></i>&emsp;
+						'.htmlentities($row['resource_name']).'&emsp;
+						<a href="'.htmlentities($row['resource_path']).'" target="_blank">
+							'.__("Display").'
+						</a>&emsp;
+						<form id="remove_form_'.$row['RESOURCE_ID'].'" method="POST" action="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">
+							<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
+							<a onClick="document.getElementById(\'remove_form_'.$row['RESOURCE_ID'].'\').submit();">
+								'.__("Delete").'
+							</a>&emsp;
+						</form>
+					</div>');
 				}
 			?>
 		</div>
@@ -398,7 +414,26 @@
 						$r_new = 1;
 						$archive_button_text = __("Add to current session");
 					}
-					echo('<p><i class="fa fa-file-pdf"></i>&emsp;'.htmlentities($row['resource_name']).'&emsp;<a href="'.htmlentities($row['resource_path']).'" target="_blank">'.__("Display").'</a>&emsp;<a href="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">'.__("Delete").'</a>&emsp;<a href="process.php?r=modify_resources&mode=archive&rid='.$row['RESOURCE_ID'].'&rnew='.$r_new.'">'.$archive_button_text.'</a></p>');
+					echo('
+					<div style="display: flex; gap: 1vmin;">
+						<i class="fa fa-file-pdf"></i>&emsp;
+						'.htmlentities($row['resource_name']).'&emsp;
+						<a href="'.htmlentities($row['resource_path']).'" target="_blank">
+							'.__("Display").'
+						</a>&emsp;
+						<form id="remove_form_'.$row['RESOURCE_ID'].'" method="POST" action="process.php?r=modify_resources&mode=remove&rid='.$row['RESOURCE_ID'].'">
+							<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
+							<a onClick="document.getElementById(\'remove_form_'.$row['RESOURCE_ID'].'\').submit();">
+								'.__("Delete").'
+							</a>&emsp;
+						</form>
+						<form id="modify_form_'.$row['RESOURCE_ID'].'" method="POST" action="process.php?r=modify_resources&mode=archive&rid='.$row['RESOURCE_ID'].'&rnew='.$r_new.'">
+							<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
+							<a onClick="document.getElementById(\'modify_form_'.$row['RESOURCE_ID'].'\').submit();">
+								'.$archive_button_text.'
+							</a>
+						</form>
+					</div>');
 				}
 			?>
 	</div>
@@ -555,7 +590,7 @@
 			});
 		</script>
 	</div>
-	<iframe id="main_page_content" onLoad="if(i===0){main_page_load(this); i = 1;}" src="../include/elements/main_page_content.php" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
+	<iframe id="main_page_content" onLoad="if(i===0){main_page_load(this); i = 1;}" src="../include/elements/main_page_content.html" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
 	<br style="clear: both;" />
 	<br />
 	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_main'; document.getElementById('modify_content_form').submit();"><?php echo(__("Save all")); ?></a>
@@ -590,7 +625,7 @@
 			});
 		</script>
 	</div>
-	<iframe id="faq_content" onLoad="if(j===0){faq_load(this); j = 1;}" src="../include/elements/faq_content.php" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
+	<iframe id="faq_content" onLoad="if(j===0){faq_load(this); j = 1;}" src="../include/elements/faq_content.html" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
 	<br style="clear: both;" />
 	<br />
 	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor_f.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_faq'; document.getElementById('modify_content_form').submit();"><?php echo(__("Save all")); ?></a>
@@ -625,7 +660,7 @@
 			});
 		</script>
 	</div>
-	<iframe id="contact_content" onLoad="if(k===0){contact_load(this); k = 1;}" src="../include/elements/contact_info.php" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
+	<iframe id="contact_content" onLoad="if(k===0){contact_load(this); k = 1;}" src="../include/elements/contact_info.html" style="background-color: rgb(222, 222, 222); height: 60vmin; width: 48%; margin-right: 5%; float: right; border: 0; border-radius: 1vw;"></iframe>
 	<br style="clear: both;" />
 	<br />
 	<a style="margin-right: 5%;" class="button" onClick="document.getElementById('editor_send_content').innerHTML = editor_c.getValue(); document.getElementById('modify_content_form').action = document.getElementById('modify_content_form').action+'&page=portal_contact'; document.getElementById('modify_content_form').submit();"><?php echo(__("Save all")); ?></a>

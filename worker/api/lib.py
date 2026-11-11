@@ -79,6 +79,14 @@ def decode_and_extract_zip(
 
             for member in members:
                 zip_ref.extract(member, target_dir)
+    except zipfile.BadZipFile as exception:
+        logger.exception(
+            f"lib.py: decode_and_extract_zip(): {exception}"
+        )
+        logger.exception(
+            f"lib.py: decode_and_extract_zip(): Received data: {zip_bytes}"
+        )
+        return False
     except Exception as exception:
         logger.exception(
             f"lib.py: decode_and_extract_zip(): {exception}"

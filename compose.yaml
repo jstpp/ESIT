@@ -11,6 +11,7 @@ services:
       - ./include/:/www/esit/include
       - ./public/img:/www/esit/public/img
       - ./public/login:/www/esit/public/login
+      - ./public/portal/elements:/www/esit/public/include/elements
       - ./public/include/resources:/www/esit/public/include/resources
       - ./setup/nginx.conf.example:/etc/nginx/nginx.conf
       - ./setup/default.conf.example:/etc/nginx/conf.d/default.conf
@@ -30,6 +31,7 @@ services:
       - ./locale/:/www/esit/locale
       - ./public/img:/www/esit/public/img
       - ./public/login:/www/esit/public/login
+      - ./public/portal/elements:/www/esit/public/include/elements
       - ./public/include/resources:/www/esit/public/include/resources
       - ./setup/php.ini:/usr/local/etc/php/conf.d/esit-php.ini
     depends_on:
@@ -57,10 +59,13 @@ services:
 
   worker:
     build:
+      context: .
       dockerfile: ./setup/worker-dockerfile
+      args:
+        WORKER_UID: "10001"
+        WORKER_GID: "10001"
+    user: "10001:10001"
     env_file: .env
-    volumes:
-      - ./worker/:/worker/
     security_opt:
       - seccomp:./setup/seccomp.json
       - apparmor:unconfined  # Required for nsjail to manage its own sandboxing without host-level AppArmor configuration.
