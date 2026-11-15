@@ -1,9 +1,14 @@
 <?php
-	session_set_cookie_params([
+	$is_https =	(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+				|| ($_SERVER['SERVER_PORT'] ?? null) == 443
+				|| ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
+
+	if ($is_https) session_set_cookie_params([
 		'httponly' => true,
 		'secure'   => true,
 		'samesite' => 'Lax',
 	]);
+
 	session_start();
 
 	$worker_network_private_key = hex2bin($_ENV['NETWORK_PRIVATE_KEY']);

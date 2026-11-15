@@ -53,7 +53,7 @@
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?php echo(explode('_', $_SESSION['lang'] ?? '')[0]); ?>">
 	<head>
 		<title><?php echo(__("App")); ?> | <?php  echo(htmlspecialchars($general_title)); ?></title>
 		<link href="/include/fonts/Montserrat/Montserrat.css" rel="stylesheet">

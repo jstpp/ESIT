@@ -48,7 +48,7 @@ else
             # Download default portal template
             rm -Rf "$SCRIPT_DIR/../public/portal"
             rm -Rf "$SCRIPT_DIR/../include/portal"
-            git clone https://github.com/jstpp/ESITDefaultTemplate.git "$SCRIPT_DIR/../public/portal"
+            git clone https://github.com/jstpp/ESITDefaultTemplate.git "$SCRIPT_DIR/../public/portal" && git checkout 325c48b
             cp -r "$SCRIPT_DIR/../public/portal/img/"* "$SCRIPT_DIR/../public/img/"
 
             find "$SCRIPT_DIR/../setup"   -type d -exec chmod 0755 {} +

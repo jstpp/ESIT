@@ -31,6 +31,5 @@ RUN chown -R esit-user:esit-group /www/esit/*
 WORKDIR /www/esit/public/app/modules/composer/
 RUN source ./composer_setup.sh
 RUN php composer.phar install
-RUN chmod 0777 /www/esit/public/app/modules/composer/vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
 
 WORKDIR /

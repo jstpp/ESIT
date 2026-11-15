@@ -19,7 +19,7 @@ def encrypt(data, key):
     try:
         result = []
         encoded_key = bytes.fromhex(key)
-        assert(len(encoded_key)==16), f"Incorrect network key. Current length: {len(encoded_key)}"
+        if not (len(encoded_key)==16): raise Exception(f"Incorrect network key. Current length: {len(encoded_key)}")
         cipher = AES.new((encoded_key), AES.MODE_GCM)
         ciphertext, tag = cipher.encrypt_and_digest(data.encode("utf-8"))
         result.append(ciphertext)
@@ -34,7 +34,7 @@ def encrypt(data, key):
 def decrypt(data, key):
     try:
         encoded_key = bytes.fromhex(key)
-        assert(len(encoded_key)==16), f"Incorrect network key. Current length: {len(encoded_key)}"
+        if not (len(encoded_key)==16): raise Exception(f"Incorrect network key. Current length: {len(encoded_key)}")
         cipher = AES.new((encoded_key), AES.MODE_GCM, data[1])
         result = cipher.decrypt_and_verify(data[0], data[2]).decode("utf-8")
         return result
@@ -215,7 +215,7 @@ def send(status, data):
             data["submission_file"] = prepare_base64(data)
             data["status"] = status
             encrypted = encrypt(json.dumps(data), apiconfig.network_private_key)
-            assert encrypted, "Encryption failed"
+            if not encrypted: raise Exception("Encryption failed")
             data_to_decrypt["content"] = base64.b64encode(encrypted[0]).decode("utf-8")
             data_to_decrypt["nonce"] = base64.b64encode(encrypted[1]).decode("utf-8")
             data_to_decrypt["tag"] = base64.b64encode(encrypted[2]).decode("utf-8")

@@ -170,7 +170,7 @@
 	<?php
 		if($row['scomment']!="-" and $row['scomment']!="" and strtotime($row['result_publish_time'])<strtotime("now"))
 		{
-			echo('<p style="margin-left: 5%;"><b>'.__("Optional comment").': </b>'.$row['scomment'].'</p>');
+			echo('<p style="margin-left: 5%;"><b>'.__("Optional comment").': </b>'.htmlentities($row['scomment']).'</p>');
 		}
 	?>
 	<br />

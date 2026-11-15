@@ -188,10 +188,10 @@
 </style>
 <script src="/include/js/chart.js/chart.js"></script>
 
-<center>
+<center role="banner">
 	<h1 style="font-size: 3.5vw; user-select: none; background: linear-gradient(315deg, rgba(0, 179, 255, 1) 0%, var(--text) 60%); -webkit-background-clip: text; color: transparent;"><?php echo(__("Hello")); ?>, <?php echo(htmlentities($_SESSION['AUTH_NAME'])); ?>!</h1>
 </center>
-<div id="search_box">
+<div id="search_box" role="search">
 	<form class="search_box_rounded_input_box" method="GET" action="index.php">
 		<input type="hidden" name="p" value="search">
 		<input type="text" id="search_box_key" name="key" placeholder="<?php echo(__("What are you looking for?")); ?>" oninput="search(document.getElementById('search_box_key').value);"/>
@@ -280,7 +280,7 @@
 	</script>
 </div>
 <div style="display: flex;">
-	<div id="dashboard_main" style="min-width: 72%; display: flex; flex-direction: column; align-items: stretch;">
+	<div id="dashboard_main" role="group" style="min-width: 72%; display: flex; flex-direction: column; align-items: stretch;">
 		<div class="window">
 			<h3 class="window_title"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;<?php echo(__("My progress")); ?></h3>
 			<script>
@@ -499,7 +499,7 @@
 			<br />
 		</div>
 	</div>
-	<div id="proposed_channels" style="min-width: 27.5%; max-width: 30%; margin-left: 0; margin-right: 1%; display: flex; flex-direction: column; align-items: stretch;">
+	<div id="proposed_channels" role="group" style="min-width: 27.5%; max-width: 30%; margin-left: 0; margin-right: 1%; display: flex; flex-direction: column; align-items: stretch;">
 		<?php
 			include_plugins_for("dashboard_side_panel");
 		?>
@@ -516,7 +516,7 @@
 					echo('<a href="?p=channel&id='.$row['CHANNEL_ID'].'" style="flex: 1; text-decoration: none;"><div class="dashboard_content_set" style="background: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url(\''.$row['img_path'].'\'); background-size: cover;">
 				<div class="dashboard_content_set_metadata">
 					<h3>'.htmlentities($row['title']).'</h3>
-					<small style="top: -1vmax; position: relative;"><img src="https://api.dicebear.com/10.x/identicon/svg?seed='.htmlentities($row['author']).'" style="background-color: var(--text); width: 1vmax; border-radius: 0.5vmax; margin-bottom: -0.2vmax;" />&nbsp;&nbsp;'.htmlentities($row['author']).'</small>
+					<small style="top: -1vmax; position: relative;"><img aria-label="'.htmlentities($row['author']).'\'s profile picture" src="https://api.dicebear.com/10.x/identicon/svg?seed='.htmlentities($row['author']).'" style="background-color: var(--text); width: 1vmax; border-radius: 0.5vmax; margin-bottom: -0.2vmax;" />&nbsp;&nbsp;'.htmlentities($row['author']).'</small>
 				</div>
 			</div></a>');
 				}

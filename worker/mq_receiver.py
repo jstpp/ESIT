@@ -175,7 +175,7 @@ def main(
 
                     if not isinstance(submission, dict):
                         raise Exception("Submission must be a JSON object")
-                    assert int(submission["submission_id"]) > 0
+                    if not int(submission["submission_id"]) > 0: raise Exception("Invalid submission id")
 
                 except Exception as e:
                     logger.warning(f"Received invalid submission: {e}")
@@ -197,17 +197,17 @@ def main(
                         "An error occured when worker was preparing inout for submission"
                     )
 
-                assert api.lib.prepare(submission), "Failed to prepare submission."
+                if not api.lib.prepare(submission): raise Exception("Failed to prepare submission")
 
                 if submission["submission_lang"] == "py":
                     logger.info("Executing PYTHON script.")
-                    assert api.lib.send(compilers.python.run(submission), submission), "API usage failed"
+                    if not api.lib.send(compilers.python.run(submission), submission): raise Exception("API usage failed")
                 elif submission["submission_lang"] == "cpp":
                     logger.info("Executing C++ script.")
-                    assert api.lib.send(compilers.cpp.run(submission), submission), "API usage failed"
+                    if not api.lib.send(compilers.cpp.run(submission), submission): raise Exception("API usage failed")
                 elif submission["submission_lang"] == "java":
                     logger.info("Executing JAVA script.")
-                    assert api.lib.send(compilers.java.run(submission), submission), "API usage failed"
+                    if not api.lib.send(compilers.java.run(submission), submission): raise Exception("API usage failed")
                 else:
                     raise Exception(f"Unsupported language: {submission.get("submission_lang", 'unknown')}")
 

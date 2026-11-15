@@ -68,9 +68,9 @@
 		display: flex;
 	}
 </style>
-<div id="vertical_menu">
+<div id="vertical_menu" role="navigation">
 	<div style="margin-left: 0.8vw; margin-top: 5vw; display: flex; gap: 1vmax;">
-		<img src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($_SESSION['AUTH_USERNAME']) ?>" onClick="document.getElementById('profile_background_pane').style.display = 'flex';" style="cursor: pointer; width: 2.7vmax; border-radius: 1.35vmax; box-shadow: 0 0 0.2vmax 0.1vmax var(--container-hover-bg-textbox); background-color: rgba(218, 226, 230, 1);"/>
+		<img aria-label="<?php echo($_SESSION['AUTH_USERNAME']) ?>'s profile picture" src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($_SESSION['AUTH_USERNAME']) ?>" onClick="document.getElementById('profile_background_pane').style.display = 'flex';" style="cursor: pointer; width: 2.7vmax; border-radius: 1.35vmax; box-shadow: 0 0 0.2vmax 0.1vmax var(--container-hover-bg-textbox); background-color: rgba(218, 226, 230, 1);"/>
 		<div>
 			<b style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block; width: 12.5vw;"><?php echo($_SESSION['AUTH_NAME']) ?> <?php echo($_SESSION['AUTH_SURNAME']) ?></b>
 			<br />

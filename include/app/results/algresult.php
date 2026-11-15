@@ -30,6 +30,7 @@
 			$gradient = "linear-gradient(to left,gray 0%,transparent 5%);";
 			$percentage = "...";
 			$status = __("In queue");
+			echo('<meta http-equiv="refresh" content="5" />');
 		} else {
 			$gradient = "linear-gradient(to left,#8eed28 0%,transparent 5%);";
 			$percentage = $row['score_percentage']."%";

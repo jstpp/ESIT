@@ -2,6 +2,7 @@
     require_once('modules/composer/vendor/autoload.php');
 
     $purifier_config = HTMLPurifier_Config::createDefault();
+    $purifier_config->set('Cache.DefinitionImpl', null);
     $purifier = new HTMLPurifier($purifier_config);
 
     $id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);

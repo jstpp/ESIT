@@ -30,7 +30,7 @@
 		background-color: var(--vertical-menu-bg);
 	}
 </style>
-<div id="horizontal_menu">
+<div id="horizontal_menu" role="navigation">
 	<a href="../login/process.php?s=logout" style="margin-right: 0.75vw;"><i class='fas fa-door-open'></i>&emsp;<?php echo(__("Log out")); ?></a>
 	<a onClick="document.getElementById('notifications_menu').style.display = 'block';"><i class='fa fa-bell'></i>&emsp;<?php echo(__("Notifications")); ?></a>
 	<?php

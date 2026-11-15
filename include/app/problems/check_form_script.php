@@ -1,10 +1,15 @@
 <?php
+    require_once('modules/composer/vendor/autoload.php');
+    $purifier_config = HTMLPurifier_Config::createDefault();
+    $purifier_config->set('Cache.DefinitionImpl', null);
+    $purifier = new HTMLPurifier($purifier_config);
+
     $id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
     if(!is_logged_in() || !has_permission('main.channels.check_form') || !isset($_POST['form_pts']) || !$id) kick();
 
     try {
         $db_query = $pdo->prepare('UPDATE SUBMISSIONS SET verification_time=:vertime, score=:score1, score_percentage=(100*:score2/(SELECT DISTINCT maxpoints FROM CONTENT INNER JOIN SUBMISSIONS ON CONTENT.CONTENT_ID=SUBMISSIONS.problem_id WHERE SUBMISSION_ID=:sid1)), comment=:comment WHERE SUBMISSION_ID=:sid2');
-        $db_query->execute(['vertime' => date("Y-m-d H:i:s", time()), 'score1'=>(int)$_POST['form_pts'], 'score2'=>(int)$_POST['form_pts'], 'sid1' => $id, 'sid2' => $id, 'comment' => $_POST['form_comment'] ?? '-']);
+        $db_query->execute(['vertime' => date("Y-m-d H:i:s", time()), 'score1'=>(int)$_POST['form_pts'], 'score2'=>(int)$_POST['form_pts'], 'sid1' => $id, 'sid2' => $id, 'comment' => $purifier->purify($_POST['form_comment'] ?? '-')]);
 
         redirect("index.php?p=formresult&sid=".filter_var($_GET['id'], FILTER_VALIDATE_INT));
     } catch (Throwable $t) {

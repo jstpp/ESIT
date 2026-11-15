@@ -1,6 +1,7 @@
 <?php
     require_once('modules/composer/vendor/autoload.php');
     $purifier_config = HTMLPurifier_Config::createDefault();
+    $purifier_config->set('Cache.DefinitionImpl', null);
 	$purifier = new HTMLPurifier($purifier_config);
 
     function process_content_create_root($cid)
