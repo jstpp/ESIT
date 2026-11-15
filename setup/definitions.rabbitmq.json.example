@@ -6,7 +6,7 @@
     "users": [
       {
         "name": "esit_user",
-        "password_hash": "Tw5wa+s2q9gMhlfKghfFRI4kwehS1zfonTxtlKMXpeIvXg+W",
+        "password_hash": "",
         "hashing_algorithm": "rabbit_password_hashing_sha256",
         "tags": ""
       }
