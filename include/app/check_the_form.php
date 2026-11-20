@@ -1,6 +1,11 @@
 <?php
 	if (!has_permission('main.display.channels.check_the_form') || !isset($_GET['sid'])) kick();
 	
+	require_once('modules/composer/vendor/autoload.php');
+    $purifier_config = HTMLPurifier_Config::createDefault();
+    $purifier_config->set('Cache.DefinitionImpl', null);
+    $purifier = new HTMLPurifier($purifier_config);
+
 	$db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID INNER JOIN USERS ON USERS.USER_ID=SUBMISSIONS.user_id WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
 	$db_query->execute(['sid' => $_GET['sid']]);
 	$row = $db_query->fetch();
@@ -49,7 +54,7 @@
 	<br />
 	<div style="user-select: text; margin-left: 5%; width: 88%; padding: 1% 1%; background-color: #dae2e6; color: #2a2c2e;">
 		<?php
-			echo($row['content']);
+			echo($purifier->purify($row['content']));
 		?>
 	</div>
 	<br />

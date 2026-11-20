@@ -2,7 +2,6 @@ import logging
 import math
 import os
 import subprocess
-import sys
 
 logger = logging.getLogger("esit.worker")
 
@@ -38,7 +37,6 @@ def run(submission):
         logger.exception("A compiler exception occured - " + str(e))
         return "fail"
 
-    genfile = sys.stdout
     for turn in submission.tests:
         logger.info(
             "Testing submission "
@@ -47,64 +45,52 @@ def run(submission):
             + str(turn.TEST_ID)
             + ")"
         )
-        try:
-            genfile = sys.stdout
-            logfile = open(output_dir + "/" + str(turn.TEST_ID) + ".log", "w")
-            debugfilerun = open(
-                misc_dir + "/debug-run-" + str(turn.TEST_ID) + ".log", "w"
-            )
-        except Exception:
-            logger.exception(
-                "A compiler exception occured - error for test " + str(turn.TEST_ID)
-            )
-            return "fail"
+
+        debug_file = misc_dir + "/debug-run-" + str(turn.TEST_ID) + ".log"
+        output_file = output_dir + "/" + str(turn.TEST_ID) + ".log"
+        input_file = input_dir + "/" + str(turn.TEST_ID) + ".in"
 
         try:
-            quest = subprocess.run(
-                [
-                    "/usr/bin/time",
-                    "-f",
-                    "\t%U",
-                    "-o",
-                    os.path.abspath(time_dir + "/" + str(turn.TEST_ID) + ".log"),
-                    "nsjail",
-                    "--config",
-                    os.path.abspath(
-                        str(os.path.dirname(os.path.realpath(__file__)))
-                        + "/../sandboxing/policy/pythonexecpolicy-run.cfg"
-                    ),
-                    "-T",
-                    root_dir,
-                    "-B",
-                    root_dir + "/misc",
-                    "-R",
-                    code_file,
-                    "--cwd",
-                    root_dir,
-                    "--time_limit",
-                    str(math.ceil(turn.max_time)),
-                    "--rlimit_as",
-                    str(turn.max_memory),
-                    "--",
-                    "/usr/local/bin/python3",
-                    code_file,
-                ],
-                stdin=open(input_dir + "/" + str(turn.TEST_ID) + ".in"),
-                capture_output=True,
-                text=True,
-            )
-            sys.stdout = debugfilerun
-            print(quest.stderr)
-            sys.stdout = logfile
-            print(quest.stdout)
-            turn.result = quest.stdout
+            with open(output_file, "wb") as outputfile, open(debug_file, "wb") as debugfile, open(input_file, "rb") as inputfile:
+                quest = subprocess.run(
+                    [
+                        "/usr/bin/time",
+                        "-f",
+                        "\t%U",
+                        "-o",
+                        os.path.abspath(time_dir + "/" + str(turn.TEST_ID) + ".log"),
+                        "nsjail",
+                        "--config",
+                        os.path.abspath(
+                            str(os.path.dirname(os.path.realpath(__file__)))
+                            + "/../sandboxing/policy/pythonexecpolicy-run.cfg"
+                        ),
+                        "-T",
+                        root_dir,
+                        "-B",
+                        root_dir + "/misc",
+                        "-R",
+                        code_file,
+                        "--cwd",
+                        root_dir,
+                        "--time_limit",
+                        str(math.ceil(turn.max_time)),
+                        "--rlimit_as",
+                        str(turn.max_memory),
+                        "--",
+                        "/usr/local/bin/python3",
+                        code_file,
+                    ],
+                    stdin=inputfile,
+                    stdout=outputfile,
+                    stderr=debugfile
+                )
+                
+            with open(output_file, "r", encoding="utf-8", errors="replace") as outputfile:
+                turn.result = outputfile.read()
             turn.returncode = quest.returncode
-            sys.stdout = genfile
-            logfile.close()
 
         except Exception as e:
-            logger.exception(f"Exception: {e}")
-            sys.stdout = genfile
-            logfile.close()
+            logger.exception(f"An exception occurred.")
 
     return "success"

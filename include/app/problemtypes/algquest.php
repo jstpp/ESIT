@@ -51,7 +51,7 @@
 <div class="window">
 	<p style="margin-left: 5%;">
 		<i class='fas fa-info-circle'></i>&emsp;<?php echo($howmanytimes); ?><br /><br />
-		<b>Limity (wg pakietów testów):</b><br />
+		<b><?php echo(__('Limits (by test package)')); ?>:</b><br />
 		<table style="margin-left: 5%;" id="tests">
 			<?php
 				$db_query = $pdo->prepare('SELECT * FROM ALG_TEST_LIST WHERE problem_id=:pid');

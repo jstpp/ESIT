@@ -16,7 +16,7 @@ def run(submission):
             + "/../solutions/"
             + str(submission.submission_id)
         )
-        code_file = root_dir + "/code/" + submission.submission_id + ".cpp"
+        code_file = root_dir + "/code/" + str(submission.submission_id) + ".cpp"
         output_dir = root_dir + "/output"
         time_dir = root_dir + "/time"
         misc_dir = root_dir + "/misc"
@@ -36,48 +36,47 @@ def run(submission):
         )
         return "fail"
 
-    genfile = sys.stdout
-
     try:
         logger.info("Compilation of submission " + str(submission.submission_id))
-        debugfilecompilation = open(misc_dir + "/debug-compilation.log", "w")
-        quest = subprocess.run(
-            [
-                "nsjail",
-                "--config",
-                os.path.abspath(
-                    str(os.path.dirname(os.path.realpath(__file__)))
-                    + "/../sandboxing/policy/cppexecpolicy-compilation.cfg"
-                ),
-                "-T",
-                "/tmp",
-                "-B",
-                root_dir,
-                "-B",
-                misc_dir,
-                "-R",
-                code_file,
-                "--cwd",
-                root_dir,
-                "--time_limit",
-                str(math.ceil(config.worker_max_compilation_time)),
-                "--rlimit_as",
-                str(config.worker_max_compilation_memory),
-                "--",
-                "/usr/bin/g++",
-                "-std=c++20",
-                "-pedantic",
-                "-Wall",
-                "-ftime-report",
-                "-o",
-                (misc_dir + "/compiled.out"),
-                code_file,
-            ],
-            capture_output=True,
-            text=True,
-        )
-        sys.stdout = debugfilecompilation
-        print(quest.stderr)
+        compilation_debug_file = misc_dir + "/debug-compilation.log"
+
+        with open(compilation_debug_file, "wb") as compdebugfile:
+            quest = subprocess.run(
+                [
+                    "nsjail",
+                    "--config",
+                    os.path.abspath(
+                        str(os.path.dirname(os.path.realpath(__file__)))
+                        + "/../sandboxing/policy/cppexecpolicy-compilation.cfg"
+                    ),
+                    "-T",
+                    "/tmp",
+                    "-B",
+                    root_dir,
+                    "-B",
+                    misc_dir,
+                    "-R",
+                    code_file,
+                    "--cwd",
+                    root_dir,
+                    "--time_limit",
+                    str(math.ceil(config.worker_max_compilation_time)),
+                    "--rlimit_as",
+                    str(config.worker_max_compilation_memory),
+                    "--",
+                    "/usr/bin/g++",
+                    "-std=c++20",
+                    "-pedantic",
+                    "-Wall",
+                    "-ftime-report",
+                    "-o",
+                    (misc_dir + "/compiled.out"),
+                    code_file,
+                ],
+                stdout=compdebugfile,
+                stderr=compdebugfile
+            )
+
     except Exception as e:
         logger.exception(
             f"A compiler exception occured - general compilation error: {e}"
@@ -92,69 +91,57 @@ def run(submission):
             + str(turn.TEST_ID)
             + ")"
         )
-        try:
-            genfile = sys.stdout
-            logfile = open(output_dir + "/" + str(turn.TEST_ID) + ".log", "w")
-            debugfilerun = open(
-                misc_dir + "/debug-run-" + str(turn.TEST_ID) + ".log", "w"
-            )
-        except Exception:
-            logger.exception(
-                "A compiler exception occured - compilation error for test "
-                + str(turn.TEST_ID)
-            )
-            return "fail"
+
+        debug_file = misc_dir + "/debug-run-" + str(turn.TEST_ID) + ".log"
+        output_file = output_dir + "/" + str(turn.TEST_ID) + ".log"
+        input_file = input_dir + "/" + str(turn.TEST_ID) + ".in"
 
         try:
-            sys.stdout = debugfilerun
-            quest2 = subprocess.run(
-                [
-                    "/usr/bin/time",
-                    "-f",
-                    "\t%U",
-                    "-o",
-                    os.path.abspath(time_dir + "/" + str(turn.TEST_ID) + ".log"),
-                    "nsjail",
-                    "--config",
-                    os.path.abspath(
-                        str(os.path.dirname(os.path.realpath(__file__)))
-                        + "/../sandboxing/policy/cppexecpolicy-run.cfg"
-                    ),
-                    "-B",
-                    root_dir,
-                    "-B",
-                    misc_dir,
-                    "-R",
-                    code_file,
-                    "--cwd",
-                    root_dir,
-                    "--time_limit",
-                    str(math.ceil(turn.max_time)),
-                    "--rlimit_as",
-                    str(turn.max_memory),
-                    "--",
-                    (misc_dir + "/compiled.out"),
-                    code_file,
-                ],
-                stdin=open(input_dir + "/" + str(turn.TEST_ID) + ".in"),
-                capture_output=True,
-                text=True,
-            )
-            print(quest2.stderr)
-            sys.stdout = logfile
-            print(quest2.stdout)
+            with open(output_file, "wb") as outputfile, open(debug_file, "wb") as debugfile, open(input_file, "rb") as inputfile:
+                quest2 = subprocess.run(
+                    [
+                        "/usr/bin/time",
+                        "-f",
+                        "\t%U",
+                        "-o",
+                        os.path.abspath(time_dir + "/" + str(turn.TEST_ID) + ".log"),
+                        "nsjail",
+                        "--config",
+                        os.path.abspath(
+                            str(os.path.dirname(os.path.realpath(__file__)))
+                            + "/../sandboxing/policy/cppexecpolicy-run.cfg"
+                        ),
+                        "-B",
+                        root_dir,
+                        "-B",
+                        misc_dir,
+                        "-R",
+                        code_file,
+                        "--cwd",
+                        root_dir,
+                        "--time_limit",
+                        str(math.ceil(turn.max_time)),
+                        "--rlimit_as",
+                        str(turn.max_memory),
+                        "--",
+                        (misc_dir + "/compiled.out"),
+                        code_file,
+                    ],
+                    stdin=inputfile,
+                    stdout=outputfile,
+                    stderr=debugfile
+                )
 
+            with open(output_file, "r", encoding="utf-8", errors="replace") as outputfile:
+                turn.result = outputfile.read()
             if quest.returncode == 0:
-                turn.result = quest2.stdout
                 turn.returncode = quest2.returncode
             else:
-                turn.result = quest.stdout
                 turn.returncode = quest.returncode
 
-            sys.stdout = genfile
-            logfile.close()
         except Exception:
-            sys.stdout = genfile
-            logfile.close()
+            turn.result = ""
+            turn.returncode = 255
+            logger.exception(f"An exception occurred.")
 
     return "success"
