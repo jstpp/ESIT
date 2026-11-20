@@ -1,61 +1,88 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow checks out code, performs a Codacy security scan
-# and integrates the results with the
-# GitHub Advanced Security code scanning feature.  For more information on
-# the Codacy security scan action usage and parameters, see
-# https://github.com/codacy/codacy-analysis-cli-action.
-# For more information on Codacy Analysis CLI in general, see
-# https://github.com/codacy/codacy-analysis-cli.
 
 name: Codacy Security Scan
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "main" ]
+    branches:
+      - main
   schedule:
-    - cron: '0 16 * * 1'
+    - cron: "0 16 * * 1"
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: codacy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   codacy-security-scan:
-    permissions:
-      contents: read # for actions/checkout to fetch code
-      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
-      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
     name: Codacy Security Scan
     runs-on: ubuntu-latest
-    steps:
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
-      # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+
       - name: Run Codacy Analysis CLI
         uses: codacy/codacy-analysis-cli-action@d840f886c4bd4edc059706d09c6a1586111c540b
         with:
-          # Check https://github.com/codacy/codacy-analysis-cli#project-token to get your project token from your Codacy repository
-          # You can also omit the token and run the tools that support default configurations
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          directory: .
           verbose: true
           output: results.sarif
           format: sarif
-          # Adjust severity of non-security issues
           gh-code-scanning-compat: true
-          # Force 0 exit code to allow SARIF file generation
-          # This will handover control about PR rejection to the GitHub side
           max-allowed-issues: 2147483647
 
-      # Upload the SARIF file generated in the previous step
-      - name: Upload SARIF results file
+      - name: Validate SARIF report
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ ! -s results.sarif ]]; then
+            echo "::error::SARIF report is missing or empty."
+            exit 1
+          fi
+
+          if ! jq -e '
+            .version == "2.1.0"
+            and (.runs | type == "array")
+            and (.runs | length > 0)
+            and all(.runs[];
+              (.tool.driver.name | type == "string" and length > 0)
+            )
+          ' results.sarif >/dev/null; then
+            echo "::error::Invalid SARIF report."
+            jq '{version, runs_count: ((.runs // []) | length)}' results.sarif
+            exit 1
+          fi
+
+          echo "SARIF report is valid."
+          jq '{
+            version,
+            runs: [
+              .runs[] | {
+                tool: .tool.driver.name,
+                results_count: ((.results // []) | length)
+              }
+            ]
+          }' results.sarif
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: >-
+          github.event_name != 'pull_request' ||
+          github.event.pull_request.head.repo.full_name == github.repository
         uses: github/codeql-action/upload-sarif@1fc58d04a4d4374f921bdac573c3811c240f9c26
         with:
           sarif_file: results.sarif

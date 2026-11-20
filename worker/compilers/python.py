@@ -1,12 +1,11 @@
+import logging
 import math
 import os
 import subprocess
 import sys
-import time
-import logging
-from obj.submission import Submission, Test
 
 logger = logging.getLogger("esit.worker")
+
 
 def run(submission):
     try:
@@ -42,10 +41,11 @@ def run(submission):
     genfile = sys.stdout
     for turn in submission.tests:
         logger.info(
-            "Testing submission " +
-            str(submission.submission_id) +
-            " (test " +
-            str(turn.TEST_ID) + ")"
+            "Testing submission "
+            + str(submission.submission_id)
+            + " (test "
+            + str(turn.TEST_ID)
+            + ")"
         )
         try:
             genfile = sys.stdout
@@ -54,8 +54,8 @@ def run(submission):
                 misc_dir + "/debug-run-" + str(turn.TEST_ID) + ".log", "w"
             )
         except Exception:
-            logger.exception("A compiler exception occured - error for test "
-                + str(turn.TEST_ID)
+            logger.exception(
+                "A compiler exception occured - error for test " + str(turn.TEST_ID)
             )
             return "fail"
 

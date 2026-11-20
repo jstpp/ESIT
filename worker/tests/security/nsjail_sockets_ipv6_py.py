@@ -3,7 +3,7 @@ import os
 import shutil
 
 import compilers.python
-from obj.submission import Submission, Test
+from obj.submission import Submission
 
 
 def prepare_submission(code):

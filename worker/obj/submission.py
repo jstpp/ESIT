@@ -2,7 +2,6 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Literal
 
-
 SubmissionLanguage = Literal["py", "cpp", "java"]
 SubmissionType = Literal["normal", "silent", "recheck", "testing"]
 
@@ -70,9 +69,7 @@ class Submission:
 
     def to_dict(self) -> dict:
         data = asdict(self)
-        data["submission_time"] = self.submission_time.strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+        data["submission_time"] = self.submission_time.strftime("%Y-%m-%d %H:%M:%S")
         return data
 
     def __post_init__(self):

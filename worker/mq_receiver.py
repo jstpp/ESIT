@@ -1,28 +1,28 @@
 #!/usr/bin/env python
 
 import json
+import logging
 import os
 import sys
-import time
 import threading
-
-import logging
+import time
 from logging.handlers import RotatingFileHandler
-from obj.submission import Submission, Test
 
 import pika
 
 import api.lib
-import api.config.config as config
 import compilers.cpp
 import compilers.java
 import compilers.python
 import tests.run as tests
+from api.config import config
+from obj.submission import Submission
 
 SUPPORTED_LANGUAGES = {"py", "cpp", "java"}
 ENFORCED_TESTING = True
 ENFORCED_LANDLOCK = True
 QUIET_TESTING = False
+
 
 def setup_logging(log_directory, worker_id):
     os.makedirs(log_directory, exist_ok=True)
@@ -31,10 +31,11 @@ def setup_logging(log_directory, worker_id):
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
-    if logger.handlers: return logger
+    if logger.handlers:
+        return logger
 
     formatter = logging.Formatter(
-        fmt=f"%(asctime)s [%(levelname)s] %(message)s",
+        fmt="%(asctime)s [%(levelname)s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
@@ -57,9 +58,7 @@ def setup_logging(log_directory, worker_id):
 
 
 def handle_thread_exception(args):
-    logger = logging.getLogger(
-        f"esit.{args.thread.name}"
-    )
+    logger = logging.getLogger(f"esit.{args.thread.name}")
     logger.error(
         "Unhandled exception in thread %s",
         args.thread.name,
@@ -67,7 +66,7 @@ def handle_thread_exception(args):
             args.exc_type,
             args.exc_value,
             args.exc_traceback,
-        )
+        ),
     )
 
 
@@ -103,16 +102,14 @@ def initialize_landlock(logger):
     try:
         from landlockpy import AccessFS, AccessNet, Ruleset
 
-        with Ruleset(
-            handled_fs=AccessFS.NONE, handled_net=AccessNet.CONNECT_TCP
-        ) as rs:
+        with Ruleset(handled_fs=AccessFS.NONE, handled_net=AccessNet.CONNECT_TCP) as rs:
             rs.allow_port(53, AccessNet.CONNECT_TCP)
             rs.allow_port(80, AccessNet.CONNECT_TCP)
             rs.allow_port(443, AccessNet.CONNECT_TCP)
             rs.restrict()
         logger.info("Landlock restrictions initialized successfully.")
         return True
-    except Exception as e:
+    except Exception:
         if ENFORCED_LANDLOCK:
             logger.critical(
                 "Landlock initialization failed. Worker initialization has been canceled."
@@ -128,13 +125,16 @@ def initialize_landlock(logger):
 def start_execution(logger, submission):
     if submission.submission_lang == "py":
         logger.info("Executing PYTHON script.")
-        if not api.lib.send(compilers.python.run(submission), submission): raise Exception("API usage failed")
+        if not api.lib.send(compilers.python.run(submission), submission):
+            raise Exception("API usage failed")
     elif submission.submission_lang == "cpp":
         logger.info("Executing C++ script.")
-        if not api.lib.send(compilers.cpp.run(submission), submission): raise Exception("API usage failed")
+        if not api.lib.send(compilers.cpp.run(submission), submission):
+            raise Exception("API usage failed")
     elif submission.submission_lang == "java":
         logger.info("Executing JAVA script.")
-        if not api.lib.send(compilers.java.run(submission), submission): raise Exception("API usage failed")
+        if not api.lib.send(compilers.java.run(submission), submission):
+            raise Exception("API usage failed")
     else:
         raise Exception(f"Unsupported language: {submission.submission_lang}")
 
@@ -147,17 +147,15 @@ def connect_to_queue(logger, t):
             )
             connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
-                    host=config.rabbitmq_host, 
-                    port=config.rabbitmq_port, 
+                    host=config.rabbitmq_host,
+                    port=config.rabbitmq_port,
                     credentials=credentials,
                     heartbeat=60,
-                    socket_timeout=10
+                    socket_timeout=10,
                 )
             )
             channel = connection.channel()
-            logger.info(
-                "Successfully connected to the queue."
-            )
+            logger.info("Successfully connected to the queue.")
             break
         except Exception as e:
             t *= 2
@@ -178,7 +176,7 @@ def connect_to_queue(logger, t):
 
 def prepare_inout(logger, submission):
     try:
-        logger.info(f'Preparing inout for submission {submission.submission_id}...')
+        logger.info(f"Preparing inout for submission {submission.submission_id}...")
         if os.path.isdir(
             os.path.dirname(os.path.realpath(__file__))
             + "/inout/"
@@ -191,23 +189,24 @@ def prepare_inout(logger, submission):
             )
             return True
         else:
-            logger.info(f"Inout set for submission {submission.submission_id} not found. Asking main server to fill the gap...")
+            logger.info(
+                f"Inout set for submission {submission.submission_id} not found. Asking main server to fill the gap..."
+            )
             if api.lib.ask_for_inout(submission.to_dict()):
                 return True
             else:
-                logger.error(f"Inout set for submission {submission.submission_id} not found. **Filling the gap failed!**")
+                logger.error(
+                    f"Inout set for submission {submission.submission_id} not found. **Filling the gap failed!**"
+                )
                 return False
     except Exception as exception:
         raise Exception(f"mq_receiver.py: prepare_inout(): {exception}")
 
 
-def main(
-    worker_id=1
-):
+def main(worker_id=1):
     try:
         logger = setup_logging(
-            os.path.join(os.path.dirname(os.path.realpath(__file__)), "logs"),
-            worker_id
+            os.path.join(os.path.dirname(os.path.realpath(__file__)), "logs"), worker_id
         )
 
         logger.info("Worker initialization...")
@@ -226,18 +225,20 @@ def main(
             try:
                 submission = None
                 try:
-                    submission = validate_submission(Submission.from_dict(json.loads(body)))
+                    submission = validate_submission(
+                        Submission.from_dict(json.loads(body))
+                    )
 
-                except (ValueError, TypeError) as e:
-                    logger.exception(f"Received invalid submission.")
+                except (ValueError, TypeError):
+                    logger.exception("Received invalid submission.")
                     ch.basic_nack(
                         delivery_tag=method.delivery_tag,
                         requeue=False,
                     )
                     return
 
-                except Exception as e:
-                    logger.exception(f"Undefined exception when processing submission.")
+                except Exception:
+                    logger.exception("Undefined exception when processing submission.")
                     ch.basic_nack(
                         delivery_tag=method.delivery_tag,
                         requeue=False,
@@ -250,21 +251,27 @@ def main(
                     raise Exception(
                         f"An error occurred when worker was preparing inout for submission {submission.submission_id}."
                     )
-                if not api.lib.prepare(submission.to_dict()): raise Exception("Failed to prepare submission.")
+                if not api.lib.prepare(submission.to_dict()):
+                    raise Exception("Failed to prepare submission.")
 
                 start_execution(logger, submission)
 
-            except Exception as e:
-                if (submission and isinstance(submission, Submission) 
-                and submission.submission_id != 'unknown' 
-                and api.lib.send('fail', submission.to_dict())):
+            except Exception:
+                if (
+                    submission
+                    and isinstance(submission, Submission)
+                    and submission.submission_id != "unknown"
+                    and api.lib.send("fail", submission.to_dict())
+                ):
                     ch.basic_ack(delivery_tag=method.delivery_tag)
                 else:
                     ch.basic_nack(
                         delivery_tag=method.delivery_tag,
                         requeue=False,
                     )
-                logger.exception(f"Submission {submission.submission_id} couldn\'t be evaluated. Sent to DLQ")
+                logger.exception(
+                    f"Submission {submission.submission_id} couldn't be evaluated. Sent to DLQ"
+                )
             else:
                 ch.basic_ack(
                     delivery_tag=method.delivery_tag,
@@ -282,7 +289,6 @@ def main(
 
 
 if __name__ == "__main__":
-    threading.excepthook = handle_thread_exception
     workers = []
 
     try:
@@ -303,12 +309,11 @@ if __name__ == "__main__":
         else:
             logging.getLogger("esit.worker").info("Testing finished. No errors found.")
 
+        threading.excepthook = handle_thread_exception
         for i in range(int(sys.argv[1])):
             workers.append(
                 threading.Thread(
-                    target=main,
-                    kwargs={"worker_id": i + 1},
-                    name=f"worker.{i + 1}"
+                    target=main, kwargs={"worker_id": i + 1}, name=f"worker.{i + 1}"
                 )
             )
             workers[i].start()
@@ -324,4 +329,6 @@ if __name__ == "__main__":
             os._exit(0)
 
     except Exception:
-        logging.getLogger("esit.worker").exception("An exception occurred during workers' startup.")
+        logging.getLogger("esit.worker").exception(
+            "An exception occurred during workers' startup."
+        )

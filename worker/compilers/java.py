@@ -1,10 +1,8 @@
+import logging
 import math
 import os
 import subprocess
 import sys
-import time
-import logging
-from obj.submission import Submission, Test
 
 logger = logging.getLogger("esit.worker")
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -33,21 +31,18 @@ def run(submission):
             root_dir + "/code/" + str(submission.submission_id) + ".java", code_file
         )
     except Exception as e:
-        logger.exception("A compiler exception occured - not enough arguments when calling script: " +
-            str(e) +
-            " -> sys.argv length: " +
-            str(len(sys.argv))
+        logger.exception(
+            "A compiler exception occured - not enough arguments when calling script: "
+            + str(e)
+            + " -> sys.argv length: "
+            + str(len(sys.argv))
         )
         return "fail"
 
     genfile = sys.stdout
     try:
-        logger.info("Compilation of submission " +
-            str(submission.submission_id)
-        )
-        debugfilecompilation = open(
-            misc_dir + "/debug-compilation.log", "w"
-        )
+        logger.info("Compilation of submission " + str(submission.submission_id))
+        debugfilecompilation = open(misc_dir + "/debug-compilation.log", "w")
         quest = subprocess.run(
             [
                 "nsjail",
@@ -83,14 +78,18 @@ def run(submission):
         sys.stdout = debugfilecompilation
         print(quest.stderr)
     except Exception as e:
-        logger.exception(f"A compiler exception occured - general compilation error: {e}")
+        logger.exception(
+            f"A compiler exception occured - general compilation error: {e}"
+        )
         return "fail"
 
     for turn in submission.tests:
-        logger.info("Execution of submission " +
-            str(submission.submission_id) +
-            " (test" +
-            str(turn.TEST_ID) + ")"
+        logger.info(
+            "Execution of submission "
+            + str(submission.submission_id)
+            + " (test"
+            + str(turn.TEST_ID)
+            + ")"
         )
         try:
             genfile = sys.stdout
@@ -99,7 +98,8 @@ def run(submission):
                 misc_dir + "/debug-run-" + str(turn.TEST_ID) + ".log", "w"
             )
         except Exception:
-            logger.exception("A compiler exception occured - compilation error for test "
+            logger.exception(
+                "A compiler exception occured - compilation error for test "
                 + str(turn.TEST_ID)
             )
             return "fail"
@@ -145,8 +145,8 @@ def run(submission):
             print(quest2.stderr)
             sys.stdout = logfile
             print(quest2.stdout)
-            
-            if quest.returncode==0:
+
+            if quest.returncode == 0:
                 turn.result = quest2.stdout
                 turn.returncode = quest2.returncode
             else:

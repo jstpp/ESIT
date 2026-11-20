@@ -1,26 +1,28 @@
 import base64
 import io
 import json
+import logging
 import os
 import shutil
 import socket
-import time
 import zipfile
-import logging
 
 import requests
 from Crypto.Cipher import AES
 
 import api.config.config as apiconfig
-from obj.submission import Submission, Test
 
 logger = logging.getLogger("esit.worker")
+
 
 def encrypt(data, key):
     try:
         result = []
         encoded_key = bytes.fromhex(key)
-        if not (len(encoded_key)==16): raise Exception(f"Incorrect network key. Current length: {len(encoded_key)}")
+        if not (len(encoded_key) == 16):
+            raise Exception(
+                f"Incorrect network key. Current length: {len(encoded_key)}"
+            )
         cipher = AES.new((encoded_key), AES.MODE_GCM)
         ciphertext, tag = cipher.encrypt_and_digest(data.encode("utf-8"))
         result.append(ciphertext)
@@ -35,7 +37,10 @@ def encrypt(data, key):
 def decrypt(data, key):
     try:
         encoded_key = bytes.fromhex(key)
-        if not (len(encoded_key)==16): raise Exception(f"Incorrect network key. Current length: {len(encoded_key)}")
+        if not (len(encoded_key) == 16):
+            raise Exception(
+                f"Incorrect network key. Current length: {len(encoded_key)}"
+            )
         cipher = AES.new((encoded_key), AES.MODE_GCM, data[1])
         result = cipher.decrypt_and_verify(data[0], data[2]).decode("utf-8")
         return result
@@ -45,11 +50,11 @@ def decrypt(data, key):
 
 
 def decode_and_extract_zip(
-    b64string, 
+    b64string,
     output_dir,
     max_files=10000,
     max_uncompressed_size=512 * 1024 * 1024,
-    max_zip_size=128 * 1024 * 1024
+    max_zip_size=128 * 1024 * 1024,
 ):
     try:
         zip_bytes = base64.b64decode(b64string, validate=True)
@@ -81,17 +86,13 @@ def decode_and_extract_zip(
             for member in members:
                 zip_ref.extract(member, target_dir)
     except zipfile.BadZipFile as exception:
-        logger.exception(
-            f"lib.py: decode_and_extract_zip(): {exception}"
-        )
+        logger.exception(f"lib.py: decode_and_extract_zip(): {exception}")
         logger.exception(
             f"lib.py: decode_and_extract_zip(): Received data: {zip_bytes}"
         )
         return False
     except Exception as exception:
-        logger.exception(
-            f"lib.py: decode_and_extract_zip(): {exception}"
-        )
+        logger.exception(f"lib.py: decode_and_extract_zip(): {exception}")
         return False
     else:
         return True
@@ -120,7 +121,7 @@ def ask_for_inout(data):
             timeout=(5, 30),
         )
 
-        if (api_connection.status_code==403):
+        if api_connection.status_code == 403:
             logger.info(
                 "Request is forbidden. Consider adding worker to the whitelist in web application GUI."
             )
@@ -129,9 +130,7 @@ def ask_for_inout(data):
         try:
             api_connection.raise_for_status()
         except Exception:
-            logger.error(
-                "An error occured when asking for inout!"
-            )
+            logger.error("An error occured when asking for inout!")
             return False
 
         return decode_and_extract_zip(
@@ -142,9 +141,7 @@ def ask_for_inout(data):
         )
 
     except Exception as exception:
-        logger.exception(
-            f"lib.py: ask_for_inout(): {exception}"
-        )
+        logger.exception(f"lib.py: ask_for_inout(): {exception}")
         return False
 
 
@@ -179,9 +176,7 @@ def prepare_base64(data):
             encoded_zip = base64.b64encode(zip_bytes).decode("utf-8")
         return encoded_zip
     except Exception as exception:
-        logger.exception(
-            f"lib.py: prepare_base64(): {exception}"
-        )
+        logger.exception(f"lib.py: prepare_base64(): {exception}")
         return False
 
 
@@ -199,9 +194,7 @@ def prepare_file_transfer(dir_id):
             + str(dir_id),
         )
     except Exception as exception:
-        logger.exception(
-            f"lib.py: prepare_file_transfer(): {exception}"
-        )
+        logger.exception(f"lib.py: prepare_file_transfer(): {exception}")
         return False
     else:
         return True
@@ -217,7 +210,8 @@ def send(status, data):
             data["submission_file"] = prepare_base64(data)
             data["status"] = status
             encrypted = encrypt(json.dumps(data), apiconfig.network_private_key)
-            if not encrypted: raise Exception("Encryption failed")
+            if not encrypted:
+                raise Exception("Encryption failed")
             data_to_decrypt["content"] = base64.b64encode(encrypted[0]).decode("utf-8")
             data_to_decrypt["nonce"] = base64.b64encode(encrypted[1]).decode("utf-8")
             data_to_decrypt["tag"] = base64.b64encode(encrypted[2]).decode("utf-8")
@@ -231,16 +225,12 @@ def send(status, data):
             try:
                 api_connection.raise_for_status()
             except Exception:
-                logger.error(
-                    "An error occured when transfering the file!"
-                )
+                logger.error("An error occured when transfering the file!")
                 return False
             else:
                 return True
         else:
-            logger.error(
-                "An error occured when transfering the file!"
-            )
+            logger.error("An error occured when transfering the file!")
             return False
 
     except Exception as exception:
