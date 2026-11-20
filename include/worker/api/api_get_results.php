@@ -30,13 +30,14 @@
 
         foreach($submission['tests'] as $sm)
         {
-            if ($submission['status']=="fail" || $sm['returncode']==255) {
+            if ($submission['status']=="fail" || ($sm['returncode'] ?? 255)==255) {
                 $sm['result'] = "<-systemerror->";
                 $sm['anws_correct'] = 0;
                 $sm['anws_wrong'] = 0;
                 $sm['anws_resource'] = 0;
                 $sm['anws_syserror'] = 1;
                 $sm['exec_time'] = 0;
+                $sm['returncode'] = 255;
                 $sm['comment'] = "System error";
             } else {
                 $timefile = fopen(__DIR__."/../solutions/".$submission['submission_id']."/time/".$sm['TEST_ID'].".log",'r');
@@ -62,7 +63,7 @@
                         $sm['result'] = "<-error->";
                         break;
                     default:
-                        $solution_array = preg_split('/\r\n|\r|\n/', $sm['result']);
+                        $solution_array = preg_split('/\r\n|\r|\n/', $sm['result'] ?? "");
                 }
 
                 $i = 0;

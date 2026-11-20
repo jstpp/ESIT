@@ -261,7 +261,7 @@ def main(worker_id=1):
                     submission
                     and isinstance(submission, Submission)
                     and submission.submission_id != "unknown"
-                    and api.lib.send("fail", submission.to_dict())
+                    and api.lib.send("fail", submission)
                 ):
                     ch.basic_ack(delivery_tag=method.delivery_tag)
                 else:

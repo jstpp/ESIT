@@ -91,6 +91,8 @@ def run(submission):
             turn.returncode = quest.returncode
 
         except Exception as e:
+            turn.result = ""
+            turn.returncode = 255
             logger.exception(f"An exception occurred.")
 
     return "success"

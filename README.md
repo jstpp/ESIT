@@ -38,9 +38,11 @@ source ./setup/setup.sh --install
 
 The service will be available on `localhost:80` unless you change it. 
 
-> [!important] The first user to register will automatically become an administrator so it's in your best interest to limit access to web server during initial setup.
+> [!important] 
+> The first user to register will automatically become an administrator so it's in your best interest to limit access to web server during initial setup.
 
-> [!tip] To start server again after installation, you don't need run `setup.sh` again. Just use:
+> [!tip] 
+> To start server again after installation, you don't need run `setup.sh` again. Just use:
 > ```bash
 > docker compose up
 > ```
@@ -84,16 +86,16 @@ Check the ESIT custom configuration options [here](setup/README.md). After succe
 > [!tip]
 > It is recommended to use ESIT behind reverse proxy with HTTPS. You should setup it on your own (using software like [nginx](https://github.com/nginx/nginx)).
 
-## Translation & contrubuting
+## Translation & contributing
 ### Contribute
 Would you like to contribute? Check out [contributing guidelines](CONTRIBUTING.md). Moreover, here is a roadmap indicating goals to be achieved in the future:
 
-- [] Roles customizable with GUI
-- [] Customizable portal templates
-- [] Distributed workers network
-- [] Automatic verification of content creators
-- [] WCAG 2 compliance
-- [] Updates system
+- [ ] Roles customizable with GUI
+- [ ] Customizable portal templates
+- [ ] Distributed workers network
+- [ ] Automatic verification of content creators
+- [ ] WCAG 2 compliance
+- [ ] Updates system
 
 <br />
 <a href="https://deepwiki.com/jstpp/ESIT"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
