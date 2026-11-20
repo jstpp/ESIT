@@ -3,6 +3,7 @@ import os
 import shutil
 
 import compilers.python
+from obj.submission import Submission, Test
 
 
 def prepare_submission(code):
@@ -91,7 +92,7 @@ def prepare_submission(code):
         "submission_type": "testing",
         "user_id": 0,
         "problem_id": 0,
-        "submission_lang": "python",
+        "submission_lang": "py",
         "tests": [
             {
                 "TEST_ID": 0,
@@ -107,7 +108,7 @@ def prepare_submission(code):
         "submission_file": base64.b64encode(code.encode("utf-8")).decode("utf-8"),
     }
 
-    return submission
+    return Submission.from_dict(submission)
 
 
 code = """
@@ -138,4 +139,4 @@ if failed:
 submission = prepare_submission(code)
 status = compilers.python.run(submission)
 
-assert submission["tests"][0]["returncode"] == 0, submission["tests"][0]["returncode"]
+assert submission.tests[0].returncode == 0, submission.tests[0].returncode

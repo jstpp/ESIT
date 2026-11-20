@@ -4,21 +4,22 @@ import subprocess
 import sys
 import time
 import logging
+from obj.submission import Submission, Test
 
 logger = logging.getLogger("esit.worker")
 
 def run(submission):
     try:
-        if submission["submission_type"] != "testing":
+        if submission.submission_type != "testing":
             root_dir = os.path.abspath(
                 str(os.path.dirname(os.path.realpath(__file__)))
                 + "/../solutions/"
-                + str(submission["submission_id"])
+                + str(submission.submission_id)
             )
             input_dir = os.path.abspath(
                 str(os.path.dirname(os.path.realpath(__file__)))
                 + "/../inout/"
-                + str(submission["problem_id"])
+                + str(submission.problem_id)
                 + "/in"
             )
         else:
@@ -29,7 +30,7 @@ def run(submission):
                 str(os.path.dirname(os.path.realpath(__file__)))
                 + "/../tests/tmp/0-inout/in"
             )
-        code_file = root_dir + "/code/" + submission["submission_id"] + ".py"
+        code_file = root_dir + "/code/" + str(submission.submission_id) + ".py"
         output_dir = root_dir + "/output"
         time_dir = root_dir + "/time"
         misc_dir = root_dir + "/misc"
@@ -39,22 +40,22 @@ def run(submission):
         return "fail"
 
     genfile = sys.stdout
-    for turn in submission["tests"]:
+    for turn in submission.tests:
         logger.info(
             "Testing submission " +
-            str(submission["submission_id"]) +
+            str(submission.submission_id) +
             " (test " +
-            str(turn["TEST_ID"]) + ")"
+            str(turn.TEST_ID) + ")"
         )
         try:
             genfile = sys.stdout
-            logfile = open(output_dir + "/" + str(turn["TEST_ID"]) + ".log", "w")
+            logfile = open(output_dir + "/" + str(turn.TEST_ID) + ".log", "w")
             debugfilerun = open(
-                misc_dir + "/debug-run-" + str(turn["TEST_ID"]) + ".log", "w"
+                misc_dir + "/debug-run-" + str(turn.TEST_ID) + ".log", "w"
             )
         except Exception:
             logger.exception("A compiler exception occured - error for test "
-                + str(turn["TEST_ID"])
+                + str(turn.TEST_ID)
             )
             return "fail"
 
@@ -65,7 +66,7 @@ def run(submission):
                     "-f",
                     "\t%U",
                     "-o",
-                    os.path.abspath(time_dir + "/" + str(turn["TEST_ID"]) + ".log"),
+                    os.path.abspath(time_dir + "/" + str(turn.TEST_ID) + ".log"),
                     "nsjail",
                     "--config",
                     os.path.abspath(
@@ -81,14 +82,14 @@ def run(submission):
                     "--cwd",
                     root_dir,
                     "--time_limit",
-                    str(math.ceil(turn["max_time"])),
+                    str(math.ceil(turn.max_time)),
                     "--rlimit_as",
-                    str(turn["max_memory"]),
+                    str(turn.max_memory),
                     "--",
                     "/usr/local/bin/python3",
                     code_file,
                 ],
-                stdin=open(input_dir + "/" + str(turn["TEST_ID"]) + ".in"),
+                stdin=open(input_dir + "/" + str(turn.TEST_ID) + ".in"),
                 capture_output=True,
                 text=True,
             )
@@ -96,8 +97,8 @@ def run(submission):
             print(quest.stderr)
             sys.stdout = logfile
             print(quest.stdout)
-            turn["result"] = quest.stdout
-            turn["returncode"] = quest.returncode
+            turn.result = quest.stdout
+            turn.returncode = quest.returncode
             sys.stdout = genfile
             logfile.close()
 

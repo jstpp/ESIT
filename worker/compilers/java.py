@@ -4,6 +4,7 @@ import subprocess
 import sys
 import time
 import logging
+from obj.submission import Submission, Test
 
 logger = logging.getLogger("esit.worker")
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -15,7 +16,7 @@ def run(submission):
         root_dir = os.path.abspath(
             str(os.path.dirname(os.path.realpath(__file__)))
             + "/../solutions/"
-            + str(submission["submission_id"])
+            + str(submission.submission_id)
         )
         code_file = root_dir + "/code/Main.java"
         output_dir = root_dir + "/output"
@@ -24,12 +25,12 @@ def run(submission):
         input_dir = os.path.abspath(
             str(os.path.dirname(os.path.realpath(__file__)))
             + "/../inout/"
-            + str(submission["problem_id"])
+            + str(submission.problem_id)
             + "/in"
         )
 
         os.rename(
-            root_dir + "/code/" + submission["submission_id"] + ".java", code_file
+            root_dir + "/code/" + str(submission.submission_id) + ".java", code_file
         )
     except Exception as e:
         logger.exception("A compiler exception occured - not enough arguments when calling script: " +
@@ -42,7 +43,7 @@ def run(submission):
     genfile = sys.stdout
     try:
         logger.info("Compilation of submission " +
-            str(submission["submission_id"])
+            str(submission.submission_id)
         )
         debugfilecompilation = open(
             misc_dir + "/debug-compilation.log", "w"
@@ -85,21 +86,21 @@ def run(submission):
         logger.exception(f"A compiler exception occured - general compilation error: {e}")
         return "fail"
 
-    for turn in submission["tests"]:
+    for turn in submission.tests:
         logger.info("Execution of submission " +
-            str(submission["submission_id"]) +
+            str(submission.submission_id) +
             " (test" +
-            str(turn["TEST_ID"]) + ")"
+            str(turn.TEST_ID) + ")"
         )
         try:
             genfile = sys.stdout
-            logfile = open(output_dir + "/" + str(turn["TEST_ID"]) + ".log", "w")
+            logfile = open(output_dir + "/" + str(turn.TEST_ID) + ".log", "w")
             debugfilerun = open(
-                misc_dir + "/debug-run-" + str(turn["TEST_ID"]) + ".log", "w"
+                misc_dir + "/debug-run-" + str(turn.TEST_ID) + ".log", "w"
             )
         except Exception:
             logger.exception("A compiler exception occured - compilation error for test "
-                + str(turn["TEST_ID"])
+                + str(turn.TEST_ID)
             )
             return "fail"
 
@@ -111,7 +112,7 @@ def run(submission):
                     "-f",
                     "\t%U",
                     "-o",
-                    os.path.abspath(time_dir + "/" + str(turn["TEST_ID"]) + ".log"),
+                    os.path.abspath(time_dir + "/" + str(turn.TEST_ID) + ".log"),
                     "nsjail",
                     "--config",
                     os.path.abspath(
@@ -127,17 +128,17 @@ def run(submission):
                     "--cwd",
                     root_dir,
                     "--time_limit",
-                    str(math.ceil(turn["max_time"])),
+                    str(math.ceil(turn.max_time)),
                     "--rlimit_as",
-                    str(turn["max_memory"] * 8),
+                    str(turn.max_memory * 8),
                     "--",
                     "/usr/bin/java",
-                    "-Xmx" + str(turn["max_memory"]) + "M",
+                    "-Xmx" + str(turn.max_memory) + "M",
                     "-cp",
                     misc_dir,
                     "Main",
                 ],
-                stdin=open(input_dir + "/" + str(turn["TEST_ID"]) + ".in"),
+                stdin=open(input_dir + "/" + str(turn.TEST_ID) + ".in"),
                 capture_output=True,
                 text=True,
             )
@@ -146,11 +147,11 @@ def run(submission):
             print(quest2.stdout)
             
             if quest.returncode==0:
-                turn["result"] = quest2.stdout
-                turn["returncode"] = quest2.returncode
+                turn.result = quest2.stdout
+                turn.returncode = quest2.returncode
             else:
-                turn["result"] = quest.stdout
-                turn["returncode"] = quest.returncode
+                turn.result = quest.stdout
+                turn.returncode = quest.returncode
 
             sys.stdout = genfile
             logfile.close()

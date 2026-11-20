@@ -8,6 +8,7 @@ import threading
 
 import logging
 from logging.handlers import RotatingFileHandler
+from obj.submission import Submission, Test
 
 import pika
 
@@ -18,9 +19,19 @@ import compilers.java
 import compilers.python
 import tests.run as tests
 
+SUPPORTED_LANGUAGES = {"py", "cpp", "java"}
+ENFORCED_TESTING = True
+ENFORCED_LANDLOCK = True
+QUIET_TESTING = False
+
 def setup_logging(log_directory, worker_id):
     os.makedirs(log_directory, exist_ok=True)
-    log_file = os.path.join(log_directory, f"worker_{worker_id}.log")
+
+    logger = logging.getLogger(f"esit.worker.{worker_id}")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    if logger.handlers: return logger
 
     formatter = logging.Formatter(
         fmt=f"%(asctime)s [%(levelname)s] %(message)s",
@@ -28,7 +39,7 @@ def setup_logging(log_directory, worker_id):
     )
 
     file_handler = RotatingFileHandler(
-        log_file,
+        os.path.join(log_directory, f"worker_{worker_id}.log"),
         maxBytes=10 * 1024 * 1024,
         backupCount=5,
         encoding="utf-8",
@@ -39,81 +50,158 @@ def setup_logging(log_directory, worker_id):
     file_handler.setFormatter(formatter)
     console_handler.setFormatter(formatter)
 
-    logging.basicConfig(
-        level=logging.INFO,
-        handlers=[file_handler, console_handler],
-        force=True,
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    return logger
+
+
+def handle_thread_exception(args):
+    logger = logging.getLogger(
+        f"esit.{args.thread.name}"
+    )
+    logger.error(
+        "Unhandled exception in thread %s",
+        args.thread.name,
+        exc_info=(
+            args.exc_type,
+            args.exc_value,
+            args.exc_traceback,
+        )
     )
 
-    logging.captureWarnings(True)
-    return logging.getLogger("esit.worker")
+
+def validate_submission(data):
+    if not data:
+        raise TypeError("No submission provided")
+    if not isinstance(data, Submission):
+        raise TypeError("Submission must be a JSON object")
+
+    submission_id = data.submission_id
+    problem_id = data.problem_id
+    language = data.submission_lang
+
+    if not isinstance(submission_id, int) or isinstance(submission_id, bool):
+        raise ValueError("Invalid submission_id")
+
+    if submission_id <= 0:
+        raise ValueError("submission_id must be positive")
+
+    if not isinstance(problem_id, int) or isinstance(problem_id, bool):
+        raise ValueError("Invalid problem_id")
+
+    if problem_id <= 0:
+        raise ValueError("problem_id must be positive")
+
+    if language not in SUPPORTED_LANGUAGES:
+        raise ValueError("Unsupported submission language")
+
+    return data
+
+
+def initialize_landlock(logger):
+    try:
+        from landlockpy import AccessFS, AccessNet, Ruleset
+
+        with Ruleset(
+            handled_fs=AccessFS.NONE, handled_net=AccessNet.CONNECT_TCP
+        ) as rs:
+            rs.allow_port(53, AccessNet.CONNECT_TCP)
+            rs.allow_port(80, AccessNet.CONNECT_TCP)
+            rs.allow_port(443, AccessNet.CONNECT_TCP)
+            rs.restrict()
+        logger.info("Landlock restrictions initialized successfully.")
+        return True
+    except Exception as e:
+        if ENFORCED_LANDLOCK:
+            logger.critical(
+                "Landlock initialization failed. Worker initialization has been canceled."
+            )
+            sys.exit(1)
+        else:
+            logger.warning(
+                "Landlock initialization failed. It may decrease level of worker security."
+            )
+        return False
+
+
+def start_execution(logger, submission):
+    if submission.submission_lang == "py":
+        logger.info("Executing PYTHON script.")
+        if not api.lib.send(compilers.python.run(submission), submission): raise Exception("API usage failed")
+    elif submission.submission_lang == "cpp":
+        logger.info("Executing C++ script.")
+        if not api.lib.send(compilers.cpp.run(submission), submission): raise Exception("API usage failed")
+    elif submission.submission_lang == "java":
+        logger.info("Executing JAVA script.")
+        if not api.lib.send(compilers.java.run(submission), submission): raise Exception("API usage failed")
+    else:
+        raise Exception(f"Unsupported language: {submission.submission_lang}")
 
 
 def connect_to_queue(logger, t):
-    try:
-        credentials = pika.PlainCredentials(
-            config.rabbitmq_user, config.rabbitmq_password
-        )
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(
-                host=config.rabbitmq_host, 
-                port=config.rabbitmq_port, 
-                credentials=credentials,
-                heartbeat=60,
-                socket_timeout=10
+    while True:
+        try:
+            credentials = pika.PlainCredentials(
+                config.rabbitmq_user, config.rabbitmq_password
             )
-        )
-        channel = connection.channel()
-        logger.info(
-            "Successfully connected to the queue."
-        )
-    except Exception as e:
-        t *= 2
+            connection = pika.BlockingConnection(
+                pika.ConnectionParameters(
+                    host=config.rabbitmq_host, 
+                    port=config.rabbitmq_port, 
+                    credentials=credentials,
+                    heartbeat=60,
+                    socket_timeout=10
+                )
+            )
+            channel = connection.channel()
+            logger.info(
+                "Successfully connected to the queue."
+            )
+            break
+        except Exception as e:
+            t *= 2
 
-        if t > 32:
-            logger.critical("Can't connect to RabbitMQ. Stopping worker...")
-            sys.exit(1)
+            if t > 32:
+                logger.critical("Can't connect to RabbitMQ. Stopping worker...")
+                sys.exit(1)
 
-        logger.error(
-            f"Can't connect to RabbitMQ: {e}. "
-            f"Trying to reconnect in {t} seconds."
-        )
+            logger.error(
+                f"Can't connect to RabbitMQ: {e}. "
+                f"Trying to reconnect in {t} seconds."
+            )
 
-        time.sleep(t)
-        return connect_to_queue(logger, t)
+            time.sleep(t)
 
     return connection, channel
 
 
 def prepare_inout(logger, submission):
     try:
-        logger.info(f'Preparing inout for submission {submission["submission_id"]}...')
+        logger.info(f'Preparing inout for submission {submission.submission_id}...')
         if os.path.isdir(
             os.path.dirname(os.path.realpath(__file__))
             + "/inout/"
-            + str(submission["problem_id"])
+            + str(submission.problem_id)
         ):
             logger.info(
-                f'Inout set for submission {submission["submission_id"]} has been found in {os.path.dirname(os.path.realpath(__file__))
+                f'Inout set for submission {submission.submission_id} has been found in {os.path.dirname(os.path.realpath(__file__))
                 + "/inout/"
-                + str(submission["problem_id"])}'
+                + str(submission.problem_id)}'
             )
             return True
         else:
-            logger.info(f"Inout set for submission {submission["submission_id"]} not found. Asking main server to fill the gap...")
-            if api.lib.ask_for_inout(submission):
+            logger.info(f"Inout set for submission {submission.submission_id} not found. Asking main server to fill the gap...")
+            if api.lib.ask_for_inout(submission.to_dict()):
                 return True
             else:
-                logger.error(f"Inout set for submission {submission["submission_id"]} not found. **Filling the gap failed!**")
+                logger.error(f"Inout set for submission {submission.submission_id} not found. **Filling the gap failed!**")
                 return False
     except Exception as exception:
         raise Exception(f"mq_receiver.py: prepare_inout(): {exception}")
 
 
 def main(
-    EnforcedTesting=True,
-    QuietTesting=False,  
-    EnforcedLandlock=True,
     worker_id=1
 ):
     try:
@@ -125,19 +213,6 @@ def main(
         logger.info("Worker initialization...")
         logger.info("Testing current configuration...")
 
-        if not tests.is_ok(QuietTesting):
-            if EnforcedTesting:
-                logger.critical(
-                    "Testing detected errors. Worker initialization has been canceled. To start the worker, fix all errors first."
-                )
-                sys.exit(1)
-            else:
-                logger.warning(
-                    "Testing detected errors. Worker initialization should be canceled but EnforcedTesting is set to `false`. Ignored."
-                )
-        else:
-            logger.info("Testing finished. No errors found.")
-
         logger.info(f"Logging directory: worker_{worker_id}.log")
 
     except Exception as exception:
@@ -145,83 +220,51 @@ def main(
 
     try:
         connection, channel = connect_to_queue(logger, 2)
-        try:
-            from landlockpy import AccessFS, AccessNet, Ruleset
-
-            with Ruleset(
-                handled_fs=AccessFS.NONE, handled_net=AccessNet.CONNECT_TCP
-            ) as rs:
-                rs.allow_port(53, AccessNet.CONNECT_TCP)
-                rs.allow_port(80, AccessNet.CONNECT_TCP)
-                rs.allow_port(443, AccessNet.CONNECT_TCP)
-                rs.restrict()
-            logger.info("Landlock restrictions initialized successfully.")
-        except Exception as e:
-            if EnforcedLandlock:
-                logger.critical(
-                    "Landlock initialization failed. Worker initialization has been canceled."
-                )
-                sys.exit(1)
-            else:
-                logger.warning(
-                    "Landlock initialization failed. It may decrease level of worker security."
-                )
+        initialize_landlock(logger)
 
         def callback(ch, method, properties, body):
             try:
                 submission = None
                 try:
-                    submission = json.loads(body)
+                    submission = validate_submission(Submission.from_dict(json.loads(body)))
 
-                    if not isinstance(submission, dict):
-                        raise Exception("Submission must be a JSON object")
-                    if not int(submission["submission_id"]) > 0: raise Exception("Invalid submission id")
-
-                except Exception as e:
-                    logger.warning(f"Received invalid submission: {e}")
+                except (ValueError, TypeError) as e:
+                    logger.exception(f"Received invalid submission.")
                     ch.basic_nack(
                         delivery_tag=method.delivery_tag,
                         requeue=False,
                     )
                     return
 
-                logger.info(
-                    f"Received submission {submission["submission_id"]}",
-                )
+                except Exception as e:
+                    logger.exception(f"Undefined exception when processing submission.")
+                    ch.basic_nack(
+                        delivery_tag=method.delivery_tag,
+                        requeue=False,
+                    )
+                    return
+
+                logger.info(f"Received submission {submission.submission_id}")
 
                 if not (prepare_inout(logger, submission)):
-                    logger.error(
-                        f"An error occured when worker was preparing inout for submission {submission.get("submission_id", 'unknown')}."
-                    )
                     raise Exception(
-                        "An error occured when worker was preparing inout for submission"
+                        f"An error occurred when worker was preparing inout for submission {submission.submission_id}."
                     )
+                if not api.lib.prepare(submission.to_dict()): raise Exception("Failed to prepare submission.")
 
-                if not api.lib.prepare(submission): raise Exception("Failed to prepare submission")
-
-                if submission["submission_lang"] == "py":
-                    logger.info("Executing PYTHON script.")
-                    if not api.lib.send(compilers.python.run(submission), submission): raise Exception("API usage failed")
-                elif submission["submission_lang"] == "cpp":
-                    logger.info("Executing C++ script.")
-                    if not api.lib.send(compilers.cpp.run(submission), submission): raise Exception("API usage failed")
-                elif submission["submission_lang"] == "java":
-                    logger.info("Executing JAVA script.")
-                    if not api.lib.send(compilers.java.run(submission), submission): raise Exception("API usage failed")
-                else:
-                    raise Exception(f"Unsupported language: {submission.get("submission_lang", 'unknown')}")
+                start_execution(logger, submission)
 
             except Exception as e:
-                if (submission and isinstance(submission, dict) 
-                and submission.get("submission_id", 'unknown') != 'unknown' 
-                and api.lib.send("fail", submission)):
+                if (submission and isinstance(submission, Submission) 
+                and submission.submission_id != 'unknown' 
+                and api.lib.send('fail', submission.to_dict())):
                     ch.basic_ack(delivery_tag=method.delivery_tag)
                 else:
                     ch.basic_nack(
                         delivery_tag=method.delivery_tag,
                         requeue=False,
                     )
-                logger.warning(f"Submission {submission.get("submission_id", 'unknown')} couldn\'t be evaluated. Sent to DLQ")
+                logger.exception(f"Submission {submission.submission_id} couldn\'t be evaluated. Sent to DLQ")
             else:
                 ch.basic_ack(
                     delivery_tag=method.delivery_tag,
@@ -239,18 +282,33 @@ def main(
 
 
 if __name__ == "__main__":
+    threading.excepthook = handle_thread_exception
     workers = []
+
     try:
         if len(sys.argv) != 2:
             print(f"Usage: {sys.argv[0]} <number_of_workers>")
             sys.exit(1)
+
+        if not tests.is_ok(QUIET_TESTING):
+            if ENFORCED_TESTING:
+                logging.getLogger("esit.worker").critical(
+                    "Testing detected errors. Worker initialization has been canceled. To start the worker, fix all errors first."
+                )
+                sys.exit(1)
+            else:
+                logging.getLogger("esit.worker").warning(
+                    "Testing detected errors. Worker initialization should be canceled but ENFORCED_TESTING is set to `False`. Ignored."
+                )
+        else:
+            logging.getLogger("esit.worker").info("Testing finished. No errors found.")
 
         for i in range(int(sys.argv[1])):
             workers.append(
                 threading.Thread(
                     target=main,
                     kwargs={"worker_id": i + 1},
-                    name=f"worker-{i + 1}"
+                    name=f"worker.{i + 1}"
                 )
             )
             workers[i].start()
@@ -264,3 +322,6 @@ if __name__ == "__main__":
             sys.exit(0)
         except SystemExit:
             os._exit(0)
+
+    except Exception:
+        logging.getLogger("esit.worker").exception("An exception occurred during workers' startup.")

@@ -22,3 +22,73 @@ Worker is provided with tests suite by default and it automatically stops when a
 > [!WARNING]
 > Tests suite is still under construction - please, consider the fact that passing these tests does not guarantee that your instance is completely secure. There is no such thing as a 100% secure system.
 
+## Details
+### Submission message in JSON (app -> worker)
+```json
+{
+  "submission_id": 123,
+  "submission_type": "normal",
+  "user_id": "550e8400-e29b-41d4-a716-446655440000",
+  "problem_id": 42,
+  "submission_lang": "py",
+  "tests": [
+    {
+      "TEST_ID": 101,
+      "test_author_id": "550e8400-e29b-41d4-a716-446655440001",
+      "problem_id": 42,
+      "max_time": 2.0,
+      "max_memory": 256,
+      "weight": 10
+    },
+    {
+      "TEST_ID": 102,
+      "test_author_id": "550e8400-e29b-41d4-a716-446655440001",
+      "problem_id": 42,
+      "max_time": 2.0,
+      "max_memory": 256,
+      "weight": 20
+    }
+  ],
+  "listenerUrl": "https://esit.example.org",
+  "submission_time": "2026-11-20 10:45:00",
+  "submission_file": "<BASE64_ENCODED_ZIP_ARCHIVE>"
+}
+```
+
+### Response in JSON (worker -> app)
+
+```json
+{
+  "submission_id": 123,
+  "submission_type": "normal",
+  "user_id": "550e8400-e29b-41d4-a716-446655440000",
+  "problem_id": 42,
+  "submission_lang": "py",
+  "tests": [
+    {
+      "TEST_ID": 101,
+      "test_author_id": "550e8400-e29b-41d4-a716-446655440001",
+      "problem_id": 42,
+      "max_time": 2.0,
+      "max_memory": 256,
+      "weight": 10,
+      "result": "Hello, world!\n",
+      "returncode": 0
+    },
+    {
+      "TEST_ID": 102,
+      "test_author_id": "550e8400-e29b-41d4-a716-446655440001",
+      "problem_id": 42,
+      "max_time": 2.0,
+      "max_memory": 256,
+      "weight": 20,
+      "result": "42\n",
+      "returncode": 0
+    }
+  ],
+  "listenerUrl": "https://esit.example.org",
+  "submission_time": "2026-11-20 10:45:00",
+  "submission_file": "<BASE64_ENCODED_RESULT_ZIP_ARCHIVE>",
+  "status": "success"
+}
+```

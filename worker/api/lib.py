@@ -12,6 +12,7 @@ import requests
 from Crypto.Cipher import AES
 
 import api.config.config as apiconfig
+from obj.submission import Submission, Test
 
 logger = logging.getLogger("esit.worker")
 
@@ -208,6 +209,7 @@ def prepare_file_transfer(dir_id):
 
 def send(status, data):
     try:
+        data = data.to_dict()
         data_to_decrypt = json.loads('{"content":"", "nonce":""}')
         headers = {"Content-Type": "application/json; charset=utf-8"}
 
