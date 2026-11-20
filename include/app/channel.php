@@ -1,667 +1,644 @@
 <?php
-	$db_query = $pdo->prepare('SELECT * FROM CHANNELS INNER JOIN USERS ON CHANNELS.author_id=USERS.USER_ID WHERE CHANNEL_ID=:setid');
-	$db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+    $db_query = $pdo->prepare('SELECT * FROM CHANNELS INNER JOIN USERS ON CHANNELS.author_id=USERS.USER_ID WHERE CHANNEL_ID=:setid');
+    $db_query->execute(['setid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 
-	if($row = $db_query->fetch())
-	{
-		$chtitle = $row['title'];
-		$chimgpath = $row['img_path'];
-		$chdescription = $row['description'];
-		$chauthor = $row['username'];
-		$chisarchived = $row['isarchived'];
-		$chlayout = json_decode($row['layout']);
-	} else {
-		kick();
-	}
+if ($row = $db_query->fetch()) {
+    $chtitle = $row['title'];
+    $chimgpath = $row['img_path'];
+    $chdescription = $row['description'];
+    $chauthor = $row['username'];
+    $chisarchived = $row['isarchived'];
+    $chlayout = json_decode($row['layout']);
+} else {
+    kick();
+}
 ?>
 <style>
-	.window table {
-		width: 90%;
-		margin-left: 5%;
-		user-select: none;
-	}
-	.window table a {
-		text-decoration: none;
-		color: var(--highlight-color);
-	}
-	.window table td {
-		border-top: 0.1vw solid gray;
-		padding: 0.5vw 0.5vw;
-	}
-	.window table td a {
-		font-weight: bold;
-		text-align: center;
-		transition: 0.3s;
-		cursor: pointer;
-	}
-	.window table tr {
-		transition: 0.2s;
-		cursor: default;
-	}
-	.window table tr:hover {
-		background-color: var(--container-hover-bg);
-	}
-	.window #questlist tr {
-		cursor: pointer;
-	}
-	.window .forminput {
-		border: 0; 
-		padding: 0.75vw 1.25vw; 
-		color: #dae2e6; 
-		background-color: var(--container-hover-bg); 
-		font-family: inherit;
-		cursor: pointer;
-		transition: 0.4s;
-		text-decoration: none;
-	}
-	.window .forminput:hover {
-		background-color: var(--container-hover-bg-textbox);
-	}
+    .window table {
+        width: 90%;
+        margin-left: 5%;
+        user-select: none;
+    }
+    .window table a {
+        text-decoration: none;
+        color: var(--highlight-color);
+    }
+    .window table td {
+        border-top: 0.1vw solid gray;
+        padding: 0.5vw 0.5vw;
+    }
+    .window table td a {
+        font-weight: bold;
+        text-align: center;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    .window table tr {
+        transition: 0.2s;
+        cursor: default;
+    }
+    .window table tr:hover {
+        background-color: var(--container-hover-bg);
+    }
+    .window #questlist tr {
+        cursor: pointer;
+    }
+    .window .forminput {
+        border: 0; 
+        padding: 0.75vw 1.25vw; 
+        color: #dae2e6; 
+        background-color: var(--container-hover-bg); 
+        font-family: inherit;
+        cursor: pointer;
+        transition: 0.4s;
+        text-decoration: none;
+    }
+    .window .forminput:hover {
+        background-color: var(--container-hover-bg-textbox);
+    }
 
-	#set_header_img {
-		width: calc(100% - 18vw);
-		height: 10vmax;
-		filter: brightness(20%);
-		position: absolute;
-		object-fit: cover;
-		z-index: -1;
-		-webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-		mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-	}
+    #set_header_img {
+        width: calc(100% - 18vw);
+        height: 10vmax;
+        filter: brightness(20%);
+        position: absolute;
+        object-fit: cover;
+        z-index: -1;
+        -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    }
 
-	.forminput_2 {
-		background: transparent;
-		outline: none;
-		border: none;
-		border-bottom: 0.3vmin solid rgb(204, 204, 204);
-		font: inherit;
-		width: 98%;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 2vmin;
-		padding: 1% 1%;
-	}
+    .forminput_2 {
+        background: transparent;
+        outline: none;
+        border: none;
+        border-bottom: 0.3vmin solid rgb(204, 204, 204);
+        font: inherit;
+        width: 98%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 2vmin;
+        padding: 1% 1%;
+    }
 
-	.button {
-		padding: 1vw 1vw;
-		float: right;
+    .button {
+        padding: 1vw 1vw;
+        float: right;
 
-		background-color: var(--highlight-color);
-		color: white;
-		border-radius: 5px;
-		cursor: pointer;
-		transition: 0.2s;
-		text-decoration: none;
-	}
-	.button:hover {
-		background-color: #6ed4ff;
-	}
+        background-color: var(--highlight-color);
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.2s;
+        text-decoration: none;
+    }
+    .button:hover {
+        background-color: #6ed4ff;
+    }
 
-	#channel_content {
-		position: relative;
-		padding-left: 2vmax;
-		margin-top: 5vmax;
-	}
-	#channel_content::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 2.2vmax;
-		width: 0;
-		border-left: 0.25vmax dotted rgba(255, 255, 255, 0.4); 
-		z-index: 1;
-	}
-	.channel_content_chapter {
-		width: calc(90% - 1.4vmax);
-		margin-left: 5%;
-		margin-bottom: 0.3vmax;
-		padding: 0.7vmax;
-		display: flex;
-		flex-direction: column;
-		gap: 0.2vmax;
-		background-color: var(--container-hover-bg);
-		border-radius: 0.6vmax;
-	}
-	.channel_content_chapter_pinned {
-		text-align: center;
-	}
-	.channel_content_chapter::after {
-		content: '●';
-		margin-left: -3.3vmax;
-		background-color: black;
-		padding: 0.4vmax;
-		padding-top: 0.2vmax;
-		padding-bottom: 0.6vmax;
-		border-radius: 1.2vmax;
-		border: 0.1vmax solid var(--text);
-		width: 1vmax;
-		height: 1vmax;
-		display: flex;
-		align-content: center;
-		justify-content: center;
-		z-index: 2;
-	}
-	.channel_content_block_final {
-		width: calc(90%);
-		margin-left: 5%;
-		padding: 0.2vmax;
-		margin-bottom: 0.3vmax;
-		display: flex;
-		gap: 0.5vmax;
-	}
-	.channel_content_block_final * {
-		transition: 0.5s;
-	}
-	.channel_content_block_final:hover .channel_content_block_title {
-		box-shadow: inset 0 0 1vmax rgba(0, 0, 0, 0.4);
-		cursor: pointer;
-	}
-	.channel_content_block_final:hover .channel_content_block_icon,
-	.channel_content_block_final:hover .channel_content_block_available_attempts,
-	.channel_content_block_final:hover .channel_content_block_stars {
-		box-shadow: inset 0 0 1vmax rgba(0, 0, 0, 0.4);
-		background-color: var(--text) !important;
-		color: var(--container-hover-bg-textbox);
-		cursor: pointer;
-	}
-	.channel_content_block_final:hover .channel_content_block_progress_bar {
-		background-color: transparent !important;
-		width: 70%;
-	}
-	.channel_content_block_final:hover .channel_content_block_progress {
-		width: 3.5vmax;
-	}
-	.channel_content_chapter .channel_content_block_final {
-		width: calc(100% - 0.2vmax);
-		margin-left: 0;
-	}
-	.channel_content_block_icon {
-		padding: 1vmax;
-		border-radius: 0.4vmax;
-		display: flex;
-		align-items: center;
-	}
-	.channel_content_block_title {
-		padding: 1vmax;
-		border-radius: 0.4vmax;
-		background-color: var(--bg);
-		margin-right: 0.3vmax;
-		display: flex;
-		flex-grow: 5;
-		align-items: center;
-		min-width: 0;
-	}
-	.channel_content_block_title_text {
-		flex-grow: 5;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		min-width: 0;
-	}
-	.channel_content_block_element_details {
-		display: flex;
-		flex-direction: row;
-		gap: 1vmax;
-	}
-	.channel_content_block_available_attempts {
-		width: auto;
-		justify-content: center;
-		margin-left: 1vmax;
-		text-align: center;
-		padding: 0.5vmax;
-		border-radius: 0.5vmax;
-	}
-	.channel_content_block_stars {
-		width: auto;
-		justify-content: center;
-		text-align: center;
-		padding: 0.5vmax;
-		border-radius: 0.5vmax;
-	}
-	.channel_content_block_progress {
-		background-color: var(--container-hover-bg);
-		width: 5vmax;
-		border-radius: 0.5vmax;
-		overflow: hidden;
-		display: flex;
-		align-items: center;
-	}
-	.channel_content_block_progress_bar {
-		padding-top: 0.5vmax;
-		padding-bottom: 0.5vmax;
-		width: calc(5vmax * 0.2);
-		height: 100%;
-		display: flex;
-		align-items: center;
-	}
-	.channel_content_block_progress_bar span {
-		margin-left: 0.5vmax;
-	}
-	.follow_box {
-		position: absolute; 
-		right: 1.5vmax; 
-		margin-top: 1vmax; 
-		font-size: 1vmax;
-		padding: 0.5vmax;
-		cursor: pointer;
-		transition: 0.3s;
-		border-radius: 0.5vmax;
-		background-color: var(--text);
-		color: var(--bg);
-		text-decoration: none;
-	}
-	.follow_box:hover {
-		color: var(--text);
-		background: transparent;
-	}
-	
-	
+    #channel_content {
+        position: relative;
+        padding-left: 2vmax;
+        margin-top: 5vmax;
+    }
+    #channel_content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 2.2vmax;
+        width: 0;
+        border-left: 0.25vmax dotted rgba(255, 255, 255, 0.4); 
+        z-index: 1;
+    }
+    .channel_content_chapter {
+        width: calc(90% - 1.4vmax);
+        margin-left: 5%;
+        margin-bottom: 0.3vmax;
+        padding: 0.7vmax;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2vmax;
+        background-color: var(--container-hover-bg);
+        border-radius: 0.6vmax;
+    }
+    .channel_content_chapter_pinned {
+        text-align: center;
+    }
+    .channel_content_chapter::after {
+        content: '●';
+        margin-left: -3.3vmax;
+        background-color: black;
+        padding: 0.4vmax;
+        padding-top: 0.2vmax;
+        padding-bottom: 0.6vmax;
+        border-radius: 1.2vmax;
+        border: 0.1vmax solid var(--text);
+        width: 1vmax;
+        height: 1vmax;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        z-index: 2;
+    }
+    .channel_content_block_final {
+        width: calc(90%);
+        margin-left: 5%;
+        padding: 0.2vmax;
+        margin-bottom: 0.3vmax;
+        display: flex;
+        gap: 0.5vmax;
+    }
+    .channel_content_block_final * {
+        transition: 0.5s;
+    }
+    .channel_content_block_final:hover .channel_content_block_title {
+        box-shadow: inset 0 0 1vmax rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+    }
+    .channel_content_block_final:hover .channel_content_block_icon,
+    .channel_content_block_final:hover .channel_content_block_available_attempts,
+    .channel_content_block_final:hover .channel_content_block_stars {
+        box-shadow: inset 0 0 1vmax rgba(0, 0, 0, 0.4);
+        background-color: var(--text) !important;
+        color: var(--container-hover-bg-textbox);
+        cursor: pointer;
+    }
+    .channel_content_block_final:hover .channel_content_block_progress_bar {
+        background-color: transparent !important;
+        width: 70%;
+    }
+    .channel_content_block_final:hover .channel_content_block_progress {
+        width: 3.5vmax;
+    }
+    .channel_content_chapter .channel_content_block_final {
+        width: calc(100% - 0.2vmax);
+        margin-left: 0;
+    }
+    .channel_content_block_icon {
+        padding: 1vmax;
+        border-radius: 0.4vmax;
+        display: flex;
+        align-items: center;
+    }
+    .channel_content_block_title {
+        padding: 1vmax;
+        border-radius: 0.4vmax;
+        background-color: var(--bg);
+        margin-right: 0.3vmax;
+        display: flex;
+        flex-grow: 5;
+        align-items: center;
+        min-width: 0;
+    }
+    .channel_content_block_title_text {
+        flex-grow: 5;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+    }
+    .channel_content_block_element_details {
+        display: flex;
+        flex-direction: row;
+        gap: 1vmax;
+    }
+    .channel_content_block_available_attempts {
+        width: auto;
+        justify-content: center;
+        margin-left: 1vmax;
+        text-align: center;
+        padding: 0.5vmax;
+        border-radius: 0.5vmax;
+    }
+    .channel_content_block_stars {
+        width: auto;
+        justify-content: center;
+        text-align: center;
+        padding: 0.5vmax;
+        border-radius: 0.5vmax;
+    }
+    .channel_content_block_progress {
+        background-color: var(--container-hover-bg);
+        width: 5vmax;
+        border-radius: 0.5vmax;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+    .channel_content_block_progress_bar {
+        padding-top: 0.5vmax;
+        padding-bottom: 0.5vmax;
+        width: calc(5vmax * 0.2);
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .channel_content_block_progress_bar span {
+        margin-left: 0.5vmax;
+    }
+    .follow_box {
+        position: absolute; 
+        right: 1.5vmax; 
+        margin-top: 1vmax; 
+        font-size: 1vmax;
+        padding: 0.5vmax;
+        cursor: pointer;
+        transition: 0.3s;
+        border-radius: 0.5vmax;
+        background-color: var(--text);
+        color: var(--bg);
+        text-decoration: none;
+    }
+    .follow_box:hover {
+        color: var(--text);
+        background: transparent;
+    }
+    
+    
 </style>
 <script src="/include/js/sortablejs/Sortable.js" type="text/javascript"></script>
 <img id="set_header_img" src="<?php echo htmlspecialchars($chimgpath, ENT_QUOTES, 'UTF-8'); ?>" />
 <form id="channel_follow_form" method="POST" action="process.php?r=follow_channel&id=<?php echo($_GET['id']); ?>">
-	<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
-	<a onClick="document.getElementById('channel_follow_form').submit();" class="follow_box">
-		<i class="far fa-bell"></i>&nbsp;<?php echo((check_follow($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unfollow') : __('Follow')); ?>&nbsp;
-	</a>
+    <input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+    <a onClick="document.getElementById('channel_follow_form').submit();" class="follow_box">
+        <i class="far fa-bell"></i>&nbsp;<?php echo((check_follow($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unfollow') : __('Follow')); ?>&nbsp;
+    </a>
 </form>
 <br />
 <br />
 <center>
-	<h1><?php echo(htmlentities($chtitle)); ?></h1>
+    <h1><?php echo(htmlentities($chtitle)); ?></h1>
 </center>
 <br />
 <br />
 <?php
-	if(has_permission('main.channels.create_problemset'))
-	{
-		echo('
+if (has_permission('main.channels.create_problemset')) {
+    echo('
 <div id="new_block_dialog" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
 	<span onClick="document.getElementById(\'new_block_dialog\').style.display = \'none\';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
 	<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
-		<h2 style="text-align: center;">'.__("New block").' ('.__("problemset").')</h2>
+		<h2 style="text-align: center;">' . __("New block") . ' (' . __("problemset") . ')</h2>
 		<br />
-		<form method="POST" action="process.php?r=create_problemset&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'" id="new_block_form">
-			<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
-			<input name="new_block_form_name" id="new_block_form_name" class="forminput_2" type="text" placeholder="'.__("Block title").'" required/>
+		<form method="POST" action="process.php?r=create_problemset&cid=' . filter_var($_GET['id'], FILTER_VALIDATE_INT) . '" id="new_block_form">
+			<input name="csrf_token" type="hidden" value="' . $_SESSION['CSRF_TOKEN'] . '" />
+			<input name="new_block_form_name" id="new_block_form_name" class="forminput_2" type="text" placeholder="' . __("Block title") . '" required/>
 			<br />
 			<br />
 			<br />
-			'.__("Availability depends on completion").':
+			' . __("Availability depends on completion") . ':
 			<select class="forminput_2" name="new_block_form_condition" id="new_block_form_condition">
-				<option value="none"><i>'.__("Nothing").'</i></option>');
+				<option value="none"><i>' . __("Nothing") . '</i></option>');
 
-		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE channel_id=:cid');
-		$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+    $db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE channel_id=:cid');
+    $db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 
-		while($row = $db_query->fetch()) {
-			echo('<option value="S'.$row['SET_ID'].'">'.htmlentities($row['title']).'</option>');
-		}
+    while ($row = $db_query->fetch()) {
+        echo('<option value="S' . $row['SET_ID'] . '">' . htmlentities($row['title']) . '</option>');
+    }
 
-		echo('</select>
+    echo('</select>
 			<br />
 			<br />
 			<br />
-			'.__("Publish time").':
+			' . __("Publish time") . ':
 			<input name="new_block_form_publish_time" id="new_block_form_publish_time" class="forminput_2" type="datetime-local" required/>
 			<br />
 		</form>
 		<br />
-		<a class="button" id="button_1" onClick="document.getElementById(\'new_block_form\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;'.__("Add block").'</a>
+		<a class="button" id="button_1" onClick="document.getElementById(\'new_block_form\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;' . __("Add block") . '</a>
 		<br style="clear: both;"/>
 	</div>
 </div>');
-	}
+}
 ?>
 <div style="display: flex; gap: 1vmax; align-items: flex-start;">
-	<div class="window" style="margin-right: 0; min-width: 50%;">
-		<h2 class="window_title" style="float: left;"><i class='fas fa-eye'></i>&nbsp;&nbsp;<?php echo(__("Available for You")); ?></h2>
-		<?php if(has_permission('main.channels.create_problemset')) echo('<a onClick="document.getElementById(\'new_block_dialog\').style.display = \'flex\';" class="forminput" style="float: right; margin-right: 5%; margin-top: 2.5%;">'.__("Add block").'</a>'); ?>
-		<div id="channel_content">
-			<?php
-				function generate_content($data, $pdo): void
-				{
-					foreach ($data->content as $object) {
-						$object = json_decode(json_encode($object), true);
-						if($object['type']=="problemset")
-						{
-							$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:sid AND publish_time<:currenttime');
-							$db_query->execute(['sid' => $object['id'], 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
-							$set = $db_query->fetch();
-							$availability = check_problemset_availability($object['id'], $pdo);
-							if(isset($set))
-							{
-								if(!isset($set['title']) || empty($set['title'])) continue;
-								echo('
-								<div id="update_block_dialog_'.$set['SET_ID'].'" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
-									<span onClick="document.getElementById(\'update_block_dialog_'.$set['SET_ID'].'\').style.display = \'none\';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
+    <div class="window" style="margin-right: 0; min-width: 50%;">
+        <h2 class="window_title" style="float: left;"><i class='fas fa-eye'></i>&nbsp;&nbsp;<?php echo(__("Available for You")); ?></h2>
+        <?php if (has_permission('main.channels.create_problemset')) {
+            echo('<a onClick="document.getElementById(\'new_block_dialog\').style.display = \'flex\';" class="forminput" style="float: right; margin-right: 5%; margin-top: 2.5%;">' . __("Add block") . '</a>');
+        } ?>
+        <div id="channel_content">
+            <?php
+            function generate_content($data, $pdo): void
+            {
+                foreach ($data->content as $object) {
+                    $object = json_decode(json_encode($object), true);
+                    if ($object['type'] == "problemset") {
+                        $db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:sid AND publish_time<:currenttime');
+                        $db_query->execute(['sid' => $object['id'], 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
+                        $set = $db_query->fetch();
+                        $availability = check_problemset_availability($object['id'], $pdo);
+                        if (isset($set)) {
+                            if (!isset($set['title']) || empty($set['title'])) {
+                                continue;
+                            }
+                            echo('
+								<div id="update_block_dialog_' . $set['SET_ID'] . '" style="display: none; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
+									<span onClick="document.getElementById(\'update_block_dialog_' . $set['SET_ID'] . '\').style.display = \'none\';" style="font-size: 4.5vmax; float: right; margin-right: 2vw; cursor: pointer; position: fixed; top: 0; right: 0;">×</span>
 									<div style="background-color: #dae2e6; color: black; width: 30vmax; max-height: 80vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">
-										<h2 style="text-align: center;">'.htmlentities($set['title']).'</h2>
+										<h2 style="text-align: center;">' . htmlentities($set['title']) . '</h2>
 										<br />
-										<form method="POST" action="process.php?r=modify_problemset&sid='.$set['SET_ID'].'" id="update_block_form_'.$set['SET_ID'].'">
-											<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
-											<input name="update_block_form_name" id="update_block_form_name" class="forminput_2" type="text" placeholder="'.__("Block title").'" value="'.htmlentities($set['title']).'" required/>
+										<form method="POST" action="process.php?r=modify_problemset&sid=' . $set['SET_ID'] . '" id="update_block_form_' . $set['SET_ID'] . '">
+											<input name="csrf_token" type="hidden" value="' . $_SESSION['CSRF_TOKEN'] . '" />
+											<input name="update_block_form_name" id="update_block_form_name" class="forminput_2" type="text" placeholder="' . __("Block title") . '" value="' . htmlentities($set['title']) . '" required/>
 											<br />
 											<br />
 											<br />
-											'.__("Availability depends on completion").':
+											' . __("Availability depends on completion") . ':
 											<select class="forminput_2" name="update_block_form_condition" id="update_block_form_condition">
-												<option value="none"><i>'.__("Nothing").'</i></option>');
+												<option value="none"><i>' . __("Nothing") . '</i></option>');
 
-										$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE channel_id=:cid');
-										$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+                                    $db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE channel_id=:cid');
+                                    $db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 
-										while($row = $db_query->fetch()) {
-											if($row['SET_ID']==$availability['condition_id'])
-											{
-												echo('<option value="S'.$row['SET_ID'].'" selected>'.htmlentities($row['title']).'</option>');
-											} else {
-												echo('<option value="S'.$row['SET_ID'].'">'.htmlentities($row['title']).'</option>');
-											}
-										}
+                            while ($row = $db_query->fetch()) {
+                                if ($row['SET_ID'] == $availability['condition_id']) {
+                                            echo('<option value="S' . $row['SET_ID'] . '" selected>' . htmlentities($row['title']) . '</option>');
+                                } else {
+                                                echo('<option value="S' . $row['SET_ID'] . '">' . htmlentities($row['title']) . '</option>');
+                                }
+                            }
 
-										echo('</select>
+                                    echo('</select>
 											<br />
 											<br />
 											<br />
-											'.__("Publish time").':
-											<input name="update_block_form_publish_time" id="update_block_form_publish_time" class="forminput_2" type="datetime-local" value="'.htmlentities($set['publish_time']).'" required/>
+											' . __("Publish time") . ':
+											<input name="update_block_form_publish_time" id="update_block_form_publish_time" class="forminput_2" type="datetime-local" value="' . htmlentities($set['publish_time']) . '" required/>
 											<br />
 										</form>
 										<br />
-										<a class="button" id="button_1" onClick="document.getElementById(\'update_block_form_'.$set['SET_ID'].'\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;'.__("Save changes").'</a>
+										<a class="button" id="button_1" onClick="document.getElementById(\'update_block_form_' . $set['SET_ID'] . '\').submit();" style="margin-right: 1%; margin-bottom: 1%;"><i class="fa fa-plus"></i>&nbsp;' . __("Save changes") . '</a>
 										<br style="clear: both;"/>
 									</div>
 								</div>');
-								echo('<div class="channel_content_block channel_content_chapter" data-id="'.$object['id'].'">');
-								$db_query = $pdo->prepare('SELECT * FROM CONTENT WHERE problemset=:pid');
-								$db_query->execute(['pid' => $object['id']]);
-								$set_results[$set['SET_ID']] = [];
-								if($availability['is_available'] or has_permission('main.display.all_resources'))
-								{
-									while($row = $db_query->fetch())
-									{
-										switch($row['type']){
-											case 1:
-												$contenttype = content_type_identification('alg');
-												break;
-											case 2:
-												$contenttype = content_type_identification('ctf');
-												break;
-											case 3:
-												$contenttype = content_type_identification('och');
-												break;
-											case 4:
-												$contenttype = content_type_identification('mch');
-												break;
-											case 5:
-												$contenttype = content_type_identification('opn');
-												break;
-											case 6:
-												$contenttype = content_type_identification('vid');
-												break;
-											case 7:
-												$contenttype = content_type_identification('art');
-												break;
-											default:
-												$contenttype = content_type_identification('unk');
-												break;
-										}
-										if ($row['type']<=5)
-										{
-											$cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid AND mode=1');
-											$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
-											$ctx = $cdb_query->fetch();
+                            echo('<div class="channel_content_block channel_content_chapter" data-id="' . $object['id'] . '">');
+                            $db_query = $pdo->prepare('SELECT * FROM CONTENT WHERE problemset=:pid');
+                            $db_query->execute(['pid' => $object['id']]);
+                            $set_results[$set['SET_ID']] = [];
+                            if ($availability['is_available'] or has_permission('main.display.all_resources')) {
+                                while ($row = $db_query->fetch()) {
+                                    switch ($row['type']) {
+                                        case 1:
+                                            $contenttype = content_type_identification('alg');
+                                            break;
+                                        case 2:
+                                            $contenttype = content_type_identification('ctf');
+                                            break;
+                                        case 3:
+                                            $contenttype = content_type_identification('och');
+                                            break;
+                                        case 4:
+                                            $contenttype = content_type_identification('mch');
+                                            break;
+                                        case 5:
+                                            $contenttype = content_type_identification('opn');
+                                            break;
+                                        case 6:
+                                            $contenttype = content_type_identification('vid');
+                                            break;
+                                        case 7:
+                                            $contenttype = content_type_identification('art');
+                                            break;
+                                        default:
+                                            $contenttype = content_type_identification('unk');
+                                            break;
+                                    }
+                                    if ($row['type'] <= 5) {
+                                        $cdb_query = $pdo->prepare('SELECT COUNT(*) AS attempts FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid AND mode=1');
+                                        $cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
+                                        $ctx = $cdb_query->fetch();
 
-											$cdb_query = $pdo->prepare('SELECT MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
-											$cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
-											$ctx['maxscore'] = $cdb_query->fetch()['maxscore'];
+                                        $cdb_query = $pdo->prepare('SELECT MAX(SCORE) AS maxscore FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid');
+                                        $cdb_query->execute(['pid' => $row['CONTENT_ID'], 'uid' => $_SESSION['AUTH_ID']]);
+                                        $ctx['maxscore'] = $cdb_query->fetch()['maxscore'];
 
-											if((int)$ctx['maxscore']!=-1)
-											{
-												$maxscore = $ctx['maxscore'];
-											} else {
-												$maxscore = 0;
-											}
-											echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['CONTENT_ID'].'" style="color: inherit;">
-												<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
+                                        if ((int)$ctx['maxscore'] != -1) {
+                                            $maxscore = $ctx['maxscore'];
+                                        } else {
+                                            $maxscore = 0;
+                                        }
+                                        echo('<a class="channel_content_block_final" href="index.php?p=content&id=' . $row['CONTENT_ID'] . '" style="color: inherit;">
+												<div class="channel_content_block_icon" style="background-color: ' . $contenttype['color'] . ';"><i class="' . $contenttype['icon'] . '"></i></div>
 												<div class="channel_content_block_title">
-													<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.htmlentities($row['title']).'</b>
+													<b class="channel_content_block_title_text">#' . $row['CONTENT_ID'] . '&nbsp;&nbsp;' . htmlentities($row['title']) . '</b>
 													<div class="channel_content_block_element_details">
-														<div class="channel_content_block_available_attempts" style="background-color: '.$contenttype['color'].'; right: 0;">
-															'.($row['maxattempts']-$ctx['attempts']).' prób
+														<div class="channel_content_block_available_attempts" style="background-color: ' . $contenttype['color'] . '; right: 0;">
+															' . ($row['maxattempts'] - $ctx['attempts']) . ' prób
 														</div>
-														<div class="channel_content_block_stars" style="background-color: '.$contenttype['color'].'">
-															<i class="far fa-star"></i>&nbsp;'.max(count_content_stars($row['CONTENT_ID']),0).'
+														<div class="channel_content_block_stars" style="background-color: ' . $contenttype['color'] . '">
+															<i class="far fa-star"></i>&nbsp;' . max(count_content_stars($row['CONTENT_ID']), 0) . '
 														</div>');
-											if(strtotime($row['result_publish_time'])<strtotime("now"))
-											{
-												echo('<div class="channel_content_block_progress">
-													<div class="channel_content_block_progress_bar" style="width: calc(5vmax * '.floatval($maxscore/$row['maxpoints']).'); background-color: '.$contenttype['color'].';"><span>'.round($maxscore/$row['maxpoints']*100, 0).'%</span></div>
+                                        if (strtotime($row['result_publish_time']) < strtotime("now")) {
+                                            echo('<div class="channel_content_block_progress">
+													<div class="channel_content_block_progress_bar" style="width: calc(5vmax * ' . floatval($maxscore / $row['maxpoints']) . '); background-color: ' . $contenttype['color'] . ';"><span>' . round($maxscore / $row['maxpoints'] * 100, 0) . '%</span></div>
 												</div>');
-											}
-											echo('</div>
+                                        }
+                                        echo('</div>
 												</div>
 											</a>');
-											array_push($set_results[$set['SET_ID']], round($maxscore/$row['maxpoints']*100, 0));
-										} else {
-											echo('<a class="channel_content_block_final" href="index.php?p=content&id='.$row['CONTENT_ID'].'" style="color: inherit;">
-												<div class="channel_content_block_icon" style="background-color: '.$contenttype['color'].';"><i class="'.$contenttype['icon'].'"></i></div>
+                                        array_push($set_results[$set['SET_ID']], round($maxscore / $row['maxpoints'] * 100, 0));
+                                    } else {
+                                        echo('<a class="channel_content_block_final" href="index.php?p=content&id=' . $row['CONTENT_ID'] . '" style="color: inherit;">
+												<div class="channel_content_block_icon" style="background-color: ' . $contenttype['color'] . ';"><i class="' . $contenttype['icon'] . '"></i></div>
 												<div class="channel_content_block_title">
-													<b class="channel_content_block_title_text">#'.$row['CONTENT_ID'].'&nbsp;&nbsp;'.htmlentities($row['title']).'</b>
+													<b class="channel_content_block_title_text">#' . $row['CONTENT_ID'] . '&nbsp;&nbsp;' . htmlentities($row['title']) . '</b>
 													<div class="channel_content_block_element_details">
-														<div class="channel_content_block_stars" style="background-color: '.$contenttype['color'].'">
-															<i class="far fa-star"></i>&nbsp;'.max(count_content_stars($row['CONTENT_ID']),0).'
+														<div class="channel_content_block_stars" style="background-color: ' . $contenttype['color'] . '">
+															<i class="far fa-star"></i>&nbsp;' . max(count_content_stars($row['CONTENT_ID']), 0) . '
 														</div>');
-											echo('</div>
+                                        echo('</div>
 												</div>
 											</a>');
-										}
-									}
-								} else {
-									echo('<h1 style="text-align: center; margin-bottom: -1vmax;"><i class=\'fas fa-lock\'></i></h1>');
-								}
-								echo('<div class="channel_content_chapter_pinned" style="order: -9999;">'.$set['title']);
-								if (!$availability['is_available']) {
-									echo('&emsp;<small style="color: rgba(128, 128, 128, 1);"><i class=\'fas fa-lock\'></i> '.__("Requires completion").': '.htmlentities($availability['condition_title']).'</small>');
-								} else if(in_array(0, $set_results[$set['SET_ID']]) || count($set_results[$set['SET_ID']])==0)
-								{
-									echo('&emsp;<small style="color: rgba(218, 130, 6, 1);"><i class=\'fas fa-rocket\'></i> '.__("Started").'</small>');
-								} else {
-									echo('&emsp;<small style="color: rgba(14, 149, 109, 1);"><i class=\'fas fa-award\'></i> '.__("Completed").'</small>');
-								}
-								echo('</div>');
-								if(has_permission('main.channels.add_problem'))
-								{
-									echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
-										<a href="?p=addproblem&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;'.__("Add problem").'</a>
-										<a href="?p=addcontent&sid='.$object['id'].'" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;'.__("Add content").'</a>
-										<a class="forminput" onClick="document.getElementById(\'update_block_dialog_'.$object['id'].'\').style.display = \'flex\';"><i class=\'fas fa-wrench\'></i>&nbsp;&nbsp;'.__("Settings").'</a><br /><br /></div>');
-								}
-								echo('
+                                    }
+                                }
+                            } else {
+                                echo('<h1 style="text-align: center; margin-bottom: -1vmax;"><i class=\'fas fa-lock\'></i></h1>');
+                            }
+                            echo('<div class="channel_content_chapter_pinned" style="order: -9999;">' . $set['title']);
+                            if (!$availability['is_available']) {
+                                echo('&emsp;<small style="color: rgba(128, 128, 128, 1);"><i class=\'fas fa-lock\'></i> ' . __("Requires completion") . ': ' . htmlentities($availability['condition_title']) . '</small>');
+                            } elseif (in_array(0, $set_results[$set['SET_ID']]) || count($set_results[$set['SET_ID']]) == 0) {
+                                echo('&emsp;<small style="color: rgba(218, 130, 6, 1);"><i class=\'fas fa-rocket\'></i> ' . __("Started") . '</small>');
+                            } else {
+                                echo('&emsp;<small style="color: rgba(14, 149, 109, 1);"><i class=\'fas fa-award\'></i> ' . __("Completed") . '</small>');
+                            }
+                            echo('</div>');
+                            if (has_permission('main.channels.add_problem')) {
+                                echo('<div class="channel_content_chapter_pinned" style="order: 9999; margin-top: 0;">
+										<a href="?p=addproblem&sid=' . $object['id'] . '" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;' . __("Add problem") . '</a>
+										<a href="?p=addcontent&sid=' . $object['id'] . '" class="forminput"><i class=\'fas fa-plus\'></i>&nbsp;&nbsp;' . __("Add content") . '</a>
+										<a class="forminput" onClick="document.getElementById(\'update_block_dialog_' . $object['id'] . '\').style.display = \'flex\';"><i class=\'fas fa-wrench\'></i>&nbsp;&nbsp;' . __("Settings") . '</a><br /><br /></div>');
+                            }
+                            echo('
 									<br />
 									<br />
 								</div>');
-							}
-						}
-					}
-				}
-				if (isset($chlayout->content) && (is_array($chlayout->content) || is_object($chlayout->content))) {
-					generate_content($chlayout, $pdo);
-				}
-								
-			?>
-		</div>
-		<br />
-		<br />
-	</div>
-	<script type="text/javascript">
-		var elements = document.getElementsByClassName('channel_content_block');
+                        }
+                    }
+                }
+            }
+            if (isset($chlayout->content) && (is_array($chlayout->content) || is_object($chlayout->content))) {
+                generate_content($chlayout, $pdo);
+            }
 
-		new Sortable(document.getElementById('channel_content'), {
-			group: 'shared',
-			animation: 150,
-			fallbackOnBody: true,
-			swapThreshold: 0.65,
-			draggable: '.channel_content_chapter',
-			dataIdAttr: 'data-id',
-			onEnd: function (evt) {
-				var order = this.toArray(); 
+            ?>
+        </div>
+        <br />
+        <br />
+    </div>
+    <script type="text/javascript">
+        var elements = document.getElementsByClassName('channel_content_block');
 
-				var layoutData = {
-					content: order.map(function(id) {
-						return {
-							type: "problemset",
-							id: parseInt(id)
-						};
-					})
-				};
+        new Sortable(document.getElementById('channel_content'), {
+            group: 'shared',
+            animation: 150,
+            fallbackOnBody: true,
+            swapThreshold: 0.65,
+            draggable: '.channel_content_chapter',
+            dataIdAttr: 'data-id',
+            onEnd: function (evt) {
+                var order = this.toArray(); 
 
-				fetch('process.php?r=update_channel_layout&cid=<?php echo filter_var($_GET['id'], FILTER_VALIDATE_INT); ?>', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'X-CSRF-Token': '<?php echo($_SESSION['CSRF_TOKEN']); ?>'
-					},
-					body: JSON.stringify(layoutData)
-				})
-				.then(response => response.json())
-				.then(data => {
-					if(!data.success) {
-						console.error('<?php echo(__('Error during layout saving')); ?>:', data.message);
-					}
-				})
-				.catch(error => {
-					console.error('<?php echo(__('Connection error')); ?>:', error);
-				});
-			}
-		});
-	</script>
-	<div class="window" style="margin-left: 0; align-self: stretch;">
-		<h2 class="window_title"><i class='fas fa-medal'></i>&nbsp;&nbsp;<?php echo(__("Results")); ?></h2>
-		<div style="overflow: auto; width: 90%; margin-left: 5%;">
-			<table id="scoreboard">
-				<tr>
-					<th><?php echo(__('Username')); ?></th>
-					<th><?php echo(__('Total')); ?></th>
-					<?php 
-						$problem_array = array();
-						$scores = array();
-						$temp_table_user_ids = array();
-						$temp_table_total_scores = array();
+                var layoutData = {
+                    content: order.map(function(id) {
+                        return {
+                            type: "problemset",
+                            id: parseInt(id)
+                        };
+                    })
+                };
 
-						$db_query = $pdo->prepare('SELECT CONTENT.* FROM CONTENT INNER JOIN PROBLEMSETS ON CONTENT.problemset=PROBLEMSETS.SET_ID INNER JOIN CHANNELS ON PROBLEMSETS.channel_id=CHANNELS.CHANNEL_ID WHERE CHANNELS.CHANNEL_ID=:cid AND result_publish_time<:currenttime ORDER BY CONTENT_ID DESC');
-						$db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
+                fetch('process.php?r=update_channel_layout&cid=<?php echo filter_var($_GET['id'], FILTER_VALIDATE_INT); ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': '<?php echo($_SESSION['CSRF_TOKEN']); ?>'
+                    },
+                    body: JSON.stringify(layoutData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(!data.success) {
+                        console.error('<?php echo(__('Error during layout saving')); ?>:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('<?php echo(__('Connection error')); ?>:', error);
+                });
+            }
+        });
+    </script>
+    <div class="window" style="margin-left: 0; align-self: stretch;">
+        <h2 class="window_title"><i class='fas fa-medal'></i>&nbsp;&nbsp;<?php echo(__("Results")); ?></h2>
+        <div style="overflow: auto; width: 90%; margin-left: 5%;">
+            <table id="scoreboard">
+                <tr>
+                    <th><?php echo(__('Username')); ?></th>
+                    <th><?php echo(__('Total')); ?></th>
+                    <?php
+                        $problem_array = array();
+                        $scores = array();
+                        $temp_table_user_ids = array();
+                        $temp_table_total_scores = array();
 
-						while($row = $db_query->fetch())
-						{
-							echo('<th>#'.$row['CONTENT_ID'].'</th>');
-							array_push($problem_array, $row['CONTENT_ID']);
+                        $db_query = $pdo->prepare('SELECT CONTENT.* FROM CONTENT INNER JOIN PROBLEMSETS ON CONTENT.problemset=PROBLEMSETS.SET_ID INNER JOIN CHANNELS ON PROBLEMSETS.channel_id=CHANNELS.CHANNEL_ID WHERE CHANNELS.CHANNEL_ID=:cid AND result_publish_time<:currenttime ORDER BY CONTENT_ID DESC');
+                        $db_query->execute(['cid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
-						}
-						
-						echo("</tr>");
+                    while ($row = $db_query->fetch()) {
+                        echo('<th>#' . $row['CONTENT_ID'] . '</th>');
+                        array_push($problem_array, $row['CONTENT_ID']);
+                    }
 
-						foreach($problem_array as $p)
-						{
-							$db_query = $pdo->prepare('SELECT SUBMISSIONS.user_id AS user_id, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, SUBMISSIONS.problem_id AS problem_id, USERS.username AS username, CONTENT.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.problem_id=:pids AND CONTENT.result_publish_time<:currenttime ORDER BY SUBMISSIONS.problem_id DESC');
-							$db_query->execute(['pids' => $p, 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
+                        echo("</tr>");
 
-							while($row = $db_query->fetch())
-							{
-								if(!isset($scores[$row['user_id']]['user_data']['username']))
-								{
-									$scores[$row['user_id']]['user_data']['username'] = $row['username'];
-									$scores[$row['user_id']]['user_data']['user_id'] = $row['user_id'];
-									$scores[$row['user_id']]['user_data']['total_score'] = 0;
-								}
+                    foreach ($problem_array as $p) {
+                        $db_query = $pdo->prepare('SELECT SUBMISSIONS.user_id AS user_id, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, SUBMISSIONS.problem_id AS problem_id, USERS.username AS username, CONTENT.result_publish_time AS result_publish_time FROM SUBMISSIONS INNER JOIN USERS ON SUBMISSIONS.user_id=USERS.USER_ID INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.problem_id=:pids AND CONTENT.result_publish_time<:currenttime ORDER BY SUBMISSIONS.problem_id DESC');
+                        $db_query->execute(['pids' => $p, 'currenttime' => date("Y-m-d H:i:s", strtotime("now"))]);
 
-								if(!isset($scores[$row['user_id']][$row['problem_id']]['score']))
-								{
-									if($row['score']!=-1)
-									{
-										$scores[$row['user_id']][$row['problem_id']]['score'] = $row['score'];
-										$scores[$row['user_id']][$row['problem_id']]['percentage'] = $row['score_percentage'];
-										$scores[$row['user_id']]['user_data']['total_score'] += $row['score'];
-									}
-								} else {
-									if($scores[$row['user_id']][$row['problem_id']]['score']<$row['score'])
-									{
-										if($row['score']!=-1)
-										{	
-											$scores[$row['user_id']]['user_data']['total_score'] += ($row['score'] - $scores[$row['user_id']][$row['problem_id']]['score']);
-										}
-										$scores[$row['user_id']][$row['problem_id']]['score'] = $row['score'];
-										$scores[$row['user_id']][$row['problem_id']]['percentage'] = $row['score_percentage'];
-									}
-								}
-							}
-						}
+                        while ($row = $db_query->fetch()) {
+                            if (!isset($scores[$row['user_id']]['user_data']['username'])) {
+                                $scores[$row['user_id']]['user_data']['username'] = $row['username'];
+                                $scores[$row['user_id']]['user_data']['user_id'] = $row['user_id'];
+                                $scores[$row['user_id']]['user_data']['total_score'] = 0;
+                            }
 
-						foreach(array_keys($scores) as $u)
-						{
-							array_push($temp_table_total_scores, $scores[$u]['user_data']['total_score']);
-							array_push($temp_table_user_ids, $scores[$u]['user_data']['user_id']);
-						}
+                            if (!isset($scores[$row['user_id']][$row['problem_id']]['score'])) {
+                                if ($row['score'] != -1) {
+                                    $scores[$row['user_id']][$row['problem_id']]['score'] = $row['score'];
+                                    $scores[$row['user_id']][$row['problem_id']]['percentage'] = $row['score_percentage'];
+                                    $scores[$row['user_id']]['user_data']['total_score'] += $row['score'];
+                                }
+                            } else {
+                                if ($scores[$row['user_id']][$row['problem_id']]['score'] < $row['score']) {
+                                    if ($row['score'] != -1) {
+                                        $scores[$row['user_id']]['user_data']['total_score'] += ($row['score'] - $scores[$row['user_id']][$row['problem_id']]['score']);
+                                    }
+                                    $scores[$row['user_id']][$row['problem_id']]['score'] = $row['score'];
+                                    $scores[$row['user_id']][$row['problem_id']]['percentage'] = $row['score_percentage'];
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (array_keys($scores) as $u) {
+                        array_push($temp_table_total_scores, $scores[$u]['user_data']['total_score']);
+                        array_push($temp_table_user_ids, $scores[$u]['user_data']['user_id']);
+                    }
 
 
-						array_multisort($temp_table_total_scores, SORT_DESC, $temp_table_user_ids);
+                        array_multisort($temp_table_total_scores, SORT_DESC, $temp_table_user_ids);
 
-						foreach($temp_table_user_ids as $u)
-						{
-							if($_SESSION['AUTH_ID']==$u)
-							{
-								echo('<tr style="background-color: var(--highlight-color); font-weight: bold;">');
-							} else {
-								echo('<tr>');
-							}
-							echo('<td>'.$scores[$u]['user_data']['username'].'</td>');
-							echo('<td>'.$scores[$u]['user_data']['total_score'].'</td>');
-							foreach($problem_array as $p)
-							{
-								if(isset($scores[$u][$p]['score']) and (int)$scores[$u][$p]['score']!=-1)
-								{
-									echo('<td>'.$scores[$u][$p]['score'].'</td>');
-								} else {
-									echo('<td>0</td>');
-								}
-							}
-							echo('</tr>');
-						}
-					?>
-			</table>
-		</div>
-		<br />
-		<br />
-	</div>
+                    foreach ($temp_table_user_ids as $u) {
+                        if ($_SESSION['AUTH_ID'] == $u) {
+                            echo('<tr style="background-color: var(--highlight-color); font-weight: bold;">');
+                        } else {
+                            echo('<tr>');
+                        }
+                        echo('<td>' . $scores[$u]['user_data']['username'] . '</td>');
+                        echo('<td>' . $scores[$u]['user_data']['total_score'] . '</td>');
+                        foreach ($problem_array as $p) {
+                            if (isset($scores[$u][$p]['score']) and (int)$scores[$u][$p]['score'] != -1) {
+                                echo('<td>' . $scores[$u][$p]['score'] . '</td>');
+                            } else {
+                                echo('<td>0</td>');
+                            }
+                        }
+                        echo('</tr>');
+                    }
+                    ?>
+            </table>
+        </div>
+        <br />
+        <br />
+    </div>
 </div>
 <div class="window" style="display: flex; gap: 2%;">
-	<div style="width: 68%;">
-		<h3 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Information")); ?></h3>
-		<p style="margin-left: 2.5%;"><?php echo(htmlentities($chdescription)); ?></p>
-		<br />
-		<?php
-			if(has_permission('main.channels.archive_channel'))
-			{
-				echo('
-				<form method="POST" action="process.php?r=archive_channel&cid='.filter_var($_GET['id'], FILTER_VALIDATE_INT).'">
-					<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
-					<input type="submit" class="button" style="border: none; font: inherit; float: left; margin-left: 2.5%;" value="'.($chisarchived==1 ? __("Unarchive") : __("Archive")).'">
+    <div style="width: 68%;">
+        <h3 class="window_title" style="margin-left: 2.5%;"><?php echo(__("Information")); ?></h3>
+        <p style="margin-left: 2.5%;"><?php echo(htmlentities($chdescription)); ?></p>
+        <br />
+        <?php
+        if (has_permission('main.channels.archive_channel')) {
+            echo('
+				<form method="POST" action="process.php?r=archive_channel&cid=' . filter_var($_GET['id'], FILTER_VALIDATE_INT) . '">
+					<input name="csrf_token" type="hidden" value="' . $_SESSION['CSRF_TOKEN'] . '" />
+					<input type="submit" class="button" style="border: none; font: inherit; float: left; margin-left: 2.5%;" value="' . ($chisarchived == 1 ? __("Unarchive") : __("Archive")) . '">
 				</form>
 				<br style="clear: both;"/>');
-			}
-		?>
-		<br />
-	</div>
-	<div style="width: 30%;">
-		<h3 class="window_title"><?php echo(__("Author")); ?></h3>
-		<div style="font-size: 1vmax; margin-left: 5%; user-select: none;">
-			<p><img src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($chauthor); ?>" style="height: 1vmax; border-radius: 0.5vmax; background-color: var(--text); margin-bottom: -0.2vmax;" />
-			&nbsp;<?php echo($chauthor); ?></p>
-		</div>
-		<br />
-	</div>
+        }
+        ?>
+        <br />
+    </div>
+    <div style="width: 30%;">
+        <h3 class="window_title"><?php echo(__("Author")); ?></h3>
+        <div style="font-size: 1vmax; margin-left: 5%; user-select: none;">
+            <p><img src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($chauthor); ?>" style="height: 1vmax; border-radius: 0.5vmax; background-color: var(--text); margin-bottom: -0.2vmax;" />
+            &nbsp;<?php echo($chauthor); ?></p>
+        </div>
+        <br />
+    </div>
 </div>
 <br style="clear: both;" />
 <br />

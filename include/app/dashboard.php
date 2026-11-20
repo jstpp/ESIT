@@ -1,536 +1,524 @@
-<?php 
-	include_once(__DIR__.'/../../include/app/profiles/get_stats.php');
+<?php
+    include_once(__DIR__ . '/../../include/app/profiles/get_stats.php');
 ?>
 
 <style>
-	#results {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5vmax;
-	}
+    #results {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5vmax;
+    }
 
-	.dashboard_results_block {
-		padding: 1vmax;
-		background-color: var(--container-hover-bg);
-		border-radius: 1vmax;
-		width: calc(90% - 2vmax);
-		margin-left: 5%;
+    .dashboard_results_block {
+        padding: 1vmax;
+        background-color: var(--container-hover-bg);
+        border-radius: 1vmax;
+        width: calc(90% - 2vmax);
+        margin-left: 5%;
 
-		text-decoration: none;
-		color: var(--text) !important;
+        text-decoration: none;
+        color: var(--text) !important;
 
-		display: flex;
-		gap: 1vmax;
-		justify-content: stretch;
-		align-items: center;
-		transition: 0.3s;
-		cursor: pointer;
-	}
+        display: flex;
+        gap: 1vmax;
+        justify-content: stretch;
+        align-items: center;
+        transition: 0.3s;
+        cursor: pointer;
+    }
 
-	.dashboard_results_block:hover {
-		box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg-textbox);
-	}
+    .dashboard_results_block:hover {
+        box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg-textbox);
+    }
 
-	.dashboard_results_block_progress {
-		background-color: var(--container-hover-bg);
-		width: 8vmax;
-		border-radius: 0.5vmax;
-		overflow: hidden;
-		display: flex;
-		align-items: center;
-	}
-	.dashboard_results_block_progress_bar {
-		padding-top: 0.5vmax;
-		padding-bottom: 0.5vmax;
-		width: calc(8vmax * 0.2);
-		height: 100%;
-		display: flex;
-		align-items: center;
-	}
-	.dashboard_results_block_progress_bar h2 {
-		margin-left: 1vmax;
-	}
-	
-	.window .news {
-		background-color: var(--container-hover-bg);
-		width: 85%;
-		margin-left: 5%;
-		margin-top: 0.5vw;
-		padding: 1% 2%;
-		border-radius: 1vmax;
-	}
+    .dashboard_results_block_progress {
+        background-color: var(--container-hover-bg);
+        width: 8vmax;
+        border-radius: 0.5vmax;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+    .dashboard_results_block_progress_bar {
+        padding-top: 0.5vmax;
+        padding-bottom: 0.5vmax;
+        width: calc(8vmax * 0.2);
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .dashboard_results_block_progress_bar h2 {
+        margin-left: 1vmax;
+    }
+    
+    .window .news {
+        background-color: var(--container-hover-bg);
+        width: 85%;
+        margin-left: 5%;
+        margin-top: 0.5vw;
+        padding: 1% 2%;
+        border-radius: 1vmax;
+    }
 
-	.news img {
-		max-width: 100%;
-	}
+    .news img {
+        max-width: 100%;
+    }
 
-	#dashboard_badges img {
-		width: 25%;
-	}
+    #dashboard_badges img {
+        width: 25%;
+    }
 
-	#dashboard_propositions_bar {
-		width: 100%;
-		display: flex;
-		gap: 1vmax;
-		justify-content: center;
-		flex-direction: column;
-		margin-bottom: -1vmax;
-	}
+    #dashboard_propositions_bar {
+        width: 100%;
+        display: flex;
+        gap: 1vmax;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: -1vmax;
+    }
 
-	.dashboard_content_set {
-		width: 97%;
-		transition: 0.3s;
-		min-height: 13vmax;
-		box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg);
-		border-radius: 0.5vw;
-		background-color: var(--bg);
-		overflow: hidden;
-	}
+    .dashboard_content_set {
+        width: 97%;
+        transition: 0.3s;
+        min-height: 13vmax;
+        box-shadow: 0 0 0.1vmax 0.2vmax var(--container-hover-bg);
+        border-radius: 0.5vw;
+        background-color: var(--bg);
+        overflow: hidden;
+    }
 
-	.dashboard_content_set:hover {
-		box-shadow: 0 0 0.1vmax 0.2vmax var(--highlight-color);
-		cursor: pointer;
-	}
+    .dashboard_content_set:hover {
+        box-shadow: 0 0 0.1vmax 0.2vmax var(--highlight-color);
+        cursor: pointer;
+    }
 
-	.dashboard_content_set > div > * {
-		transition: 0.3s;
-	}
+    .dashboard_content_set > div > * {
+        transition: 0.3s;
+    }
 
-	.dashboard_content_set:hover > div > h3 {
-		font-size: 1.5vmax;
-	}
+    .dashboard_content_set:hover > div > h3 {
+        font-size: 1.5vmax;
+    }
 
-	.dashboard_content_set:hover > div > small {
-		font-size: 1vmax;
-	}
+    .dashboard_content_set:hover > div > small {
+        font-size: 1vmax;
+    }
 
-	.dashboard_content_set_metadata {
-		padding-left: 1vmax;
-		padding-right: 1vmax;
-		color: white;
-	}
+    .dashboard_content_set_metadata {
+        padding-left: 1vmax;
+        padding-right: 1vmax;
+        color: white;
+    }
 
-	.search_box_rounded_input_box {
-		width: 70%;
-		margin-left: 15%;
-		overflow: hidden;
-		height: fit-content;
-		background-color: var(--container-bg);
-		color: var(--text);
-		border-radius: 1.5vmax;
-		display: flex;
-		box-shadow: 0 0 0.5vmax 0.3vmax var(--container-hover-bg);
-		transition: 0.3s;
-	}
-	.search_box_rounded_input_box input[type="text"] {
-		height: 100%;
-		flex-grow: 5;
-		padding: 0.5vmax 1vmax;
-		background-color: transparent;
-		font-family: inherit;
-		color: inherit;
-		font-size: 1vmax;
-		outline: none;
-		border: none;
-		margin-top: 0.3vmax;
-	}
+    .search_box_rounded_input_box {
+        width: 70%;
+        margin-left: 15%;
+        overflow: hidden;
+        height: fit-content;
+        background-color: var(--container-bg);
+        color: var(--text);
+        border-radius: 1.5vmax;
+        display: flex;
+        box-shadow: 0 0 0.5vmax 0.3vmax var(--container-hover-bg);
+        transition: 0.3s;
+    }
+    .search_box_rounded_input_box input[type="text"] {
+        height: 100%;
+        flex-grow: 5;
+        padding: 0.5vmax 1vmax;
+        background-color: transparent;
+        font-family: inherit;
+        color: inherit;
+        font-size: 1vmax;
+        outline: none;
+        border: none;
+        margin-top: 0.3vmax;
+    }
 
-	.search_box_rounded_input_box input[type="submit"] {
-		width: fit-content;
-		border-radius: 1vmax;
-		padding: 0.5vmax 2vmax;
-		color: var(--text);
-		font-family: inherit;
-		font-size: 1vmax;
-		font-weight: bold;
-		margin: 0.3vmax;
-		border: none;
-		outline: none;
-		background-color: var(--highlight-color);
-		transition: 0.3s;
-		cursor: pointer;
-	}
-	.search_box_rounded_input_box:hover {
-		box-shadow: 0 0 0.3vmax 0.2vmax var(--highlight-color);
-	}
-	.search_box_rounded_input_box input[type="submit"]:hover {
-		padding: 0.5vmax 2.5vmax;
-		opacity: 0.8;
-	}
+    .search_box_rounded_input_box input[type="submit"] {
+        width: fit-content;
+        border-radius: 1vmax;
+        padding: 0.5vmax 2vmax;
+        color: var(--text);
+        font-family: inherit;
+        font-size: 1vmax;
+        font-weight: bold;
+        margin: 0.3vmax;
+        border: none;
+        outline: none;
+        background-color: var(--highlight-color);
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    .search_box_rounded_input_box:hover {
+        box-shadow: 0 0 0.3vmax 0.2vmax var(--highlight-color);
+    }
+    .search_box_rounded_input_box input[type="submit"]:hover {
+        padding: 0.5vmax 2.5vmax;
+        opacity: 0.8;
+    }
 
-	#search_box_result_container {
-		position: absolute;
-		float: left;
-		background: rgba(0,0,0,0.5);
-		width: calc(82vw * 0.7 - 2vmax);
-		height: fit-content;
-		margin-left: calc(82vw * 0.15);
-		margin-top: 0.5vmax;
-		padding: 1vmax;
-		border-radius: 1.5vmax;
-		z-index: 10;
-	}
-	#search_box_result_container a {
-		padding: 1vmax;
-		background-color: var(--bg);
-		color: var(--text);
-		text-decoration: none;
-		transition: 0.3s;
-		height: fit-content;
-		display: block;
-		margin-top: 0.2vmax;
-		border-radius: 0.3vmax;
-	}
-	#search_box_result_container a:hover {
-		background-color: var(--container-bg);
-	}
+    #search_box_result_container {
+        position: absolute;
+        float: left;
+        background: rgba(0,0,0,0.5);
+        width: calc(82vw * 0.7 - 2vmax);
+        height: fit-content;
+        margin-left: calc(82vw * 0.15);
+        margin-top: 0.5vmax;
+        padding: 1vmax;
+        border-radius: 1.5vmax;
+        z-index: 10;
+    }
+    #search_box_result_container a {
+        padding: 1vmax;
+        background-color: var(--bg);
+        color: var(--text);
+        text-decoration: none;
+        transition: 0.3s;
+        height: fit-content;
+        display: block;
+        margin-top: 0.2vmax;
+        border-radius: 0.3vmax;
+    }
+    #search_box_result_container a:hover {
+        background-color: var(--container-bg);
+    }
 
 </style>
 <script src="/include/js/chart.js/chart.js"></script>
 
 <center role="banner">
-	<h1 style="font-size: 3.5vw; user-select: none; background: linear-gradient(315deg, rgba(0, 179, 255, 1) 0%, var(--text) 60%); -webkit-background-clip: text; color: transparent;"><?php echo(__("Hello")); ?>, <?php echo(htmlentities($_SESSION['AUTH_NAME'])); ?>!</h1>
+    <h1 style="font-size: 3.5vw; user-select: none; background: linear-gradient(315deg, rgba(0, 179, 255, 1) 0%, var(--text) 60%); -webkit-background-clip: text; color: transparent;"><?php echo(__("Hello")); ?>, <?php echo(htmlentities($_SESSION['AUTH_NAME'])); ?>!</h1>
 </center>
 <div id="search_box" role="search">
-	<form class="search_box_rounded_input_box" method="GET" action="index.php">
-		<input type="hidden" name="p" value="search">
-		<input type="text" id="search_box_key" name="key" placeholder="<?php echo(__("What are you looking for?")); ?>" oninput="search(document.getElementById('search_box_key').value);"/>
-		<input type="submit" value="<?php echo(__("Search")); ?>"/>
-	</form>	
-	<div id="search_box_result_container" style="display: none;">
-		<div id="search_box_result_container_channels" style="display: none;">
-			<br /><b><?php echo(__("Channels")); ?></b>
-			<div id="search_box_result_container_channels_content">
-			</div>
-		</div>
-		<div id="search_box_result_container_contentsets" style="display: none;">
-			<br /><b><?php echo(__("Contentsets")); ?></b>
-			<div id="search_box_result_container_contentsets_content"> 
-			</div>
-		</div>
-		<div id="search_box_result_container_content" style="display: none;">
-			<br /><b><?php echo(__("Content")); ?></b>
-			<div id="search_box_result_container_content_content"> 
-			</div>
-		</div>
-	</div>
-	<br />
-	<br />
-	<script>
-		let timeout;
-		
-		async function search(key)
-		{
-			let data = await fetch('process.php?r=search&key=' + encodeURIComponent(key))
-				.then(r => r.json());
-			
-			let e = 0;
+    <form class="search_box_rounded_input_box" method="GET" action="index.php">
+        <input type="hidden" name="p" value="search">
+        <input type="text" id="search_box_key" name="key" placeholder="<?php echo(__("What are you looking for?")); ?>" oninput="search(document.getElementById('search_box_key').value);"/>
+        <input type="submit" value="<?php echo(__("Search")); ?>"/>
+    </form> 
+    <div id="search_box_result_container" style="display: none;">
+        <div id="search_box_result_container_channels" style="display: none;">
+            <br /><b><?php echo(__("Channels")); ?></b>
+            <div id="search_box_result_container_channels_content">
+            </div>
+        </div>
+        <div id="search_box_result_container_contentsets" style="display: none;">
+            <br /><b><?php echo(__("Contentsets")); ?></b>
+            <div id="search_box_result_container_contentsets_content"> 
+            </div>
+        </div>
+        <div id="search_box_result_container_content" style="display: none;">
+            <br /><b><?php echo(__("Content")); ?></b>
+            <div id="search_box_result_container_content_content"> 
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <script>
+        let timeout;
+        
+        async function search(key)
+        {
+            let data = await fetch('process.php?r=search&key=' + encodeURIComponent(key))
+                .then(r => r.json());
+            
+            let e = 0;
 
-			document.getElementById('search_box_result_container_channels_content').innerHTML = '';
-			document.getElementById('search_box_result_container_contentsets_content').innerHTML = '';
-			document.getElementById('search_box_result_container_content_content').innerHTML = '';
+            document.getElementById('search_box_result_container_channels_content').innerHTML = '';
+            document.getElementById('search_box_result_container_contentsets_content').innerHTML = '';
+            document.getElementById('search_box_result_container_content_content').innerHTML = '';
 
-			let channels_length = (data.channels.length>3) ? 3 : data.channels.length;
-			let contentsets_length = (data.contentsets.length>3) ? 3 : data.contentsets.length;
-			let content_length = (data.content.length>3) ? 3 : data.content.length;
+            let channels_length = (data.channels.length>3) ? 3 : data.channels.length;
+            let contentsets_length = (data.contentsets.length>3) ? 3 : data.contentsets.length;
+            let content_length = (data.content.length>3) ? 3 : data.content.length;
 
-			if(channels_length>0) {
-				document.getElementById('search_box_result_container_channels').style.display = 'block';
-				for (let i = 0; i < channels_length; i++)
-				{
-					document.getElementById('search_box_result_container_channels_content').innerHTML = 
-					document.getElementById('search_box_result_container_channels_content').innerHTML +
-					'<a href="index.php?p=channel&id='+data.channels[i].CHANNEL_ID+'">' + data.channels[i].title +  '</a>';
-				}
-				e++;
-			} else {
-				document.getElementById('search_box_result_container_channels').style.display = 'none';
-			}
-			if(contentsets_length>0) {
-				document.getElementById('search_box_result_container_contentsets').style.display = 'block';
-				for (let i = 0; i < contentsets_length; i++)
-				{
-					document.getElementById('search_box_result_container_contentsets_content').innerHTML = 
-					document.getElementById('search_box_result_container_contentsets_content').innerHTML +
-					'<a href="index.php?p=channel&id='+data.contentsets[i].channel_id+'">' + data.contentsets[i].title +  '</a>';
-				}
-				e++;
-			} else {
-				document.getElementById('search_box_result_container_contentsets').style.display = 'none';
-			}
-			if(content_length>0) {
-				document.getElementById('search_box_result_container_content').style.display = 'block';
-				for (let i = 0; i < content_length; i++)
-				{
-					document.getElementById('search_box_result_container_content_content').innerHTML = 
-					document.getElementById('search_box_result_container_content_content').innerHTML +
-					'<a href="index.php?p=content&id='+data.content[i].CONTENT_ID+'">' + data.content[i].title +  '</a>';
-				}
-				e++;
-			} else {
-				document.getElementById('search_box_result_container_content').style.display = 'none';
-			}
-			
-			if(e>0) {
-				document.getElementById('search_box_result_container').style.display = 'block';
-			} else {
-				document.getElementById('search_box_result_container').style.display = 'none';
-			}
-		}
-	</script>
+            if(channels_length>0) {
+                document.getElementById('search_box_result_container_channels').style.display = 'block';
+                for (let i = 0; i < channels_length; i++)
+                {
+                    document.getElementById('search_box_result_container_channels_content').innerHTML = 
+                    document.getElementById('search_box_result_container_channels_content').innerHTML +
+                    '<a href="index.php?p=channel&id='+data.channels[i].CHANNEL_ID+'">' + data.channels[i].title +  '</a>';
+                }
+                e++;
+            } else {
+                document.getElementById('search_box_result_container_channels').style.display = 'none';
+            }
+            if(contentsets_length>0) {
+                document.getElementById('search_box_result_container_contentsets').style.display = 'block';
+                for (let i = 0; i < contentsets_length; i++)
+                {
+                    document.getElementById('search_box_result_container_contentsets_content').innerHTML = 
+                    document.getElementById('search_box_result_container_contentsets_content').innerHTML +
+                    '<a href="index.php?p=channel&id='+data.contentsets[i].channel_id+'">' + data.contentsets[i].title +  '</a>';
+                }
+                e++;
+            } else {
+                document.getElementById('search_box_result_container_contentsets').style.display = 'none';
+            }
+            if(content_length>0) {
+                document.getElementById('search_box_result_container_content').style.display = 'block';
+                for (let i = 0; i < content_length; i++)
+                {
+                    document.getElementById('search_box_result_container_content_content').innerHTML = 
+                    document.getElementById('search_box_result_container_content_content').innerHTML +
+                    '<a href="index.php?p=content&id='+data.content[i].CONTENT_ID+'">' + data.content[i].title +  '</a>';
+                }
+                e++;
+            } else {
+                document.getElementById('search_box_result_container_content').style.display = 'none';
+            }
+            
+            if(e>0) {
+                document.getElementById('search_box_result_container').style.display = 'block';
+            } else {
+                document.getElementById('search_box_result_container').style.display = 'none';
+            }
+        }
+    </script>
 </div>
 <div style="display: flex;">
-	<div id="dashboard_main" role="group" style="min-width: 72%; display: flex; flex-direction: column; align-items: stretch;">
-		<div class="window">
-			<h3 class="window_title"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;<?php echo(__("My progress")); ?></h3>
-			<script>
-				const dashboard_progress_pts = <?php echo json_encode($points); ?>;
-				const dashboard_labels = <?php echo json_encode($labels); ?>;
-			</script>
-			<div style="display: flex; gap: 3vmax;">
-				<div style="height: 13vmax; width: 10vmax; padding: 1vmax; margin-left: 5%; display: flex; flex-direction: column; align-items: center; text-align: center;">
-					<div style="position: relative; width: 10vmax; height: 10vmax;">
-						<canvas id="dashboard_progress_correct_answers"></canvas>
-						<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 2vmax;">
-							<?php echo($avg_score); ?>%
-						</div>
-					</div>
-					<small style="width: 100%; font-size: 0.8vw; margin-top: 2vmax;"><?php echo(__("Average correctness")); ?></small>
-				</div>
-				<div style="max-height: 12vmax; width: calc(100% - 22vmax); padding: 1vmax; margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center;">
-					<canvas id="dashboard_progress_points" style="width: 100%; float: right;"></canvas>
-					<br />
-					<small style="width: 100%;"><?php echo(__("Number of points in the last 30 days")); ?></small>
-				</div>
-			</div>
-			<br />
-			<script>
-				document.addEventListener('DOMContentLoaded', () => {
-					dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_answers'), {
-						type: 'doughnut',
-						data: {
-						labels: ["<?php echo(__("Correct answers")); ?>", "<?php echo(__("Incorrect answers")); ?>"],
-						datasets: [{
-							data: [<?php echo($avg_score); ?>, <?php echo(100-$avg_score); ?>],
-							backgroundColor: ['rgba(0, 179, 255, 1)', 'rgba(21, 33, 46, 1)']
-						}]
-						},
-						options: {
-							responsive: true,
-							borderWidth: 0,
-							cutout: '75%',
-							plugins: {
-								legend: {
-									display: false
-								},
-								tooltip: {
-									enabled: false
-								}
-							}
-						}
-					});
+    <div id="dashboard_main" role="group" style="min-width: 72%; display: flex; flex-direction: column; align-items: stretch;">
+        <div class="window">
+            <h3 class="window_title"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;<?php echo(__("My progress")); ?></h3>
+            <script>
+                const dashboard_progress_pts = <?php echo json_encode($points); ?>;
+                const dashboard_labels = <?php echo json_encode($labels); ?>;
+            </script>
+            <div style="display: flex; gap: 3vmax;">
+                <div style="height: 13vmax; width: 10vmax; padding: 1vmax; margin-left: 5%; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="position: relative; width: 10vmax; height: 10vmax;">
+                        <canvas id="dashboard_progress_correct_answers"></canvas>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 2vmax;">
+                            <?php echo($avg_score); ?>%
+                        </div>
+                    </div>
+                    <small style="width: 100%; font-size: 0.8vw; margin-top: 2vmax;"><?php echo(__("Average correctness")); ?></small>
+                </div>
+                <div style="max-height: 12vmax; width: calc(100% - 22vmax); padding: 1vmax; margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <canvas id="dashboard_progress_points" style="width: 100%; float: right;"></canvas>
+                    <br />
+                    <small style="width: 100%;"><?php echo(__("Number of points in the last 30 days")); ?></small>
+                </div>
+            </div>
+            <br />
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_correct_answers'), {
+                        type: 'doughnut',
+                        data: {
+                        labels: ["<?php echo(__("Correct answers")); ?>", "<?php echo(__("Incorrect answers")); ?>"],
+                        datasets: [{
+                            data: [<?php echo($avg_score); ?>, <?php echo(100 - $avg_score); ?>],
+                            backgroundColor: ['rgba(0, 179, 255, 1)', 'rgba(21, 33, 46, 1)']
+                        }]
+                        },
+                        options: {
+                            responsive: true,
+                            borderWidth: 0,
+                            cutout: '75%',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    enabled: false
+                                }
+                            }
+                        }
+                    });
 
-					dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_points'), {
-					type: "line",
-					data: {
-						labels: dashboard_labels,
-						datasets: [{ 
-							data: dashboard_progress_pts,
-							borderColor: "rgba(0, 179, 255, 1)",
-							pointRadius: 2,
-							fill: true,
-						}]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						plugins: {
-							legend: { display: false }
-						},
-						y: {
-							suggestedMin: 0,
-							suggestedMax: 100
-						}
-					}
-					});
-				});
-			</script>
-		</div>
-		<div class="window">
-			<h3 class="window_title"><i class="fa fa-flask"></i>&nbsp;&nbsp;<?php echo(__("My last solutions")); ?></h3>
-			<div id="results">
-				<?php
-					$db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, CONTENT.title AS title, CONTENT.type AS type, CONTENT.maxpoints AS max_pts, CONTENT.CONTENT_ID AS problem_id, CONTENT.result_publish_time AS result_publish_time, SUBMISSIONS.submission_lang AS lang FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 4');
-					$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
+                    dashboard_progress_pts_chart = new Chart(document.getElementById('dashboard_progress_points'), {
+                    type: "line",
+                    data: {
+                        labels: dashboard_labels,
+                        datasets: [{ 
+                            data: dashboard_progress_pts,
+                            borderColor: "rgba(0, 179, 255, 1)",
+                            pointRadius: 2,
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        y: {
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                    });
+                });
+            </script>
+        </div>
+        <div class="window">
+            <h3 class="window_title"><i class="fa fa-flask"></i>&nbsp;&nbsp;<?php echo(__("My last solutions")); ?></h3>
+            <div id="results">
+                <?php
+                    $db_query = $pdo->prepare('SELECT SUBMISSIONS.SUBMISSION_ID AS id, SUBMISSIONS.mode AS mode, SUBMISSIONS.verification_time, SUBMISSIONS.submission_time AS submission_time, SUBMISSIONS.score AS score, SUBMISSIONS.score_percentage AS score_percentage, CONTENT.title AS title, CONTENT.type AS type, CONTENT.maxpoints AS max_pts, CONTENT.CONTENT_ID AS problem_id, CONTENT.result_publish_time AS result_publish_time, SUBMISSIONS.submission_lang AS lang FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.user_id=:uid ORDER BY SUBMISSIONS.submission_time DESC LIMIT 4');
+                    $db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
 
-					$isfound = 0;
-					while($row = $db_query->fetch())
-					{
-						$isfound++;
-						if(strtotime($row['result_publish_time'])>strtotime("now"))
-						{
-							$gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
-							$percentage = "...";
-							$status = "<i class=\"fa fa-eye-slash\"></i>&nbsp;&nbsp;".__("Result unavailable");
-						}
-						else if($row['score_percentage']==0)
-						{
-							$gradient = "linear-gradient(to left, rgba(255, 61, 110, 0.5) 0%,transparent 50%);";
-							$percentage = (int)($row['score_percentage']);
-							$status = __("Incorrect");
-						} else if ($row['score_percentage']==100)
-						{
-							$gradient = "linear-gradient(to left, rgba(0, 209, 10, 0.5) 0%,transparent 50%);";
-							$percentage = (int)($row['score_percentage']);
-							$status = __("Fully correct");
-						} else if ($row['score_percentage']==-1)
-						{
-							$gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
-							$percentage = "...";
-							$status = __("In queue...");
-						} else {
-							$gradient = "linear-gradient(to left, rgba(142, 237, 40, 0.5) 0%,transparent 50%);";
-							$percentage = (int)($row['score_percentage']);
-							$status = __("Partially correct");
-						}
+                    $isfound = 0;
+                while ($row = $db_query->fetch()) {
+                    $isfound++;
+                    if (strtotime($row['result_publish_time']) > strtotime("now")) {
+                        $gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
+                        $percentage = "...";
+                        $status = "<i class=\"fa fa-eye-slash\"></i>&nbsp;&nbsp;" . __("Result unavailable");
+                    } elseif ($row['score_percentage'] == 0) {
+                        $gradient = "linear-gradient(to left, rgba(255, 61, 110, 0.5) 0%,transparent 50%);";
+                        $percentage = (int)($row['score_percentage']);
+                        $status = __("Incorrect");
+                    } elseif ($row['score_percentage'] == 100) {
+                        $gradient = "linear-gradient(to left, rgba(0, 209, 10, 0.5) 0%,transparent 50%);";
+                        $percentage = (int)($row['score_percentage']);
+                        $status = __("Fully correct");
+                    } elseif ($row['score_percentage'] == -1) {
+                        $gradient = "linear-gradient(to left, rgba(173, 170, 171, 0.5) 0%,transparent 50%);";
+                        $percentage = "...";
+                        $status = __("In queue...");
+                    } else {
+                        $gradient = "linear-gradient(to left, rgba(142, 237, 40, 0.5) 0%,transparent 50%);";
+                        $percentage = (int)($row['score_percentage']);
+                        $status = __("Partially correct");
+                    }
 
-						switch($row['type'])
-						{
-							case 1:
-								$problem = content_type_identification('alg');
-								$resultdest = "algresult";
-								break;
-							case 2:
-								$problem = content_type_identification('ctf');
-								$resultdest = "ctfresult";
-								break;
-							case 3:
-								$problem = content_type_identification('och');
-								$resultdest = "testresult";
-								break;
-							case 4:
-								$problem = content_type_identification('mch');
-								$resultdest = "testresult";
-								break;
-							case 5:
-								$problem = content_type_identification('opn');
-								$resultdest = "formresult";
-								break;
-							default:
-								$problem = content_type_identification('unk');
-								break;
-						}
+                    switch ($row['type']) {
+                        case 1:
+                            $problem = content_type_identification('alg');
+                            $resultdest = "algresult";
+                            break;
+                        case 2:
+                            $problem = content_type_identification('ctf');
+                            $resultdest = "ctfresult";
+                            break;
+                        case 3:
+                            $problem = content_type_identification('och');
+                            $resultdest = "testresult";
+                            break;
+                        case 4:
+                            $problem = content_type_identification('mch');
+                            $resultdest = "testresult";
+                            break;
+                        case 5:
+                            $problem = content_type_identification('opn');
+                            $resultdest = "formresult";
+                            break;
+                        default:
+                            $problem = content_type_identification('unk');
+                            break;
+                    }
 
-						echo('<a href="index.php?p='.$resultdest.'&sid='.$row['id'].'" class="dashboard_results_block" style="background-image: '.$gradient.';">
+                    echo('<a href="index.php?p=' . $resultdest . '&sid=' . $row['id'] . '" class="dashboard_results_block" style="background-image: ' . $gradient . ';">
 							<div style="display: flex; flex-direction: column; flex: 1;">
 							<h2 style="margin: 0 0 0.5vmax 0;">');
-							switch($row['lang'])
-							{
-								case "cpp":
-									echo('<i class="fa-brands fa-cuttlefish"></i>');
-									break;
-								case "py":
-									echo('<i class="fa-brands fa-python"></i>');
-									break;
-								case "java":
-									echo('<i class="fa-brands fa-java"></i>');
-									break;
-								default:
-									break;
-							}
-							echo('
-								&nbsp;'.htmlentities($row['title']).'</h2>
-								<small style="font-size: 0.7vmax; background-color: '.$problem['color'].'; width: 8vmax; text-align: center; padding: 0.4vmax; border-radius: 1vmax;"><i class="'.$problem['icon'].'"></i>&nbsp;&nbsp;'.$problem['full_name'].'</small>
+                    switch ($row['lang']) {
+                        case "cpp":
+                                echo('<i class="fa-brands fa-cuttlefish"></i>');
+                            break;
+                        case "py":
+                                    echo('<i class="fa-brands fa-python"></i>');
+                            break;
+                        case "java":
+                            echo('<i class="fa-brands fa-java"></i>');
+                            break;
+                        default:
+                            break;
+                    }
+                        echo('
+								&nbsp;' . htmlentities($row['title']) . '</h2>
+								<small style="font-size: 0.7vmax; background-color: ' . $problem['color'] . '; width: 8vmax; text-align: center; padding: 0.4vmax; border-radius: 1vmax;"><i class="' . $problem['icon'] . '"></i>&nbsp;&nbsp;' . $problem['full_name'] . '</small>
 							</div>');
-						
-						if ($row['score_percentage']!=-1 and strtotime($row['result_publish_time'])<strtotime("now")) {	
-							echo('	<div class="dashboard_results_block_status" style="flex: 1;">'.$status.'</div>
+
+                    if ($row['score_percentage'] != -1 and strtotime($row['result_publish_time']) < strtotime("now")) {
+                        echo('	<div class="dashboard_results_block_status" style="flex: 1;">' . $status . '</div>
 									<div>
-										<small>'.$row['submission_time'].'</small><br />
+										<small>' . $row['submission_time'] . '</small><br />
 										<div class="dashboard_results_block_progress">
-											<div class="dashboard_results_block_progress_bar" style="width: calc(8vmax * '.floatval($percentage/100).'); background-color: '.$problem['color'].';">
-												<h2 style="margin-top: 0; margin-bottom: 0;">'.$percentage.'%</h2>
+											<div class="dashboard_results_block_progress_bar" style="width: calc(8vmax * ' . floatval($percentage / 100) . '); background-color: ' . $problem['color'] . ';">
+												<h2 style="margin-top: 0; margin-bottom: 0;">' . $percentage . '%</h2>
 											</div>
 										</div>
 									</div>');
-						} else {
-							echo('<div>
-										'.$status.'
+                    } else {
+                        echo('<div>
+										' . $status . '
 									</div>');
-						}
-						echo('</a>');
-					}
+                    }
+                    echo('</a>');
+                }
 
-					if($isfound==0)
-					{
-						echo("<center>".__("There's nothing here yet!")."</center>");
-					}
-				?>
-			</div>
-			<br />
-			<br />
-		</div>
-		<div class="window" style="flex: 1;">
-			<h3 class="window_title"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;<?php echo(__("News")); ?></h3>
-			<?php
-				$db_query = $pdo->prepare('SELECT * FROM ARTICLES WHERE contentset_pos=0 ORDER BY id DESC LIMIT 3');
-				$db_query->execute();
+                if ($isfound == 0) {
+                    echo("<center>" . __("There's nothing here yet!") . "</center>");
+                }
+                ?>
+            </div>
+            <br />
+            <br />
+        </div>
+        <div class="window" style="flex: 1;">
+            <h3 class="window_title"><i class="fa fa-bullhorn"></i>&nbsp;&nbsp;<?php echo(__("News")); ?></h3>
+            <?php
+                $db_query = $pdo->prepare('SELECT * FROM ARTICLES WHERE contentset_pos=0 ORDER BY id DESC LIMIT 3');
+                $db_query->execute();
 
-				$news_count=0;
-				while($row = $db_query->fetch())
-				{
-					$news_count++;
-					$article_id = $row['id'];
-					$article_title = $row['title'];
-					$article_author = $row['author'];
-					$article_time = $row['time'];
-					$article_content = $row['content'];
-					echo('<div class="news">
-						<span><i class=\'fas fa-user-circle\'></i>&nbsp;'.htmlentities($row['author']).'&emsp;<i class=\'fas fa-clock\'></i>&nbsp;'.htmlentities($row['time']).'</span>
-						<h3>'.htmlentities($row['title']).'</h3>
-						<p>'.$row['content'].'</p>
+                $news_count = 0;
+            while ($row = $db_query->fetch()) {
+                $news_count++;
+                $article_id = $row['id'];
+                $article_title = $row['title'];
+                $article_author = $row['author'];
+                $article_time = $row['time'];
+                $article_content = $row['content'];
+                echo('<div class="news">
+						<span><i class=\'fas fa-user-circle\'></i>&nbsp;' . htmlentities($row['author']) . '&emsp;<i class=\'fas fa-clock\'></i>&nbsp;' . htmlentities($row['time']) . '</span>
+						<h3>' . htmlentities($row['title']) . '</h3>
+						<p>' . $row['content'] . '</p>
 					</div>');
-				}
-				if($news_count==0)
-				{
-					echo("<center>".__("There's nothing here yet!")."</center><br />");
-				}
-			?>
-			<br />
-		</div>
-	</div>
-	<div id="proposed_channels" role="group" style="min-width: 27.5%; max-width: 30%; margin-left: 0; margin-right: 1%; display: flex; flex-direction: column; align-items: stretch;">
-		<?php
-			include_plugins_for("dashboard_side_panel");
-		?>
-		<h3 class="window_title"><i class='fas fa-lightbulb'></i>&emsp;<?php echo(__("You might also like")); ?></h3>
-		<div id="dashboard_propositions_bar">
-			<?php
-				$db_query = $pdo->prepare('SELECT *, USERS.username AS author FROM CHANNELS INNER JOIN USERS ON CHANNELS.author_id=USERS.USER_ID ORDER BY CHANNELS.CHANNEL_ID DESC LIMIT :limit;');
-				$db_query->execute(['limit' => (4 + $news_count)]);
-				
-				$count = 0;
-				while($row = $db_query->fetch())
-				{
-					$count++;
-					echo('<a href="?p=channel&id='.$row['CHANNEL_ID'].'" style="flex: 1; text-decoration: none;"><div class="dashboard_content_set" style="background: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url(\''.$row['img_path'].'\'); background-size: cover;">
+            }
+            if ($news_count == 0) {
+                echo("<center>" . __("There's nothing here yet!") . "</center><br />");
+            }
+            ?>
+            <br />
+        </div>
+    </div>
+    <div id="proposed_channels" role="group" style="min-width: 27.5%; max-width: 30%; margin-left: 0; margin-right: 1%; display: flex; flex-direction: column; align-items: stretch;">
+        <?php
+            include_plugins_for("dashboard_side_panel");
+        ?>
+        <h3 class="window_title"><i class='fas fa-lightbulb'></i>&emsp;<?php echo(__("You might also like")); ?></h3>
+        <div id="dashboard_propositions_bar">
+            <?php
+                $db_query = $pdo->prepare('SELECT *, USERS.username AS author FROM CHANNELS INNER JOIN USERS ON CHANNELS.author_id=USERS.USER_ID ORDER BY CHANNELS.CHANNEL_ID DESC LIMIT :limit;');
+                $db_query->execute(['limit' => (4 + $news_count)]);
+
+                $count = 0;
+            while ($row = $db_query->fetch()) {
+                $count++;
+                echo('<a href="?p=channel&id=' . $row['CHANNEL_ID'] . '" style="flex: 1; text-decoration: none;"><div class="dashboard_content_set" style="background: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url(\'' . $row['img_path'] . '\'); background-size: cover;">
 				<div class="dashboard_content_set_metadata">
-					<h3>'.htmlentities($row['title']).'</h3>
-					<small style="top: -1vmax; position: relative;"><img aria-label="'.htmlentities($row['author']).'\'s profile picture" src="https://api.dicebear.com/10.x/identicon/svg?seed='.htmlentities($row['author']).'" style="background-color: var(--text); width: 1vmax; border-radius: 0.5vmax; margin-bottom: -0.2vmax;" />&nbsp;&nbsp;'.htmlentities($row['author']).'</small>
+					<h3>' . htmlentities($row['title']) . '</h3>
+					<small style="top: -1vmax; position: relative;"><img aria-label="' . htmlentities($row['author']) . '\'s profile picture" src="https://api.dicebear.com/10.x/identicon/svg?seed=' . htmlentities($row['author']) . '" style="background-color: var(--text); width: 1vmax; border-radius: 0.5vmax; margin-bottom: -0.2vmax;" />&nbsp;&nbsp;' . htmlentities($row['author']) . '</small>
 				</div>
 			</div></a>');
-				}
+            }
 
-				if ($count==0) {
-					echo("<script>document.getElementById('proposed_channels').style.display = 'none';</script>");
-					echo("<script>document.getElementById('dashboard_main').style.width = '100%';</script>");
-				}
-			?>
-			<br />
-			<br />
-		</div>
-		<br />
-	</div>
+            if ($count == 0) {
+                echo("<script>document.getElementById('proposed_channels').style.display = 'none';</script>");
+                echo("<script>document.getElementById('dashboard_main').style.width = '100%';</script>");
+            }
+            ?>
+            <br />
+            <br />
+        </div>
+        <br />
+    </div>
 </div>
 <br />
 <br />

@@ -1,88 +1,90 @@
 <?php
-	if (!has_permission('main.display.channels.check_the_form') || !isset($_GET['sid'])) kick();
-	
-	require_once('modules/composer/vendor/autoload.php');
+if (!has_permission('main.display.channels.check_the_form') || !isset($_GET['sid'])) {
+    kick();
+}
+
+    require_once('modules/composer/vendor/autoload.php');
     $purifier_config = HTMLPurifier_Config::createDefault();
     $purifier_config->set('Cache.DefinitionImpl', null);
     $purifier = new HTMLPurifier($purifier_config);
 
-	$db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID INNER JOIN USERS ON USERS.USER_ID=SUBMISSIONS.user_id WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
-	$db_query->execute(['sid' => $_GET['sid']]);
-	$row = $db_query->fetch();
+    $db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID INNER JOIN USERS ON USERS.USER_ID=SUBMISSIONS.user_id WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
+    $db_query->execute(['sid' => $_GET['sid']]);
+    $row = $db_query->fetch();
 ?>
 <style>
-	.window .forminput {
-		border: 0; 
-		padding: 0.75vw 1.25vw; 
-		color: #dae2e6; 
-		background-color: #2a2c2e; 
-		font-family: inherit;
-		outline: none;
-	}
-	.window .forminput_a {
-		border: 0; 
-		padding: 0.75vw 2.5%; 
-		color: #dae2e6; 
-		background-color: #2a2c2e; 
-		font-family: inherit;
-		cursor: pointer;
-		transition: 0.4s;
-		text-decoration: none;
-	}
-	.window .forminput_a:hover {
-		background-color: #3e4145;
-	}
+    .window .forminput {
+        border: 0; 
+        padding: 0.75vw 1.25vw; 
+        color: #dae2e6; 
+        background-color: #2a2c2e; 
+        font-family: inherit;
+        outline: none;
+    }
+    .window .forminput_a {
+        border: 0; 
+        padding: 0.75vw 2.5%; 
+        color: #dae2e6; 
+        background-color: #2a2c2e; 
+        font-family: inherit;
+        cursor: pointer;
+        transition: 0.4s;
+        text-decoration: none;
+    }
+    .window .forminput_a:hover {
+        background-color: #3e4145;
+    }
 </style>
 
 <script>
-	MathJax = {
-	tex: {
-		inlineMath: [['$', '$']]
-	}
-	};
+    MathJax = {
+    tex: {
+        inlineMath: [['$', '$']]
+    }
+    };
 </script>
 <script id="MathJax-script" async
   src="/include/js/mathjax/tex-chtml.js">
 </script>
 
 <center>
-	<h1><?php echo(__("Currently evaluating user's solution")); ?></h1>
+    <h1><?php echo(__("Currently evaluating user's solution")); ?></h1>
 </center>
 
 <div class="window">
-	<h3 class="window_title"><?php echo(__("Solution of user")); ?> <?php echo($row['username']); ?></h3>
-	<br />
-	<div style="user-select: text; margin-left: 5%; width: 88%; padding: 1% 1%; background-color: #dae2e6; color: #2a2c2e;">
-		<?php
-			echo($purifier->purify($row['content']));
-		?>
-	</div>
-	<br />
-	<br />
+    <h3 class="window_title"><?php echo(__("Solution of user")); ?> <?php echo($row['username']); ?></h3>
+    <br />
+    <div style="user-select: text; margin-left: 5%; width: 88%; padding: 1% 1%; background-color: #dae2e6; color: #2a2c2e;">
+        <?php
+            echo($purifier->purify($row['content']));
+        ?>
+    </div>
+    <br />
+    <br />
 </div>
 <div class="window">
-	<h3 class="window_title"><?php echo(__("Grade")); ?></h3>
-	<form id="rate_form" method="POST" action="process.php?r=check_form&id=<?php echo($row['SUBMISSION_ID']); ?>">
-		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
-		<input type="number" class="forminput" id="pts" name="form_pts" style="margin-left: 5%;" min="0" max="<?php echo($row['maxpoints']); ?>"/>&emsp;/&emsp;<?php echo($row['maxpoints']); ?>
-		<br />
-		<h3 class="window_title"><?php echo(__("Optional comment")); ?></h3>
-		<textarea name="form_comment" class="forminput" style="margin-left: 5%; width: 50%; border-radius: 0.3vmax;"></textarea>
-		<br />
-		<br />
-	</form>
-	<a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('rate_form').submit();"><?php echo(__("Submit your assessment")); ?></a>
-	<br />
-	<br />
-	<br />
+    <h3 class="window_title"><?php echo(__("Grade")); ?></h3>
+    <form id="rate_form" method="POST" action="process.php?r=check_form&id=<?php echo($row['SUBMISSION_ID']); ?>">
+        <input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+        <input type="number" class="forminput" id="pts" name="form_pts" style="margin-left: 5%;" min="0" max="<?php echo($row['maxpoints']); ?>"/>&emsp;/&emsp;<?php echo($row['maxpoints']); ?>
+        <br />
+        <h3 class="window_title"><?php echo(__("Optional comment")); ?></h3>
+        <textarea name="form_comment" class="forminput" style="margin-left: 5%; width: 50%; border-radius: 0.3vmax;"></textarea>
+        <br />
+        <br />
+    </form>
+    <a class="forminput_a" style="margin-left: 5%;" onClick="document.getElementById('rate_form').submit();"><?php echo(__("Submit your assessment")); ?></a>
+    <br />
+    <br />
+    <br />
 </div>
 <div class="window">
-	<h3 class="window_title"><?php echo(__("Problem")); ?></h3>
-	<br />
-	<iframe src="content/quests/<?php echo($row['CONTENT_ID']); ?>/pdf/<?php echo($row['CONTENT_ID']); ?>.pdf" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
-	<br />
-	<br />
-	<br />
+    <h3 class="window_title"><?php echo(__("Problem")); ?></h3>
+    <br />
+    <iframe src="content/quests/<?php echo($row['CONTENT_ID']); ?>/pdf/<?php echo($row['CONTENT_ID']); ?>.pdf" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
+    <br />
+    <br />
+    <br />
 </div>
 <br />
 <br />

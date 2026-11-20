@@ -1,22 +1,22 @@
-<?php 
-    include(__DIR__.'/../../include/diagnostics/resources.php');
-    include(__DIR__.'/../../include/diagnostics/configuration.php');
+<?php
+    include(__DIR__ . '/../../include/diagnostics/resources.php');
+    include(__DIR__ . '/../../include/diagnostics/configuration.php');
 ?>
 <style>
     .window p, h2, h3 {
-		margin-left: 5%;
-	}
+        margin-left: 5%;
+    }
     .pulse {
-		animation: pulse-animation 1.8s infinite;
-	}
-	@keyframes pulse-animation {
-		0% {
-			box-shadow: 0 0 0 0vw rgba(0, 0, 0, 0.2);
-		}
-		100% {
-			box-shadow: 0 0 0.2vw 0.8vw rgba(0, 0, 0, 0);
-		}
-	}
+        animation: pulse-animation 1.8s infinite;
+    }
+    @keyframes pulse-animation {
+        0% {
+            box-shadow: 0 0 0 0vw rgba(0, 0, 0, 0.2);
+        }
+        100% {
+            box-shadow: 0 0 0.2vw 0.8vw rgba(0, 0, 0, 0);
+        }
+    }
     .circle {
         aspect-ratio: 1 / 1;
         border-radius: 50%;
@@ -78,14 +78,14 @@
 <script src="/include/js/chart.js/chart.js" type="text/javascript"></script>
 
 <center>
-	<h1><?php echo(__("Diagnostics panel")); ?></h1>
+    <h1><?php echo(__("Diagnostics panel")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title"><?php echo(__("System resources")); ?></h2>
+    <h2 class="window_title"><?php echo(__("System resources")); ?></h2>
     <div>
         <p><?php echo(__("OS details")); ?>: <?php echo(php_uname()); ?></p>
         <p>CPU: <?php echo(getNumOfCPUs()); ?> <?php echo(__("cores")); ?></p>
-        <p>RAM: <?php print(round(getMemory()['MemTotal']/1024/1024,2)); ?> GB</p>
+        <p>RAM: <?php print(round(getMemory()['MemTotal'] / 1024 / 1024, 2)); ?> GB</p>
         <br />
     </div>
     <div style="display: flex; width: 90%; margin-left: 5%; gap: 5%;">
@@ -105,10 +105,9 @@
     <p><?php echo(__("Loaded PHP extensions")); ?>:
         <div style="width: 90%; margin-left: 5%; display: flex; flex-wrap: wrap;">
             <?php
-                foreach(get_loaded_extensions() as $extension)
-                {
-                    print("<span class='display_extension'>".htmlentities($extension)."</span>");
-                }
+            foreach (get_loaded_extensions() as $extension) {
+                print("<span class='display_extension'>" . htmlentities($extension) . "</span>");
+            }
             ?>
         </div>
     </p>
@@ -182,24 +181,22 @@
     setInterval(update_stats, 1000);
 </script>
 <div class="window">
-	<h2 class="window_title"><?php echo(__("Summary")); ?></h2>
+    <h2 class="window_title"><?php echo(__("Summary")); ?></h2>
     <p><small><?php echo(__("The summary shows the results of superficial tests.")); ?></small></p>
     <h3 class="window_title"><?php echo(__("Configuration")); ?></h3>
     <?php
         $count = 0;
-        foreach(configuration_diagnostics() as $row)
-        {
-            $count++;
-            echo('<div class="diagnostics_feedback diag_'.htmlentities($row['category']).'" style="display: flex; flex-direction: row;">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.$row['content'].'</p>
+    foreach (configuration_diagnostics() as $row) {
+        $count++;
+        echo('<div class="diagnostics_feedback diag_' . htmlentities($row['category']) . '" style="display: flex; flex-direction: row;">
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">' . $row['content'] . '</p>
             </div>');
-        }
-        if($count==0)
-        {
-            echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.__("Yay! There is no issues at the moment!").'</p>
+    }
+    if ($count == 0) {
+        echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">' . __("Yay! There is no issues at the moment!") . '</p>
             </div>');
-        }
+    }
     ?>
     <br />
     <h3 class="window_title"><?php echo(__("Event logs")); ?></h3>
@@ -208,25 +205,23 @@
         $db_query->execute();
 
         $count = 0;
-        while($row = $db_query->fetch())
-        {
-            $count++;
-            echo('<div class="diagnostics_feedback diag_'.htmlentities($row['category']).'">
+    while ($row = $db_query->fetch()) {
+        $count++;
+        echo('<div class="diagnostics_feedback diag_' . htmlentities($row['category']) . '">
                 <div style="display: flex; flex-direction: row; width: 100%; align-items: center;">
-                    <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.$row['content'].'</p>
+                    <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">' . $row['content'] . '</p>
                 </div>
                 <code class="diagnostics_details">
-                '.htmlentities($row['time']).' 
-                '.htmlentities($row['details']).'
+                ' . htmlentities($row['time']) . ' 
+                ' . htmlentities($row['details']) . '
                 </code>
             </div>');
-        }
-        if($count==0)
-        {
-            echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
-                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">'.__("Yay! There is no issues at the moment!").'</p>
+    }
+    if ($count == 0) {
+        echo('<div class="diagnostics_feedback diag_info" style="flex-direction: row;">
+                <div class="circle pulse" style="width: 1vw; height: 1vw;"></div><p style="margin-left: 3%;">' . __("Yay! There is no issues at the moment!") . '</p>
             </div>');
-        }
+    }
     ?>
     <br />
     <a class="button" style="margin-right: 5%;" href="index.php?p=logs"><?php echo(__("Display all")); ?></a>

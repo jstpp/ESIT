@@ -72,6 +72,51 @@ def security_tests(quiet=False):
     return [ok, warn, err]
 
 
+def misc_tests(quiet=False):
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.path.abspath(os.path.dirname(__file__) + "/../")
+    if not quiet:
+        print(str(time.ctime()) + " | " + "[ * ] Running misc tests")
+    ok, warn, err = 0, 0, 0
+    for f in os.scandir(os.path.dirname(__file__) + "/misc/"):
+        if f.is_file():
+            if not quiet:
+                print(
+                    str(time.ctime())
+                    + " | "
+                    + f"  ├── Running: {clrs.PINK}"
+                    + f.path
+                    + f"{clrs.ENDC}"
+                )
+            try:
+                run_test(f.path, env)
+                if not quiet:
+                    print(
+                        str(time.ctime())
+                        + " | "
+                        + f"  ├── Status:  {clrs.GREEN}OK{clrs.ENDC}"
+                    )
+                ok += 1
+            except Exception as e:
+                if not quiet:
+                    print(
+                        str(time.ctime())
+                        + " |   ├── Status:  "
+                        + f"{clrs.RED}FAILED{clrs.ENDC}"
+                    )
+                    print(str(time.ctime()) + " |   ├── Reason:")
+                    for line in str(e).splitlines():
+                        print(
+                            str(time.ctime())
+                            + f" |   │   {clrs.RED}"
+                            + line
+                            + f"{clrs.ENDC}"
+                        )
+                err += 1
+
+    return [ok, warn, err]
+
+
 def unit_tests(quiet=False):
     env = os.environ.copy()
     env["PYTHONPATH"] = os.path.abspath(os.path.dirname(__file__) + "/../")
@@ -131,13 +176,14 @@ def is_ok(quiet=False):
 
     unit_tests_result = unit_tests(quiet)
     security_tests_result = security_tests(quiet)
+    misc_tests_result = misc_tests(quiet)
 
     if not quiet:
         print(str(time.ctime()) + " | " + "[ * ] Testing finished")
 
-    ok = unit_tests_result[0] + security_tests_result[0]
-    warn = unit_tests_result[1] + security_tests_result[1]
-    err = unit_tests_result[2] + security_tests_result[2]
+    ok = unit_tests_result[0] + security_tests_result[0] + misc_tests_result[0]
+    warn = unit_tests_result[1] + security_tests_result[1] + misc_tests_result[1]
+    err = unit_tests_result[2] + security_tests_result[2] + misc_tests_result[2]
 
     if not quiet:
         print(

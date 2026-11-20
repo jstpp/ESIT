@@ -11,21 +11,30 @@ from api.config import config
 
 def run(submission):
     try:
-        root_dir = os.path.abspath(
-            str(os.path.dirname(os.path.realpath(__file__)))
-            + "/../solutions/"
-            + str(submission.submission_id)
-        )
+        if submission.submission_type != "testing":
+            root_dir = os.path.abspath(
+                str(os.path.dirname(os.path.realpath(__file__)))
+                + "/../solutions/"
+                + str(submission.submission_id)
+            )
+            input_dir = os.path.abspath(
+                str(os.path.dirname(os.path.realpath(__file__)))
+                + "/../inout/"
+                + str(submission.problem_id)
+                + "/in"
+            )
+        else:
+            root_dir = os.path.abspath(
+                str(os.path.dirname(os.path.realpath(__file__))) + "/../tests/tmp/0"
+            )
+            input_dir = os.path.abspath(
+                str(os.path.dirname(os.path.realpath(__file__)))
+                + "/../tests/tmp/0-inout/in"
+            )
         code_file = root_dir + "/code/Main.java"
         output_dir = root_dir + "/output"
         time_dir = root_dir + "/time"
         misc_dir = root_dir + "/misc"
-        input_dir = os.path.abspath(
-            str(os.path.dirname(os.path.realpath(__file__)))
-            + "/../inout/"
-            + str(submission.problem_id)
-            + "/in"
-        )
 
         os.rename(
             root_dir + "/code/" + str(submission.submission_id) + ".java", code_file

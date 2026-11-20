@@ -1,4 +1,4 @@
 <?php
-	session_destroy();
-	redirect('index.php?response=logout');
-?>
+
+    session_destroy();
+    redirect('index.php?response=logout');

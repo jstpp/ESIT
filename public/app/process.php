@@ -1,89 +1,109 @@
 <?php
-	include(__DIR__.'/../../include/app/core.php');
-	if(boolval(get_misc_value('plugin_debugging'))) $start_time = hrtime(true);
 
-	$allowed_scripts = [
-		'register' 		      		=> ['mode' => 'register', 'permission' => 'main.register', 'path' => 'app/user_management/register_new_user.php', 'csrf_token_required' => False],
-		'addpost'    		  		=> ['mode' => 'interactive', 'permission' => 'main.portal.addpost', 'path' => 'app/portal/addpost_db.php' , 'csrf_token_required' => True],
-		'getimg'      		  		=> ['mode' => 'non-interactive', 'permission' => 'main.portal.tinyupload', 'path' => 'app/portal/tinyupload.php' , 'csrf_token_required' => False],
-		'deletepost'   		  		=> ['mode' => 'interactive', 'permission' => 'main.portal.deletepost', 'path' => 'app/portal/deletepost.php', 'required' => ['id'], 'csrf_token_required' => True],
-		'modifypost'   		  		=> ['mode' => 'interactive', 'permission' => 'main.portal.modifypost', 'path' => 'app/portal/modifypost_db.php', 'required' => ['id'], 'csrf_token_required' => True],
-		'send_alg_solution'   		=> ['mode' => 'interactive', 'permission' => 'main.send_alg_solution', 'path' => 'worker/mq_producer.php', 'required' => ['lang', 'pid'], 'csrf_token_required' => True],
-		'api_get_results'	  		=> ['mode' => 'worker-api', 'permission' => 'main.api_get_results', 'path' => 'worker/api/api_get_results.php', 'csrf_token_required' => False],
-		'ask_for_inout'	  	  		=> ['mode' => 'worker-api', 'permission' => 'main.ask_for_inout', 'path' => 'worker/api/api_ask_for_inout.php', 'csrf_token_required' => False],
-		'registration_is_unique'	=> ['mode' => 'public', 'permission' => 'main.registration_is_unique', 'path' => '../public/include/registration_is_unique.php', 'csrf_token_required' => False],
-		'add_problem'				=> ['mode' => 'interactive', 'permission' => 'main.channels.add_problem', 'path' => 'app/problems/add_problem_script.php', 'csrf_token_required' => True],
-		'add_content'				=> ['mode' => 'interactive', 'permission' => 'main.channels.add_content', 'path' => 'app/content/add_content_script.php', 'csrf_token_required' => True],
-		'verify_ctf'				=> ['mode' => 'interactive', 'permission' => 'main.verify_ctf', 'path' => 'app/problems/verify_ctf_script.php', 'csrf_token_required' => True],
-		'verify_test'				=> ['mode' => 'interactive', 'permission' => 'main.verify_test', 'path' => 'app/problems/verify_test_answers.php', 'csrf_token_required' => True],
-		'save_form'					=> ['mode' => 'interactive', 'permission' => 'main.save_form', 'path' => 'app/problems/save_form_script.php', 'csrf_token_required' => True],
-		'check_form'				=> ['mode' => 'interactive', 'permission' => 'main.channels.check_form', 'path' => 'app/problems/check_form_script.php', 'csrf_token_required' => True],
-		'settings_appearance'		=> ['mode' => 'interactive', 'permission' => 'main.settings_appearance', 'path' => 'app/settings/settings_appearance.php', 'csrf_token_required' => True],
-		'modify_content'			=> ['mode' => 'interactive', 'permission' => 'main.portal.modify_content', 'path' => 'app/portal/modify_content.php', 'required' => ['page'], 'csrf_token_required' => True],
-		'modify_resources'			=> ['mode' => 'interactive', 'permission' => 'main.portal.modify_resources', 'path' => 'app/portal/modify_portal_resources.php', 'csrf_token_required' => True],
-		'modify_user'				=> ['mode' => 'interactive', 'permission' => 'main.user_management.modify_user', 'path' => 'app/user_management/modify_user.php', 'required' => ['uid'], 'csrf_token_required' => True],
-		'create_user'				=> ['mode' => 'interactive', 'permission' => 'main.user_management.create_user', 'path' => 'app/user_management/create_user.php', 'csrf_token_required' => True],
-		'remove_user'				=> ['mode' => 'interactive', 'permission' => 'main.user_management.remove_user', 'path' => 'app/user_management/remove_user.php', 'required' => ['uid'], 'csrf_token_required' => True],
-		'modify_config'				=> ['mode' => 'interactive', 'permission' => 'main.admin.modify_config', 'path' => 'app/config/modify_config.php', 'csrf_token_required' => True],
-		'create_channel'			=> ['mode' => 'interactive', 'permission' => 'main.channels.create_channel', 'path' => 'app/channels/create_channel.php', 'csrf_token_required' => True],
-		'archive_channel'			=> ['mode' => 'interactive', 'permission' => 'main.channels.archive_channel', 'path' => 'app/channels/archive_channel.php', 'required' => ['cid'], 'csrf_token_required' => True],
-		'create_problemset'			=> ['mode' => 'interactive', 'permission' => 'main.channels.create_problemset', 'path' => 'app/channels/create_problemset.php', 'required' => ['cid'], 'csrf_token_required' => True],
-		'modify_problemset'			=> ['mode' => 'interactive', 'permission' => 'main.channels.modify_problemset', 'path' => 'app/channels/modify_problemset.php', 'required' => ['sid'], 'csrf_token_required' => True],
-		'update_channel_layout'		=> ['mode' => 'non-interactive', 'permission' => 'main.channels.update_channel_layout', 'path' => 'app/channels/update_channel_layout.php', 'required' => ['cid'], 'csrf_token_required' => True],
-		'download_plugin'			=> ['mode' => 'interactive', 'permission' => 'main.download_plugin', 'path' => 'app/plugins/download_plugin.php', 'csrf_token_required' => True],
-		'change_password'			=> ['mode' => 'interactive', 'permission' => 'main.change_password', 'path' => 'app/settings/change_password.php', 'csrf_token_required' => True],
-		'diag_server_resources'		=> ['mode' => 'non-interactive', 'permission' => 'main.diag_server_resources', 'path' => 'diagnostics/resources.php', 'csrf_token_required' => False],
-		'get_content'				=> ['mode' => 'content-delivery', 'permission' => 'main.get_content', 'path' => 'app/content_delivery/get_content.php', 'csrf_token_required' => False],
-		'follow_channel'			=> ['mode' => 'interactive', 'permission' => 'main.social.follow_channel', 'path' => 'app/channels/follow_channel.php', 'required' => ['id'], 'csrf_token_required' => True],
-		'star_content'				=> ['mode' => 'interactive', 'permission' => 'main.social.star_content', 'path' => 'app/problems/star_content.php', 'required' => ['id'], 'csrf_token_required' => True],
-		'problem_recheck'   		=> ['mode' => 'interactive', 'permission' => 'main.solutions.exec.recheck', 'path' => 'worker/mq_producer.php', 'required' => ['sid'], 'csrf_token_required' => True],
-		'request_recheck'   		=> ['mode' => 'interactive', 'permission' => 'main.solutions.request_recheck', 'path' => 'app/problems/request_reevaluation.php', 'required' => ['sid'], 'csrf_token_required' => True],
-		'search'					=> ['mode' => 'non-interactive', 'permission' => 'main.channels.search', 'path' => 'app/content/search.php', 'required' => ['key'], 'csrf_token_required' => False]
-	];
+    include(__DIR__ . '/../../include/app/core.php');
+if (boolval(get_misc_value('plugin_debugging'))) {
+    $start_time = hrtime(true);
+}
 
-	$current_r = $_GET['r'] ?? 'none';
-	if(is_logged_in()) check_session_timeout();
-	if (!array_key_exists($current_r, $allowed_scripts)) kick();
-	$script_config = $allowed_scripts[$current_r];
+    $allowed_scripts = [
+        'register'                  => ['mode' => 'register', 'permission' => 'main.register', 'path' => 'app/user_management/register_new_user.php', 'csrf_token_required' => false],
+        'addpost'                   => ['mode' => 'interactive', 'permission' => 'main.portal.addpost', 'path' => 'app/portal/addpost_db.php' , 'csrf_token_required' => true],
+        'getimg'                    => ['mode' => 'non-interactive', 'permission' => 'main.portal.tinyupload', 'path' => 'app/portal/tinyupload.php' , 'csrf_token_required' => false],
+        'deletepost'                => ['mode' => 'interactive', 'permission' => 'main.portal.deletepost', 'path' => 'app/portal/deletepost.php', 'required' => ['id'], 'csrf_token_required' => true],
+        'modifypost'                => ['mode' => 'interactive', 'permission' => 'main.portal.modifypost', 'path' => 'app/portal/modifypost_db.php', 'required' => ['id'], 'csrf_token_required' => true],
+        'send_alg_solution'         => ['mode' => 'interactive', 'permission' => 'main.send_alg_solution', 'path' => 'worker/mq_producer.php', 'required' => ['lang', 'pid'], 'csrf_token_required' => true],
+        'api_get_results'           => ['mode' => 'worker-api', 'permission' => 'main.api_get_results', 'path' => 'worker/api/api_get_results.php', 'csrf_token_required' => false],
+        'ask_for_inout'             => ['mode' => 'worker-api', 'permission' => 'main.ask_for_inout', 'path' => 'worker/api/api_ask_for_inout.php', 'csrf_token_required' => false],
+        'registration_is_unique'    => ['mode' => 'public', 'permission' => 'main.registration_is_unique', 'path' => '../public/include/registration_is_unique.php', 'csrf_token_required' => false],
+        'add_problem'               => ['mode' => 'interactive', 'permission' => 'main.channels.add_problem', 'path' => 'app/problems/add_problem_script.php', 'csrf_token_required' => true],
+        'add_content'               => ['mode' => 'interactive', 'permission' => 'main.channels.add_content', 'path' => 'app/content/add_content_script.php', 'csrf_token_required' => true],
+        'verify_ctf'                => ['mode' => 'interactive', 'permission' => 'main.verify_ctf', 'path' => 'app/problems/verify_ctf_script.php', 'csrf_token_required' => true],
+        'verify_test'               => ['mode' => 'interactive', 'permission' => 'main.verify_test', 'path' => 'app/problems/verify_test_answers.php', 'csrf_token_required' => true],
+        'save_form'                 => ['mode' => 'interactive', 'permission' => 'main.save_form', 'path' => 'app/problems/save_form_script.php', 'csrf_token_required' => true],
+        'check_form'                => ['mode' => 'interactive', 'permission' => 'main.channels.check_form', 'path' => 'app/problems/check_form_script.php', 'csrf_token_required' => true],
+        'settings_appearance'       => ['mode' => 'interactive', 'permission' => 'main.settings_appearance', 'path' => 'app/settings/settings_appearance.php', 'csrf_token_required' => true],
+        'modify_content'            => ['mode' => 'interactive', 'permission' => 'main.portal.modify_content', 'path' => 'app/portal/modify_content.php', 'required' => ['page'], 'csrf_token_required' => true],
+        'modify_resources'          => ['mode' => 'interactive', 'permission' => 'main.portal.modify_resources', 'path' => 'app/portal/modify_portal_resources.php', 'csrf_token_required' => true],
+        'modify_user'               => ['mode' => 'interactive', 'permission' => 'main.user_management.modify_user', 'path' => 'app/user_management/modify_user.php', 'required' => ['uid'], 'csrf_token_required' => true],
+        'create_user'               => ['mode' => 'interactive', 'permission' => 'main.user_management.create_user', 'path' => 'app/user_management/create_user.php', 'csrf_token_required' => true],
+        'remove_user'               => ['mode' => 'interactive', 'permission' => 'main.user_management.remove_user', 'path' => 'app/user_management/remove_user.php', 'required' => ['uid'], 'csrf_token_required' => true],
+        'modify_config'             => ['mode' => 'interactive', 'permission' => 'main.admin.modify_config', 'path' => 'app/config/modify_config.php', 'csrf_token_required' => true],
+        'create_channel'            => ['mode' => 'interactive', 'permission' => 'main.channels.create_channel', 'path' => 'app/channels/create_channel.php', 'csrf_token_required' => true],
+        'archive_channel'           => ['mode' => 'interactive', 'permission' => 'main.channels.archive_channel', 'path' => 'app/channels/archive_channel.php', 'required' => ['cid'], 'csrf_token_required' => true],
+        'create_problemset'         => ['mode' => 'interactive', 'permission' => 'main.channels.create_problemset', 'path' => 'app/channels/create_problemset.php', 'required' => ['cid'], 'csrf_token_required' => true],
+        'modify_problemset'         => ['mode' => 'interactive', 'permission' => 'main.channels.modify_problemset', 'path' => 'app/channels/modify_problemset.php', 'required' => ['sid'], 'csrf_token_required' => true],
+        'update_channel_layout'     => ['mode' => 'non-interactive', 'permission' => 'main.channels.update_channel_layout', 'path' => 'app/channels/update_channel_layout.php', 'required' => ['cid'], 'csrf_token_required' => true],
+        'download_plugin'           => ['mode' => 'interactive', 'permission' => 'main.download_plugin', 'path' => 'app/plugins/download_plugin.php', 'csrf_token_required' => true],
+        'change_password'           => ['mode' => 'interactive', 'permission' => 'main.change_password', 'path' => 'app/settings/change_password.php', 'csrf_token_required' => true],
+        'diag_server_resources'     => ['mode' => 'non-interactive', 'permission' => 'main.diag_server_resources', 'path' => 'diagnostics/resources.php', 'csrf_token_required' => false],
+        'get_content'               => ['mode' => 'content-delivery', 'permission' => 'main.get_content', 'path' => 'app/content_delivery/get_content.php', 'csrf_token_required' => false],
+        'follow_channel'            => ['mode' => 'interactive', 'permission' => 'main.social.follow_channel', 'path' => 'app/channels/follow_channel.php', 'required' => ['id'], 'csrf_token_required' => true],
+        'star_content'              => ['mode' => 'interactive', 'permission' => 'main.social.star_content', 'path' => 'app/problems/star_content.php', 'required' => ['id'], 'csrf_token_required' => true],
+        'problem_recheck'           => ['mode' => 'interactive', 'permission' => 'main.solutions.exec.recheck', 'path' => 'worker/mq_producer.php', 'required' => ['sid'], 'csrf_token_required' => true],
+        'request_recheck'           => ['mode' => 'interactive', 'permission' => 'main.solutions.request_recheck', 'path' => 'app/problems/request_reevaluation.php', 'required' => ['sid'], 'csrf_token_required' => true],
+        'search'                    => ['mode' => 'non-interactive', 'permission' => 'main.channels.search', 'path' => 'app/content/search.php', 'required' => ['key'], 'csrf_token_required' => false]
+    ];
 
-	switch($script_config['mode'])
-	{
-		case 'interactive':
-			if(!is_logged_in()) kick();
-			if(!has_permission($script_config['permission'])) kick();
-			print('
+    $current_r = $_GET['r'] ?? 'none';
+    if (is_logged_in()) {
+        check_session_timeout();
+    }
+    if (!array_key_exists($current_r, $allowed_scripts)) {
+        kick();
+    }
+    $script_config = $allowed_scripts[$current_r];
+
+    switch ($script_config['mode']) {
+        case 'interactive':
+            if (!is_logged_in()) {
+                kick();
+            }
+            if (!has_permission($script_config['permission'])) {
+                kick();
+            }
+            print('
 				<style>
 					html {
 						background-color: rgba(39, 55, 71, 1);
 					}
 				</style>'
-			);
-			break;
-		case 'non-interactive':
-			if(!is_logged_in()) kick();
-			if(!has_permission($script_config['permission'])) kick();
-			break;
-		case 'content-delivery':
-			break;
-		case 'public':
-			if(!api_rate_limit_tick(120, 600)) {
-				header('HTTP/1.1 429 Too Many Requests');
-				die;
-			}
-			break;
-		case 'register':
-			if(is_logged_in()) kick();
-			if(!has_permission($script_config['permission'])) kick();
-			break;
-		case 'worker-api':
-			if(!net_check_if_trusted()) kick();
-			break;
-		default:
-			kick();
-			break;
-	}
+            );
+            break;
+        case 'non-interactive':
+            if (!is_logged_in()) {
+                kick();
+            }
+            if (!has_permission($script_config['permission'])) {
+                kick();
+            }
+            break;
+        case 'content-delivery':
+            break;
+        case 'public':
+            if (!api_rate_limit_tick(120, 600)) {
+                header('HTTP/1.1 429 Too Many Requests');
+                die;
+            }
+            break;
+        case 'register':
+            if (is_logged_in()) {
+                kick();
+            }
+            if (!has_permission($script_config['permission'])) {
+                kick();
+            }
+            break;
+        case 'worker-api':
+            if (!net_check_if_trusted()) {
+                kick();
+            }
+            break;
+        default:
+            kick();
+            break;
+    }
 
-	if (isset($script_config['required'])) {
+    if (isset($script_config['required'])) {
         foreach ($script_config['required'] as $req) {
             if (!isset($_GET[$req]) && !isset($_POST[$req])) {
                 kick();
@@ -91,22 +111,22 @@
         }
     }
 
-	if (!empty($script_config['csrf_token_required']) && $script_config['csrf_token_required']==True) {
-		$csrf_token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'];
-		if (!isset($csrf_token) || !hash_equals($_SESSION['CSRF_TOKEN'] ?? '', $csrf_token)) kick();
-	}
+    if (!empty($script_config['csrf_token_required']) && $script_config['csrf_token_required'] == true) {
+        $csrf_token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'];
+        if (!isset($csrf_token) || !hash_equals($_SESSION['CSRF_TOKEN'] ?? '', $csrf_token)) {
+            kick();
+        }
+    }
 
-	include(__DIR__.'/../../include/'.$script_config['path']);
+    include(__DIR__ . '/../../include/' . $script_config['path']);
 
-	if(boolval(get_misc_value('plugin_debugging')))
-	{
-		$time = (hrtime(true)-$start_time)/1e9;
-		$ip = get_real_client_ip();
-		log_insert(
-			'debug',
-			$ip,
-			"Executed <code>{$current_r}</code> in {$time} seconds.",
-			"{$ip} executed {$current_r} in {$time} seconds."
-		);
-	}
-?>
+    if (boolval(get_misc_value('plugin_debugging'))) {
+        $time = (hrtime(true) - $start_time) / 1e9;
+        $ip = get_real_client_ip();
+        log_insert(
+            'debug',
+            $ip,
+            "Executed <code>{$current_r}</code> in {$time} seconds.",
+            "{$ip} executed {$current_r} in {$time} seconds."
+        );
+    }

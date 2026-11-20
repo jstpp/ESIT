@@ -1,843 +1,862 @@
 <?php
-	$is_https =	(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-				|| ($_SERVER['SERVER_PORT'] ?? null) == 443
-				|| ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
 
-	if ($is_https) session_set_cookie_params([
-		'httponly' => true,
-		'secure'   => true,
-		'samesite' => 'Lax',
-	]);
+    $is_https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                || ($_SERVER['SERVER_PORT'] ?? null) == 443
+                || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
 
-	session_start();
+if ($is_https) {
+    session_set_cookie_params([
+    'httponly' => true,
+    'secure'   => true,
+    'samesite' => 'Lax',
+    ]);
+}
 
-	$worker_network_private_key = hex2bin($_ENV['NETWORK_PRIVATE_KEY']);
+    session_start();
 
-	###############################################
-	#               customization				  #
-	###############################################
+    $worker_network_private_key = hex2bin($_ENV['NETWORK_PRIVATE_KEY']);
 
-	# database connection
-	$db_host = "mysql"; #MySQL host
+    ###############################################
+    #               customization                 #
+    ###############################################
+
+    # database connection
+    $db_host = "mysql"; #MySQL host
     $db_username = $_ENV['MYSQL_USER']; #MySQL username
     $db_password = $_ENV['MYSQL_PASSWORD']; #MySQL password
     $db_database = $_ENV['MYSQL_DATABASE']; #MySQL db name
     $db_charset = "utf8mb4"; #MySQL charset
 
-	# broker connection
-	$rabbit_mq_host = "rabbitmq"; #Broker's host
+    # broker connection
+    $rabbit_mq_host = "rabbitmq"; #Broker's host
     $rabbit_mq_port = 5672; #Broker's access port
     $rabbit_mq_user = $_ENV['RABBITMQ_DEFAULT_USER']; #Broker's access username
     $rabbit_mq_password = $_ENV['RABBITMQ_DEFAULT_PASS']; #Broker's access password
 
-	# mailing settings
-	$mail_name = "ESIT Mailing Module"; #Name of the sender
-	$mail_smtp_debug = 0; #Mail debugging
-	$mail_smtp_auth = true;
+    # mailing settings
+    $mail_name = "ESIT Mailing Module"; #Name of the sender
+    $mail_smtp_debug = 0; #Mail debugging
+    $mail_smtp_auth = true;
 
-	# default variables
-	$default_variables = array(
-		'general_title' => 'My First ESIT app',
-		'general_motd' => 'Change your MOTD',
-		'general_url' => 'http://web',
-		'general_timezone' => 'Europe/Warsaw',
-		'general_default_language' => 'en_US.UTF-8',
-		'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1", "172.18.0.2", "172.18.0.3", "172.18.0.4", "172.18.0.5"]',
-		'general_trusted_proxies' => '["127.0.0.1", "::1"]',
-		'plugin_custom_error_broker_url' => 'http://localhost',
-		'plugin_mailing_module_host' => 'localhost',
-		'plugin_mailing_module_port' => 587,
-		'plugin_mailing_module_username' => 'YourUsername',
-		'plugin_mailing_module_password' => 'YourPassword',
-		'plugin_mailing_module_protocol' => 'starttls',
-	);
+    # default variables
+    $default_variables = array(
+        'general_title' => 'My First ESIT app',
+        'general_motd' => 'Change your MOTD',
+        'general_url' => 'http://web',
+        'general_timezone' => 'Europe/Warsaw',
+        'general_default_language' => 'en_US.UTF-8',
+        'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1", "172.18.0.2", "172.18.0.3", "172.18.0.4", "172.18.0.5"]',
+        'general_trusted_proxies' => '["127.0.0.1", "::1"]',
+        'plugin_custom_error_broker_url' => 'http://localhost',
+        'plugin_mailing_module_host' => 'localhost',
+        'plugin_mailing_module_port' => 587,
+        'plugin_mailing_module_username' => 'YourUsername',
+        'plugin_mailing_module_password' => 'YourPassword',
+        'plugin_mailing_module_protocol' => 'starttls',
+    );
 
-	###############################################
-	#		   	 database connection	     	  #
-	###############################################
+    ###############################################
+    #            database connection              #
+    ###############################################
 
-	$dsn = "mysql:host=$db_host;dbname=$db_database;charset=$db_charset";
+    $dsn = "mysql:host=$db_host;dbname=$db_database;charset=$db_charset";
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
     ];
 
-	try {
-    	$pdo = new PDO($dsn, $db_username, $db_password, $options);
-	}
-	catch (Throwable $t) {
-		echo("Database initialization failure. Please reload.");
-		die;
-	}
+    try {
+        $pdo = new PDO($dsn, $db_username, $db_password, $options);
+    } catch (Throwable $t) {
+        echo("Database initialization failure. Please reload.");
+        die;
+    }
 
 
-	###############################################
-	#          	         i18n					  #
-	###############################################
+    ###############################################
+    #                    i18n                     #
+    ###############################################
 
-	function __($text, $plural=null, $number=null) {
-		if (!isset($plural)) return _($text);
-		return ngettext($text, $plural, $number);
-	}
+    function __($text, $plural = null, $number = null)
+    {
+        if (!isset($plural)) {
+            return _($text);
+        }
+        return ngettext($text, $plural, $number);
+    }
 
-	function init_i18n($domain, $lang = ""): string {
-		try {	
-			if(strlen($lang)<5) $lang = $_SESSION['lang'] ?? get_misc_value("general_default_language");
-			if(!init_i18n_is_valid_locale($lang)) return get_misc_value("general_default_language");
+    function init_i18n($domain, $lang = ""): string
+    {
+        try {
+            if (strlen($lang) < 5) {
+                $lang = $_SESSION['lang'] ?? get_misc_value("general_default_language");
+            }
+            if (!init_i18n_is_valid_locale($lang)) {
+                return get_misc_value("general_default_language");
+            }
 
-			setlocale(LC_ALL, $lang);
-			bindtextdomain($domain, __DIR__.'/../../locale');
-			bind_textdomain_codeset($domain, 'UTF-8');
-			textdomain($domain);
-			
-			return $lang;
-		} catch (Throwable $t) {
-			extended_exception_handler($t);
-			return get_misc_value("general_default_language");
-		}
-	}
+            setlocale(LC_ALL, $lang);
+            bindtextdomain($domain, __DIR__ . '/../../locale');
+            bind_textdomain_codeset($domain, 'UTF-8');
+            textdomain($domain);
 
-	function init_i18n_is_valid_locale($lang): bool
-	{
-		return preg_match(
-			'/^[a-z]{2,3}(?:_[A-Z]{2}|\-[A-Z]{2})?(?:\.[A-Za-z0-9_-]+)?$/',
-			$lang
-		) === 1;
-	}
+            return $lang;
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return get_misc_value("general_default_language");
+        }
+    }
 
-	###############################################
-	#              general toolbox				  #
-	###############################################
+    function init_i18n_is_valid_locale($lang): bool
+    {
+        return preg_match(
+            '/^[a-z]{2,3}(?:_[A-Z]{2}|\-[A-Z]{2})?(?:\.[A-Za-z0-9_-]+)?$/',
+            $lang
+        ) === 1;
+    }
 
-	function get_misc_value(string $key): string
-	{
-		global $pdo;
-		$config_array = array();
+    ###############################################
+    #              general toolbox                #
+    ###############################################
 
-		$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name=:key LIMIT 1');
-		$db_query->execute(['key' => $key]);
+    function get_misc_value(string $key): string
+    {
+        global $pdo;
+        $config_array = array();
 
-		if($row = $db_query->fetch()) return $row['misc_value'];
+        $db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name=:key LIMIT 1');
+        $db_query->execute(['key' => $key]);
 
-		global $default_variables;
-		return (isset($default_variables[$key])) ? $default_variables[$key] : "";
-	}
+        if ($row = $db_query->fetch()) {
+            return $row['misc_value'];
+        }
 
-	function force_to_login(): void
-	{
-		if (!headers_sent()) header("Location: /login", true, 302);
-		echo('<meta http-equiv="refresh" content="0; url=/login" />');
-		die;
-	}
+        global $default_variables;
+        return (isset($default_variables[$key])) ? $default_variables[$key] : "";
+    }
 
-	function kick(): void
-	{
-		if(boolval(get_misc_value('plugin_errors')) && boolval(get_misc_value('plugin_custom_error_broker_url')))
-		{
-			$error_link = get_misc_value('plugin_custom_error_broker_url');
-		} else {
-			$error_link = boolval(get_misc_value('general_url')) ? get_misc_value('general_url')."/error.php" : "http://localhost/error.php";
-		}
+    function force_to_login(): void
+    {
+        if (!headers_sent()) {
+            header("Location: /login", true, 302);
+        }
+        echo('<meta http-equiv="refresh" content="0; url=/login" />');
+        die;
+    }
 
-		redirect($error_link);
-	}
+    function kick(): void
+    {
+        if (boolval(get_misc_value('plugin_errors')) && boolval(get_misc_value('plugin_custom_error_broker_url'))) {
+            $error_link = get_misc_value('plugin_custom_error_broker_url');
+        } else {
+            $error_link = boolval(get_misc_value('general_url')) ? get_misc_value('general_url') . "/error.php" : "http://localhost/error.php";
+        }
 
-	function redirect(string $dest): void
-	{
-		if (!headers_sent()) {
-			header("Location: ".$dest, true, 302);
-		} else {
-			echo '<meta http-equiv="refresh" content="0; url='.htmlspecialchars($dest).'"/>';
-		}
-		die;
-	}
+        redirect($error_link);
+    }
 
-	function display_message(
-		string $type, 
-		string $header, 
-		string $message
-	): void
-	{
-		if(!isset($type) || !isset($header) || !isset($message)) kick();
-		$type = htmlspecialchars($type, ENT_QUOTES, 'UTF-8');
-		$header = htmlspecialchars($header, ENT_QUOTES, 'UTF-8');
-		$message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
-		if(empty($type) || empty($header) || empty($message)) kick();
-		
-		echo('<div onClick="this.remove();" style="display: flex; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
+    function redirect(string $dest): void
+    {
+        if (!headers_sent()) {
+            header("Location: " . $dest, true, 302);
+        } else {
+            echo '<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($dest) . '"/>';
+        }
+        die;
+    }
+
+    function display_message(
+        string $type,
+        string $header,
+        string $message
+    ): void {
+        if (!isset($type) || !isset($header) || !isset($message)) {
+            kick();
+        }
+        $type = htmlspecialchars($type, ENT_QUOTES, 'UTF-8');
+        $header = htmlspecialchars($header, ENT_QUOTES, 'UTF-8');
+        $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+        if (empty($type) || empty($header) || empty($message)) {
+            kick();
+        }
+
+        echo('<div onClick="this.remove();" style="display: flex; justify-content: center; align-items: center; margin: 0; min-width: 100vw; min-height: 100vh; background-color: rgba(0,0,0,0.6); position: fixed; top: 0; left: 0; z-index: 999">
 			<div style="background-color: var(--bg); color: var(--text); width: 30vmax; max-height: 60vh; padding: 1vmax 1vmax; border-radius: 0.2vmax;">');
 
-		switch($type)
-		{
-			case "error":
-				echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 80, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
-				break;
-			case "warning":
-				echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 172, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
-				break;
-			case "success":
-				echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgba(80, 180, 132, 1); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
-				break;
-			default:
-				echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(80, 143, 180); color: #dae2e6; width: 100%; text-align: center;"><h2>'.htmlentities($header).'</h2></div><br />');
-				break;
-		}
+        switch ($type) {
+            case "error":
+                echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 80, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>' . htmlentities($header) . '</h2></div><br />');
+                break;
+            case "warning":
+                echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(180, 172, 80); color: #dae2e6; width: 100%; text-align: center;"><h2>' . htmlentities($header) . '</h2></div><br />');
+                break;
+            case "success":
+                echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgba(80, 180, 132, 1); color: #dae2e6; width: 100%; text-align: center;"><h2>' . htmlentities($header) . '</h2></div><br />');
+                break;
+            default:
+                echo('<div style="margin-left: -1vmax; border-radius: 0.2vmax; margin-top: -1vmax; padding: 1vmax 1vmax; background-color: rgb(80, 143, 180); color: #dae2e6; width: 100%; text-align: center;"><h2>' . htmlentities($header) . '</h2></div><br />');
+                break;
+        }
 
-		echo(htmlentities($message));
+        echo(htmlentities($message));
 
-		echo('<br /><br /></div>
+        echo('<br /><br /></div>
 		</div>');
-	}
+    }
 
-	function is_an_user(string $key): bool
-	{
-		global $pdo;
+    function is_an_user(string $key): bool
+    {
+        global $pdo;
 
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS WHERE username=:key1 OR mail=:key2');
-		$db_query->execute(['key1' => $key, 'key2' => $key]);
-		
-		return ($db_query->fetch()['count'] > 0);
-	}
+        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM USERS WHERE username=:key1 OR mail=:key2');
+        $db_query->execute(['key1' => $key, 'key2' => $key]);
 
-	function is_logged_in(): bool
-	{
-		return isset($_SESSION['AUTH_ID']);
-	}
-	
-	function get_roles($user_id = 0): array
-	{
-		global $pdo;
+        return ($db_query->fetch()['count'] > 0);
+    }
 
-		if(!is_logged_in()) return [];
-		if($user_id===0) $user_id = $_SESSION['AUTH_ID'];
+    function is_logged_in(): bool
+    {
+        return isset($_SESSION['AUTH_ID']);
+    }
 
-		$db_query = $pdo->prepare('SELECT ROLES.* FROM ROLES INNER JOIN AFFILIATION ON ROLES.ROLE_ID=AFFILIATION.role_id WHERE AFFILIATION.user_id=:uid ORDER BY ROLES.priority');
-		$db_query->execute(['uid' => $user_id]);
+    function get_roles($user_id = 0): array
+    {
+        global $pdo;
 
-		$result = $db_query->fetchAll();
-		return (count($result)>0) ? $result : [];
-	}
+        if (!is_logged_in()) {
+            return [];
+        }
+        if ($user_id === 0) {
+            $user_id = $_SESSION['AUTH_ID'];
+        }
 
-	function has_permission(
-		string $permission_name, 
-		$user_id = 0
-	): bool
-	{
-		global $pdo;
+        $db_query = $pdo->prepare('SELECT ROLES.* FROM ROLES INNER JOIN AFFILIATION ON ROLES.ROLE_ID=AFFILIATION.role_id WHERE AFFILIATION.user_id=:uid ORDER BY ROLES.priority');
+        $db_query->execute(['uid' => $user_id]);
 
-		if (!is_logged_in())
-		{
-			$db_query = $pdo->prepare('SELECT PERMISSION_ID FROM PERMISSIONS INNER JOIN ROLES ON PERMISSIONS.role_id=ROLES.ROLE_ID WHERE ROLES.role_name="undefined" AND (PERMISSIONS.permission LIKE :permission1 OR PERMISSIONS.permission="*" OR RIGHT(PERMISSIONS.permission, 1)="*" AND :permission2 LIKE CONCAT(LEFT(PERMISSIONS.permission, LENGTH(PERMISSIONS.permission) - 1), "%"))');
-			$db_query->execute(['permission1' => $permission_name, 'permission2' => $permission_name]);
-			return ($db_query->fetch()) ? True : False;
-		}
+        $result = $db_query->fetchAll();
+        return (count($result) > 0) ? $result : [];
+    }
 
-		if ($user_id===0) $user_id = $_SESSION['AUTH_ID'];
-		$db_query = $pdo->prepare('SELECT PERMISSION_ID FROM PERMISSIONS INNER JOIN AFFILIATION ON PERMISSIONS.role_id=AFFILIATION.role_id WHERE AFFILIATION.user_id=:uid AND (PERMISSIONS.permission LIKE :permission1 OR PERMISSIONS.permission="*" OR RIGHT(PERMISSIONS.permission, 1)="*" AND :permission2 LIKE CONCAT(LEFT(PERMISSIONS.permission, LENGTH(PERMISSIONS.permission) - 1), "%"))');
-		$db_query->execute(['uid' => $user_id, 'permission1' => $permission_name, 'permission2' => $permission_name]);
-		
-		return ($db_query->fetch()) ? True : False;
-	}
+    function has_permission(
+        string $permission_name,
+        $user_id = 0
+    ): bool {
+        global $pdo;
 
-	function check_session_timeout(): void
-	{
-		if (!isset($_SESSION['SESSION_TIMEOUT'])) force_to_login();
-		if ($_SESSION['SESSION_TIMEOUT'] < time())
-		{
-			session_destroy();
-			force_to_login();
-			die;
-		} else {
-			$_SESSION['SESSION_TIMEOUT'] = time() + 14400;
-		}
+        if (!is_logged_in()) {
+            $db_query = $pdo->prepare('SELECT PERMISSION_ID FROM PERMISSIONS INNER JOIN ROLES ON PERMISSIONS.role_id=ROLES.ROLE_ID WHERE ROLES.role_name="undefined" AND (PERMISSIONS.permission LIKE :permission1 OR PERMISSIONS.permission="*" OR RIGHT(PERMISSIONS.permission, 1)="*" AND :permission2 LIKE CONCAT(LEFT(PERMISSIONS.permission, LENGTH(PERMISSIONS.permission) - 1), "%"))');
+            $db_query->execute(['permission1' => $permission_name, 'permission2' => $permission_name]);
+            return ($db_query->fetch()) ? true : false;
+        }
 
-	}
+        if ($user_id === 0) {
+            $user_id = $_SESSION['AUTH_ID'];
+        }
+        $db_query = $pdo->prepare('SELECT PERMISSION_ID FROM PERMISSIONS INNER JOIN AFFILIATION ON PERMISSIONS.role_id=AFFILIATION.role_id WHERE AFFILIATION.user_id=:uid AND (PERMISSIONS.permission LIKE :permission1 OR PERMISSIONS.permission="*" OR RIGHT(PERMISSIONS.permission, 1)="*" AND :permission2 LIKE CONCAT(LEFT(PERMISSIONS.permission, LENGTH(PERMISSIONS.permission) - 1), "%"))');
+        $db_query->execute(['uid' => $user_id, 'permission1' => $permission_name, 'permission2' => $permission_name]);
 
-	function net_check_if_trusted(): bool
-	{
-		$allowed = json_decode(get_misc_value('general_workers_allowed_addr'), true);	
+        return ($db_query->fetch()) ? true : false;
+    }
+
+    function check_session_timeout(): void
+    {
+        if (!isset($_SESSION['SESSION_TIMEOUT'])) {
+            force_to_login();
+        }
+        if ($_SESSION['SESSION_TIMEOUT'] < time()) {
+            session_destroy();
+            force_to_login();
+            die;
+        } else {
+            $_SESSION['SESSION_TIMEOUT'] = time() + 14400;
+        }
+    }
+
+    function net_check_if_trusted(): bool
+    {
+        $allowed = json_decode(get_misc_value('general_workers_allowed_addr'), true);
         return is_array($allowed) && in_array(get_real_client_ip(), $allowed, true);
-	}
+    }
 
-	function get_real_client_ip(): string
-	{
-		$remote_addr = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    function get_real_client_ip(): string
+    {
+        $remote_addr = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 
-		if (!in_array($remote_addr, json_decode(get_misc_value('general_trusted_proxies'), true), true)) return $remote_addr;
-		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-			$client_ip = trim($ips[0]);
+        if (!in_array($remote_addr, json_decode(get_misc_value('general_trusted_proxies'), true), true)) {
+            return $remote_addr;
+        }
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $client_ip = trim($ips[0]);
 
-			if (filter_var($client_ip, FILTER_VALIDATE_IP)) return $client_ip;
-		}
+            if (filter_var($client_ip, FILTER_VALIDATE_IP)) {
+                return $client_ip;
+            }
+        }
 
-		return $remote_addr;
-	}
+        return $remote_addr;
+    }
 
-	function include_plugins_for(
-		string $element, 
-		?string $plugin = null
-	): bool
-	{
-		if(!isset($element)) return False;
-
-		global $pdo;
-		$element = basename($element);
-		if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $element)) return False; 
-		
-		$base_dir = realpath(__DIR__ . "/../plugins");
-
-		if (!isset($plugin)) {
-			$db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_value=1 AND misc_name LIKE "community_plugin_%"');
-			$db_query->execute();
-
-			while($row = $db_query->fetch())
-			{
-				$plugin_name = substr($row['misc_name'], 17);
-				if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin_name)) continue;
-				$plugin_path = realpath($base_dir . "/" . $plugin_name . "/include/" . $element . ".php");
-
-				try {
-					if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) include($plugin_path);
-				} catch (Throwable $t) {
-					extended_exception_handler($t);
-					continue;
-				}
-			}
-		} else {
-			try {
-				if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin)) return False;
-
-				$plugin_path = realpath($base_dir . "/" . $plugin . "/include/" . $element . ".php");
-				
-				if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) {
-					include($plugin_path);
-				} else {
-					return False;
-				}
-			} catch (Throwable $t) {
-				extended_exception_handler($t);
-				return False;
-			}
-		}
-		return True;
-	}
-
-	function copy_directory(
-		string $src, 
-		string $dst
-	): bool 
-	{
-		$dir = opendir($src);
-		try {
-			mkdir($dst, 0755, true);
-		} catch (Throwable $t) {
-			extended_exception_handler($t);
-			closedir($dir);
-			return False;
-		}
-
-		try {
-			while (false !== ($file = readdir($dir))) {
-				if (($file != '.') && ($file != '..')) {
-					if (is_dir($src . '/' . $file)) {
-						copy_directory($src . '/' . $file, $dst . '/' . $file);
-					} else {
-						copy($src . '/' . $file, $dst . '/' . $file);
-					}
-				}
-			}
-			closedir($dir);
-		} catch (Throwable $t) {
-			extended_exception_handler($t);
-			closedir($dir);
-			return False;
-		}
-		return True;
-	}
-
-	function delete_directory(string $dir): bool
-	{
-		if (!is_dir($dir)) return False;
-
-		$files = array_diff(scandir($dir), array('.', '..'));
-
-		foreach ($files as $file) {
-			$path = "$dir/$file";
-			(is_dir($path)) ? delete_directory($path) : unlink($path);
-		}
-
-		return rmdir($dir);
-	}
-
-	function extract_zip(
-		string $path, 
-		string $dest, 
-		int $max_files = 10000, 
-		int $max_uncompressed_size = 1024 * 1024 * 512,
-		int $max_zip_size = 1024 * 1024 * 128
-	): bool
-	{
-
-		$file_size = filesize($path);
-		if ($file_size === false || $file_size > $max_zip_size) return False;
-		
-		$zip = new ZipArchive();
-		if($zip->open($path) !== True) return False;
-
-		$real_base_dir = realpath($dest);
-		if ($real_base_dir === False) 
-		{
-			$zip->close();
-			return False;
-		}
-
-        if ($zip->numFiles > $max_files) {
-			$zip->close();
+    function include_plugins_for(
+        string $element,
+        ?string $plugin = null
+    ): bool {
+        if (!isset($element)) {
             return false;
         }
 
-		$total_size = 0;
+        global $pdo;
+        $element = basename($element);
+        if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $element)) {
+            return false;
+        }
 
-		for ($i = 0; $i<$zip->numFiles; $i++) 
-		{
-			$stat = $zip->statIndex($i);
-			$filename = $zip->getNameIndex($i);
-			
-			if ($stat === false || $filename === false) {
-				$zip->close();
-				return false;
-			}
+        $base_dir = realpath(__DIR__ . "/../plugins");
 
-			if (strpos($filename, '../') !== False || strpos($filename, '..\\') !== False) {
-				$zip->close();
-				return False;
-			}
+        if (!isset($plugin)) {
+            $db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_value=1 AND misc_name LIKE "community_plugin_%"');
+            $db_query->execute();
 
-			if (strpos($filename, '/') === 0 || strpos($filename, '\\') === 0) {
-				$zip->close();
-				return False;
-			}
+            while ($row = $db_query->fetch()) {
+                $plugin_name = substr($row['misc_name'], 17);
+                if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin_name)) {
+                    continue;
+                }
+                $plugin_path = realpath($base_dir . "/" . $plugin_name . "/include/" . $element . ".php");
 
-			$size = (int)($stat['size'] ?? 0);
+                try {
+                    if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) {
+                        include($plugin_path);
+                    }
+                } catch (Throwable $t) {
+                    extended_exception_handler($t);
+                    continue;
+                }
+            }
+        } else {
+            try {
+                if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $plugin)) {
+                    return false;
+                }
+
+                $plugin_path = realpath($base_dir . "/" . $plugin . "/include/" . $element . ".php");
+
+                if ($plugin_path && strpos($plugin_path, $base_dir) === 0 && file_exists($plugin_path)) {
+                    include($plugin_path);
+                } else {
+                    return false;
+                }
+            } catch (Throwable $t) {
+                extended_exception_handler($t);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function copy_directory(
+        string $src,
+        string $dst
+    ): bool {
+        $dir = opendir($src);
+        try {
+            mkdir($dst, 0755, true);
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            closedir($dir);
+            return false;
+        }
+
+        try {
+            while (false !== ($file = readdir($dir))) {
+                if (($file != '.') && ($file != '..')) {
+                    if (is_dir($src . '/' . $file)) {
+                        copy_directory($src . '/' . $file, $dst . '/' . $file);
+                    } else {
+                        copy($src . '/' . $file, $dst . '/' . $file);
+                    }
+                }
+            }
+            closedir($dir);
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            closedir($dir);
+            return false;
+        }
+        return true;
+    }
+
+    function delete_directory(string $dir): bool
+    {
+        if (!is_dir($dir)) {
+            return false;
+        }
+
+        $files = array_diff(scandir($dir), array('.', '..'));
+
+        foreach ($files as $file) {
+            $path = "$dir/$file";
+            (is_dir($path)) ? delete_directory($path) : unlink($path);
+        }
+
+        return rmdir($dir);
+    }
+
+    function extract_zip(
+        string $path,
+        string $dest,
+        int $max_files = 10000,
+        int $max_uncompressed_size = 1024 * 1024 * 512,
+        int $max_zip_size = 1024 * 1024 * 128
+    ): bool {
+
+        $file_size = filesize($path);
+        if ($file_size === false || $file_size > $max_zip_size) {
+            return false;
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($path) !== true) {
+            return false;
+        }
+
+        $real_base_dir = realpath($dest);
+        if ($real_base_dir === false) {
+            $zip->close();
+            return false;
+        }
+
+        if ($zip->numFiles > $max_files) {
+            $zip->close();
+            return false;
+        }
+
+        $total_size = 0;
+
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $stat = $zip->statIndex($i);
+            $filename = $zip->getNameIndex($i);
+
+            if ($stat === false || $filename === false) {
+                $zip->close();
+                return false;
+            }
+
+            if (strpos($filename, '../') !== false || strpos($filename, '..\\') !== false) {
+                $zip->close();
+                return false;
+            }
+
+            if (strpos($filename, '/') === 0 || strpos($filename, '\\') === 0) {
+                $zip->close();
+                return false;
+            }
+
+            $size = (int)($stat['size'] ?? 0);
             if ($size < 0) {
-				$zip->close();
-				return False;
-			}
-            
+                $zip->close();
+                return false;
+            }
+
             $total_size += $size;
             if ($total_size > $max_uncompressed_size) {
-				$zip->close();
-				return False;
-			}
-		}
+                $zip->close();
+                return false;
+            }
+        }
 
-		$success = $zip->extractTo($real_base_dir);
-    	$zip->close();
-		return $success;
-	}
+        $success = $zip->extractTo($real_base_dir);
+        $zip->close();
+        return $success;
+    }
 
-	function load_img_input(
-		?array $img = null, 
-		?string $target_root_dir = null
-	): string
-	{
-		$allowed_types = [
-							'image/jpeg' => 'jpg',
-							'image/png'  => 'png',
-							'image/webp' => 'webp'
-						 ];
+    function load_img_input(
+        ?array $img = null,
+        ?string $target_root_dir = null
+    ): string {
+        $allowed_types = [
+                            'image/jpeg' => 'jpg',
+                            'image/png'  => 'png',
+                            'image/webp' => 'webp'
+                         ];
 
-		$placeholder = "../img/placeholder.jpeg";
+        $placeholder = "../img/placeholder.jpeg";
 
-		if (!isset($img)) return $placeholder;
+        if (!isset($img)) {
+            return $placeholder;
+        }
 
-		if (
-			!isset($target_root_dir) 
-			|| !isset($img['tmp_name']) 
-			|| $img['error'] !== UPLOAD_ERR_OK
-		)
-		{
-			log_insert('debug', get_real_client_ip(), 'load_img_input(): File upload/read unsuccessful', 'load_img_input(): File upload/read unsuccessful');
-			return $placeholder;
-		}
+        if (
+            !isset($target_root_dir)
+            || !isset($img['tmp_name'])
+            || $img['error'] !== UPLOAD_ERR_OK
+        ) {
+            log_insert('debug', get_real_client_ip(), 'load_img_input(): File upload/read unsuccessful', 'load_img_input(): File upload/read unsuccessful');
+            return $placeholder;
+        }
 
-		$base_dir = realpath($target_root_dir);
-		if (!$base_dir || !is_dir($base_dir))
-		{
-			log_insert('debug', get_real_client_ip(), 'load_img_input(): Base directory doesn\'t exist', 'load_img_input(): Base directory doesn\'t exist');
-			return $placeholder;
-		}
+        $base_dir = realpath($target_root_dir);
+        if (!$base_dir || !is_dir($base_dir)) {
+            log_insert('debug', get_real_client_ip(), 'load_img_input(): Base directory doesn\'t exist', 'load_img_input(): Base directory doesn\'t exist');
+            return $placeholder;
+        }
 
-		if(!isset($img, $target_root_dir)) 
-		{
-			log_insert('debug', get_real_client_ip(), 'load_img_input(): Improper filename or path', 'load_img_input(): Improper filename or path');
-			return $placeholder;
-		}
+        if (!isset($img, $target_root_dir)) {
+            log_insert('debug', get_real_client_ip(), 'load_img_input(): Improper filename or path', 'load_img_input(): Improper filename or path');
+            return $placeholder;
+        }
 
-		try {
-			$finfo = new finfo(FILEINFO_MIME_TYPE);
-			$mime_type = $finfo->file($img["tmp_name"]);
+        try {
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime_type = $finfo->file($img["tmp_name"]);
 
-			if (
-				getimagesize($img["tmp_name"]) == false 
-				|| ($img["size"] > 20000000 || filesize($img["tmp_name"]) > 20000000)
-				|| !array_key_exists($mime_type, $allowed_types)
-			) 
-			{
-				log_insert('debug', get_real_client_ip(), 'load_img_input(): Improper file format', 'load_img_input(): Improper file format');
-				return $placeholder;
-			}	
+            if (
+                getimagesize($img["tmp_name"]) == false
+                || ($img["size"] > 20000000 || filesize($img["tmp_name"]) > 20000000)
+                || !array_key_exists($mime_type, $allowed_types)
+            ) {
+                log_insert('debug', get_real_client_ip(), 'load_img_input(): Improper file format', 'load_img_input(): Improper file format');
+                return $placeholder;
+            }
 
-			$index = hash('sha256', (new DateTime())->format('Uv') . random_bytes(5));
-			$target_file = $base_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
+            $index = hash('sha256', (new DateTime())->format('Uv') . random_bytes(5));
+            $target_file = $base_dir . DIRECTORY_SEPARATOR . $index . "." . $allowed_types[$mime_type];
 
-			if (
-				file_exists($target_file)
-				|| strpos($target_file, $base_dir) !== 0
-				|| !move_uploaded_file($img["tmp_name"], $target_file)
-			) 
-			{
-				log_insert('debug', get_real_client_ip(), 'load_img_input(): File moving unsuccessful', 'load_img_input(): File moving unsuccessful');
-				return $placeholder;
-			}
+            if (
+                file_exists($target_file)
+                || strpos($target_file, $base_dir) !== 0
+                || !move_uploaded_file($img["tmp_name"], $target_file)
+            ) {
+                log_insert('debug', get_real_client_ip(), 'load_img_input(): File moving unsuccessful', 'load_img_input(): File moving unsuccessful');
+                return $placeholder;
+            }
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return $placeholder;
+        }
+        return $target_root_dir . DIRECTORY_SEPARATOR . $index . "." . $allowed_types[$mime_type];
+    }
 
-		} catch (Throwable $t) {
-			extended_exception_handler($t);
-			return $placeholder;
-		}
-		return $target_root_dir.DIRECTORY_SEPARATOR.$index.".".$allowed_types[$mime_type];
-	}
-
-	function log_insert(
-		string $category, 
-		string $ip, 
-		string $content, 
-		string $details
-	): bool
-    {
+    function log_insert(
+        string $category,
+        string $ip,
+        string $content,
+        string $details
+    ): bool {
         try {
             global $pdo;
 
             $db_query = $pdo->prepare('INSERT INTO LOGS (category, ip, content, details) VALUES (:category, :ip, :content, :details)');
-            $db_query->execute(['category' => $category, 
-                                'ip' => $ip, 
-                                'content' => $content, 
+            $db_query->execute(['category' => $category,
+                                'ip' => $ip,
+                                'content' => $content,
                                 'details' => $details]);
 
-            return True;
+            return true;
         } catch (Throwable $t) {
-			extended_exception_handler($t);
-            return False;
+            extended_exception_handler($t);
+            return false;
         }
     }
 
-	function parse_flash_messages(): void
-	{
-		if(isset($_SESSION['flash_messages']) && count($_SESSION['flash_messages'])>0)
-		{
-			foreach($_SESSION['flash_messages'] as $message)
-			{
-				display_message($message['type'], $message['header'], $message['content']);
-			}
-			unset($_SESSION['flash_messages']);
-		}
-	}
-
-	function insert_flash_message(
-		string $type, 
-		string $header, 
-		?string $content = null
-	): void
-	{
-		if (!isset($_SESSION['flash_messages']) || !is_array($_SESSION['flash_messages'])) $_SESSION['flash_messages'] = [];
-
-		$_SESSION['flash_messages'][] = [
-			'type'    => $type,
-			'header'  => $header,
-			'content' => $content ?? '',
-		];
-	}
-
-	function content_type_identification(string $type): array {
-		$problem_types = [
-			'alg'     => ['full_name' => __('Algorithmic task'), 'icon' => 'fas fa-file-code', 'color' => 'rgba(0, 121, 250, 1)'],
-			'ctf'     => ['full_name' => __('Capture The Flag'), 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
-			'och'     => ['full_name' => __('Single choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgb(1, 120, 84)'],
-			'mch'     => ['full_name' => __('Multiple choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgb(218, 98, 6)'],
-			'opn'     => ['full_name' => __('Open-ended'), 'icon' => 'fa fa-pencil-square', 'color' => 'rgba(69, 47, 165, 1)'],
-			'vid'	  => ['full_name' => __('Video'), 'icon' => 'fas fa-play', 'color' => 'rgb(165, 47, 165)'],
-			'art'	  => ['full_name' => __('Article'), 'icon' => 'fas fa-book-open', 'color' => 'rgb(110, 67, 14)'],
-			'unk'     => ['full_name' => __('Unknown'), 'icon' => 'fas fa-bug', 'color' => 'rgba(120, 120, 120, 1)']
-		];
-
-		return $problem_types[$type] ?? [];
-	}
-
-	function check_problemset_availability(
-		int $set_id, 
-		$pdo
-	): array
-	{
-		$status = array('is_available' => 'false', 'condition_title' => 'Unknown', 'condition_id' => -1);
-		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID = :sid');
-		$db_query->execute(['sid' => $set_id]);
-		$set = $db_query->fetch();
-
-		if (!$set)
-		{ 
-			$status['is_available'] = False;
-			return $status;
-		}
-		$condition = json_decode($set['depends_on']);
-		$status['condition_id'] = $condition->id;
-		$db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:sid');
-		$db_query->execute(['sid' => $condition->id]);
-		if($row = $db_query->fetch()) $status['condition_title'] = $row['title'];
-
-		if (!isset($condition->type) || $condition->type === 'none') 
-		{
-			$status['is_available'] = True;
-			return $status;
-		}
-		$required_set_id = $condition->id;
-
-		$db_query = $pdo->prepare('SELECT CONTENT_ID, maxpoints FROM CONTENT WHERE problemset = :pid');
-		$db_query->execute(['pid' => $required_set_id]);
-		$problems = $db_query->fetchAll();
-
-		if (empty($problems)) 
-		{
-			$status['is_available'] = False;
-			return $status;
-		}
-
-		foreach ($problems as $row) {
-			$cdb_query = $pdo->prepare('SELECT MAX(score) AS maxscore FROM SUBMISSIONS WHERE problem_id = :pid AND user_id = :uid');
-			$cdb_query->execute([
-				'pid' => $row['CONTENT_ID'], 
-				'uid' => $_SESSION['AUTH_ID']
-			]);
-			$ctx = $cdb_query->fetch();
-
-			$maxscore = ($ctx && (int)$ctx['maxscore'] !== -1) ? (float)$ctx['maxscore'] : 0;
-			$maxpoints = (float)$row['maxpoints'];
-
-			$percentage = ($maxpoints > 0) ? ($maxscore / $maxpoints) * 100 : 0;
-
-			if (round($percentage, 0) < 50) {
-				$status['is_available'] = False;
-				return $status;
-			}
-		}
-		$status['is_available'] = True;
-		return $status;
-	}
-
-	function api_rate_limit_tick(
-		int $limit, 
-		int $time_range): bool
-	{
-		$now = time();
-		$_SESSION['api_rate_limit_tick'] ??= [];
-
-		$_SESSION['api_rate_limit_tick'] = array_filter(
-			$_SESSION['api_rate_limit_tick'],
-			fn(int $timestamp) => $now - $timestamp <= $time_range
-		);
-
-		$_SESSION['api_rate_limit_tick'][] = $now;
-		return count($_SESSION['api_rate_limit_tick']) <= $limit;
-	}
-
-	function import_user_settings(): array
-	{
-		global $pdo;
-
-		$db_query = $pdo->prepare('SELECT * FROM USERS WHERE USER_ID=:uid LIMIT 1');
-		$db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
-		$user = $db_query->fetch();
-
-		return $user ?? [];
-	}
-
-	function count_channel_followers(int $channel_id): int
-	{
-		global $pdo;
-
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM FOLLOWERS WHERE channel_id=:cid');
-		$db_query->execute(['cid' => $channel_id]);
-		$count = $db_query->fetch()['count'];
-
-		return $count ?? 0;
-	}
-
-	function count_content_stars(int $content_id): int
-	{
-		global $pdo;
-
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM STARS WHERE content_id=:cid');
-		$db_query->execute(['cid' => $content_id]);
-		$count = $db_query->fetch()['count'];
-
-		return $count ?? 0;
-	}
-
-	function check_star(
-		int $content_id, 
-		$user_id): bool
-	{
-		global $pdo;
-
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM STARS WHERE content_id=:cid AND user_id=:uid');
-		$db_query->execute(['cid' => $content_id, 'uid' =>  $user_id]);
-		$count = $db_query->fetch()['count'];
-
-		return ($count>0) ? True : False;
-	}
-
-	function check_follow(
-		int $channel_id, 
-		$user_id
-	): bool
-	{
-		global $pdo;
-
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM FOLLOWS WHERE channel_id=:cid AND user_id=:uid');
-		$db_query->execute(['cid' => $channel_id, 'uid' =>  $user_id]);
-		$count = $db_query->fetch()['count'];
-
-		return ($count>0) ? True : False;
-	}
-
-	function regenerate_csrf_token(): bool
-	{
-		try {
-			$_SESSION['CSRF_TOKEN'] = bin2hex(random_bytes(32));
-		} catch (Throwable $t)
-		{
-			extended_exception_handler($t);
-			return False;
-		}
-		return True;
-	}
-
-	function generate_recovery_token(string $mail): string
-	{
-		global $pdo;
-
-		try {
-			if(strlen(trim($mail))<2) throw new Exception("Password recovery: incorrect mail format.");
-		} catch (Throwable $t)
-		{
-			extended_exception_handler($t);
-			return "";
-		}
-
-		$token = password_hash($mail.bin2hex(random_bytes(32)), PASSWORD_ARGON2ID);
-
-		try {
-			$db_query = $pdo->prepare('INSERT INTO PASSWORD_RECOVERY (token, mail) VALUES (:token, :mail)');
-			$db_query->execute(['token' => $token, 'mail' => $mail]);
-		} catch (Throwable $t)
-		{
-			extended_exception_handler($t);
-			return "";
-		}
-
-		return $token;
-	}
-
-	function verify_recovery_token(
-		string $mail, 
-		string $token
-	): bool
-	{
-		global $pdo;
-
-		try {
-			if(strlen(trim($mail))<2) throw new Exception("Password recovery: incorrect mail format.");
-		} catch (Throwable $t)
-		{
-			extended_exception_handler($t);
-			return False;
-		}
-
-		try {
-			$db_query = $pdo->prepare('SELECT * FROM PASSWORD_RECOVERY WHERE token=:token AND mail=:mail AND expiration_time > CURRENT_TIMESTAMP()');
-			$db_query->execute(['token' => $token, 'mail' => $mail]);
-			if($row = $db_query->fetch()) {
-				$db_query = $pdo->prepare('DELETE FROM PASSWORD_RECOVERY WHERE token=:token AND mail=:mail AND expiration_time > CURRENT_TIMESTAMP()');
-				$db_query->execute(['token' => $token, 'mail' => $mail]);
-				return True;
-			}
-		} catch (Throwable $t)
-		{
-			extended_exception_handler($t);
-			return False;
-		}
-
-		return False;
-	}
-
-
-	###############################################
-	#       just another extension point		  #
-	###############################################
-
-	include_plugins_for("core");
-
-
-	###############################################
-	#              some automation				  #
-	###############################################
-
-	if(isset($_SESSION['flash_messages'])) parse_flash_messages();
-
-	try {
-		date_default_timezone_set(get_misc_value('general_timezone'));
-	} catch (Exception $t) {
-		extended_exception_handler($t);
-		echo("Invalid timezone.");
-	}
-
-	include(__DIR__."/../diagnostics/error_handler.php");
-
-	if (is_logged_in() and has_permission('main.admin.plugins.%')) {
-		include_once(__DIR__."/plugins/plugin_manager.php");
-		$plugin_manager = new PluginManager($pdo);
-	}
-
-	if(boolval(get_misc_value('plugin_debugging')))
+    function parse_flash_messages(): void
     {
+        if (isset($_SESSION['flash_messages']) && count($_SESSION['flash_messages']) > 0) {
+            foreach ($_SESSION['flash_messages'] as $message) {
+                display_message($message['type'], $message['header'], $message['content']);
+            }
+            unset($_SESSION['flash_messages']);
+        }
+    }
+
+    function insert_flash_message(
+        string $type,
+        string $header,
+        ?string $content = null
+    ): void {
+        if (!isset($_SESSION['flash_messages']) || !is_array($_SESSION['flash_messages'])) {
+            $_SESSION['flash_messages'] = [];
+        }
+
+        $_SESSION['flash_messages'][] = [
+            'type'    => $type,
+            'header'  => $header,
+            'content' => $content ?? '',
+        ];
+    }
+
+    function content_type_identification(string $type): array
+    {
+        $problem_types = [
+            'alg'     => ['full_name' => __('Algorithmic task'), 'icon' => 'fas fa-file-code', 'color' => 'rgba(0, 121, 250, 1)'],
+            'ctf'     => ['full_name' => __('Capture The Flag'), 'icon' => 'fa-solid fa-flag', 'color' => 'rgba(208, 72, 72, 1)'],
+            'och'     => ['full_name' => __('Single choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgb(1, 120, 84)'],
+            'mch'     => ['full_name' => __('Multiple choice'), 'icon' => 'fa fa-check-square', 'color' => 'rgb(218, 98, 6)'],
+            'opn'     => ['full_name' => __('Open-ended'), 'icon' => 'fa fa-pencil-square', 'color' => 'rgba(69, 47, 165, 1)'],
+            'vid'     => ['full_name' => __('Video'), 'icon' => 'fas fa-play', 'color' => 'rgb(165, 47, 165)'],
+            'art'     => ['full_name' => __('Article'), 'icon' => 'fas fa-book-open', 'color' => 'rgb(110, 67, 14)'],
+            'unk'     => ['full_name' => __('Unknown'), 'icon' => 'fas fa-bug', 'color' => 'rgba(120, 120, 120, 1)']
+        ];
+
+        return $problem_types[$type] ?? [];
+    }
+
+    function check_problemset_availability(
+        int $set_id,
+        $pdo
+    ): array {
+        $status = array('is_available' => 'false', 'condition_title' => 'Unknown', 'condition_id' => -1);
+        $db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID = :sid');
+        $db_query->execute(['sid' => $set_id]);
+        $set = $db_query->fetch();
+
+        if (!$set) {
+            $status['is_available'] = false;
+            return $status;
+        }
+        $condition = json_decode($set['depends_on']);
+        $status['condition_id'] = $condition->id;
+        $db_query = $pdo->prepare('SELECT * FROM PROBLEMSETS WHERE SET_ID=:sid');
+        $db_query->execute(['sid' => $condition->id]);
+        if ($row = $db_query->fetch()) {
+            $status['condition_title'] = $row['title'];
+        }
+
+        if (!isset($condition->type) || $condition->type === 'none') {
+            $status['is_available'] = true;
+            return $status;
+        }
+        $required_set_id = $condition->id;
+
+        $db_query = $pdo->prepare('SELECT CONTENT_ID, maxpoints FROM CONTENT WHERE problemset = :pid');
+        $db_query->execute(['pid' => $required_set_id]);
+        $problems = $db_query->fetchAll();
+
+        if (empty($problems)) {
+            $status['is_available'] = false;
+            return $status;
+        }
+
+        foreach ($problems as $row) {
+            $cdb_query = $pdo->prepare('SELECT MAX(score) AS maxscore FROM SUBMISSIONS WHERE problem_id = :pid AND user_id = :uid');
+            $cdb_query->execute([
+                'pid' => $row['CONTENT_ID'],
+                'uid' => $_SESSION['AUTH_ID']
+            ]);
+            $ctx = $cdb_query->fetch();
+
+            $maxscore = ($ctx && (int)$ctx['maxscore'] !== -1) ? (float)$ctx['maxscore'] : 0;
+            $maxpoints = (float)$row['maxpoints'];
+
+            $percentage = ($maxpoints > 0) ? ($maxscore / $maxpoints) * 100 : 0;
+
+            if (round($percentage, 0) < 50) {
+                $status['is_available'] = false;
+                return $status;
+            }
+        }
+        $status['is_available'] = true;
+        return $status;
+    }
+
+    function api_rate_limit_tick(
+        int $limit,
+        int $time_range
+    ): bool {
+        $now = time();
+        $_SESSION['api_rate_limit_tick'] ??= [];
+
+        $_SESSION['api_rate_limit_tick'] = array_filter(
+            $_SESSION['api_rate_limit_tick'],
+            fn(int $timestamp) => $now - $timestamp <= $time_range
+        );
+
+        $_SESSION['api_rate_limit_tick'][] = $now;
+        return count($_SESSION['api_rate_limit_tick']) <= $limit;
+    }
+
+    function import_user_settings(): array
+    {
+        global $pdo;
+
+        $db_query = $pdo->prepare('SELECT * FROM USERS WHERE USER_ID=:uid LIMIT 1');
+        $db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
+        $user = $db_query->fetch();
+
+        return $user ?? [];
+    }
+
+    function count_channel_followers(int $channel_id): int
+    {
+        global $pdo;
+
+        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM FOLLOWERS WHERE channel_id=:cid');
+        $db_query->execute(['cid' => $channel_id]);
+        $count = $db_query->fetch()['count'];
+
+        return $count ?? 0;
+    }
+
+    function count_content_stars(int $content_id): int
+    {
+        global $pdo;
+
+        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM STARS WHERE content_id=:cid');
+        $db_query->execute(['cid' => $content_id]);
+        $count = $db_query->fetch()['count'];
+
+        return $count ?? 0;
+    }
+
+    function check_star(
+        int $content_id,
+        $user_id
+    ): bool {
+        global $pdo;
+
+        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM STARS WHERE content_id=:cid AND user_id=:uid');
+        $db_query->execute(['cid' => $content_id, 'uid' =>  $user_id]);
+        $count = $db_query->fetch()['count'];
+
+        return ($count > 0) ? true : false;
+    }
+
+    function check_follow(
+        int $channel_id,
+        $user_id
+    ): bool {
+        global $pdo;
+
+        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM FOLLOWS WHERE channel_id=:cid AND user_id=:uid');
+        $db_query->execute(['cid' => $channel_id, 'uid' =>  $user_id]);
+        $count = $db_query->fetch()['count'];
+
+        return ($count > 0) ? true : false;
+    }
+
+    function regenerate_csrf_token(): bool
+    {
+        try {
+            $_SESSION['CSRF_TOKEN'] = bin2hex(random_bytes(32));
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return false;
+        }
+        return true;
+    }
+
+    function generate_recovery_token(string $mail): string
+    {
+        global $pdo;
+
+        try {
+            if (strlen(trim($mail)) < 2) {
+                throw new Exception("Password recovery: incorrect mail format.");
+            }
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return "";
+        }
+
+        $token = password_hash($mail . bin2hex(random_bytes(32)), PASSWORD_ARGON2ID);
+
+        try {
+            $db_query = $pdo->prepare('INSERT INTO PASSWORD_RECOVERY (token, mail) VALUES (:token, :mail)');
+            $db_query->execute(['token' => $token, 'mail' => $mail]);
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return "";
+        }
+
+        return $token;
+    }
+
+    function verify_recovery_token(
+        string $mail,
+        string $token
+    ): bool {
+        global $pdo;
+
+        try {
+            if (strlen(trim($mail)) < 2) {
+                throw new Exception("Password recovery: incorrect mail format.");
+            }
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return false;
+        }
+
+        try {
+            $db_query = $pdo->prepare('SELECT * FROM PASSWORD_RECOVERY WHERE token=:token AND mail=:mail AND expiration_time > CURRENT_TIMESTAMP()');
+            $db_query->execute(['token' => $token, 'mail' => $mail]);
+            if ($row = $db_query->fetch()) {
+                $db_query = $pdo->prepare('DELETE FROM PASSWORD_RECOVERY WHERE token=:token AND mail=:mail AND expiration_time > CURRENT_TIMESTAMP()');
+                $db_query->execute(['token' => $token, 'mail' => $mail]);
+                return true;
+            }
+        } catch (Throwable $t) {
+            extended_exception_handler($t);
+            return false;
+        }
+
+        return false;
+    }
+
+
+    ###############################################
+    #       just another extension point          #
+    ###############################################
+
+    include_plugins_for("core");
+
+
+    ###############################################
+    #              some automation                #
+    ###############################################
+
+    if (isset($_SESSION['flash_messages'])) {
+        parse_flash_messages();
+    }
+
+    try {
+        date_default_timezone_set(get_misc_value('general_timezone'));
+    } catch (Exception $t) {
+        extended_exception_handler($t);
+        echo("Invalid timezone.");
+    }
+
+    include(__DIR__ . "/../diagnostics/error_handler.php");
+
+    if (is_logged_in() and has_permission('main.admin.plugins.%')) {
+        include_once(__DIR__ . "/plugins/plugin_manager.php");
+        $plugin_manager = new PluginManager($pdo);
+    }
+
+    if (boolval(get_misc_value('plugin_debugging'))) {
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
         error_reporting(E_ALL);
     } else {
-		ini_set('display_errors', '0');
+        ini_set('display_errors', '0');
         ini_set('display_startup_errors', '0');
         error_reporting(0);
-	}
+    }
 
-	if(isset($_GET['error'])) 
-	{
-		insert_flash_message('warning', __("Oops..."), __("Something went wrong. Try again."));
-		parse_flash_messages();
-	}
+    if (isset($_GET['error'])) {
+        insert_flash_message('warning', __("Oops..."), __("Something went wrong. Try again."));
+        parse_flash_messages();
+    }
 
-	try {
-		$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM ROLES');
-		$db_query->execute();
-		if ($db_query->fetch()['count'] === 0) 
-		{
-			include(__DIR__."/../app/config/init_roles.php");
-			load_initial_roles($pdo);
-		}
-	} catch (Throwable $t) {
-		extended_exception_handler($t);
-	}
+    try {
+        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM ROLES');
+        $db_query->execute();
+        if ($db_query->fetch()['count'] === 0) {
+            include(__DIR__ . "/../app/config/init_roles.php");
+            load_initial_roles($pdo);
+        }
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
+    }
 
-	$_SESSION['lang'] = isset($_GET['lang'], $_SESSION['lang']) ? init_i18n('messages', $_GET['lang']) : init_i18n('messages');
-
-?>
+    $_SESSION['lang'] = isset($_GET['lang'], $_SESSION['lang']) ? init_i18n('messages', $_GET['lang']) : init_i18n('messages');

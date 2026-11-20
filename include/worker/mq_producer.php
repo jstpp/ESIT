@@ -1,155 +1,160 @@
 <?php
-    if(!is_logged_in()) kick();
+
+if (!is_logged_in()) {
+    kick();
+}
 
     require_once('modules/composer/vendor/autoload.php');
-	use PhpAmqpLib\Connection\AMQPStreamConnection;
-	use PhpAmqpLib\Message\AMQPMessage;
+    use PhpAmqpLib\Connection\AMQPStreamConnection;
+    use PhpAmqpLib\Message\AMQPMessage;
 
-    function savesubmission($submission_id, $content, $submission_lang)
-	{
-        try {
-            if (file_exists(__DIR__."/solutions/".$submission_id)) return False;
-            if (!isset($_POST['sendtext']) && !isset($_GET['sid'])) return False;
-
-            mkdir(__DIR__."/solutions/".$submission_id, 0755, True);
-            mkdir(__DIR__."/solutions/".$submission_id."/code", 0755, True);
-            mkdir(__DIR__."/solutions/".$submission_id."/misc", 0755, True);
-            mkdir(__DIR__."/solutions/".$submission_id."/time", 0755, True);
-            mkdir(__DIR__."/solutions/".$submission_id."/output", 0755, True);
-
-            chmod(__DIR__."/solutions/".$submission_id, 0755);
-            chmod(__DIR__."/solutions/".$submission_id."/code", 0755);
-            chmod(__DIR__."/solutions/".$submission_id."/misc", 0755);
-            chmod(__DIR__."/solutions/".$submission_id."/time", 0755);
-            chmod(__DIR__."/solutions/".$submission_id."/output", 0755);
-
-            $codefile = fopen(__DIR__."/solutions/".$submission_id."/code/".$submission_id.".".$submission_lang, "w");
-            fwrite($codefile, $content);
-            fclose($codefile);
-
-            return True;
-
-        } catch (Throwable $t) {
-            extended_exception_handler($t);
-            return False;
+function savesubmission($submission_id, $content, $submission_lang)
+{
+    try {
+        if (file_exists(__DIR__ . "/solutions/" . $submission_id)) {
+            return false;
         }
-	}
-
-    function mqsend($mq_host, $mq_port, $mq_user, $mq_password, $data)
-	{
-        try {
-            $connection = new AMQPStreamConnection($mq_host, $mq_port, $mq_user, $mq_password);
-            $channel = $connection->channel();
-
-            $msg = new AMQPMessage($data);
-            $channel->basic_publish($msg, '', 'esit'); 
-
-            $channel->close();
-            $connection->close();
-            return True;
-        } catch (Throwable $t) {
-            extended_exception_handler($t);
-            return False;
+        if (!isset($_POST['sendtext']) && !isset($_GET['sid'])) {
+            return false;
         }
-	}
 
-    function zip_submission($submission_id)
-    {
-        $pathdir = __DIR__.'/solutions/'.$submission_id.'/'; 
-        $zipcreated = __DIR__.'/solutions/'.$submission_id."/".$submission_id.".zip";
-        $zip = new ZipArchive;
+        mkdir(__DIR__ . "/solutions/" . $submission_id, 0755, true);
+        mkdir(__DIR__ . "/solutions/" . $submission_id . "/code", 0755, true);
+        mkdir(__DIR__ . "/solutions/" . $submission_id . "/misc", 0755, true);
+        mkdir(__DIR__ . "/solutions/" . $submission_id . "/time", 0755, true);
+        mkdir(__DIR__ . "/solutions/" . $submission_id . "/output", 0755, true);
 
-        try {
-            if($zip -> open($zipcreated, ZipArchive::CREATE) === TRUE) 
-            {
-                $files = scandir($pathdir);
-                foreach ($files as $file) {
-                    if ($file == '.' || $file == '..') continue;
-                    $zip -> addEmptyDir($file);
-                    if(is_dir($pathdir.$file))
-                    {
-                        $dir = opendir($pathdir.$file);
-                        while($next_file = readdir($dir)) {
-                            if ($next_file == '.' || $next_file == '..') continue;
-                            if(is_file($pathdir.$file."/".$next_file)) {
-                                $zip -> addFile($pathdir.$file."/".$next_file, $file."/".$next_file);
-                            }
+        chmod(__DIR__ . "/solutions/" . $submission_id, 0755);
+        chmod(__DIR__ . "/solutions/" . $submission_id . "/code", 0755);
+        chmod(__DIR__ . "/solutions/" . $submission_id . "/misc", 0755);
+        chmod(__DIR__ . "/solutions/" . $submission_id . "/time", 0755);
+        chmod(__DIR__ . "/solutions/" . $submission_id . "/output", 0755);
+
+        $codefile = fopen(__DIR__ . "/solutions/" . $submission_id . "/code/" . $submission_id . "." . $submission_lang, "w");
+        fwrite($codefile, $content);
+        fclose($codefile);
+
+        return true;
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
+        return false;
+    }
+}
+
+function mqsend($mq_host, $mq_port, $mq_user, $mq_password, $data)
+{
+    try {
+        $connection = new AMQPStreamConnection($mq_host, $mq_port, $mq_user, $mq_password);
+        $channel = $connection->channel();
+
+        $msg = new AMQPMessage($data);
+        $channel->basic_publish($msg, '', 'esit');
+
+        $channel->close();
+        $connection->close();
+        return true;
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
+        return false;
+    }
+}
+
+function zip_submission($submission_id)
+{
+    $pathdir = __DIR__ . '/solutions/' . $submission_id . '/';
+    $zipcreated = __DIR__ . '/solutions/' . $submission_id . "/" . $submission_id . ".zip";
+    $zip = new ZipArchive();
+
+    try {
+        if ($zip -> open($zipcreated, ZipArchive::CREATE) === true) {
+            $files = scandir($pathdir);
+            foreach ($files as $file) {
+                if ($file == '.' || $file == '..') {
+                    continue;
+                }
+                $zip -> addEmptyDir($file);
+                if (is_dir($pathdir . $file)) {
+                    $dir = opendir($pathdir . $file);
+                    while ($next_file = readdir($dir)) {
+                        if ($next_file == '.' || $next_file == '..') {
+                            continue;
+                        }
+                        if (is_file($pathdir . $file . "/" . $next_file)) {
+                            $zip -> addFile($pathdir . $file . "/" . $next_file, $file . "/" . $next_file);
                         }
                     }
                 }
-                $zip ->close();
             }
-            return $zipcreated;
-        } catch (Throwable $t) {
-            extended_exception_handler($t);
-            return '-';
+            $zip ->close();
         }
+        return $zipcreated;
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
+        return '-';
     }
+}
 
     $sid = filter_var($_GET['sid'] ?? null, FILTER_VALIDATE_INT);
     $pid = filter_var($_GET['pid'] ?? null, FILTER_VALIDATE_INT);
-    if((!isset($_POST['lang']) && !$sid) || !is_logged_in()) kick();
+if ((!isset($_POST['lang']) && !$sid) || !is_logged_in()) {
+    kick();
+}
 
     $db_query = $pdo->prepare('SELECT DISTINCT problemset FROM CONTENT WHERE CONTENT_ID=:pid');
     $db_query->execute(['pid' => $pid]);
-    if(($row = $db_query->fetch()) && !(check_problemset_availability($row['problemset'], $pdo)['is_available']))
-    {
-        redirect("/app/index.php?p=search&error");
-    }
-    
-    try {
-        if($sid && has_permission('main.solutions.exec.recheck'))
-        {
-            $db_query = $pdo->prepare('SELECT * FROM SUBMISSIONS WHERE SUBMISSION_ID=:sid');
-            $db_query->execute(['sid' => $sid]);
-            if($recheck_submission = $db_query->fetch()) 
-            {
-                $submission_lang = $recheck_submission['submission_lang'];
-                $uid = $recheck_submission['user_id'];
-                $pid = $recheck_submission['problem_id'];
-                $sendtext = file_get_contents(__DIR__."/solutions/".$sid."/code/".$sid.".".$submission_lang);
-            } else {
-                kick();
-            }
+if (($row = $db_query->fetch()) && !(check_problemset_availability($row['problemset'], $pdo)['is_available'])) {
+    redirect("/app/index.php?p=search&error");
+}
+
+try {
+    if ($sid && has_permission('main.solutions.exec.recheck')) {
+        $db_query = $pdo->prepare('SELECT * FROM SUBMISSIONS WHERE SUBMISSION_ID=:sid');
+        $db_query->execute(['sid' => $sid]);
+        if ($recheck_submission = $db_query->fetch()) {
+            $submission_lang = $recheck_submission['submission_lang'];
+            $uid = $recheck_submission['user_id'];
+            $pid = $recheck_submission['problem_id'];
+            $sendtext = file_get_contents(__DIR__ . "/solutions/" . $sid . "/code/" . $sid . "." . $submission_lang);
         } else {
-            if(!$pid) kick();
-            switch ($_POST['lang'])
-            {
-                case "cpp":
-                    $submission_lang = "cpp";
-                    break;
-                case "py":
-                    $submission_lang = "py";
-                    break;
-                case "java":
-                    $submission_lang = "java";
-                    break;
-                default:
-                    $submission_lang = "py";
-                    break;
-            }
-            $uid = $_SESSION['AUTH_ID'];
-            $sendtext = $_POST['sendtext'];
+            kick();
         }
-    } catch (Throwable $t) {
-        extended_exception_handler($t);
-        redirect("/app/index.php?p=search&error");
+    } else {
+        if (!$pid) {
+            kick();
+        }
+        switch ($_POST['lang']) {
+            case "cpp":
+                $submission_lang = "cpp";
+                break;
+            case "py":
+                $submission_lang = "py";
+                break;
+            case "java":
+                $submission_lang = "java";
+                break;
+            default:
+                $submission_lang = "py";
+                break;
+        }
+        $uid = $_SESSION['AUTH_ID'];
+        $sendtext = $_POST['sendtext'];
     }
+} catch (Throwable $t) {
+    extended_exception_handler($t);
+    redirect("/app/index.php?p=search&error");
+}
 
     $submission_type = "normal";
     $submission_mode = 1;
-    if(isset($_GET['mode']))
-    {
-        if($_GET['mode']=="silent" && has_permission('main.solutions.exec.silent'))
-        {
-            $submission_type = "silent";
-            $submission_mode = 2;
-        } else if($_GET['mode']=="recheck" && has_permission('main.solutions.exec.recheck'))
-        {
-            $submission_type = "recheck";
-            $submission_mode = 3;
-        }
+if (isset($_GET['mode'])) {
+    if ($_GET['mode'] == "silent" && has_permission('main.solutions.exec.silent')) {
+        $submission_type = "silent";
+        $submission_mode = 2;
+    } elseif ($_GET['mode'] == "recheck" && has_permission('main.solutions.exec.recheck')) {
+        $submission_type = "recheck";
+        $submission_mode = 3;
     }
+}
 
     $db_query = $pdo->prepare('INSERT INTO SUBMISSIONS (problem_id, problemset_id, user_id, verification_time, score, score_percentage, submission_lang, mode) VALUES (:pid, (SELECT DISTINCT problemset FROM CONTENT WHERE CONTENT_ID=:xpid), :uid, :ver_time, -1, -1, :sub_lang, :mode)');
     $db_query->execute(['pid' => $pid, 'xpid' => $pid, 'uid' => $uid, "ver_time" => "1900-01-01 10:00:00", "sub_lang" => $submission_lang, "mode" => $submission_mode]);
@@ -161,37 +166,37 @@
     $db_query = $pdo->prepare('SELECT * FROM ALG_TEST_LIST WHERE problem_id=:pid');
     $db_query->execute(['pid' => $pid]);
 
-    while($row = $db_query->fetch())
-	{
-        array_push($tests, $row);
+while ($row = $db_query->fetch()) {
+    array_push($tests, $row);
+}
+if (count($tests) < 1) {
+    kick();
+}
+
+try {
+    $myObj = new stdClass();
+
+    $myObj->submission_id = $submission_id;
+    $myObj->submission_type = $submission_type;
+    $myObj->user_id = $uid;
+    $myObj->problem_id = $pid;
+    $myObj->submission_lang = $submission_lang;
+    $myObj->tests = $tests;
+    $myObj->listenerUrl = get_misc_value('general_url');
+    $myObj->submission_time = date('Y-m-d H:i:s');
+    $myObj->submission_file = base64_encode(file_get_contents(zip_submission($submission_id)));
+
+    $data = json_encode($myObj);
+    mqsend($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $data); #credentials from app/core.php
+
+    if ($submission_type == "recheck" && $sid) {
+        $db_query = $pdo->prepare('DELETE FROM REEVALUATION_REQUESTS WHERE submission_id=:sid');
+        $db_query->execute(['sid' => $sid]);
     }
-    if(count($tests)<1) kick();
+} catch (Throwable $t) {
+    extended_exception_handler($t);
+    redirect("/app/index.php?p=search&error");
+}
 
-    try {
-        $myObj = new stdClass();
-
-        $myObj->submission_id = $submission_id; 
-        $myObj->submission_type = $submission_type;
-        $myObj->user_id = $uid;
-        $myObj->problem_id = $pid; 
-        $myObj->submission_lang = $submission_lang;
-        $myObj->tests = $tests;
-        $myObj->listenerUrl = get_misc_value('general_url');
-        $myObj->submission_time = date('Y-m-d H:i:s');
-        $myObj->submission_file = base64_encode(file_get_contents(zip_submission($submission_id)));
-
-        $data = json_encode($myObj);
-        mqsend($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $data); #credentials from app/core.php
-
-        if ($submission_type=="recheck" && $sid) {
-            $db_query = $pdo->prepare('DELETE FROM REEVALUATION_REQUESTS WHERE submission_id=:sid');
-            $db_query->execute(['sid' => $sid]);
-        }
-    } catch (Throwable $t) {
-        extended_exception_handler($t);
-        redirect("/app/index.php?p=search&error");
-    }
-
-    redirect("index.php?p=algresult&sid=".$submission_id);
+    redirect("index.php?p=algresult&sid=" . $submission_id);
     die;
-?>

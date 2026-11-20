@@ -1,42 +1,49 @@
 <?php
-    if(!is_logged_in() || !has_permission('main.channels.modify_problemset')) kick();
-    if(!isset($_GET['sid'], $_POST['update_block_form_name'], $_POST['update_block_form_condition'], $_POST['update_block_form_publish_time'])) redirect("index.php?p=search&error");
-    
+
+if (!is_logged_in() || !has_permission('main.channels.modify_problemset')) {
+    kick();
+}
+if (!isset($_GET['sid'], $_POST['update_block_form_name'], $_POST['update_block_form_condition'], $_POST['update_block_form_publish_time'])) {
+    redirect("index.php?p=search&error");
+}
+
     $sid = filter_var($_GET['sid'] ?? null, FILTER_VALIDATE_INT);
-    if ($sid===False || $sid <= 0) redirect("index.php?p=search&error");
+if ($sid === false || $sid <= 0) {
+    redirect("index.php?p=search&error");
+}
 
-    try {
-        switch($_POST['update_block_form_condition'][0] ?? '')
-        {
-            case 'S': # problemset
-                $condition = json_encode(array('type' => 'problemset', 'id' => (int)mb_substr($_POST['update_block_form_condition'], 1)));
-                break;
-            case 'P': # problem (TBD in the future)
-                $condition = json_encode(array('type' => 'problem', 'id' => (int)mb_substr($_POST['update_block_form_condition'], 1)));
-                break;
-            default:
-                $condition = json_encode(array('type' => 'none', 'id' => 'none'));
-                break;
-        }
+try {
+    switch ($_POST['update_block_form_condition'][0] ?? '') {
+        case 'S': # problemset
+            $condition = json_encode(array('type' => 'problemset', 'id' => (int)mb_substr($_POST['update_block_form_condition'], 1)));
+            break;
+        case 'P': # problem (TBD in the future)
+            $condition = json_encode(array('type' => 'problem', 'id' => (int)mb_substr($_POST['update_block_form_condition'], 1)));
+            break;
+        default:
+            $condition = json_encode(array('type' => 'none', 'id' => 'none'));
+            break;
+    }
 
-        $title = trim($_POST['update_block_form_name']);
-        if(empty($title)) redirect("index.php?p=search&error");
-
-        $db_query = $pdo->prepare('SELECT channel_id FROM PROBLEMSETS WHERE SET_ID=:sid');
-        $db_query->execute(['sid'=>$sid]);
-        $cid = $db_query->fetch()['channel_id'];
-
-        $db_query = $pdo->prepare('UPDATE PROBLEMSETS SET title=:title, depends_on=:depends_on, publish_time=:publish_time WHERE SET_ID=:sid');
-        $db_query->execute([
-            'title' => $title, 
-            'depends_on'=> $condition,
-            'publish_time' => $_POST['update_block_form_publish_time'],
-            'sid' => $sid
-        ]);
-
-        redirect("index.php?p=channel&id=".$cid);
-    } catch (Throwable $t) {
-        extended_exception_handler($t);
+    $title = trim($_POST['update_block_form_name']);
+    if (empty($title)) {
         redirect("index.php?p=search&error");
     }
-?>
+
+    $db_query = $pdo->prepare('SELECT channel_id FROM PROBLEMSETS WHERE SET_ID=:sid');
+    $db_query->execute(['sid' => $sid]);
+    $cid = $db_query->fetch()['channel_id'];
+
+    $db_query = $pdo->prepare('UPDATE PROBLEMSETS SET title=:title, depends_on=:depends_on, publish_time=:publish_time WHERE SET_ID=:sid');
+    $db_query->execute([
+        'title' => $title,
+        'depends_on' => $condition,
+        'publish_time' => $_POST['update_block_form_publish_time'],
+        'sid' => $sid
+    ]);
+
+    redirect("index.php?p=channel&id=" . $cid);
+} catch (Throwable $t) {
+    extended_exception_handler($t);
+    redirect("index.php?p=search&error");
+}

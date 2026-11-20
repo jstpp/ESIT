@@ -1,43 +1,42 @@
 <style> 
-	#horizontal_menu {
-		margin: 0;
-		width: 100%;
-		height: 3vw;
-		top: 0;
+    #horizontal_menu {
+        margin: 0;
+        width: 100%;
+        height: 3vw;
+        top: 0;
 
-		z-index: 5;
-		position: fixed;
+        z-index: 5;
+        position: fixed;
 
-		background-color: var(--horizontal-menu-bg);
-	}
-	#horizontal_menu a {
-		margin-top: 0.4vw;
-		margin-right: 0.2vw;
-		padding: 0.4vw 1.2vw;
+        background-color: var(--horizontal-menu-bg);
+    }
+    #horizontal_menu a {
+        margin-top: 0.4vw;
+        margin-right: 0.2vw;
+        padding: 0.4vw 1.2vw;
 
-		display: block;
-		float: right;
-		text-decoration: none;
-		border-radius: 0.5vmax;
+        display: block;
+        float: right;
+        text-decoration: none;
+        border-radius: 0.5vmax;
 
-		color: var(--horizontal-menu-text);
-		text-align: center;
-		transition: 0.2s;
-		cursor: pointer;
-		user-select: none;
-	}
-	#horizontal_menu a:hover {
-		background-color: var(--vertical-menu-bg);
-	}
+        color: var(--horizontal-menu-text);
+        text-align: center;
+        transition: 0.2s;
+        cursor: pointer;
+        user-select: none;
+    }
+    #horizontal_menu a:hover {
+        background-color: var(--vertical-menu-bg);
+    }
 </style>
 <div id="horizontal_menu" role="navigation">
-	<a href="../login/process.php?s=logout" style="margin-right: 0.75vw;"><i class='fas fa-door-open'></i>&emsp;<?php echo(__("Log out")); ?></a>
-	<a onClick="document.getElementById('notifications_menu').style.display = 'block';"><i class='fa fa-bell'></i>&emsp;<?php echo(__("Notifications")); ?></a>
-	<?php
-		if(boolval(get_misc_value('plugin_portal')))
-		{
-			echo('<a href="../index.php"><i class=\'fa fa-bookmark\'></i>&emsp;'.__('Portal').'</a>');
-		}
-		include_plugins_for("horizontal_menu");
-	?>
+    <a href="../login/process.php?s=logout" style="margin-right: 0.75vw;"><i class='fas fa-door-open'></i>&emsp;<?php echo(__("Log out")); ?></a>
+    <a onClick="document.getElementById('notifications_menu').style.display = 'block';"><i class='fa fa-bell'></i>&emsp;<?php echo(__("Notifications")); ?></a>
+    <?php
+    if (boolval(get_misc_value('plugin_portal'))) {
+        echo('<a href="../index.php"><i class=\'fa fa-bookmark\'></i>&emsp;' . __('Portal') . '</a>');
+    }
+        include_plugins_for("horizontal_menu");
+    ?>
 </div>

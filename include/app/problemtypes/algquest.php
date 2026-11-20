@@ -1,90 +1,86 @@
 <style>
-	.window a {
-		color: var(--highlight-color);
-		font-weight: bold;
-		text-decoration: none;
-	}
+    .window a {
+        color: var(--highlight-color);
+        font-weight: bold;
+        text-decoration: none;
+    }
 
-	.window .forminput {
-		border: 0; 
-		padding: 1vw 1.5vw; 
-		color: var(--text); 
-		background-color: var(--container-hover-bg); 
-		font-family: inherit;
-		cursor: pointer;
-		transition: 0.4s;
-	}
-	.window .forminput:hover {
-		background-color: var(--bg);
-	}
+    .window .forminput {
+        border: 0; 
+        padding: 1vw 1.5vw; 
+        color: var(--text); 
+        background-color: var(--container-hover-bg); 
+        font-family: inherit;
+        cursor: pointer;
+        transition: 0.4s;
+    }
+    .window .forminput:hover {
+        background-color: var(--bg);
+    }
 
-	#tests td {
-		border: 1px solid white;
-		padding: 1vmin 3vmin;
-	}
+    #tests td {
+        border: 1px solid white;
+        padding: 1vmin 3vmin;
+    }
 </style>
 
 <div class="window">
-	<h2 class="window_title"><?php echo(__("Problem content")); ?></h2>
-	<iframe src="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
-	<br />
-	<p style="color: white; text-align: center; width: 100%;"><?php echo(__("You can open this problem")); ?> <a href="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" target="_blank">&nbsp;<i class='fas fa-folder-open'></i>&nbsp;<?php echo(__("here")); ?></a>&nbsp;</p>
-	<br />
-	<br />
+    <h2 class="window_title"><?php echo(__("Problem content")); ?></h2>
+    <iframe src="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" style="width: 90%; margin-left: 5%; height: 85vh; border: 0;"></iframe>
+    <br />
+    <p style="color: white; text-align: center; width: 100%;"><?php echo(__("You can open this problem")); ?> <a href="process.php?r=get_content&mode=pdffile&cid=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>" target="_blank">&nbsp;<i class='fas fa-folder-open'></i>&nbsp;<?php echo(__("here")); ?></a>&nbsp;</p>
+    <br />
+    <br />
 </div>
 <?php
-	$db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid AND mode=1');
-	$db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'uid' => $_SESSION['AUTH_ID']]);
+    $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM SUBMISSIONS WHERE problem_id=:pid AND user_id=:uid AND mode=1');
+    $db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT), 'uid' => $_SESSION['AUTH_ID']]);
 
-	$count = $db_query->fetch()['count'];
+    $count = $db_query->fetch()['count'];
 
-	if($maxattempts-$count>1)
-	{
-		$howmanytimes = __("You can submit your solution ")." <b>".($maxattempts-$count)." ".__("times")."</b>.";
-	} else if ($maxattempts-$count==1)
-	{
-		$howmanytimes = __("You can submit your solution <b>once only</b>.");
-	} else {
-		$howmanytimes = __("You can't submit new solutions.");
-	}
+if ($maxattempts - $count > 1) {
+    $howmanytimes = __("You can submit your solution ") . " <b>" . ($maxattempts - $count) . " " . __("times") . "</b>.";
+} elseif ($maxattempts - $count == 1) {
+    $howmanytimes = __("You can submit your solution <b>once only</b>.");
+} else {
+    $howmanytimes = __("You can't submit new solutions.");
+}
 ?>
 <div class="window">
-	<p style="margin-left: 5%;">
-		<i class='fas fa-info-circle'></i>&emsp;<?php echo($howmanytimes); ?><br /><br />
-		<b><?php echo(__('Limits (by test package)')); ?>:</b><br />
-		<table style="margin-left: 5%;" id="tests">
-			<?php
-				$db_query = $pdo->prepare('SELECT * FROM ALG_TEST_LIST WHERE problem_id=:pid');
-				$db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
+    <p style="margin-left: 5%;">
+        <i class='fas fa-info-circle'></i>&emsp;<?php echo($howmanytimes); ?><br /><br />
+        <b><?php echo(__('Limits (by test package)')); ?>:</b><br />
+        <table style="margin-left: 5%;" id="tests">
+            <?php
+                $db_query = $pdo->prepare('SELECT * FROM ALG_TEST_LIST WHERE problem_id=:pid');
+                $db_query->execute(['pid' => filter_var($_GET['id'], FILTER_VALIDATE_INT)]);
 
-				while($test = $db_query->fetch())
-				{
-					echo('<tr>
-					<td>'.__("Test").' '.$test['TEST_ID'].'</td>
-					<td>'.$test['max_memory'].' MiB</td>
-					<td>'.$test['max_time'].' s</td>
+            while ($test = $db_query->fetch()) {
+                echo('<tr>
+					<td>' . __("Test") . ' ' . $test['TEST_ID'] . '</td>
+					<td>' . $test['max_memory'] . ' MiB</td>
+					<td>' . $test['max_time'] . ' s</td>
 				</tr>');
-				}
-			?>
-		</table>
-	</p>
+            }
+            ?>
+        </table>
+    </p>
 </div>
 <?php
-	if($maxattempts-$count>0)
-	{
-		echo('
+if ($maxattempts - $count > 0) {
+    echo('
 		<div class="window" id="mysolution">
-			<form method="POST" action="process.php?r=send_alg_solution&pid='.$problemid.'">
-				<input name="csrf_token" type="hidden" value="'.$_SESSION['CSRF_TOKEN'].'" />
+			<form method="POST" action="process.php?r=send_alg_solution&pid=' . $problemid . '">
+				<input name="csrf_token" type="hidden" value="' . $_SESSION['CSRF_TOKEN'] . '" />
 				<script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
-				<h2 class="window_title">'.__("Your solution").'</h2>
+				<h2 class="window_title">' . __("Your solution") . '</h2>
 				<br />
 				<select class="forminput" name="lang" id="lang" onChange="lchange();" style="float: left; margin-left: 5%;">
 					<option value="cpp">C++ (g++ dla C++20)</option>
 					<option value="python">Python (Python 3.13)</option>
 					<option value="java">Java (openJDK 25)</option>
 				</select>
-				<input type="submit" value="'.__("Submit your answer").'" class="forminput" style="float: right; margin-right: 5%;" onClick="document.getElementById(\'editor_code\').innerHTML = editor.getValue();"/>
+				<input type="submit" value="' . __("Submit your answer") . '" class="forminput" style="float: right; margin-right: 5%;" onClick="document.getElementById(\'editor_code\').innerHTML = editor.getValue();"/>
 				<br style="clear: both;"/>
 				<br />
 				<div id="sendtext" style="width: 90%; margin-left: 5%;">
@@ -92,7 +88,7 @@
 					<div id="editor" style="position: relative; height: 60vmin; width: 100%; border-radius: 2vmin;"></div>
 					<script>
 						var editor = ace.edit("editor");
-						editor.setTheme("ace/theme/'.str_replace('.css','',$settings->{'code_editor_theme'}).'");
+						editor.setTheme("ace/theme/' . str_replace('.css', '', $settings->{'code_editor_theme'}) . '");
 						editor.session.setMode("ace/mode/c_cpp");
 
 						function lchange(){
@@ -112,7 +108,7 @@
 			</form>
 			<br />
 		</div>');
-	}
+}
 ?>
 <br />
 <br />

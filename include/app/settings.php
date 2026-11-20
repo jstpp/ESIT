@@ -1,174 +1,178 @@
 <style>
-	.window #results {
-		width: 90%;
-		margin-left: 5%;
-		user-select: none;
-	}
-	.window #results td {
-		border-top: 0.1vw solid gray;
-		padding: 0.5vw 0.5vw;
-	}
-	.window #results td a {
-		font-weight: bold;
-		text-align: center;
-		transition: 0.3s;
-		cursor: pointer;
-	}
-	.window #results tr {
-		transition: 0.2s;
-		cursor: default;
-	}
-	.window #results tr:hover {
-		background-color: #2a2c2e;
-	}
+    .window #results {
+        width: 90%;
+        margin-left: 5%;
+        user-select: none;
+    }
+    .window #results td {
+        border-top: 0.1vw solid gray;
+        padding: 0.5vw 0.5vw;
+    }
+    .window #results td a {
+        font-weight: bold;
+        text-align: center;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    .window #results tr {
+        transition: 0.2s;
+        cursor: default;
+    }
+    .window #results tr:hover {
+        background-color: #2a2c2e;
+    }
 
-	.set_link {
-		padding: 1vw 1vw;
-		margin-left: 4%;
-		
-		display: flex;
+    .set_link {
+        padding: 1vw 1vw;
+        margin-left: 4%;
+        
+        display: flex;
 
-		font-weight: bold;
-		color: inherit;
-		text-decoration: none;
-		user-select: none;
-		transition: 0.2s;
-		cursor: pointer;
-	}
-	.set_link:hover {
-		background-color: #2a2c2e;
-	}
+        font-weight: bold;
+        color: inherit;
+        text-decoration: none;
+        user-select: none;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    .set_link:hover {
+        background-color: #2a2c2e;
+    }
 
-	.org_user {
-		padding: 1vw 1vw;
-		margin-left: 5%;
-		margin-top: 0.5vw;
-		width: 87%;
+    .org_user {
+        padding: 1vw 1vw;
+        margin-left: 5%;
+        margin-top: 0.5vw;
+        width: 87%;
 
-		background-color: #2a2c2e;
-		transition: 0.2s;
-		cursor: default;
-		user-select: none;
-	}
-	.org_user:hover {
-		background-color: #3e4145;
-	}
-	.org_user table {
-		padding: 0.8vw 0.8vw;
-		width: 70%;
-		float: left;
-	}
-	.org_user a {
-		padding: 1vw 1vw;
-		float: right;
+        background-color: #2a2c2e;
+        transition: 0.2s;
+        cursor: default;
+        user-select: none;
+    }
+    .org_user:hover {
+        background-color: #3e4145;
+    }
+    .org_user table {
+        padding: 0.8vw 0.8vw;
+        width: 70%;
+        float: left;
+    }
+    .org_user a {
+        padding: 1vw 1vw;
+        float: right;
 
-		background-color: var(--highlight-color);
-		color: white;
-		border-radius: 5px;
-		cursor: pointer;
-		transition: 0.2s;
-	}
-	.org_user a:hover {
-		background-color: #6ed4ff;
-	}
+        background-color: var(--highlight-color);
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .org_user a:hover {
+        background-color: #6ed4ff;
+    }
 </style>
 <script src="/include/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <center>
-	<h1><?php echo(__("Account settings")); ?></h1>
+    <h1><?php echo(__("Account settings")); ?></h1>
 </center>
 <div class="window">
-	<h2 class="window_title"><?php echo(__("Basic information")); ?></h2>
-	<p style="margin-left: 5%;">
-		<i class="fa fa-address-book"></i>&nbsp;&nbsp;<b><?php echo(__("Username")); ?>:&emsp;&nbsp;<?php echo($user['username']." (".$user['name']." ".$user['surname'].")"); ?></b><br />
-		<i class="fa fa-bank"></i>&nbsp;&nbsp;<b><?php echo(__("Organization")); ?>:</b>&emsp;&nbsp;<?php echo($user['organization']); ?><br />
-		<i class="fa fa-envelope"></i>&nbsp;&nbsp;<b><?php echo(__("E-mail address")); ?>:</b>&emsp;<?php echo($user['mail']); ?><br />
-	</p>
-	<br />
+    <h2 class="window_title"><?php echo(__("Basic information")); ?></h2>
+    <p style="margin-left: 5%;">
+        <i class="fa fa-address-book"></i>&nbsp;&nbsp;<b><?php echo(__("Username")); ?>:&emsp;&nbsp;<?php echo($user['username'] . " (" . $user['name'] . " " . $user['surname'] . ")"); ?></b><br />
+        <i class="fa fa-bank"></i>&nbsp;&nbsp;<b><?php echo(__("Organization")); ?>:</b>&emsp;&nbsp;<?php echo($user['organization']); ?><br />
+        <i class="fa fa-envelope"></i>&nbsp;&nbsp;<b><?php echo(__("E-mail address")); ?>:</b>&emsp;<?php echo($user['mail']); ?><br />
+    </p>
+    <br />
 </div>
 <div class="window">
-	<h2 class="window_title"><?php echo(__("Security")); ?></h2>
-	<h3 style="margin-left: 5%;"><?php echo(__("Password change")); ?></h3>
-	<form id="change_password_form" method="POST" action="process.php?r=change_password" style="margin-left: 5%;">
-		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
-		<input type="password" class="forminput" name="password_old" placeholder="<?php echo(__("Old password")); ?>" required/>
-		<input type="password" class="forminput" name="password_new1" placeholder="<?php echo(__("New password")); ?>" required/>
-		<input type="password" class="forminput" name="password_new2" placeholder="<?php echo(__("Repeat new password")); ?>" required/>
-		<a class="button" style="margin-left: 5%;" onClick="document.getElementById('change_password_form').submit();"><?php echo(__("Change the password")); ?></a>
-	</form>
-	<br style="clear: both;"/>
+    <h2 class="window_title"><?php echo(__("Security")); ?></h2>
+    <h3 style="margin-left: 5%;"><?php echo(__("Password change")); ?></h3>
+    <form id="change_password_form" method="POST" action="process.php?r=change_password" style="margin-left: 5%;">
+        <input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+        <input type="password" class="forminput" name="password_old" placeholder="<?php echo(__("Old password")); ?>" required/>
+        <input type="password" class="forminput" name="password_new1" placeholder="<?php echo(__("New password")); ?>" required/>
+        <input type="password" class="forminput" name="password_new2" placeholder="<?php echo(__("Repeat new password")); ?>" required/>
+        <a class="button" style="margin-left: 5%;" onClick="document.getElementById('change_password_form').submit();"><?php echo(__("Change the password")); ?></a>
+    </form>
+    <br style="clear: both;"/>
 </div>
 <div class="window">
-	<h2 class="window_title"><?php echo(__("Appearance")); ?></h2>
-	<form id="appearance_form" method="POST" action="process.php?r=settings_appearance" style="margin-left: 5%;">
-		<input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
-		<label for="app_dark_theme"><?php echo(__("Dark mode")); ?>:&emsp;</label>
-		<select id="app_dark_theme" name="app_dark_theme" class="forminput">
-			<option value="1" <?php if(!isset($settings->{'dark_mode'}) or isset($settings->{'dark_mode'}) and $settings->{'dark_mode'}=="1") { echo('selected'); } ?>><?php echo(__("On")); ?></option>
-			<option value="0" <?php if(isset($settings->{'dark_mode'}) and $settings->{'dark_mode'}=="0") { echo('selected'); } ?>><?php echo(__("Off")); ?></option>
-		</select>
-		<br />
-		<br />
-		<label for="ace_theme"><?php echo(__("Code editor theme")); ?>:&emsp;</label>
-		<select id="ace_theme" name="ace_theme" class="forminput">
-		</select>
-		<br />
-		<br />
-		<div id="example_code_editor" style="width: 30%;">
-			<textarea id="editor_code" name="example_code_editor" style="display: none;" readonly>
-			</textarea>
-			<div id="editor" style="position: relative; height: 5vmin; width: 100%; border-radius: 2vmin;"></div>
-		</div>
-	</form>
-	<script>
-		const select = document.getElementById('ace_theme');
-		const currentTheme = '<?php echo(htmlspecialchars($settings->{'code_editor_theme'} ?? 'dracula', ENT_QUOTES, 'UTF-8')); ?>.css';
-		const editor = ace.edit("editor");
+    <h2 class="window_title"><?php echo(__("Appearance")); ?></h2>
+    <form id="appearance_form" method="POST" action="process.php?r=settings_appearance" style="margin-left: 5%;">
+        <input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+        <label for="app_dark_theme"><?php echo(__("Dark mode")); ?>:&emsp;</label>
+        <select id="app_dark_theme" name="app_dark_theme" class="forminput">
+            <option value="1" <?php if (!isset($settings->{'dark_mode'}) or isset($settings->{'dark_mode'}) and $settings->{'dark_mode'} == "1") {
+                echo('selected');
+                              } ?>><?php echo(__("On")); ?></option>
+            <option value="0" <?php if (isset($settings->{'dark_mode'}) and $settings->{'dark_mode'} == "0") {
+                echo('selected');
+                              } ?>><?php echo(__("Off")); ?></option>
+        </select>
+        <br />
+        <br />
+        <label for="ace_theme"><?php echo(__("Code editor theme")); ?>:&emsp;</label>
+        <select id="ace_theme" name="ace_theme" class="forminput">
+        </select>
+        <br />
+        <br />
+        <div id="example_code_editor" style="width: 30%;">
+            <textarea id="editor_code" name="example_code_editor" style="display: none;" readonly>
+            </textarea>
+            <div id="editor" style="position: relative; height: 5vmin; width: 100%; border-radius: 2vmin;"></div>
+        </div>
+    </form>
+    <script>
+        const select = document.getElementById('ace_theme');
+        const currentTheme = '<?php echo(htmlspecialchars($settings->{'code_editor_theme'} ?? 'dracula', ENT_QUOTES, 'UTF-8')); ?>.css';
+        const editor = ace.edit("editor");
 
-		fetch('../include/js/ace-builds/css/theme/')
-			.then(response => response.text())
-			.then(html => {
-				const parser = new DOMParser();
-				const doc = parser.parseFromString(html, 'text/html');
+        fetch('../include/js/ace-builds/css/theme/')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
 
-				const themes = Array.from(doc.querySelectorAll('a'))
-					.map(a => a.getAttribute('href'))
-					.filter(name => name && name.endsWith('.css'));
+                const themes = Array.from(doc.querySelectorAll('a'))
+                    .map(a => a.getAttribute('href'))
+                    .filter(name => name && name.endsWith('.css'));
 
-				themes.forEach(theme => {
-					const option = document.createElement('option');
+                themes.forEach(theme => {
+                    const option = document.createElement('option');
 
-					option.value = theme
-						.replace('.css', '');
-					option.textContent = theme
-						.replace('.css', '')
-						.replaceAll('_', ' ');
+                    option.value = theme
+                        .replace('.css', '');
+                    option.textContent = theme
+                        .replace('.css', '')
+                        .replaceAll('_', ' ');
 
-					if (currentTheme === theme) {
-						option.selected = true;
-					}
+                    if (currentTheme === theme) {
+                        option.selected = true;
+                    }
 
-					select.appendChild(option);
-				});
+                    select.appendChild(option);
+                });
 
-				editor.setValue('int main() { std::cout<<"Hi!"; }', 1);
-				editor.setTheme("ace/theme/"+document.getElementById('ace_theme').value.replace('.css',''));
-				editor.session.setMode("ace/mode/c_cpp");
-				editor.setReadOnly(true);
-			});
+                editor.setValue('int main() { std::cout<<"Hi!"; }', 1);
+                editor.setTheme("ace/theme/"+document.getElementById('ace_theme').value.replace('.css',''));
+                editor.session.setMode("ace/mode/c_cpp");
+                editor.setReadOnly(true);
+            });
 
-		select.addEventListener('change', function () {
-			editor.setTheme(
-				'ace/theme/' + this.value
-			);
-		});
-	</script>
-	<br />
-	<br />
-	<a class="button" style="margin-left: 5%;" onClick="document.getElementById('appearance_form').submit();"><?php echo(__("Save appearance settings")); ?></a>
-	<br style="clear: both;"/>
+        select.addEventListener('change', function () {
+            editor.setTheme(
+                'ace/theme/' + this.value
+            );
+        });
+    </script>
+    <br />
+    <br />
+    <a class="button" style="margin-left: 5%;" onClick="document.getElementById('appearance_form').submit();"><?php echo(__("Save appearance settings")); ?></a>
+    <br style="clear: both;"/>
 </div>
 <?php
-	include_plugins_for("users_settings_personalization");
+    include_plugins_for("users_settings_personalization");
 ?>
 <br />
 <br />
