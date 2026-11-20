@@ -17,7 +17,7 @@ That's it.
 Worker stores simple logs in `logs/` directory.
 
 ## Tests suite
-Worker is provided with tests suite by default and it automatically stops when any of the mentioned tests is failed. You can bypass this behavior by running `main()` of `mq_receiver.py` with `EnforcedTesting` set to `False` instead of `True`.
+Worker is provided with tests suite by default and it automatically stops when any of the mentioned tests is failed. You can bypass this behavior by running `main()` of `mq_receiver.py` with `ENFORCED_TESTING` set to `False` instead of `True`.
 
 > [!WARNING]
 > Tests suite is still under construction - please, consider the fact that passing these tests does not guarantee that your instance is completely secure. There is no such thing as a 100% secure system.
