@@ -29,7 +29,12 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Psalm Security Scan
-        uses: psalm/psalm-github-security-scan@f3e6fd9432bc3e44aec078572677ce9d2ef9c287
+        run: |
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/github/workspace" \
+            -w /github/workspace/public/app/modules \
+            -e INPUT_REPORT_FILE=/github/workspace/results.sarif \
+            ghcr.io/psalm/psalm-security-scan
 
       - name: Upload Security Analysis results to GitHub
         uses: github/codeql-action/upload-sarif@1fc58d04a4d4374f921bdac573c3811c240f9c26
