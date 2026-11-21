@@ -6,9 +6,9 @@
 
 if ($is_https) {
     session_set_cookie_params([
-    'httponly' => true,
-    'secure'   => true,
-    'samesite' => 'Lax',
+        'httponly' => true,
+        'secure'   => true,
+        'samesite' => 'Lax',
     ]);
 }
 
@@ -47,6 +47,7 @@ if ($is_https) {
         'general_default_language' => 'en_US.UTF-8',
         'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1", "172.18.0.2", "172.18.0.3", "172.18.0.4", "172.18.0.5"]',
         'general_trusted_proxies' => '["127.0.0.1", "::1"]',
+        'general_advanced_header_security' => '0',
         'plugin_custom_error_broker_url' => 'http://localhost',
         'plugin_mailing_module_host' => 'localhost',
         'plugin_mailing_module_port' => 587,
@@ -71,6 +72,31 @@ if ($is_https) {
     } catch (Throwable $t) {
         echo("Database initialization failure. Please reload.");
         die;
+    }
+
+    ###############################################
+    #       Advanced Header Security Module       #
+    ###############################################
+
+    if ($is_https && filter_var(get_misc_value('general_advanced_header_security'), FILTER_VALIDATE_BOOLEAN)) {
+        header("Strict-Transport-Security: max-age=15552000;");
+        header('X-Content-Type-Options: nosniff');
+        header('X-Frame-Options: SAMEORIGIN');
+        header('Referrer-Policy: strict-origin-when-cross-origin');
+        header(
+            "Content-Security-Policy: " .
+            "default-src 'self'; " .
+            "script-src 'self' 'unsafe-inline'; " .
+            "style-src 'self' 'unsafe-inline'; " .
+            "img-src 'self' data: blob:; " .
+            "font-src 'self' data:; " .
+            "connect-src 'self'; " .
+            "media-src 'self' blob:; " .
+            "object-src 'none'; " .
+            "base-uri 'self'; " .
+            "form-action 'self'; " .
+            "frame-ancestors 'self';"
+        );
     }
 
 
@@ -250,7 +276,7 @@ if ($is_https) {
             return ($db_query->fetch()) ? true : false;
         }
 
-        if ($user_id === 0) {
+        if ($user_id == 0) {
             $user_id = $_SESSION['AUTH_ID'];
         }
         $db_query = $pdo->prepare('SELECT PERMISSION_ID FROM PERMISSIONS INNER JOIN AFFILIATION ON PERMISSIONS.role_id=AFFILIATION.role_id WHERE AFFILIATION.user_id=:uid AND (PERMISSIONS.permission LIKE :permission1 OR PERMISSIONS.permission="*" OR RIGHT(PERMISSIONS.permission, 1)="*" AND :permission2 LIKE CONCAT(LEFT(PERMISSIONS.permission, LENGTH(PERMISSIONS.permission) - 1), "%"))');
@@ -269,7 +295,7 @@ if ($is_https) {
             force_to_login();
             die;
         } else {
-            $_SESSION['SESSION_TIMEOUT'] = time() + 14400;
+            $_SESSION['SESSION_TIMEOUT'] = time() + 18000;
         }
     }
 

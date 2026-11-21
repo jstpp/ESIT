@@ -118,4 +118,4 @@ print(int(input())**2)
 submission = prepare_submission(code)
 status = compilers.python.run(submission)
 
-assert int(float(submission.tests[0].result)) == 121, f"Expected 121, got {submission.tests[0].result}"
+assert int(submission.tests[0].result) == 121, f"Expected 121, got {submission.tests[0].result}"

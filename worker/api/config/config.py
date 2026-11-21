@@ -6,6 +6,7 @@ load_dotenv()
 
 # General settings
 network_private_key = os.getenv("NETWORK_PRIVATE_KEY")
+web_url = os.getenv("NETWORK_WEB_URL")
 
 # Performance settings
 worker_max_compilation_memory = int(os.getenv("WORKER_MAX_COMPILATION_MEMORY"))

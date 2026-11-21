@@ -12,21 +12,35 @@ try {
     $data = json_decode($raw, true);
     $tag = base64_decode($data['tag']);
 
-    $submission = json_decode(openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, $options = 0, base64_decode($data['nonce']), $tag), true);
+    try {
+        $submission = json_decode(openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, $options = 0, base64_decode($data['nonce']), $tag), true);
+        $binaryData = base64_decode($submission['submission_file']);
+        file_put_contents(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/" . $submission['submission_id'] . "_result.zip", $binaryData);
 
-
-    $binaryData = base64_decode($submission['submission_file']);
-    file_put_contents(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/" . $submission['submission_id'] . "_result.zip", $binaryData);
-
-    $zip = new ZipArchive();
-    if (!extract_zip(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/" . $submission['submission_id'] . "_result.zip", __DIR__ . "/../solutions/" . $submission['submission_id'] . "/")) {
-        unlink(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/" . $submission['submission_id'] . "_result.zip");
+        $zip = new ZipArchive();
+        if (!extract_zip(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/" . $submission['submission_id'] . "_result.zip", __DIR__ . "/../solutions/" . $submission['submission_id'] . "/")) {
+            unlink(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/" . $submission['submission_id'] . "_result.zip");
+        }
+    } catch (Throwable $t) {
+        http_response_code(400);
+        extended_exception_handler($t);
+        die;
     }
 
     $anws_correct = 0;
     $anws_wrong = 0;
     $anws_resource = 0;
     $anws_syserror = 0;
+
+
+    if (
+        !filter_var($submission['submission_id'], FILTER_VALIDATE_INT) ||
+        !filter_var($submission['problem_id'], FILTER_VALIDATE_INT)
+    ) {
+        http_response_code(400);
+        die;
+    }
+
 
     foreach ($submission['tests'] as $sm) {
         if ($submission['status'] == "fail" || ($sm['returncode'] ?? 255) == 255) {
@@ -39,6 +53,10 @@ try {
             $sm['returncode'] = 255;
             $sm['comment'] = "System error";
         } else {
+            if (!filter_var($sm['TEST_ID'], FILTER_VALIDATE_INT)) {
+                http_response_code(400);
+                die;
+            }
             $timefile = fopen(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/time/" . $sm['TEST_ID'] . ".log", 'r');
             $checkfile = fopen(__DIR__ . "/../alg/" . $submission['problem_id'] . "/out/" . $sm['TEST_ID'] . ".out", 'r');
 
@@ -59,7 +77,18 @@ try {
                     $sm['result'] = "<-error->";
                     break;
                 default:
-                    $solution_array = preg_split('/\r\n|\r|\n/', $sm['result'] ?? "");
+                    if (!feof($resultfile)) {
+                        if (filesize(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/out/" . $sm['TEST_ID'] . ".log") <= 2097152) {
+                            $resultfile = fopen(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/out/" . $sm['TEST_ID'] . ".log", 'r');
+                            $sm['result'] = fgets($resultfile);
+                            $solution_array = preg_split('/\r\n|\r|\n/', $sm['result'] ?? "");
+                            fclose($resultfile);
+                        } else {
+                            $sm['result'] = "<-resource->";
+                            $sm['returncode'] = 137;
+                        }
+                    }
+                    break;
             }
 
             $i = 0;
@@ -89,7 +118,7 @@ try {
                         break;
                     default:
                         $answer = ($i <= count($solution_array) - 1) ? $solution_array[$i] : "";
-                        if (trim($correctanswer) == trim($answer)) {
+                        if (trim($correctanswer) === trim($answer)) {
                             $sm['anws_correct']++;
                         } else {
                             $sm['comment'] = "Received <code>" . htmlentities(preg_replace('/\s+/', '', $answer)) . "</code> when <code>" . htmlentities(preg_replace('/\s+/', '', $correctanswer)) . "</code> was required";
@@ -123,7 +152,10 @@ try {
 
     $db_query = $pdo->prepare('INSERT INTO NOTIFICATIONS (user_id, content, type) VALUES (:uid, :content, "success")');
     $db_query->execute(['uid' => $submission['user_id'], 'content' => $notification_content]);
+
+    http_response_code(200);
 } catch (Throwable $t) {
+    http_response_code(400);
     extended_exception_handler($t);
     die;
 }

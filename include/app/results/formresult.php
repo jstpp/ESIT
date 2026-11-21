@@ -1,46 +1,47 @@
 <?php
     $ident = content_type_identification('opn');
-if (isset($_GET['sid'])) {
-    if (has_permission('main.display.all_results')) {
-        $db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
-        $db_query->execute(['sid' => $_GET['sid']]);
-    } else {
-        $db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid AND SUBMISSIONS.user_id=:uid');
-        $db_query->execute(['sid' => $_GET['sid'], 'uid' => $_SESSION['AUTH_ID']]);
-    }
+    $sid = (filter_var($_GET['sid'] ?? 0, FILTER_VALIDATE_INT) > 0) $_GET['sid'] : 0;
+if ($sid <= 0) {
+    kick();
+}
+
+if (has_permission('main.display.all_results')) {
+    $db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
+    $db_query->execute(['sid' => $sid]);
+} else {
+    $db_query = $pdo->prepare('SELECT DISTINCT *, SUBMISSIONS.comment AS scomment FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid AND SUBMISSIONS.user_id=:uid');
+    $db_query->execute(['sid' => $sid, 'uid' => $_SESSION['AUTH_ID']]);
+}
 
     $row = $db_query->fetch();
 
-    if (!isset($row['score_percentage'])) {
-        kick();
-    }
+if (!isset($row['score_percentage'])) {
+    kick();
+}
 
 
-    if (strtotime($row['result_publish_time']) < strtotime("now")) {
-        if ($row['score_percentage'] == 0) {
-            $gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 5%);";
-            $percentage = $row['score_percentage'] . "%";
-            $status = __("Incorrect");
-        } elseif ($row['score_percentage'] == 100) {
-            $gradient = "linear-gradient(to left,#00d10a 0%,transparent 5%);";
-            $percentage = $row['score_percentage'] . "%";
-            $status = __("Fully correct");
-        } elseif ($row['score_percentage'] == -1) {
-            $gradient = "linear-gradient(to left,gray 0%,transparent 5%);";
-            $percentage = "...";
-            $status = __("In queue...");
-        } else {
-            $gradient = "linear-gradient(to left,#8eed28 0%,transparent 5%);";
-            $percentage = $row['score_percentage'] . "%";
-            $status = __("Partially correct");
-        }
-    } else {
+if (strtotime($row['result_publish_time']) < strtotime("now")) {
+    if ($row['score_percentage'] == 0) {
+        $gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 5%);";
+        $percentage = $row['score_percentage'] . "%";
+        $status = __("Incorrect");
+    } elseif ($row['score_percentage'] == 100) {
+        $gradient = "linear-gradient(to left,#00d10a 0%,transparent 5%);";
+        $percentage = $row['score_percentage'] . "%";
+        $status = __("Fully correct");
+    } elseif ($row['score_percentage'] == -1) {
         $gradient = "linear-gradient(to left,gray 0%,transparent 5%);";
         $percentage = "...";
-        $status = __("Result unavailable");
+        $status = __("In queue...");
+    } else {
+        $gradient = "linear-gradient(to left,#8eed28 0%,transparent 5%);";
+        $percentage = $row['score_percentage'] . "%";
+        $status = __("Partially correct");
     }
 } else {
-    kick();
+    $gradient = "linear-gradient(to left,gray 0%,transparent 5%);";
+    $percentage = "...";
+    $status = __("Result unavailable");
 }
 ?>
 <style>

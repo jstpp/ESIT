@@ -18,10 +18,12 @@ import tests.run as tests
 from api.config import config
 from obj.submission import Submission
 
+
 SUPPORTED_LANGUAGES = {"py", "cpp", "java"}
 ENFORCED_TESTING = True
 ENFORCED_LANDLOCK = True
 QUIET_TESTING = False
+CANARY_HEARTBEAT = 2 # in seconds
 
 
 def setup_logging(log_directory, worker_id):
@@ -106,6 +108,7 @@ def initialize_landlock(logger):
             rs.allow_port(53, AccessNet.CONNECT_TCP)
             rs.allow_port(80, AccessNet.CONNECT_TCP)
             rs.allow_port(443, AccessNet.CONNECT_TCP)
+            rs.allow_port(int(config.rabbitmq_port), AccessNet.CONNECT_TCP)
             rs.restrict()
         logger.info("Landlock restrictions initialized successfully.")
         return True
@@ -139,7 +142,8 @@ def start_execution(logger, submission):
         raise Exception(f"Unsupported language: {submission.submission_lang}")
 
 
-def connect_to_queue(logger, t):
+def connect_to_queue(logger, t_start, max_retries = 5):
+    t = t_start
     while True:
         try:
             credentials = pika.PlainCredentials(
@@ -150,7 +154,7 @@ def connect_to_queue(logger, t):
                     host=config.rabbitmq_host,
                     port=config.rabbitmq_port,
                     credentials=credentials,
-                    heartbeat=60,
+                    heartbeat=180,
                     socket_timeout=10,
                 )
             )
@@ -158,18 +162,18 @@ def connect_to_queue(logger, t):
             logger.info("Successfully connected to the queue.")
             break
         except Exception as e:
-            t *= 2
+            t += 1
 
-            if t > 32:
+            if t-t_start > max_retries:
                 logger.critical("Can't connect to RabbitMQ. Stopping worker...")
                 sys.exit(1)
 
             logger.error(
                 f"Can't connect to RabbitMQ: {e}. "
-                f"Trying to reconnect in {t} seconds."
+                f"Trying to reconnect in {2**t} seconds."
             )
 
-            time.sleep(t)
+            time.sleep(2**t)
 
     return connection, channel
 
@@ -203,6 +207,11 @@ def prepare_inout(logger, submission):
         raise Exception(f"mq_receiver.py: prepare_inout(): {exception}")
 
 
+def canary(logger, device_name):
+    while True:
+        api.lib.ping(f"worker ({str(device_name)})", config.web_url, max(CANARY_HEARTBEAT,1))
+        time.sleep(max(CANARY_HEARTBEAT-1,0))
+
 def main(worker_id=1):
     try:
         logger = setup_logging(
@@ -218,8 +227,14 @@ def main(worker_id=1):
         raise Exception(f"mq_receiver.py: main(): {exception}")
 
     try:
-        connection, channel = connect_to_queue(logger, 2)
+        connection, channel = connect_to_queue(logger, t_start=1, max_retries=5)
         initialize_landlock(logger)
+
+        threading.Thread(
+            target=canary,
+            kwargs={"device_name": worker_id, "logger": logger},
+            name=f"canary.worker.{worker_id}",
+        ).start()
 
         def callback(ch, method, properties, body):
             try:
@@ -284,6 +299,19 @@ def main(worker_id=1):
 
         logger.info("Waiting for messages. To exit press CTRL+C")
         channel.start_consuming()
+        logger.warning(f"Broker connection closed. ")
+
+        try:
+            while True:
+                connection, channel = connect_to_queue(logger, t_start=1, max_retries=12)
+                channel.basic_qos(prefetch_count=1)
+                channel.basic_consume(
+                    queue="esit", on_message_callback=callback, auto_ack=False
+                )
+                channel.start_consuming()
+        except Exception as exception:
+            logger.exception("An exception occured.")
+
     except Exception as exception:
         raise Exception(f"mq_receiver.py: main(): {exception}")
 

@@ -1,11 +1,15 @@
 <?php
     $ident = content_type_identification('ctf');
+    $sid = (filter_var($_GET['sid'] ?? 0, FILTER_VALIDATE_INT) > 0) $_GET['sid'] : 0;
+if ($sid <= 0) {
+    kick();
+}
 if (has_permission('main.display.all_results')) {
     $db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
-    $db_query->execute(['sid' => $_GET['sid']]);
+    $db_query->execute(['sid' => $sid]);
 } else {
     $db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid AND SUBMISSIONS.user_id=:uid');
-    $db_query->execute(['sid' => $_GET['sid'], 'uid' => $_SESSION['AUTH_ID']]);
+    $db_query->execute(['sid' => $sid, 'uid' => $_SESSION['AUTH_ID']]);
 }
 
     $row = $db_query->fetch();

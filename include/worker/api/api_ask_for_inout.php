@@ -37,11 +37,11 @@ function zip_inout($problem_id)
     return $zipcreated;
 }
 
-    $raw = file_get_contents('php://input');
-    $data = json_decode($raw, true);
-    $tag = base64_decode($data['tag']);
+        $raw = file_get_contents('php://input');
+        $data = json_decode($raw, true);
+        $tag = base64_decode($data['tag']);
 
-    $content = json_decode(openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, $options = 0, base64_decode($data['nonce']), $tag), true);
+        $content = json_decode(openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, $options = 0, base64_decode($data['nonce']), $tag), true);
 
 if (!isset($content['worker_addr'])) {
     header("HTTP/1.0 403 Forbidden");

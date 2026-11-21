@@ -86,8 +86,9 @@ def run(submission):
                     stderr=debugfile
                 )
                 
-            with open(output_file, "r", encoding="utf-8", errors="replace") as outputfile:
-                turn.result = outputfile.read()
+            if submission.submission_type == "testing":
+                with open(output_file, "r", encoding="utf-8", errors="replace") as outputfile:
+                    turn.result = outputfile.read()
             turn.returncode = quest.returncode
 
         except Exception as e:

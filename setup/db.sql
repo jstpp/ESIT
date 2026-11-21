@@ -342,6 +342,26 @@ CREATE TABLE `PASSWORD_RECOVERY` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `NETWORK_LOG`
+--
+
+CREATE TABLE `NETWORK_LOG` (
+  `LOG_ID` int(11) NOT NULL,
+  `device_name` varchar(255) NOT NULL, 
+  `device_type` varchar(255) NOT NULL, 
+  `ip_address` varchar(255) NOT NULL, 
+  `timestamp` datetime NOT NULL DEFAULT current_timestamp(),
+  `cpu_total` decimal(10, 2) NOT NULL,
+  `cpu_free` decimal(10, 2) NOT NULL,
+  `mem_total` int(11) NOT NULL,
+  `mem_free` int(11) NOT NULL,
+  `heartbeat` decimal(6, 2) NOT NULL,
+  `misc` text NOT NULL DEFAULT ('{}')
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Indexes for table dumps
 --
 
@@ -500,6 +520,12 @@ ALTER TABLE `PASSWORD_RECOVERY`
   ADD PRIMARY KEY (`REQUEST_ID`);
 
 --
+-- Indexes for table `NETWORK_LOG`
+--
+ALTER TABLE `NETWORK_LOG`
+  ADD PRIMARY KEY (`LOG_ID`);
+
+--
 -- AUTO_INCREMENT & UUIDs for dumped tables
 --
 
@@ -634,6 +660,12 @@ ALTER TABLE `REEVALUATION_REQUESTS`
 --
 ALTER TABLE `PASSWORD_RECOVERY`
   MODIFY `REQUEST_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `NETWORK_LOG`
+--
+ALTER TABLE `NETWORK_LOG`
+  MODIFY `LOG_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

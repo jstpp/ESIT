@@ -380,6 +380,17 @@
             <label for="general_default_language"><?php echo(__("Default language")); ?>:&emsp;</label>
             <input type="text" id="general_default_language" name="general_default_language" placeholder="<?php echo(__("Default language")); ?>" value="<?php echo(get_misc_value('general_default_language')); ?>">
         </div>
+        <?php
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+            echo('<div class="dark-box">
+                    <label class="switch-checkbox">
+                        <input type="checkbox" name="general_advanced_header_security" value="1" id="general_advanced_header_security" ' . (boolval(get_misc_value('general_advanced_header_security')) ? 'checked' : '') . '>
+                        <span class="switch-checkbox-toggle"></span>
+                    </label>
+                    <label for="general_advanced_header_security">&emsp;' . __("Advanced header security") . '</label>
+                </div>');
+        }
+        ?>
         <div class="dark-box">
             <p><?php echo(__("Workers")); ?></p>
             <label class="switch-checkbox">
@@ -490,6 +501,50 @@
     <br />
     <br />
     <h2 class="window_title"><?php echo(__("Community plugins")); ?></h2>
+    <?php
+        $pluginDirectory = __DIR__ . '/../plugins';
+
+        $pluginEntries = is_dir($pluginDirectory)
+            ? (scandir($pluginDirectory) ?: [])
+            : [];
+
+        $plugins = array_values(array_filter(
+            $pluginEntries,
+            static function ($plugin) use ($pluginDirectory): bool {
+                return $plugin !== '.'
+                    && $plugin !== '..'
+                    && preg_match('/^[a-zA-Z0-9_-]+$/D', $plugin) === 1
+                    && is_dir($pluginDirectory . DIRECTORY_SEPARATOR . $plugin);
+            }
+        ));
+
+        sort($plugins, SORT_NATURAL | SORT_FLAG_CASE);
+
+        $pluginEnabled = [];
+
+        foreach ($plugins as $plugin) {
+            $pluginEnabled[$plugin] = (bool) get_misc_value(
+                'community_plugin_' . $plugin
+            );
+        }
+
+
+        foreach ($plugins as $plugin) {
+            if ($pluginEnabled[$plugin]) {
+                continue;
+            }
+
+            $escapedPlugin = htmlspecialchars(
+                $plugin,
+                ENT_QUOTES | ENT_SUBSTITUTE,
+                'UTF-8'
+            );
+
+            echo('<form id="plugin_uninstall_' . htmlspecialchars($plugin, ENT_QUOTES, 'UTF-8') . '" method="POST" action="process.php?r=modify_config&call=plugin_uninstall&plugin_name=' . rawurlencode($plugin) . '">
+                <input name="csrf_token" type="hidden" value="' . $_SESSION['CSRF_TOKEN'] . '"/>
+            </form>');
+        }
+        ?>
     <form method="POST" action="process.php?r=modify_config&category=community_plugin">
         <input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
         <?php
@@ -508,7 +563,7 @@
                     echo("&emsp;<small>" . __("Plugin loading unsuccessful") . ".</small>");
                 }
             } else {
-                echo('<a href="process.php?r=modify_config&call=plugin_uninstall&plugin_name=' . $plugin . '" class="remove_plugin"><i class="fa fa-trash"></i></a>');
+                echo('<a onClick="document.getElementById(\'plugin_uninstall_' . htmlspecialchars($plugin, ENT_QUOTES, 'UTF-8') . '\').submit();" class="remove_plugin"><i class="fa fa-trash"></i></a>');
                 echo("<small>&emsp;" . __("Plugin inactive") . "</small>");
             }
             echo('	<br style="clear: both;"/>

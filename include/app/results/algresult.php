@@ -1,15 +1,16 @@
 <?php
     $ident = content_type_identification('alg');
-if (!isset($_GET['sid'])) {
+    $sid = (filter_var($_GET['sid'] ?? 0, FILTER_VALIDATE_INT) > 0) $_GET['sid'] : 0;
+if ($sid <= 0) {
     kick();
 }
 
 if (has_permission('main.display.all_results')) {
     $db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid');
-    $db_query->execute(['sid' => $_GET['sid']]);
+    $db_query->execute(['sid' => $sid]);
 } else {
     $db_query = $pdo->prepare('SELECT DISTINCT * FROM SUBMISSIONS INNER JOIN CONTENT ON SUBMISSIONS.problem_id=CONTENT.CONTENT_ID WHERE SUBMISSIONS.SUBMISSION_ID=:sid AND SUBMISSIONS.user_id=:uid');
-    $db_query->execute(['sid' => $_GET['sid'], 'uid' => $_SESSION['AUTH_ID']]);
+    $db_query->execute(['sid' => $sid, 'uid' => $_SESSION['AUTH_ID']]);
 }
 
     $row = $db_query->fetch();
@@ -41,7 +42,7 @@ if (strtotime($row['result_publish_time']) < strtotime("now")) {
 
     $results = array();
     $db_query = $pdo->prepare('SELECT * FROM RESULTS INNER JOIN ALG_TEST_LIST ON RESULTS.test_id=ALG_TEST_LIST.TEST_ID WHERE submission_id=:sid');
-    $db_query->execute(['sid' => $_GET['sid']]);
+    $db_query->execute(['sid' => $sid]);
 
     $anws_correct = 0; #Correct answers
     $anws_wrong = 0; #Wrong answers
@@ -109,14 +110,14 @@ while ($xr = $db_query->fetch()) {
 <div id="reevaluation_div">
     <?php
     if (has_permission('main.solutions.request_recheck')) {
-        echo('<form id="recheck_form" method="POST" action="process.php?r=request_recheck&sid=' . $_GET['sid'] . '">
+        echo('<form id="recheck_form" method="POST" action="process.php?r=request_recheck&sid=' . $sid . '">
 				<input name="csrf_token" type="hidden" value="' . $_SESSION['CSRF_TOKEN'] . '" />
 				<a onClick="document.getElementById(\'recheck_form\').submit();" class="reevaluation_request_box">
 				<i class="fa fa-bullhorn"></i>&nbsp;' . __("Request reevaluation") . '&nbsp;
 			</a></form>');
     }
     if (has_permission('main.solutions.exec.recheck')) {
-        echo('<form id="request_recheck_form" method="POST" action="process.php?r=problem_recheck&sid=' . $_GET['sid'] . '&mode=recheck">
+        echo('<form id="request_recheck_form" method="POST" action="process.php?r=problem_recheck&sid=' . $sid . '&mode=recheck">
 				<input name="csrf_token" type="hidden" value="' . $_SESSION['CSRF_TOKEN'] . '" />
 				<a onClick="document.getElementById(\'request_recheck_form\').submit();" class="reevaluation_request_box">
 				<i class="fa fa-bug"></i>&nbsp;' . __("Reevaluate") . '&nbsp;

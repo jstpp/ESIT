@@ -14,6 +14,7 @@ if (boolval(get_misc_value('plugin_debugging'))) {
         'send_alg_solution'         => ['mode' => 'interactive', 'permission' => 'main.send_alg_solution', 'path' => 'worker/mq_producer.php', 'required' => ['lang', 'pid'], 'csrf_token_required' => true],
         'api_get_results'           => ['mode' => 'worker-api', 'permission' => 'main.api_get_results', 'path' => 'worker/api/api_get_results.php', 'csrf_token_required' => false],
         'ask_for_inout'             => ['mode' => 'worker-api', 'permission' => 'main.ask_for_inout', 'path' => 'worker/api/api_ask_for_inout.php', 'csrf_token_required' => false],
+        'ping'                      => ['mode' => 'worker-api', 'permission' => 'main.ping', 'path' => 'worker/api/api_ping.php', 'csrf_token_required' => false],
         'registration_is_unique'    => ['mode' => 'public', 'permission' => 'main.registration_is_unique', 'path' => '../public/include/registration_is_unique.php', 'csrf_token_required' => false],
         'add_problem'               => ['mode' => 'interactive', 'permission' => 'main.channels.add_problem', 'path' => 'app/problems/add_problem_script.php', 'csrf_token_required' => true],
         'add_content'               => ['mode' => 'interactive', 'permission' => 'main.channels.add_content', 'path' => 'app/content/add_content_script.php', 'csrf_token_required' => true],

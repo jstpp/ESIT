@@ -45,6 +45,7 @@ WORKER_MAX_COMPILATION_TIME=60
 
 # network settings
 NETWORK_PRIVATE_KEY="${NETWORK_PRIVATE_KEY}"
+NETWORK_WEB_URL="http://web"
 EOF
 
 DEFINITIONS_FILE="$1/definitions.rabbitmq.json.example"

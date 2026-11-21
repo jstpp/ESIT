@@ -6,6 +6,7 @@ import os
 import shutil
 import socket
 import zipfile
+import psutil
 
 import requests
 from Crypto.Cipher import AES
@@ -48,6 +49,49 @@ def decrypt(data, key):
         logging.exception(f"lib.py: decrypt(): {exception}")
         return False
 
+def ping(device_name, listener_url, heartbeat):
+    try:
+
+        data = {
+            'device_type': 'alg_worker',
+            'device_name': socket.gethostname() + f" - {device_name}",
+            'ip_addr': socket.gethostbyname(socket.gethostname()),
+            'cpu_total' : int(os.cpu_count()),
+            'cpu_free': ((100-psutil.cpu_percent(interval=1))/100)*float(os.cpu_count()),
+            'mem_total': psutil.virtual_memory().total / (1024 ** 2),
+            'mem_free': psutil.virtual_memory().free / (1024 ** 2),
+            'heartbeat': heartbeat,
+            'misc': '{}'
+        }
+
+        data_to_decrypt = json.loads('{"content":"", "nonce":""}')
+        headers = {"Content-Type": "application/json; charset=utf-8"}
+
+        encrypted = encrypt(json.dumps(data), apiconfig.network_private_key)
+        if not encrypted:
+            raise Exception("Encryption failed")
+        data_to_decrypt["content"] = base64.b64encode(encrypted[0]).decode("utf-8")
+        data_to_decrypt["nonce"] = base64.b64encode(encrypted[1]).decode("utf-8")
+        data_to_decrypt["tag"] = base64.b64encode(encrypted[2]).decode("utf-8")
+        api_connection = requests.post(
+            listener_url + "/app/process.php?r=ping",
+            json=data_to_decrypt,
+            headers=headers,
+            timeout=(5, 30),
+        )
+
+        try:
+            api_connection.raise_for_status()
+        except Exception:
+            logger.error("Cannot establish connection with web application instance!")
+            return False
+        else:
+            logger.info(f"{device_name}: Sent ping to {listener_url}")
+            return True
+
+    except Exception as exception:
+        logger.exception(f"lib.py: ping(): An exception occurred.")
+        return False
 
 def decode_and_extract_zip(
     b64string,
@@ -234,5 +278,5 @@ def send(status, data):
             return False
 
     except Exception as exception:
-        logger.exception(f"lib.py: send(): {exception}")
+        logger.exception(f"lib.py: send(): An exception occurred.")
         return False
