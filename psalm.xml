@@ -6,8 +6,5 @@
 >
     <projectFiles>
         <directory name="public/app/modules"/>
-        <ignoreFiles>
-            <directory name="vendor"/>
-        </ignoreFiles>
     </projectFiles>
 </psalm>
