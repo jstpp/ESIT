@@ -54,7 +54,7 @@
     <br />
     <br />
     <center>
-        <a class="forminput_a" href="process.php?r=get_content&mode=ctffile&cid=<?php echo(filter_var($problemid, FILTER_VALIDATE_INT)); ?>" download>Pobierz plik</a>
+        <a class="forminput_a" href="process.php?r=get_content&mode=ctffile&cid=<?php echo(filter_var($problemid, FILTER_VALIDATE_INT)); ?>" download><?php echo(__("Download file")); ?></a>
     </center>
     <br />
     <br />

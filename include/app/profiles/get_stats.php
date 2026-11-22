@@ -1,6 +1,6 @@
 <?php
 
-    $db_query = $pdo->prepare('SELECT AVG(score_percentage) AS avg_score, COUNT(*) AS submissions_total FROM SUBMISSIONS WHERE user_id=:uid');
+    $db_query = $pdo->prepare('SELECT AVG(score_percentage) AS avg_score, COUNT(*) AS submissions_total FROM SUBMISSIONS WHERE user_id=:uid AND is_in_dlq=0');
     $db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
 
 while ($row = $db_query->fetch()) {

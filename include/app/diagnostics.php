@@ -198,10 +198,10 @@
     <h2 class="window_title"><?php echo(__("Network health")); ?></h2>
     <?php
         $db_query = $pdo->query("SELECT DISTINCT ip_address FROM NETWORK_LOG ORDER BY ip_address ASC");
-        while ($row = $db_query->fetch()) {
-            echo('<h3>' . htmlentities($row['ip_address']) . '</h3>');
+    while ($row = $db_query->fetch()) {
+        echo('<h3>' . htmlentities($row['ip_address']) . '</h3>');
 
-            $sql = "
+        $sql = "
                     SELECT n.device_name, n.device_type,
                         n.cpu_total, n.cpu_free,
                         n.mem_total, n.mem_free,
@@ -216,41 +216,41 @@
                     ) latest ON n.LOG_ID = latest.max_id
                     ORDER BY n.device_name ASC
                 ";
-            $xdb_query = $pdo->prepare($sql);
-            $xdb_query->execute(['ip_addr' => $row['ip_address']]);
+        $xdb_query = $pdo->prepare($sql);
+        $xdb_query->execute(['ip_addr' => $row['ip_address']]);
 
-            $active = [];
-            $inactive = [];
-            while ($xrow = $xdb_query->fetch()) {
-                if ($xrow['is_active']) {
-                    $active[] = $xrow;
-                } else {
-                    $inactive[] = $xrow;
-                }
+        $active = [];
+        $inactive = [];
+        while ($xrow = $xdb_query->fetch()) {
+            if ($xrow['is_active']) {
+                $active[] = $xrow;
+            } else {
+                $inactive[] = $xrow;
             }
-
-            echo('<div style="display: grid; gap: 0.5vmax; margin-left: 5%; width: 90%; grid-template-columns: auto auto auto;">');
-            foreach ($active as $xrow) {
-                echo("<div class='network_health_device network_health_device_active'>");
-                echo("<b>" . htmlentities($xrow['device_name']) . "</b><br />");
-                echo("<small>" . htmlentities($xrow['device_type']) . "</small><br />");
-                echo("<br />");
-                echo("<small>CPUs: " . htmlentities($xrow['cpu_total']) . " (" . htmlentities(round($xrow['cpu_free'] / $xrow['cpu_total'] * 100, 2)) . "% free)</small><br />");
-                echo("<small>Memory: " . htmlentities($xrow['mem_total']) . "MB (" . htmlentities($xrow['mem_free']) . "MB free)</small><br />");
-                echo("<small>Heartbeat: " . htmlentities($xrow['heartbeat']) . " seconds</small><br />");
-                echo("</div>");
-            }
-            echo('</div>');
-
-            echo('<div style="display: grid; gap: 0.5vmax; margin-top: 0.5vmax; margin-left: 5%; width: 90%; grid-template-columns: auto auto auto;">');
-            foreach ($inactive as $xrow) {
-                echo("<div class='network_health_device network_health_device_inactive'>");
-                echo("<b>" . htmlentities($xrow['device_name']) . "</b><br />");
-                echo("<small>" . htmlentities($xrow['device_type']) . "</small><br />");
-                echo("</div>");
-            }
-            echo('</div>');
         }
+
+        echo('<div style="display: grid; gap: 0.5vmax; margin-left: 5%; width: 90%; grid-template-columns: auto auto auto;">');
+        foreach ($active as $xrow) {
+            echo("<div class='network_health_device network_health_device_active'>");
+            echo("<b>" . htmlentities($xrow['device_name']) . "</b><br />");
+            echo("<small>" . htmlentities($xrow['device_type']) . "</small><br />");
+            echo("<br />");
+            echo("<small>CPUs: " . htmlentities($xrow['cpu_total']) . " (" . htmlentities(round($xrow['cpu_free'] / $xrow['cpu_total'] * 100, 2)) . "% free)</small><br />");
+            echo("<small>Memory: " . htmlentities($xrow['mem_total']) . "MB (" . htmlentities($xrow['mem_free']) . "MB free)</small><br />");
+            echo("<small>Heartbeat: " . htmlentities($xrow['heartbeat']) . " seconds</small><br />");
+            echo("</div>");
+        }
+        echo('</div>');
+
+        echo('<div style="display: grid; gap: 0.5vmax; margin-top: 0.5vmax; margin-left: 5%; width: 90%; grid-template-columns: auto auto auto;">');
+        foreach ($inactive as $xrow) {
+            echo("<div class='network_health_device network_health_device_inactive'>");
+            echo("<b>" . htmlentities($xrow['device_name']) . "</b><br />");
+            echo("<small>" . htmlentities($xrow['device_type']) . "</small><br />");
+            echo("</div>");
+        }
+        echo('</div>');
+    }
     ?>
     <br style="clear: both;" />
 </div>

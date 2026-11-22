@@ -1,6 +1,53 @@
 <?php
+    require_once('modules/composer/vendor/autoload.php');
+    use PhpAmqpLib\Connection\AMQPStreamConnection;
+    use PhpAmqpLib\Message\AMQPMessage;
+
+function flush_dead_letter_queue(): bool
+{
+    global $rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $pdo;
+
+    try {
+        $connection = new AMQPStreamConnection($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password);
+        $channel = $connection->channel();
+
+        while (true) {
+            $msg = $channel->basic_get('esit.dlq', true);
+            if ($msg === null) {
+                break;
+            }
+
+            $json = json_decode($msg->getBody(), true);
+
+            $sid = filter_var(
+                $json['submission_id'] ?? null,
+                FILTER_VALIDATE_INT
+            );
+
+            if ($sid === false || $sid <= 0) {
+                continue;
+            }
+
+            try {
+                $db_query = $pdo->prepare('UPDATE SUBMISSIONS SET is_in_dlq=1, score=0, score_percentage=0 WHERE SUBMISSION_ID=:sid');
+                $db_query->execute(['sid' => $sid]);
+            } catch (Throwable $t) {
+                extended_exception_handler($t);
+                return false;
+            }
+        }
+
+        $channel->close();
+        $connection->close();
+        return true;
+    } catch (Throwable $t) {
+        extended_exception_handler($t);
+        return false;
+    }
+}
+
     $ident = content_type_identification('alg');
-    $sid = (filter_var($_GET['sid'] ?? 0, FILTER_VALIDATE_INT) > 0) $_GET['sid'] : 0;
+    $sid = (filter_var($_GET['sid'] ?? 0, FILTER_VALIDATE_INT) > 0) ? $_GET['sid'] : 0;
 if ($sid <= 0) {
     kick();
 }
@@ -16,21 +63,26 @@ if (has_permission('main.display.all_results')) {
     $row = $db_query->fetch();
 
 if (strtotime($row['result_publish_time']) < strtotime("now")) {
-    if ($row['score_percentage'] == 0) {
-        $gradient = "linear-gradient(to left,#ff3d6e 0%,transparent 5%);";
+    if ($row['is_in_dlq'] == 1) {
+        $gradient = "linear-gradient(to left, #ff00f7 0%,transparent 5%);";
+        $percentage = $row['score_percentage'] . "%";
+        $status = __("System error");
+    } elseif ($row['score_percentage'] == 0) {
+        $gradient = "linear-gradient(to left, #ff3d6e 0%,transparent 5%);";
         $percentage = $row['score_percentage'] . "%";
         $status = __("Incorrect");
     } elseif ($row['score_percentage'] == 100) {
-        $gradient = "linear-gradient(to left,#00d10a 0%,transparent 5%);";
+        $gradient = "linear-gradient(to left, #00d10a 0%,transparent 5%);";
         $percentage = $row['score_percentage'] . "%";
         $status = __("Fully correct");
     } elseif ($row['score_percentage'] == -1) {
-        $gradient = "linear-gradient(to left,gray 0%,transparent 5%);";
+        $gradient = "linear-gradient(to left, gray 0%,transparent 5%);";
         $percentage = "...";
         $status = __("In queue");
+        flush_dead_letter_queue();
         echo('<meta http-equiv="refresh" content="3" />');
     } else {
-        $gradient = "linear-gradient(to left,#8eed28 0%,transparent 5%);";
+        $gradient = "linear-gradient(to left, #8eed28 0%,transparent 5%);";
         $percentage = $row['score_percentage'] . "%";
         $status = __("Partially correct");
     }
@@ -55,6 +107,14 @@ while ($xr = $db_query->fetch()) {
     $anws_resource += $xr['anws_resource'] * $xr['weight'];
     $anws_syserror += $xr['anws_syserror'] * $xr['weight'];
     array_push($results, $xr);
+}
+if ($anws_syserror > 0 && ($anws_correct + $anws_wrong + $anws_resource == 0)) {
+    $gradient = "linear-gradient(to left, #ff00f7 0%,transparent 5%);";
+    $percentage = $row['score_percentage'] . "%";
+    $status = __("System error");
+}
+if ($row['is_in_dlq'] == 1) {
+    $anws_syserror = 1;
 }
 ?>
 <style>
@@ -150,7 +210,9 @@ while ($xr = $db_query->fetch()) {
                     echo("<p>");
                     echo(__("Status") . ":&emsp;<code>" . htmlentities($status) . "</code><br />");
                     echo(__("Submission timestamp") . ":&emsp;<code>" . htmlentities($row['submission_time']) . "</code><br />");
-                    echo(__("Verification timestamp") . ":&emsp;<code>" . htmlentities($row['verification_time']) . "</code>");
+                    if ($row['is_in_dlq'] == 0) {
+                        echo(__("Verification timestamp") . ":&emsp;<code>" . htmlentities($row['verification_time']) . "</code>");
+                    }
 
                     echo("<h4>" . __("Total") . ":&emsp;<code>" . htmlentities($row['score']) . "/" . htmlentities($row['maxpoints']) . "</code></h4>");
                 } else {
@@ -245,10 +307,13 @@ while ($xr = $db_query->fetch()) {
     <br />
 </div>
 <?php
-if ($row['score_percentage'] == -1 or strtotime($row['result_publish_time']) > strtotime("now")) {
+if ($row['score_percentage'] == -1 || strtotime($row['result_publish_time']) > strtotime("now")) {
     echo("<script>document.getElementById('details').style.display = 'none';</script>");
     echo("<script>document.getElementById('charts').style.display = 'none';</script>");
     echo("<script>document.getElementById('summary').style.display = 'none';</script>");
+}
+if ($row['is_in_dlq'] == 1) {
+    echo("<script>document.getElementById('details').style.display = 'none';</script>");
 }
 ?>
 <br />

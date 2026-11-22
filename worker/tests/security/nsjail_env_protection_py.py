@@ -114,7 +114,6 @@ def prepare_submission(code):
 code = """
 import os
 
-# Zmienne, które nie powinny być widoczne w piaskownicy
 forbidden_vars = ["RABBITMQ_DEFAULT_USER", "RABBITMQ_DEFAULT_PASS", "NETWORK_PRIVATE_KEY"]
 leaked = [v for v in forbidden_vars if v in os.environ]
 

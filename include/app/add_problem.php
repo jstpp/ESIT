@@ -203,7 +203,7 @@ if ($isfound != 1) {
                 <br />
             </div>
             <br />
-            <a class="forminput_a" id="add_btn" onClick="add_tab();" style="float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dodaj nowy</a>
+            <a class="forminput_a" id="add_btn" onClick="add_tab();" style="float: right; margin-right: 2.5%;"><i class="fa fa-plus"></i>&nbsp;&nbsp;<?php echo(__("Add new")); ?></a>
             <br style="clear: both;"/>
             <br />
             <script>

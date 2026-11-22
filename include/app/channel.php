@@ -259,7 +259,7 @@ if ($row = $db_query->fetch()) {
 </style>
 <script src="/include/js/sortablejs/Sortable.js" type="text/javascript"></script>
 <img id="set_header_img" src="<?php echo htmlspecialchars($chimgpath, ENT_QUOTES, 'UTF-8'); ?>" />
-<form id="channel_follow_form" method="POST" action="process.php?r=follow_channel&id=<?php echo($_GET['id']); ?>">
+<form id="channel_follow_form" method="POST" action="process.php?r=follow_channel&id=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>">
     <input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
     <a onClick="document.getElementById('channel_follow_form').submit();" class="follow_box">
         <i class="far fa-bell"></i>&nbsp;<?php echo((check_follow($_GET['id'], $_SESSION['AUTH_ID'])) ? __('Unfollow') : __('Follow')); ?>&nbsp;
@@ -425,7 +425,7 @@ if (has_permission('main.channels.create_problemset')) {
 													<b class="channel_content_block_title_text">#' . $row['CONTENT_ID'] . '&nbsp;&nbsp;' . htmlentities($row['title']) . '</b>
 													<div class="channel_content_block_element_details">
 														<div class="channel_content_block_available_attempts" style="background-color: ' . $contenttype['color'] . '; right: 0;">
-															' . ($row['maxattempts'] - $ctx['attempts']) . ' prób
+															' . ($row['maxattempts'] - $ctx['attempts']) . ' ' . __("attempts") . '
 														</div>
 														<div class="channel_content_block_stars" style="background-color: ' . $contenttype['color'] . '">
 															<i class="far fa-star"></i>&nbsp;' . max(count_content_stars($row['CONTENT_ID']), 0) . '

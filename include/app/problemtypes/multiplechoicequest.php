@@ -38,7 +38,7 @@
 
 
 </style>
-<form method="POST" id="send_answers" action="process.php?r=verify_test&id=<?php echo($_GET['id']); ?>">
+<form method="POST" id="send_answers" action="process.php?r=verify_test&id=<?php echo(filter_var($_GET['id'], FILTER_VALIDATE_INT)); ?>">
     <?php
         $db_query = $pdo->prepare('SELECT * FROM TEST_QUESTIONS WHERE problem_id=:pid');
         $db_query->execute(['pid' => $_GET['id']]);
@@ -49,7 +49,7 @@
         $count++;
         echo('<div class="window">
 				<p style="margin-left: 5%;">
-					<b>Pytanie ' . $count . ': ' . htmlentities($row['question']) . '</b>&emsp; 1 pkt<br /><br />
+					<b>' . __("Question") . ' ' . $count . ': ' . htmlentities($row['question']) . '</b>&emsp; 1 pkt<br /><br />
 					<input type="checkbox" class="multiple_choice_option" name="' . $count . '_a" id="' . $count . '_a" value="a" />
 					<label for="' . $count . '_a">' . htmlentities($answers->{'a'}) . '</label><br />
 					<input type="checkbox" class="multiple_choice_option" name="' . $count . '_b" id="' . $count . '_b" value="b" />

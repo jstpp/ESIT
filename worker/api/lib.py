@@ -86,7 +86,6 @@ def ping(device_name, listener_url, heartbeat):
             logger.error("Cannot establish connection with web application instance!")
             return False
         else:
-            logger.info(f"{device_name}: Sent ping to {listener_url}")
             return True
 
     except Exception as exception:

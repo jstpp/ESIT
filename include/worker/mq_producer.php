@@ -4,9 +4,9 @@ if (!is_logged_in()) {
     kick();
 }
 
-    require_once('modules/composer/vendor/autoload.php');
-    use PhpAmqpLib\Connection\AMQPStreamConnection;
-    use PhpAmqpLib\Message\AMQPMessage;
+        require_once('modules/composer/vendor/autoload.php');
+        use PhpAmqpLib\Connection\AMQPStreamConnection;
+        use PhpAmqpLib\Message\AMQPMessage;
 
 function savesubmission($submission_id, $content, $submission_lang)
 {
@@ -100,8 +100,8 @@ if ((!isset($_POST['lang']) && !$sid) || !is_logged_in()) {
     kick();
 }
 
-    $db_query = $pdo->prepare('SELECT DISTINCT problemset FROM CONTENT WHERE CONTENT_ID=:pid');
-    $db_query->execute(['pid' => $pid]);
+        $db_query = $pdo->prepare('SELECT DISTINCT problemset FROM CONTENT WHERE CONTENT_ID=:pid');
+        $db_query->execute(['pid' => $pid]);
 if (($row = $db_query->fetch()) && !(check_problemset_availability($row['problemset'], $pdo)['is_available'])) {
     redirect("/app/index.php?p=search&error");
 }

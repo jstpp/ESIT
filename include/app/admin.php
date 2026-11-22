@@ -496,7 +496,7 @@
             <label for="plugin_debugging">&emsp;<?php echo(__("Advanced debugging")); ?></label>
         </div>
         <br />
-        <input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="Zapisz wtyczki syst.">
+        <input type="submit" class="button" style="margin-right: 5%; font: inherit; border: none;" value="<?php echo(__("Save system plugins")); ?>">
     </form>
     <br />
     <br />

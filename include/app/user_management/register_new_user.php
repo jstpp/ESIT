@@ -61,7 +61,7 @@ try {
 
         if (!$lock_acquired) {
             throw new Exception(
-                'Nie udało się uzyskać blokady rejestracji.'
+                'Cannot acquire registration lock.'
             );
         }
     }

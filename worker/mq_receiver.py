@@ -272,6 +272,7 @@ def main(worker_id=1):
                 start_execution(logger, submission)
 
             except Exception:
+                sid = "unknown"
                 if (
                     submission
                     and isinstance(submission, Submission)
@@ -279,13 +280,14 @@ def main(worker_id=1):
                     and api.lib.send("fail", submission)
                 ):
                     ch.basic_ack(delivery_tag=method.delivery_tag)
+                    sid = submission.submission_id
                 else:
                     ch.basic_nack(
                         delivery_tag=method.delivery_tag,
                         requeue=False,
                     )
                 logger.exception(
-                    f"Submission {submission.submission_id} couldn't be evaluated. Sent to DLQ"
+                    f"Submission {sid} couldn't be evaluated. Sent to DLQ"
                 )
             else:
                 ch.basic_ack(

@@ -717,7 +717,7 @@ if ($is_https) {
     {
         global $pdo;
 
-        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM FOLLOWERS WHERE channel_id=:cid');
+        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM FOLLOWS WHERE channel_id=:cid');
         $db_query->execute(['cid' => $channel_id]);
         $count = $db_query->fetch()['count'];
 
@@ -875,11 +875,28 @@ if ($is_https) {
     }
 
     try {
-        $db_query = $pdo->prepare('SELECT COUNT(*) AS count FROM ROLES');
-        $db_query->execute();
-        if ($db_query->fetch()['count'] === 0) {
-            include(__DIR__ . "/../app/config/init_roles.php");
-            load_initial_roles($pdo);
+        $lock_name = 'esit_initial_roles';
+
+        $lock_query = $pdo->prepare('SELECT GET_LOCK(:lock_name, 10)');
+        $lock_query->execute(['lock_name' => $lock_name]);
+
+        if ((int)$lock_query->fetchColumn() !== 1) {
+            throw new RuntimeException('Cannot acquire roles initialization lock.');
+        }
+
+        try {
+            $db_query = $pdo->query('SELECT COUNT(*) FROM ROLES');
+
+            if ((int)$db_query->fetchColumn() === 0) {
+                include(__DIR__ . "/../app/config/init_roles.php");
+
+                if (!load_initial_roles($pdo)) {
+                    throw new RuntimeException('Roles initialization failed.');
+                }
+            }
+        } finally {
+            $release_query = $pdo->prepare('SELECT RELEASE_LOCK(:lock_name)');
+            $release_query->execute(['lock_name' => $lock_name]);
         }
     } catch (Throwable $t) {
         extended_exception_handler($t);

@@ -140,7 +140,7 @@ CREATE TABLE `CHANNELS` (
   `CHANNEL_ID` int(11) NOT NULL,
   `title` text NOT NULL,
   `author_id` char(36) NOT NULL,
-  `description` text NOT NULL DEFAULT ('Kanał'),
+  `description` text NOT NULL DEFAULT ('Channel'),
   `img_path` text NOT NULL DEFAULT ('../img/placeholder.jpeg'),
   `publish_time` datetime NOT NULL DEFAULT current_timestamp(),
   `layout` text NOT NULL DEFAULT ('{}'),
@@ -200,6 +200,7 @@ CREATE TABLE `SUBMISSIONS` (
   `score_percentage` int(11) NOT NULL,
   `submission_lang` text NOT NULL DEFAULT ('n/a'),
   `mode` int(11) NOT NULL DEFAULT 1,
+  `is_in_dlq` int(11) NOT NULL DEFAULT 0,
   `content` longtext NOT NULL DEFAULT ('-'),
   `comment` longtext NOT NULL DEFAULT ('-')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
