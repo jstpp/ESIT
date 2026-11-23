@@ -8,7 +8,7 @@ if (!is_logged_in()) {
         use PhpAmqpLib\Connection\AMQPStreamConnection;
         use PhpAmqpLib\Message\AMQPMessage;
 
-function savesubmission($submission_id, $content, $submission_lang)
+function savesubmission($submission_id, $content, $submission_lang): bool
 {
     try {
         if (file_exists(__DIR__ . "/solutions/" . $submission_id)) {
@@ -41,7 +41,7 @@ function savesubmission($submission_id, $content, $submission_lang)
     }
 }
 
-function mqsend($mq_host, $mq_port, $mq_user, $mq_password, $data)
+function mqsend($mq_host, $mq_port, $mq_user, $mq_password, $data): bool
 {
     try {
         $connection = new AMQPStreamConnection($mq_host, $mq_port, $mq_user, $mq_password);
@@ -59,7 +59,7 @@ function mqsend($mq_host, $mq_port, $mq_user, $mq_password, $data)
     }
 }
 
-function zip_submission($submission_id)
+function zip_submission($submission_id): string
 {
     $pathdir = __DIR__ . '/solutions/' . $submission_id . '/';
     $zipcreated = __DIR__ . '/solutions/' . $submission_id . "/" . $submission_id . ".zip";

@@ -2,6 +2,7 @@
     "require": {
         "php-amqplib/php-amqplib": "^3.6",
         "phpmailer/phpmailer": "^6.10.0",
-        "ezyang/htmlpurifier": "^4.19.1"
+        "ezyang/htmlpurifier": "^4.19.1",
+        "mincdev/php-otpauth": "^2.1.1"
     }
 }

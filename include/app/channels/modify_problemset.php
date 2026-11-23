@@ -1,4 +1,8 @@
 <?php
+    require_once('modules/composer/vendor/autoload.php');
+    $purifier_config = HTMLPurifier_Config::createDefault();
+    $purifier_config->set('Cache.DefinitionImpl', null);
+    $purifier = new HTMLPurifier($purifier_config);
 
 if (!is_logged_in() || !has_permission('main.channels.modify_problemset')) {
     kick();
@@ -25,7 +29,7 @@ try {
             break;
     }
 
-    $title = trim($_POST['update_block_form_name']);
+    $title = $purifier->purify(trim($_POST['update_block_form_name']));
     if (empty($title)) {
         redirect("index.php?p=search&error");
     }

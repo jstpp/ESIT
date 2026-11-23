@@ -456,7 +456,7 @@ if (has_permission('main.channels.create_problemset')) {
                             } else {
                                 echo('<h1 style="text-align: center; margin-bottom: -1vmax;"><i class=\'fas fa-lock\'></i></h1>');
                             }
-                            echo('<div class="channel_content_chapter_pinned" style="order: -9999;">' . $set['title']);
+                            echo('<div class="channel_content_chapter_pinned" style="order: -9999;">' . htmlentities($set['title']));
                             if (!$availability['is_available']) {
                                 echo('&emsp;<small style="color: rgba(128, 128, 128, 1);"><i class=\'fas fa-lock\'></i> ' . __("Requires completion") . ': ' . htmlentities($availability['condition_title']) . '</small>');
                             } elseif (in_array(0, $set_results[$set['SET_ID']]) || count($set_results[$set['SET_ID']]) == 0) {

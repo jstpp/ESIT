@@ -58,7 +58,7 @@ if (strtotime($row['result_publish_time']) < strtotime("now")) {
     <h1><?php echo(__("CTF flag evaluation results")); ?></h1>
 </center>
 <div class="window">
-    <h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=content&id=<?php echo($row['CONTENT_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['CONTENT_ID']); ?>)</h2>
+    <h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=content&id=<?php echo($row['CONTENT_ID']); ?>"><?php echo(htmlentities($row['title'])); ?></a>&emsp;(#<?php echo($row['CONTENT_ID']); ?>)</h2>
     <div style="width: 85%; margin-left: 5%; padding: 2vmax; background-image: <?php echo($gradient); ?>; background-color: var(--container-hover-bg); border-radius: 1vmax;">
         <?php
         if ($row['score_percentage'] != -1 and strtotime($row['result_publish_time']) < strtotime("now")) {

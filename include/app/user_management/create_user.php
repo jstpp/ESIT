@@ -1,5 +1,8 @@
 <?php
-
+    require_once('modules/composer/vendor/autoload.php');
+    $purifier_config = HTMLPurifier_Config::createDefault();
+    $purifier_config->set('Cache.DefinitionImpl', null);
+    $purifier = new HTMLPurifier($purifier_config);
 if (!is_logged_in() || !has_permission('main.user_management.create_user')) {
     kick();
 }
@@ -36,12 +39,12 @@ try {
     $db_query = $pdo->prepare('INSERT INTO USERS (USER_ID, username, password, mail, name, surname, organization) VALUES (:uid, :username, :password, :mail, :name, :surname, :org)');
     $db_query->execute([
         'uid' => $user_id,
-        'username' => $_POST['username'],
+        'username' => $purifier->purify($_POST['username']),
         'password' => password_hash($_POST['password'], PASSWORD_ARGON2ID),
         'mail' => filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL),
-        'name' => trim($_POST['name']),
-        'surname' => trim($_POST['surname']),
-        'org' => trim($_POST['org'])
+        'name' => $purifier->purify(trim($_POST['name'])),
+        'surname' => $purifier->purify(trim($_POST['surname'])),
+        'org' => $purifier->purify(trim($_POST['org']))
     ]);
     $db_query = $pdo->prepare('INSERT INTO AFFILIATION (user_id, role_id) VALUES (:uid, :rid)');
     $db_query->execute(['uid' => $user_id, 'rid' => $_POST['role']]);

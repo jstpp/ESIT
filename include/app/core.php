@@ -104,7 +104,7 @@ if ($is_https) {
     #                    i18n                     #
     ###############################################
 
-    function __($text, $plural = null, $number = null)
+    function __($text, $plural = null, $number = null): string
     {
         if (!isset($plural)) {
             return _($text);
@@ -243,14 +243,14 @@ if ($is_https) {
 
     function is_logged_in(): bool
     {
-        return isset($_SESSION['AUTH_ID']);
+        return isset($_SESSION['AUTH_ID']) && ($_SESSION['AUTH_2FA_VALID'] ?? false);
     }
 
     function get_roles($user_id = 0): array
     {
         global $pdo;
 
-        if (!is_logged_in()) {
+        if (!isset($_SESSION['AUTH_ID'])) {
             return [];
         }
         if ($user_id === 0) {

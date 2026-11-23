@@ -1,6 +1,6 @@
 <?php
 
-function getMemory()
+function getMemory(): array
 {
     $mem = [];
     if (is_readable('/proc/meminfo')) {
@@ -11,7 +11,7 @@ function getMemory()
     return $mem;
 }
 
-function getNumOfCPUs()
+function getNumOfCPUs(): int
 {
     $CPUs = -1;
     if (is_file('/proc/cpuinfo')) {
@@ -22,7 +22,7 @@ function getNumOfCPUs()
     return $CPUs;
 }
 
-function getCPUUsage()
+function getCPUUsage(): float
 {
     return sys_getloadavg()[0];
 }

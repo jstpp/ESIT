@@ -1,6 +1,6 @@
 <?php
 
-function unsuccessful_change($pdo)
+function unsuccessful_change($pdo): void
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $notification_content = __("Password change unsuccessful.");

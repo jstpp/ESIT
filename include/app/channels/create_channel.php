@@ -1,4 +1,8 @@
 <?php
+    require_once('modules/composer/vendor/autoload.php');
+    $purifier_config = HTMLPurifier_Config::createDefault();
+    $purifier_config->set('Cache.DefinitionImpl', null);
+    $purifier = new HTMLPurifier($purifier_config);
 
 if (!is_logged_in() || !has_permission('main.channels.create_channel')) {
     kick();
@@ -15,7 +19,7 @@ if (isset($_FILES["channel_set_img"]) && $_FILES["channel_set_img"]["error"] ===
     $image = load_img_input();
 }
 
-    $title = trim($_POST['channel_setname']);
+    $title = $purifier->purify(trim($_POST['channel_setname']));
 if (empty($title)) {
     redirect("index.php?p=search&error");
 }

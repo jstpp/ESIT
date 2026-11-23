@@ -1,8 +1,8 @@
 <?php
     include(__DIR__ . '/../../include/app/core.php');
-if (isset($_SESSION['AUTH_ID'])) {
-    redirect("../app/index.php");
-}
+    if (isset($_SESSION['AUTH_ID']) && $_SESSION['AUTH_2FA_VALID']) {
+        redirect("../app/index.php");
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -204,6 +204,24 @@ if (isset($_SESSION['AUTH_ID'])) {
                     <br style="clear: both;"/>
                 </form>
                 <p><?php echo(__("Don't have an account yet?")); ?> <a class="simple_href" href="<?php echo(boolval(get_misc_value('plugin_portal')) ? '../rejestracja.php' : '/login/register.php'); ?>"><?php echo(__("Create an account")); ?></a>.</p>
+                <br />
+            </div>
+            <div class="window" id="otp_code_layer" style="display: none;">
+                <p><?php echo(__("Your account has Two-Factor Authentication configured. Please enter the code from your OTP provider.")); ?></p>
+                <form method="POST" action="process.php?s=auth">
+                    <input class="login_input" type="text" name="auth_otp_code" placeholder="000000" style="text-align: center;" required />
+                    <br />
+                    <br />
+                    <input type="submit" class="login_submit" style="width: calc(80% + 2vmax);" value="<?php echo(__("Log in")); ?>"/>
+                </form>
+                <?php
+                    if (isset($_GET['2fa'])) {
+                        if(!isset($_SESSION['AUTH_ID'])) redirect("/login");
+                        echo('<script>document.getElementById("otp_code_layer").style.display = "block";</script>');
+                        echo('<script>document.getElementById("default_login_window").style.display = "none";</script>');
+                    }
+                ?>
+                <br style="clear: both;"/>
                 <br />
             </div>
             <div class="window" id="password_recovery_window_mail" style="display: none;">

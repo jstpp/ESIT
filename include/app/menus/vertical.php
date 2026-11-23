@@ -72,9 +72,9 @@
     <div style="margin-left: 0.8vw; margin-top: 5vw; display: flex; gap: 1vmax;">
         <img aria-label="<?php echo($_SESSION['AUTH_USERNAME']) ?>'s profile picture" src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($_SESSION['AUTH_USERNAME']) ?>" onClick="document.getElementById('profile_background_pane').style.display = 'flex';" style="cursor: pointer; width: 2.7vmax; border-radius: 1.35vmax; box-shadow: 0 0 0.2vmax 0.1vmax var(--container-hover-bg-textbox); background-color: rgba(218, 226, 230, 1);"/>
         <div>
-            <b style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block; width: 12.5vw;"><?php echo($_SESSION['AUTH_NAME']) ?> <?php echo($_SESSION['AUTH_SURNAME']) ?></b>
+            <b style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block; width: 12.5vw;"><?php echo(htmlentities($_SESSION['AUTH_NAME'])) ?> <?php echo(htmlentities($_SESSION['AUTH_SURNAME'])) ?></b>
             <br />
-            <span style="user-select: none; font-size: 0.7vw; background-color: <?php echo($_SESSION['AUTH_ROLE']['color']) ?>; padding: 0.1vw 0.5vw; border-radius: 0.5vw;"><i class="<?php echo(__($_SESSION['AUTH_ROLE']['icon'])) ?>"></i>&nbsp;&nbsp;<?php echo(__($_SESSION['AUTH_ROLE']['role_name'])) ?><span>
+            <span style="user-select: none; font-size: 0.7vw; background-color: <?php echo($_SESSION['AUTH_ROLE']['color']); ?>; padding: 0.1vw 0.5vw; border-radius: 0.5vw;"><i class="<?php echo($_SESSION['AUTH_ROLE']['icon']); ?>"></i>&nbsp;&nbsp;<?php echo($_SESSION['AUTH_ROLE']['role_name']); ?><span>
         </div>
     </div>
     <br />

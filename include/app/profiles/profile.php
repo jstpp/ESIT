@@ -41,8 +41,8 @@
         <br />
         <center>
             <img src="https://api.dicebear.com/10.x/identicon/svg?seed=<?php echo($_SESSION['AUTH_USERNAME']) ?>" style="width: 5vmax; background-color: rgba(218, 226, 230, 1); border-radius: 2.5vmax; box-shadow: 0 0 0.3vmax 0.1vmax var(--container-hover-bg-textbox);" />
-            <h3 style="text-align: center; margin-bottom: 0;"><?php echo($_SESSION['AUTH_NAME']) ?> <?php echo($_SESSION['AUTH_SURNAME']) ?></h3>
-            <small style="text-align: center;">@<?php echo($_SESSION['AUTH_USERNAME']) ?></small>
+            <h3 style="text-align: center; margin-bottom: 0;"><?php echo(htmlentities($_SESSION['AUTH_NAME'])) ?> <?php echo(htmlentities($_SESSION['AUTH_SURNAME'])) ?></h3>
+            <small style="text-align: center;">@<?php echo(htmlentities($_SESSION['AUTH_USERNAME'])) ?></small>
         </center>
         <div class="profile_stats_box">
             <div>

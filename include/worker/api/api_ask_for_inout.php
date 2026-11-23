@@ -7,7 +7,7 @@
 
     http_response_code(200);
 
-function zip_inout($problem_id)
+function zip_inout($problem_id): string
 {
     $pathdir = __DIR__ . '/../alg/' . $problem_id . '/';
     $zipcreated = __DIR__ . '/../alg/' . $problem_id . "/" . $problem_id . ".zip";

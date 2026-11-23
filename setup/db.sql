@@ -247,6 +247,7 @@ CREATE TABLE `USERS` (
   `name` varchar(255) NOT NULL,
   `surname` varchar(320) NOT NULL,
   `organization` text NOT NULL,
+  `2fa_secret` varchar(255) NOT NULL DEFAULT ('-'),
   `settings` text NOT NULL DEFAULT ('{"code_editor_theme":"dracula.css","dark_mode":"1"}')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

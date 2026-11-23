@@ -298,6 +298,15 @@
             <h3><?php echo(__("Repositories search")); ?></h3>
         </div>
         <script>
+            function sanitizeString(str){
+                if (str!=null)
+                {
+                    str = str.replace(/[^a-z0-9áéíóúñüąężśćńźół \.,_-]/gim,"");
+                    return str.trim();
+                } else {
+                    return "";
+                }
+            }
             async function githubSearch() {
                 const query = document.getElementById("github_searchbox").value;
                 const resultsDiv = document.getElementById("github_search_results");
@@ -318,8 +327,8 @@
                         repoDiv.innerHTML = `
                             <img src="${repo.owner.avatar_url}" />
                             <p style="width: 80%;">
-                                <b>${repo.name}</b> by <b>${repo.owner.login}</b><br/>
-                                ${repo.description || '<?php echo(__("No description")); ?>'}
+                                <b>${sanitizeString(repo.name)}</b> by <b>${sanitizeString(repo.owner.login)}</b><br/>
+                                ${sanitizeString(repo.description) || '<?php echo(__("No description")); ?>'}
                             </p>
                             <a href="${repo.html_url}" target="_blank" class="download_button"><i class="fa fa-external-link"></i></a>
                             <form method="POST" id="download_plugin_form_` + repo.full_name + `" action="process.php?r=download_plugin&repo=` + repo.full_name + `&branch=` + repo.default_branch + `">

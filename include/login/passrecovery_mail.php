@@ -15,7 +15,7 @@ if (isset($_POST['recovery_pass_mail'])) {
     if (isset($users_data['name'])) {
         $recovery_token = generate_recovery_token($users_data['mail']);
         $recovery_link = get_misc_value('general_url') . "/login/index.php?passrecoverypass&mail=" . $users_data['mail'] . "&token=" . $recovery_token;
-        $recovery_msg = __("Hello") . " " . $users_data['name'] . "!<br />" . __("It's me - your activation link") . ":
+        $recovery_msg = __("Hello") . " " . htmlentities($users_data['name']) . "!<br />" . __("It's me - your activation link") . ":
             <br /><a href='" . $recovery_link . "'>" . $recovery_link . "</a>";
 
         $mail = new PHPMailer();

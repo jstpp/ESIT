@@ -161,6 +161,7 @@ if (!is_logged_in()) {
                 float: right;
                 text-decoration: none;
                 margin-left: 0.5vw;
+                margin-right: 5%;
 
                 background-color: var(--highlight-color);
                 color: white !important;

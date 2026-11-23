@@ -81,7 +81,7 @@ if (strtotime($row['result_publish_time']) < strtotime("now")) {
     <h1><?php echo(__("Evaluation results")); ?></h1>
 </center>
 <div class="window">
-    <h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=content&id=<?php echo($row['CONTENT_ID']); ?>"><?php echo($row['title']); ?></a>&emsp;(#<?php echo($row['CONTENT_ID']); ?>)</h2>
+    <h2 class="window_title"><a style="color: var(--text); padding: 0.5vmax 1vmax; border-radius: 0.5vmax; background-color: <?php echo($ident['color']); ?>" href="?p=content&id=<?php echo($row['CONTENT_ID']); ?>"><?php echo(htmlentities($row['title'])); ?></a>&emsp;(#<?php echo($row['CONTENT_ID']); ?>)</h2>
     <br />
     <div style="margin-left: 5%; width: 90%;">
         <div style="display: flex; gap: 2vmax;">

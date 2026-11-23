@@ -5,7 +5,7 @@
     $purifier_config->set('Cache.DefinitionImpl', null);
     $purifier = new HTMLPurifier($purifier_config);
 
-function process_content_create_root($cid)
+function process_content_create_root($cid): bool
 {
     try {
         mkdir(__DIR__ . '/../../../include/storage/video/' . (int)$cid, 0755, true);
@@ -16,7 +16,7 @@ function process_content_create_root($cid)
     return true;
 }
 
-function process_content_check($file, $mode)
+function process_content_check($file, $mode): bool
 {
     try {
         $restricted_extensions = ['php', 'php3', 'php4', 'php5', 'phtml', 'pl', 'cgi', '.htaccess'];
@@ -37,7 +37,7 @@ function process_content_check($file, $mode)
     }
 }
 
-function process_content_save($file, $mode, $cid)
+function process_content_save($file, $mode, $cid): ?string
 {
     $cid = (int)$cid;
     try {
@@ -75,7 +75,7 @@ try {
 
     $db_query = $pdo->prepare('INSERT INTO CONTENT (title, author_id, type, maxattempts, maxpoints, problemset, result_publish_time, publish_time, isarchived, comment) VALUES (:title, :aid, :type, :maxattempts, :maxpoints, :sid, :resultpublishtime, :publishtime, :isarchived, :comment)');
     $db_query->execute([
-        'title' => trim($_POST['content_title']),
+        'title' => $purifier->purify(trim($_POST['content_title'])),
         'aid' => $_SESSION['AUTH_ID'],
         'type' => filter_var($_POST['content_type'], FILTER_VALIDATE_INT),
         'maxattempts' => 1,

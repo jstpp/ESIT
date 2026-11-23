@@ -183,7 +183,7 @@
     <?php echo(__("Author")); ?>: <b>jstpp</b></p>
     <div id="template_files">
         <?php
-        function list_template_files($template_dir)
+        function list_template_files($template_dir): void
         {
             $template_dir = rtrim($template_dir, '/');
             $template_files = scandir($template_dir);

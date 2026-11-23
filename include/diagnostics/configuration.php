@@ -1,6 +1,6 @@
 <?php
 
-function configuration_diagnostics()
+function configuration_diagnostics(): array
 {
     $results = array();
 

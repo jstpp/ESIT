@@ -23,6 +23,7 @@ if (boolval(get_misc_value('plugin_debugging'))) {
         'save_form'                 => ['mode' => 'interactive', 'permission' => 'main.save_form', 'path' => 'app/problems/save_form_script.php', 'csrf_token_required' => true],
         'check_form'                => ['mode' => 'interactive', 'permission' => 'main.channels.check_form', 'path' => 'app/problems/check_form_script.php', 'csrf_token_required' => true],
         'settings_appearance'       => ['mode' => 'interactive', 'permission' => 'main.settings_appearance', 'path' => 'app/settings/settings_appearance.php', 'csrf_token_required' => true],
+        'save_otp'                  => ['mode' => 'interactive', 'permission' => 'main.save_otp', 'path' => 'app/settings/save_otp.php', 'csrf_token_required' => true],
         'modify_content'            => ['mode' => 'interactive', 'permission' => 'main.portal.modify_content', 'path' => 'app/portal/modify_content.php', 'required' => ['page'], 'csrf_token_required' => true],
         'modify_resources'          => ['mode' => 'interactive', 'permission' => 'main.portal.modify_resources', 'path' => 'app/portal/modify_portal_resources.php', 'csrf_token_required' => true],
         'modify_user'               => ['mode' => 'interactive', 'permission' => 'main.user_management.modify_user', 'path' => 'app/user_management/modify_user.php', 'required' => ['uid'], 'csrf_token_required' => true],

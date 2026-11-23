@@ -1,3 +1,17 @@
+<?php
+    require_once('modules/composer/vendor/autoload.php');
+    use MincDev\OtpAuth\OtpAuthenticator;
+
+    $otpAuth = new OtpAuthenticator();
+    $userName = $_SESSION['AUTH_USERNAME'];
+    $appName = get_misc_value('general_title');
+
+    $userSecret = $_SESSION['temp_otp_secret'] ?? $otpAuth->newSecret();
+    $_SESSION['temp_otp_secret'] = $userSecret;
+    
+    $qrBase64 = $otpAuth->getQR($userName, $appName, $userSecret);
+?>
+
 <style>
     .window #results {
         width: 90%;
@@ -79,9 +93,9 @@
 <div class="window">
     <h2 class="window_title"><?php echo(__("Basic information")); ?></h2>
     <p style="margin-left: 5%;">
-        <i class="fa fa-address-book"></i>&nbsp;&nbsp;<b><?php echo(__("Username")); ?>:&emsp;&nbsp;<?php echo($user['username'] . " (" . $user['name'] . " " . $user['surname'] . ")"); ?></b><br />
-        <i class="fa fa-bank"></i>&nbsp;&nbsp;<b><?php echo(__("Organization")); ?>:</b>&emsp;&nbsp;<?php echo($user['organization']); ?><br />
-        <i class="fa fa-envelope"></i>&nbsp;&nbsp;<b><?php echo(__("E-mail address")); ?>:</b>&emsp;<?php echo($user['mail']); ?><br />
+        <i class="fa fa-address-book"></i>&nbsp;&nbsp;<b><?php echo(__("Username")); ?>:&emsp;&nbsp;<?php echo(htmlentities($user['username']) . " (" . htmlentities($user['name']) . " " . htmlentities($user['surname']) . ")"); ?></b><br />
+        <i class="fa fa-bank"></i>&nbsp;&nbsp;<b><?php echo(__("Organization")); ?>:</b>&emsp;&nbsp;<?php echo(htmlentities($user['organization'])); ?><br />
+        <i class="fa fa-envelope"></i>&nbsp;&nbsp;<b><?php echo(__("E-mail address")); ?>:</b>&emsp;<?php echo(htmlentities($user['mail'])); ?><br />
     </p>
     <br />
 </div>
@@ -95,6 +109,25 @@
         <input type="password" class="forminput" name="password_new2" placeholder="<?php echo(__("Repeat new password")); ?>" required/>
         <a class="button" style="margin-left: 5%;" onClick="document.getElementById('change_password_form').submit();"><?php echo(__("Change the password")); ?></a>
     </form>
+    <br style="clear: both;"/>
+    <h3 style="margin-left: 5%;"><?php echo(__("Two-factor authentication")); ?></h3>
+    <div style="margin-left: 5%;">
+        <?php
+            $db_query = $pdo->prepare('SELECT 2fa_secret FROM USERS WHERE USER_ID=:uid');
+            $db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
+            if ($db_query->fetch()['2fa_secret']!="-")
+            {
+                echo(__("<span style='color: white; padding: 1vmax 2vmax; background-color: #28a66b; border-left: 0.5vmax solid #00723b; display: block; width: calc(90% - 1vmax); border-radius: 0.5vmax;'>2FA method has been already configured.</span><br />"));
+            }
+        ?>
+        <img src="<?= htmlspecialchars($qrBase64, ENT_QUOTES, 'UTF-8'); ?>" style="border: 1vmax solid white; border-radius: 0.5vmax;" alt="QR Code">
+        <form method="POST" action="process.php?r=save_otp">
+            <input name="csrf_token" type="hidden" value="<?php echo($_SESSION['CSRF_TOKEN']); ?>" />
+            <input name="otp_secret" type="hidden" value="<?php echo($userSecret); ?>" required/>
+            <input type="text" class="forminput" name="otp_code" placeholder="000000" required />
+            <input type="submit" class="button" style="margin-left: 5%; font: inherit; border: inherit;" value="<?php echo(__("Set up OTP provider")); ?>">
+        </form>
+    </div>
     <br style="clear: both;"/>
 </div>
 <div class="window">
@@ -170,6 +203,7 @@
     <br />
     <a class="button" style="margin-left: 5%;" onClick="document.getElementById('appearance_form').submit();"><?php echo(__("Save appearance settings")); ?></a>
     <br style="clear: both;"/>
+    <br />
 </div>
 <?php
     include_plugins_for("users_settings_personalization");
