@@ -1,6 +1,6 @@
 <?php
     $ident = content_type_identification('ctf');
-    $sid = (filter_var($_GET['sid'] ?? 0, FILTER_VALIDATE_INT) > 0) $_GET['sid'] : 0;
+    $sid = (filter_var($_GET['sid'] ?? 0, FILTER_VALIDATE_INT) > 0) ? $_GET['sid'] : 0;
 if ($sid <= 0) {
     kick();
 }

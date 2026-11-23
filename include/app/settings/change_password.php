@@ -13,7 +13,7 @@ function unsuccessful_change($pdo): void
 if (!is_logged_in()) {
     force_to_login();
 }
-if (!isset($_POST['password_old'], $_POST['password_new1'], $_POST['password_new2']) || $_POST['password_new2'] != $_POST['password_new1'] || strlen($_POST['password_new1']) < 2) {
+if (!isset($_POST['password_old'], $_POST['password_new1'], $_POST['password_new2']) || $_POST['password_new2'] != $_POST['password_new1'] || strlen($_POST['password_new1']) < 8) {
     unsuccessful_change($pdo);
 }
 
