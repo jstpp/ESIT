@@ -114,8 +114,8 @@ if (boolval(get_misc_value('plugin_debugging'))) {
     }
 
     if (!empty($script_config['csrf_token_required']) && $script_config['csrf_token_required'] == true) {
-        $csrf_token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'];
-        if (!isset($csrf_token) || !hash_equals($_SESSION['CSRF_TOKEN'] ?? '', $csrf_token)) {
+        $csrf_token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '-';
+        if (!hash_equals($_SESSION['CSRF_TOKEN'] ?? '', $csrf_token)) {
             kick();
         }
     }

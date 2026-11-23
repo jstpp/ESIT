@@ -21,15 +21,15 @@ if ($is_https) {
     ###############################################
 
     # database connection
-    $db_host = "mysql"; #MySQL host
+    $db_host = $_ENV['MYSQL_HOST']; #MySQL host
     $db_username = $_ENV['MYSQL_USER']; #MySQL username
     $db_password = $_ENV['MYSQL_PASSWORD']; #MySQL password
     $db_database = $_ENV['MYSQL_DATABASE']; #MySQL db name
     $db_charset = "utf8mb4"; #MySQL charset
 
     # broker connection
-    $rabbit_mq_host = "rabbitmq"; #Broker's host
-    $rabbit_mq_port = 5672; #Broker's access port
+    $rabbit_mq_host = $_ENV['RABBITMQ_DEFAULT_HOST']; #Broker's host
+    $rabbit_mq_port = $_ENV['RABBITMQ_DEFAULT_PORT']; #Broker's access port
     $rabbit_mq_user = $_ENV['RABBITMQ_DEFAULT_USER']; #Broker's access username
     $rabbit_mq_password = $_ENV['RABBITMQ_DEFAULT_PASS']; #Broker's access password
 
@@ -45,7 +45,7 @@ if ($is_https) {
         'general_url' => 'http://web',
         'general_timezone' => 'Europe/Warsaw',
         'general_default_language' => 'en_US.UTF-8',
-        'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.18.0.1", "172.18.0.2", "172.18.0.3", "172.18.0.4", "172.18.0.5"]',
+        'general_workers_allowed_addr' => '["localhost", "worker", "127.0.0.1", "::1", "172.*.*.*"]',
         'general_trusted_proxies' => '["127.0.0.1", "::1"]',
         'general_advanced_header_security' => '0',
         'plugin_custom_error_broker_url' => 'http://localhost',
@@ -74,29 +74,34 @@ if ($is_https) {
         die;
     }
 
+    $redis = new Redis();
+    $redis->connect('redis', 6379);
+    $redis->auth($_ENV['REDIS_PASSWORD']);
+
     ###############################################
     #       Advanced Header Security Module       #
     ###############################################
+
+    header(
+        "Content-Security-Policy: " .
+        "default-src 'self'; " .
+        "script-src 'self' 'unsafe-inline'; " .
+        "style-src 'self' 'unsafe-inline'; " .
+        "img-src 'self' data: blob:; " .
+        "font-src 'self' data:; " .
+        "connect-src 'self'; " .
+        "media-src 'self' blob:; " .
+        "object-src 'none'; " .
+        "base-uri 'self'; " .
+        "form-action 'self'; " .
+        "frame-ancestors 'self';"
+    );
 
     if ($is_https && filter_var(get_misc_value('general_advanced_header_security'), FILTER_VALIDATE_BOOLEAN)) {
         header("Strict-Transport-Security: max-age=15552000;");
         header('X-Content-Type-Options: nosniff');
         header('X-Frame-Options: SAMEORIGIN');
         header('Referrer-Policy: strict-origin-when-cross-origin');
-        header(
-            "Content-Security-Policy: " .
-            "default-src 'self'; " .
-            "script-src 'self' 'unsafe-inline'; " .
-            "style-src 'self' 'unsafe-inline'; " .
-            "img-src 'self' data: blob:; " .
-            "font-src 'self' data:; " .
-            "connect-src 'self'; " .
-            "media-src 'self' blob:; " .
-            "object-src 'none'; " .
-            "base-uri 'self'; " .
-            "form-action 'self'; " .
-            "frame-ancestors 'self';"
-        );
     }
 
 
@@ -295,16 +300,35 @@ if ($is_https) {
             force_to_login();
             die;
         } else {
-            $_SESSION['SESSION_TIMEOUT'] = time() + 18000;
+            $_SESSION['SESSION_TIMEOUT'] = time() + 60 * 60 * 5; # 5h
         }
     }
 
     function net_check_if_trusted(): bool
     {
-        $allowed = json_decode(get_misc_value('general_workers_allowed_addr'), true);
-        return is_array($allowed) && in_array(get_real_client_ip(), $allowed, true);
-    }
+        $allowed = json_decode(
+            get_misc_value('general_workers_allowed_addr'),
+            true
+        );
 
+        if (!is_array($allowed)) {
+            return false;
+        }
+
+        $ip = get_real_client_ip();
+
+        foreach ($allowed as $pattern) {
+            if ($ip === $pattern) {
+                return true;
+            }
+
+            if (fnmatch($pattern, $ip)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     function get_real_client_ip(): string
     {
         $remote_addr = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
@@ -688,18 +712,21 @@ if ($is_https) {
 
     function api_rate_limit_tick(
         int $limit,
-        int $time_range
+        int $time_range,
+        string $name = "default"
     ): bool {
-        $now = time();
-        $_SESSION['api_rate_limit_tick'] ??= [];
+        global $redis;
 
-        $_SESSION['api_rate_limit_tick'] = array_filter(
-            $_SESSION['api_rate_limit_tick'],
-            fn(int $timestamp) => $now - $timestamp <= $time_range
-        );
+        $ip = get_real_client_ip();
+        $key = "rate_limit_" . $name . "_" . $ip;
 
-        $_SESSION['api_rate_limit_tick'][] = $now;
-        return count($_SESSION['api_rate_limit_tick']) <= $limit;
+        $count = $redis->incr($key);
+
+        if ($count === 1) {
+            $redis->expire($key, $time_range);
+        }
+
+        return $count <= $limit;
     }
 
     function import_user_settings(): array

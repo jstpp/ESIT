@@ -1,11 +1,8 @@
 <?php
 
-    header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Allow-Methods: POST");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-    http_response_code(200);
 
 function zip_inout($problem_id): string
 {
@@ -44,13 +41,21 @@ function zip_inout($problem_id): string
         $content = json_decode(openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, $options = 0, base64_decode($data['nonce']), $tag), true);
 
 if (!isset($content['worker_addr'])) {
-    header("HTTP/1.0 403 Forbidden");
+    http_response_code(403);
+    die;
+}
+
+$pid = filter_var($content['problem_id'] ?? 0, FILTER_VALIDATE_INT);
+if ($pid<=0) {
+    http_response_code(404);
     die;
 }
 
 if (is_dir(__DIR__ . '/../alg/' . $content['problem_id'] . "/")) {
     echo(base64_encode(file_get_contents(zip_inout($content['problem_id']))));
+    http_response_code(200);
 } else {
+    http_response_code(404);
     echo('Problem (' . $content["problem_id"] . ') inout not found. ' . __DIR__ . '/../alg/' . $content['problem_id'] . " doesn't exist");
     die;
 }

@@ -34,7 +34,7 @@ if ($row = $db_query->fetch()) {
         $_SESSION['AUTH_2FA'] = ($row['2fa_secret'] != '-') ? true : false;
         $_SESSION['AUTH_2FA_SECRET'] = $row['2fa_secret'];
         $_SESSION['AUTH_2FA_VALID'] = !$_SESSION['AUTH_2FA'];
-        $_SESSION['SESSION_TIMEOUT'] = time() + 18000;
+        $_SESSION['SESSION_TIMEOUT'] = time() + 60 * 60 * 5; # 5h
         regenerate_csrf_token();
 
         $db_query = $pdo->prepare('UPDATE USERS SET lastlogin=:lastlogin WHERE USER_ID=:uid');

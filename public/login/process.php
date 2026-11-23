@@ -8,19 +8,19 @@ if (!isset($_GET['s'])) {
 if ($_GET['s'] == "logout") {
     include(__DIR__ . '/../../include/login/logout.php');
 } elseif ($_GET['s'] == "auth") {
-    if (!api_rate_limit_tick(150, 600)) {
+    if (!api_rate_limit_tick(150, 600, "auth")) {
         header('HTTP/1.1 429 Too Many Requests');
         die;
     }
     include(__DIR__ . '/../../include/login/auth.php');
 } elseif ($_GET['s'] == "passrecovery_mail") {
-    if (!api_rate_limit_tick(180, 600)) {
+    if (!api_rate_limit_tick(180, 600, "auth")) {
         header('HTTP/1.1 429 Too Many Requests');
         die;
     }
     include(__DIR__ . '/../../include/login/passrecovery_mail.php');
 } elseif ($_GET['s'] == "passrecovery_pass") {
-    if (!api_rate_limit_tick(180, 600)) {
+    if (!api_rate_limit_tick(180, 600, "auth")) {
         header('HTTP/1.1 429 Too Many Requests');
         die;
     }

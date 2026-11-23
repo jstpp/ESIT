@@ -3,6 +3,7 @@
     errorLevel="4"
     resolveFromConfigFile="true"
     findUnusedCode="false"
+    allFunctionsGlobal="true"
 >
     <projectFiles>
         <directory name="public/"/>

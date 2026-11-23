@@ -6,6 +6,7 @@ set -euo pipefail
 # Generate cryptographically secure random passwords
 MYSQL_ROOT_PASSWORD=$(openssl rand -hex 32)
 MYSQL_PASSWORD=$(openssl rand -hex 32)
+REDIS_DEFAULT_PASS=$(openssl rand -hex 32)
 RABBITMQ_DEFAULT_PASS=$(openssl rand -hex 32)
 NETWORK_PRIVATE_KEY=$(openssl rand -hex 16)
 RABBITMQ_DEFAULT_USER="esit_user"
@@ -27,10 +28,14 @@ RABBITMQ_PASSWORD_HASH=$(
 
 cat > "$1/../.env" <<EOF
 # mysql container
+MYSQL_HOST=mysql
 MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 MYSQL_DATABASE=esit_db
 MYSQL_USER=esit_db
 MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+# redis container
+REDIS_PASSWORD=${REDIS_DEFAULT_PASS}
 
 # rabbitmq container
 RABBITMQ_DEFAULT_HOST=rabbitmq

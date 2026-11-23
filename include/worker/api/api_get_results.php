@@ -1,6 +1,5 @@
 <?php
 
-    header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Allow-Methods: POST");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -136,7 +135,7 @@ function evaluate($submission): void
                 default:
                     $result_file = __DIR__ . "/../solutions/" . $submission['submission_id'] . "/output/" . $sm['TEST_ID'] . ".log";
                     if (is_file($result_file)) {
-                        if (filesize(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/output/" . $sm['TEST_ID'] . ".log") <= 2097152) {
+                        if (filesize(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/output/" . $sm['TEST_ID'] . ".log") <= 1024 * 1024 * 2) { # 2 MB
                             $sm['result'] = file_get_contents($result_file);
                             $solution_array = preg_split('/\r\n|\r|\n/', $sm['result'] ?? "");
                         } else {
