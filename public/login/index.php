@@ -1,8 +1,8 @@
 <?php
     include(__DIR__ . '/../../include/app/core.php');
-    if (isset($_SESSION['AUTH_ID']) && $_SESSION['AUTH_2FA_VALID']) {
-        redirect("../app/index.php");
-    }
+if (isset($_SESSION['AUTH_ID']) && $_SESSION['AUTH_2FA_VALID']) {
+    redirect("../app/index.php");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -215,11 +215,13 @@
                     <input type="submit" class="login_submit" style="width: calc(80% + 2vmax);" value="<?php echo(__("Log in")); ?>"/>
                 </form>
                 <?php
-                    if (isset($_GET['2fa'])) {
-                        if(!isset($_SESSION['AUTH_ID'])) redirect("/login");
-                        echo('<script>document.getElementById("otp_code_layer").style.display = "block";</script>');
-                        echo('<script>document.getElementById("default_login_window").style.display = "none";</script>');
+                if (isset($_GET['2fa'])) {
+                    if (!isset($_SESSION['AUTH_ID'])) {
+                        redirect("/login");
                     }
+                    echo('<script>document.getElementById("otp_code_layer").style.display = "block";</script>');
+                    echo('<script>document.getElementById("default_login_window").style.display = "none";</script>');
+                }
                 ?>
                 <br style="clear: both;"/>
                 <br />

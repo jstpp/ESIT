@@ -5,6 +5,7 @@
     findUnusedCode="false"
 >
     <projectFiles>
-        <directory name="public/app/modules"/>
+        <directory name="public/"/>
+        <directory name="include/"/>
     </projectFiles>
 </psalm>

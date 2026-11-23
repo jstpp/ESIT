@@ -8,7 +8,7 @@
 
     $userSecret = $_SESSION['temp_otp_secret'] ?? $otpAuth->newSecret();
     $_SESSION['temp_otp_secret'] = $userSecret;
-    
+
     $qrBase64 = $otpAuth->getQR($userName, $appName, $userSecret);
 ?>
 
@@ -115,10 +115,9 @@
         <?php
             $db_query = $pdo->prepare('SELECT 2fa_secret FROM USERS WHERE USER_ID=:uid');
             $db_query->execute(['uid' => $_SESSION['AUTH_ID']]);
-            if ($db_query->fetch()['2fa_secret']!="-")
-            {
-                echo(__("<span style='color: white; padding: 1vmax 2vmax; background-color: #28a66b; border-left: 0.5vmax solid #00723b; display: block; width: calc(90% - 1vmax); border-radius: 0.5vmax;'>2FA method has been already configured.</span><br />"));
-            }
+        if ($db_query->fetch()['2fa_secret'] != "-") {
+            echo(__("<span style='color: white; padding: 1vmax 2vmax; background-color: #28a66b; border-left: 0.5vmax solid #00723b; display: block; width: calc(90% - 1vmax); border-radius: 0.5vmax;'>2FA method has been already configured.</span><br />"));
+        }
         ?>
         <img src="<?= htmlspecialchars($qrBase64, ENT_QUOTES, 'UTF-8'); ?>" style="border: 1vmax solid white; border-radius: 0.5vmax;" alt="QR Code">
         <form method="POST" action="process.php?r=save_otp">

@@ -1,4 +1,5 @@
 <?php
+
     header("Content-Type: application/json; charset=UTF-8");
 
     $key = $_GET['key'] ?? null;
@@ -31,6 +32,6 @@
     while ($row = $db_query->fetch()) {
         array_push($results['channels'], $row);
     }
-    
+
 
     echo(json_encode($results));
