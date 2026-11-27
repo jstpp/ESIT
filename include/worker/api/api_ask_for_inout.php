@@ -46,7 +46,7 @@ if (!isset($content['worker_addr'])) {
 }
 
 $pid = filter_var($content['problem_id'] ?? 0, FILTER_VALIDATE_INT);
-if ($pid<=0) {
+if ($pid <= 0) {
     http_response_code(404);
     die;
 }

@@ -181,8 +181,7 @@ function evaluate($submission, $pdo): void
                 $i++;
             }
             fclose($checkfile);
-            if ($sm['returncode'] === 0 && count(array_values(array_filter($solution_array, fn($line) => trim($line) !== ''))) > $i) 
-            {
+            if ($sm['returncode'] === 0 && count(array_values(array_filter($solution_array, fn($line) => trim($line) !== ''))) > $i) {
                 $sm['anws_wrong'] += count(array_values(array_filter($solution_array, fn($line) => trim($line) !== ''))) - $i;
                 $sm['comment'] = "Extra output lines; " . ($sm['comment'] ?? '');
             }
