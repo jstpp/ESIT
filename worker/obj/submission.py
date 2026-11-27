@@ -2,7 +2,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Literal
 
-SubmissionLanguage = Literal["py", "cpp", "java"]
+SubmissionLanguage = Literal["py", "cpp", "java", "rs"]
 SubmissionType = Literal["normal", "silent", "recheck", "testing"]
 
 
@@ -79,7 +79,7 @@ class Submission:
         if self.problem_id < 0:
             raise ValueError("Invalid problem_id")
 
-        if self.submission_lang not in {"py", "cpp", "java"}:
+        if self.submission_lang not in {"py", "cpp", "java", "rs"}:
             raise ValueError(f"Unsupported submission language: {self.submission_lang}")
 
         if self.submission_type not in {"normal", "silent", "recheck", "testing"}:

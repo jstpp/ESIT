@@ -31,6 +31,7 @@ if (isset($_GET['category'])) {
                 }
                 array_push($allowed_address_array, $value);
             }
+            $redis->del('misc_' . $key);
         }
 
         if (isset($allowed_address_array)) {

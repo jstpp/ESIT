@@ -1,10 +1,8 @@
 <?php
 
-function log_error(string $category, string $ip, string $content, string $details): bool
+function log_error(string $category, string $ip, string $content, string $details, $pdo): bool
 {
     try {
-        global $pdo;
-
         $db_query = $pdo->prepare('INSERT INTO LOGS (category, ip, content, details) VALUES (:category, :ip, :content, :details)');
         $db_query->execute(['category' => $category,
                             'ip' => $ip,
@@ -73,7 +71,7 @@ function extended_fatal_error_handler(): void
         $content = "Logged fatal error <code>" . htmlentities($error_type) . "</code> in <code>" . htmlentities($error['file']) . ":" . htmlentities($error['line']) . "</code> triggered by <code>" . htmlentities($ip) . "</code>.";
         $details = "[" . htmlentities($ip) . "; " . htmlentities($error_type) . "; " . htmlentities($error['file']) . ":" . htmlentities($error['line']) . "]\n" . htmlentities($error['message']);
 
-        log_error("fatal", $ip, $content, $details);
+        log_error("fatal", $ip, $content, $details, $pdo);
     } catch (Throwable) {
         emergency_display();
         return;
@@ -87,7 +85,7 @@ function extended_error_handler(int $errno, string $errstr, string $errfile, int
         $ip = get_real_client_ip();
         $content = "Logged an <b>error</b> <code>" . htmlentities($error_type) . "</code> in <code>" . htmlentities($errfile) . ":" . htmlentities($errline) . "</code> triggered by <code>" . htmlentities($ip) . "</code>.";
         $details = "[" . htmlentities($ip) . "; " . htmlentities($error_type) . "; " . htmlentities($errfile) . ":" . htmlentities($errline) . "]\n" . htmlentities($errstr);
-        return log_error("error", $ip, $content, $details);
+        return log_error("error", $ip, $content, $details, $pdo);
     } catch (Throwable) {
         emergency_display();
         return true;
@@ -100,7 +98,7 @@ function extended_exception_handler(Throwable $e): bool
         $ip = get_real_client_ip();
         $content = "Logged an <b>exception</b> in <code>" . htmlentities($e->getFile()) . ":" . htmlentities($e->getLine()) . "</code> triggered by <code>" . htmlentities($ip) . "</code>.";
         $details = "[" . htmlentities($ip) . "; EXCEPTION (" . htmlentities(get_class($e)) . "); " . htmlentities($e->getFile()) . ":" . htmlentities($e->getLine()) . "]\n" . htmlentities($e->getMessage());
-        return log_error("exception", $ip, $content, $details);
+        return log_error("exception", $ip, $content, $details, $pdo);
     } catch (Throwable) {
         emergency_display();
         return true;

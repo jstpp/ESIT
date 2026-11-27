@@ -86,6 +86,9 @@ Check the ESIT custom configuration options [here](setup/README.md). After succe
 > [!tip]
 > It is recommended to use ESIT behind reverse proxy with HTTPS. You should setup it on your own (using software like [nginx](https://github.com/nginx/nginx)).
 
+> [!tip]
+> When customizing your ESIT instance, it can be helpful to run the worker's test suite as well as the built-in diagnostics tool that tests specific parts of the web application.
+
 ## Translation & contributing
 ### Contribute
 Would you like to contribute? Check out [contributing guidelines](CONTRIBUTING.md). Moreover, here is a roadmap indicating goals to be achieved in the future:

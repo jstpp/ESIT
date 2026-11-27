@@ -88,6 +88,10 @@ if (boolval(get_misc_value('plugin_debugging'))) {
             }
             break;
         case 'register':
+            if (!api_rate_limit_tick(120, 600, "register")) {
+                header('HTTP/1.1 429 Too Many Requests');
+                die;
+            }
             if (is_logged_in()) {
                 kick();
             }

@@ -73,6 +73,7 @@ def ping(device_name, listener_url, heartbeat):
         data_to_decrypt["content"] = base64.b64encode(encrypted[0]).decode("utf-8")
         data_to_decrypt["nonce"] = base64.b64encode(encrypted[1]).decode("utf-8")
         data_to_decrypt["tag"] = base64.b64encode(encrypted[2]).decode("utf-8")
+        
         api_connection = requests.post(
             listener_url + "/app/process.php?r=ping",
             json=data_to_decrypt,
@@ -157,8 +158,11 @@ def ask_for_inout(data):
 
         headers = {"Content-Type": "application/json; charset=utf-8"}
 
+        if data["listenerUrl"]!=apiconfig.web_url:
+            logger.warning("Submission's 'listenerUrl' is not equal to 'web_url' variable declared in config.")
+
         api_connection = requests.post(
-            data["listenerUrl"] + "/app/process.php?r=ask_for_inout",
+            apiconfig.web_url + "/app/process.php?r=ask_for_inout",
             json=data_to_send,
             headers=headers,
             timeout=(5, 30),
@@ -258,8 +262,12 @@ def send(status, data):
             data_to_decrypt["content"] = base64.b64encode(encrypted[0]).decode("utf-8")
             data_to_decrypt["nonce"] = base64.b64encode(encrypted[1]).decode("utf-8")
             data_to_decrypt["tag"] = base64.b64encode(encrypted[2]).decode("utf-8")
+
+            if data["listenerUrl"]!=apiconfig.web_url:
+                logger.warning("Submission's 'listenerUrl' is not equal to 'web_url' variable declared in config.")
+
             api_connection = requests.post(
-                data["listenerUrl"] + "/app/process.php?r=api_get_results",
+                apiconfig.web_url + "/app/process.php?r=api_get_results",
                 json=data_to_decrypt,
                 headers=headers,
                 timeout=(5, 30),

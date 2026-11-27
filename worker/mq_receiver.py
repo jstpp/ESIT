@@ -14,16 +14,17 @@ import api.lib
 import compilers.cpp
 import compilers.java
 import compilers.python
+import compilers.rust
 import tests.run as tests
 from api.config import config
 from obj.submission import Submission
 
 
-SUPPORTED_LANGUAGES = {"py", "cpp", "java"}
+SUPPORTED_LANGUAGES = {"py", "cpp", "java", "rs"}
 ENFORCED_TESTING = True
 ENFORCED_LANDLOCK = True
 QUIET_TESTING = False
-CANARY_HEARTBEAT = 2 # in seconds
+CANARY_HEARTBEAT = 8 # in seconds
 
 
 def setup_logging(log_directory, worker_id):
@@ -138,6 +139,10 @@ def start_execution(logger, submission):
         logger.info("Executing JAVA script.")
         if not api.lib.send(compilers.java.run(submission), submission):
             raise Exception("API usage failed")
+    elif submission.submission_lang == "rs":
+        logger.info("Executing RUST script.")
+        if not api.lib.send(compilers.rust.run(submission), submission):
+            raise Exception("API usage failed")
     else:
         raise Exception(f"Unsupported language: {submission.submission_lang}")
 
@@ -234,6 +239,7 @@ def main(worker_id=1):
             target=canary,
             kwargs={"device_name": worker_id, "logger": logger},
             name=f"canary.worker.{worker_id}",
+            daemon=True
         ).start()
 
         def callback(ch, method, properties, body):

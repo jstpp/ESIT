@@ -46,6 +46,7 @@ services:
       - ./setup/php.ini:/usr/local/etc/php/conf.d/esit-php.ini
     networks:
       - default-network
+      - data-network
     restart: unless-stopped
 
   mysql:
@@ -58,7 +59,7 @@ services:
       interval: 10s
       retries: 5
     networks:
-      - default-network
+      - data-network
     restart: unless-stopped
 
   redis:
@@ -74,7 +75,7 @@ services:
       timeout: 3s
       retries: 5
     networks:
-      - default-network
+      - data-network
     restart: unless-stopped
 
   rabbitmq:
@@ -102,11 +103,14 @@ services:
         WORKER_UID: "10001"
         WORKER_GID: "10001"
     user: "10001:10001"
-    env_file: .env
+    env_file: .worker.env
     security_opt:
       - seccomp:./setup/seccomp.json
       - apparmor:unconfined  # Required for nsjail to manage its own sandboxing without host-level AppArmor configuration.
                              # Docker's AppArmor profile usually interferes with nsjail sandboxing (we don't want --privileged here).
+    mem_limit: 3G
+    memswap_limit: 3G 
+    cpus: 3
     command: python3 /worker/mq_receiver.py 3
     depends_on:
       mysql:
@@ -116,3 +120,4 @@ services:
 
 networks:
   default-network:
+  data-network:

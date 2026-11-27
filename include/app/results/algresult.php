@@ -3,9 +3,8 @@
     use PhpAmqpLib\Connection\AMQPStreamConnection;
     use PhpAmqpLib\Message\AMQPMessage;
 
-function flush_dead_letter_queue(): bool
+function flush_dead_letter_queue($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $pdo): bool
 {
-    global $rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $pdo;
 
     try {
         $connection = new AMQPStreamConnection($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password);
@@ -79,7 +78,7 @@ if (strtotime($row['result_publish_time']) < strtotime("now")) {
         $gradient = "linear-gradient(to left, gray 0%,transparent 5%);";
         $percentage = "...";
         $status = __("In queue");
-        flush_dead_letter_queue();
+        flush_dead_letter_queue($rabbit_mq_host, $rabbit_mq_port, $rabbit_mq_user, $rabbit_mq_password, $pdo);
         echo('<meta http-equiv="refresh" content="3" />');
     } else {
         $gradient = "linear-gradient(to left, #8eed28 0%,transparent 5%);";

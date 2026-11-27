@@ -4,6 +4,11 @@ if (!is_logged_in()) {
     kick();
 }
 
+if (!api_rate_limit_tick(1200, 300, "send_solutions")) {
+    header('HTTP/1.1 429 Too Many Requests');
+    die;
+}
+
         require_once('modules/composer/vendor/autoload.php');
         use PhpAmqpLib\Connection\AMQPStreamConnection;
         use PhpAmqpLib\Message\AMQPMessage;
@@ -131,6 +136,9 @@ try {
                 break;
             case "java":
                 $submission_lang = "java";
+                break;
+            case "rs":
+                $submission_lang = "rs";
                 break;
             default:
                 $submission_lang = "py";

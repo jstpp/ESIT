@@ -24,14 +24,9 @@ function set_system_error(array $sm): array
     return $sm;
 }
 
-function save_test_result($sm, $submission): void
+function save_test_result($sm, $submission, $pdo): void
 {
-    global $anws_correct;
-    global $anws_resource;
-    global $anws_wrong;
-    global $anws_syserror;
-    global $pdo;
-
+    global $anws_correct, $anws_resource, $anws_wrong, $anws_syserror;
     $anws_correct += ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'] != 0) ? $sm['anws_correct'] / ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror']) * $sm['weight'] : 0;
     $anws_resource += ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'] != 0) ? $sm['anws_resource'] / ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror']) * $sm['weight'] : 0;
     $anws_wrong += ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror'] != 0) ? $sm['anws_wrong'] / ($sm['anws_correct'] + $sm['anws_resource'] + $sm['anws_wrong'] + $sm['anws_syserror']) * $sm['weight'] : 0;
@@ -45,10 +40,8 @@ function save_test_result($sm, $submission): void
     $db_query->execute(['sid' => $submission['submission_id'], 'tid' => $sm['TEST_ID'], 'content' => $sm['result'], 'time' => $sm['exec_time'], 'memory' => $sm['memory'] ?? null, 'comment' => $sm['comment'], 'returncode' => $sm['returncode'], 'ac' => $sm['anws_correct'], 'aw' => $sm['anws_wrong'], 'ar' => $sm['anws_resource'], 'ae' => $sm['anws_syserror']]);
 }
 
-function save_submission_results($submission, $anws_correct, $anws_wrong, $anws_resource, $anws_syserror): void
+function save_submission_results($submission, $anws_correct, $anws_wrong, $anws_resource, $anws_syserror, $pdo): void
 {
-    global $pdo;
-
     $percentage = ($anws_correct + $anws_wrong + $anws_resource + $anws_syserror != 0) ? $anws_correct / ($anws_correct + $anws_wrong + $anws_resource + $anws_syserror) : 0;
 
     $notification_content = __("Your solution for problem") . " #" . $submission['problem_id'] . " " . __("has been evaluated") . "!<br/><a href='index.php?p=mysolutions'><i class='fa fa-eye'></i>&nbsp;" . __("My solutions") . "</a>";
@@ -60,10 +53,8 @@ function save_submission_results($submission, $anws_correct, $anws_wrong, $anws_
     $db_query->execute(['uid' => $submission['user_id'], 'content' => $notification_content]);
 }
 
-function decrypt_payload($data, $tag): array
+function decrypt_payload($data, $tag, $worker_network_private_key): array
 {
-    global $worker_network_private_key;
-
     $decrypted = openssl_decrypt($data['content'], 'AES-128-GCM', $worker_network_private_key, 0, base64_decode($data['nonce']), $tag);
     if ($decrypted === false) {
         raise_error_and_die();
@@ -89,7 +80,7 @@ function test_is_valid($sm): bool
     ) && filter_var($sm['TEST_ID'], FILTER_VALIDATE_INT) > 0 && is_numeric($sm['weight']);
 }
 
-function evaluate($submission): void
+function evaluate($submission, $pdo): void
 {
     foreach ($submission['tests'] as $sm) {
         if (
@@ -98,7 +89,7 @@ function evaluate($submission): void
             || !test_is_valid($sm)
         ) {
             $sm = set_system_error($sm);
-            save_test_result($sm, $submission);
+            save_test_result($sm, $submission, $pdo);
             continue;
         } else {
             $timefile = fopen(__DIR__ . "/../solutions/" . $submission['submission_id'] . "/time/" . $sm['TEST_ID'] . ".log", 'r');
@@ -112,7 +103,7 @@ function evaluate($submission): void
                     fclose($checkfile);
                 }
                 $sm = set_system_error($sm);
-                save_test_result($sm, $submission);
+                save_test_result($sm, $submission, $pdo);
                 continue;
             } else {
                 $time_data_array = array();
@@ -145,7 +136,7 @@ function evaluate($submission): void
                         }
                     } else {
                         $sm = set_system_error($sm);
-                        save_test_result($sm, $submission);
+                        save_test_result($sm, $submission, $pdo);
                         fclose($checkfile);
                         continue 2;
                     }
@@ -190,12 +181,13 @@ function evaluate($submission): void
                 $i++;
             }
             fclose($checkfile);
-            if ($sm['returncode'] === 0 && count($solution_array) > $i) {
-                $sm['anws_wrong'] += count($solution_array) - $i;
-                $sm['comment'] = "Extra output lines, " . ($sm['comment'] ?? '');
+            if ($sm['returncode'] === 0 && count(array_values(array_filter($solution_array, fn($line) => trim($line) !== ''))) > $i) 
+            {
+                $sm['anws_wrong'] += count(array_values(array_filter($solution_array, fn($line) => trim($line) !== ''))) - $i;
+                $sm['comment'] = "Extra output lines; " . ($sm['comment'] ?? '');
             }
         }
-        save_test_result($sm, $submission);
+        save_test_result($sm, $submission, $pdo);
     }
 }
 
@@ -224,7 +216,7 @@ try {
     $tag = base64_decode($data['tag']);
 
     try {
-        $submission = decrypt_payload($data, $tag);
+        $submission = decrypt_payload($data, $tag, $worker_network_private_key);
         setup_filesystem($submission);
     } catch (Throwable $t) {
         extended_exception_handler($t);
@@ -237,14 +229,14 @@ try {
     $anws_syserror = 0;
 
     try {
-        evaluate($submission);
+        evaluate($submission, $pdo);
     } catch (Throwable $t) {
         extended_exception_handler($t);
         raise_error_and_die();
     }
 
     try {
-        save_submission_results($submission, $anws_correct, $anws_wrong, $anws_resource, $anws_syserror);
+        save_submission_results($submission, $anws_correct, $anws_wrong, $anws_resource, $anws_syserror, $pdo);
     } catch (Throwable $t) {
         extended_exception_handler($t);
         raise_error_and_die();

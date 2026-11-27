@@ -200,7 +200,7 @@ if (!isset($_GET['mode']) || !is_logged_in() || !has_permission('main.portal.mod
             $pdo->commit();
         } elseif ($_GET['mode'] == "general") {
             $pdo->beginTransaction();
-            $db_query = $pdo->prepare('DELETE FROM MISC WHERE misc_name LIKE "general_%"');
+            $db_query = $pdo->prepare('DELETE FROM MISC WHERE misc_name IN ("general_title", "general_motd");');
             $db_query->execute();
 
             if (isset($_POST['g_title'])) {

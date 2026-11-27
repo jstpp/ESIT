@@ -79,6 +79,7 @@ if ($maxattempts - $count > 0) {
 					<option value="cpp">C++ (g++ dla C++20)</option>
 					<option value="python">Python (Python 3.13)</option>
 					<option value="java">Java (openJDK 25)</option>
+                    <option value="rs">Rust</option>
 				</select>
 				<input type="submit" value="' . __("Submit your answer") . '" class="forminput" style="float: right; margin-right: 5%;" onClick="document.getElementById(\'editor_code\').innerHTML = editor.getValue();"/>
 				<br style="clear: both;"/>
@@ -101,6 +102,9 @@ if ($maxattempts - $count > 0) {
 							} else if(document.getElementById("lang").value === "java")
 							{
 								editor.session.setMode("ace/mode/java");
+							} else if(document.getElementById("lang").value === "rs")
+							{
+								editor.session.setMode("ace/mode/rust");
 							}
 						}
 					</script>

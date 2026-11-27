@@ -87,7 +87,7 @@ if ($is_https) {
         "default-src 'self'; " .
         "script-src 'self' 'unsafe-inline'; " .
         "style-src 'self' 'unsafe-inline'; " .
-        "img-src 'self' data: blob:; " .
+        "img-src 'self' data: blob: https:; " .
         "font-src 'self' data:; " .
         "connect-src 'self'; " .
         "media-src 'self' blob:; " .
@@ -153,18 +153,37 @@ if ($is_https) {
 
     function get_misc_value(string $key): string
     {
-        global $pdo;
-        $config_array = array();
+        global $pdo, $default_variables, $redis;
 
+        # Static cache
+        static $cache = [];
+        if (array_key_exists($key, $cache)) {
+            return $cache[$key];
+        }
+
+        # Redis
+        $redis_key = "misc_" . $key;
+        $value = $redis->get($redis_key);
+        if ($value !== false) {
+            $cache[$key] = $value;
+            return $value;
+        }
+
+        # MySQL
         $db_query = $pdo->prepare('SELECT * FROM MISC WHERE misc_name=:key LIMIT 1');
         $db_query->execute(['key' => $key]);
 
         if ($row = $db_query->fetch()) {
-            return $row['misc_value'];
+            $value = $row['misc_value'];
+        } else {
+            $value = $default_variables[$key] ?? '';
         }
 
-        global $default_variables;
-        return (isset($default_variables[$key])) ? $default_variables[$key] : "";
+        # Update cache
+        $redis->setex($redis_key, 60, $value);
+        $cache[$key] = $value;
+
+        return $value;
     }
 
     function force_to_login(): void
@@ -902,28 +921,31 @@ if ($is_https) {
     }
 
     try {
-        $lock_name = 'esit_initial_roles';
+        $db_query = $pdo->query('SELECT COUNT(*) FROM ROLES');
+        if ((int)$db_query->fetchColumn() === 0) {
+            $lock_name = 'esit_initial_roles';
 
-        $lock_query = $pdo->prepare('SELECT GET_LOCK(:lock_name, 10)');
-        $lock_query->execute(['lock_name' => $lock_name]);
+            $lock_query = $pdo->prepare('SELECT GET_LOCK(:lock_name, 10)');
+            $lock_query->execute(['lock_name' => $lock_name]);
 
-        if ((int)$lock_query->fetchColumn() !== 1) {
-            throw new RuntimeException('Cannot acquire roles initialization lock.');
-        }
-
-        try {
-            $db_query = $pdo->query('SELECT COUNT(*) FROM ROLES');
-
-            if ((int)$db_query->fetchColumn() === 0) {
-                include(__DIR__ . "/../app/config/init_roles.php");
-
-                if (!load_initial_roles($pdo)) {
-                    throw new RuntimeException('Roles initialization failed.');
-                }
+            if ((int)$lock_query->fetchColumn() !== 1) {
+                throw new RuntimeException('Cannot acquire roles initialization lock.');
             }
-        } finally {
-            $release_query = $pdo->prepare('SELECT RELEASE_LOCK(:lock_name)');
-            $release_query->execute(['lock_name' => $lock_name]);
+
+            try {
+                $db_query = $pdo->query('SELECT COUNT(*) FROM ROLES');
+
+                if ((int)$db_query->fetchColumn() === 0) {
+                    include(__DIR__ . "/../app/config/init_roles.php");
+
+                    if (!load_initial_roles($pdo)) {
+                        throw new RuntimeException('Roles initialization failed.');
+                    }
+                }
+            } finally {
+                $release_query = $pdo->prepare('SELECT RELEASE_LOCK(:lock_name)');
+                $release_query->execute(['lock_name' => $lock_name]);
+            }
         }
     } catch (Throwable $t) {
         extended_exception_handler($t);

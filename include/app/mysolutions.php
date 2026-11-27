@@ -124,6 +124,9 @@
                 case "java":
                     echo('<i class="fa-brands fa-java"></i>');
                     break;
+                case "rs":
+                    echo('<i class="fa-brands fa-rust"></i>');
+                    break;
                 default:
                     break;
             }
